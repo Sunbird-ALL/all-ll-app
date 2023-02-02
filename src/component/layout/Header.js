@@ -1,12 +1,17 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export default function Header({ title, _box }) {
-  return (
+export default function Header({ title, Component, rightComponent, _box }) {
+  return Component ? (
+    Component
+  ) : (
     <Box p="4" {..._box}>
-      <Text fontWeight={'700'} fontSize="24">
-        {title}
-      </Text>
+      <HStack justifyContent={'space-between'}>
+        <Text fontWeight={'700'} fontSize="24">
+          {title}
+        </Text>
+        {rightComponent}
+      </HStack>
     </Box>
   );
 }

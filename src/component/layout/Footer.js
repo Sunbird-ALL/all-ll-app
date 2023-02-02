@@ -1,31 +1,22 @@
-import {
-  Box,
-  Center,
-  HStack,
-  IconButton,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { FaArrowLeft } from 'react-icons/fa';
+import { Box, Center, HStack, Stack, Text, VStack } from '@chakra-ui/react';
+import React from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-export default function Footer({ menues, routeDynamics, ...props }) {
+export default function Footer({ menues, routeDynamics, width, ...props }) {
   const path = window?.location?.pathname.toString();
   const navigate = useNavigate();
 
   const footerMenus = menues;
 
   const PressableNew = ({ item, children, ...prop }) => {
-    return item?.route ? (
+    return item?.link ? (
       <Box
         {...prop}
         onClick={() => {
           navigate(
             routeDynamics
-              ? generatePath(item.route, { ...{ id: item.id } })
-              : item.route
+              ? generatePath(item.link, { ...{ id: item.id } })
+              : item.link
           );
         }}
       >
@@ -37,15 +28,14 @@ export default function Footer({ menues, routeDynamics, ...props }) {
   };
 
   return (
-    <Stack minH={'66px'}>
-      <Box width={'100%'} flex={1} safeAreaTop position="fixed" bottom="0">
+    <Stack minH={'66px'} width={width ? width : '100%'}>
+      <Box width={width ? width : '100%'} flex={1} position="fixed" bottom="0">
         <Center flex={1}></Center>
         <HStack
           pl={'20px'}
           pr={'20px'}
           bg="white"
           alignItems="center"
-          safeAreaBottom
           shadow={6}
         >
           {footerMenus?.map((item, index) => (
