@@ -3,11 +3,13 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   ChakraProvider,
   theme,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FaHome, FaMicrophone, FaPhone, FaPlus, FaUser } from 'react-icons/fa';
+import { FaHome, FaUser, FaUserGraduate } from 'react-icons/fa';
+import { useWindowSize } from '../../utils/helper';
 import AppBar from './AppBar';
 import Footer from './Footer';
 import Header from './Header';
@@ -17,40 +19,40 @@ export default function App({ isHideLayout, ...props }) {
 }
 function Layout({ _header, _body, children }) {
   const { title, ...__body } = _body ? _body : {};
+  const [width, height] = useWindowSize();
   const menues = [
     {
       title: 'Home',
+      link: '/',
       icon: <FaHome />,
-      route: '/',
     },
     {
-      title: 'About',
-      icon: <FaUser />,
-      route: '/about',
+      title: 'I am a Teacher',
+      link: '/content',
+      icon: <FaUserGraduate />,
     },
-    {
-      title: 'Contact',
-      icon: <FaPhone />,
-      route: '/contact',
-    },
+    { title: 'I am a Student', link: '/contact-us', icon: <FaUser /> },
   ];
+  console.log(width);
   return (
     <ChakraProvider theme={theme}>
-      <AppBar />
-      <Header {..._header} />
-      <Card m="4" mt="0" rounded={6} {...__body}>
-        {title ? (
-          <CardHeader bg="red.100" roundedTop={6} {...__body?._cardHeader}>
-            {title}
-          </CardHeader>
-        ) : (
-          <React.Fragment />
-        )}
-        <CardBody>{children}</CardBody>
-      </Card>
-      <Box>
-        <Footer menues={menues} />
-      </Box>
+      <Center>
+        <Box w={width} h={height} shadow="md">
+          <AppBar />
+          <Header {..._header} />
+          <Card m="4" mt="0" rounded={6} {...__body}>
+            {title ? (
+              <CardHeader bg="red.100" roundedTop={6} {...__body?._cardHeader}>
+                {title}
+              </CardHeader>
+            ) : (
+              <React.Fragment />
+            )}
+            <CardBody {...__body?._body}>{children}</CardBody>
+          </Card>
+          <Footer menues={menues} width={width} />
+        </Box>
+      </Center>
     </ChakraProvider>
   );
 }

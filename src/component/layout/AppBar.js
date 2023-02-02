@@ -8,22 +8,12 @@ export default function AppBar() {
   return (
     <HStack justifyContent={'space-between'} p="4">
       <IconButton
-        size="md"
-        fontSize="lg"
         variant="ghost"
         color="current"
-        marginLeft="2"
         onClick={e => navigat(-1)}
         icon={<FaArrowLeft />}
       />
-      <IconButton
-        size="md"
-        fontSize="lg"
-        variant="ghost"
-        color="current"
-        marginLeft="2"
-        icon={<FaBars />}
-      />
+      <IconButton variant="ghost" color="current" icon={<FaBars />} />
     </HStack>
   );
 }

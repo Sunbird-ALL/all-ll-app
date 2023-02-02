@@ -10,14 +10,17 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
     "@testing-library/user-event": "^14.1.0",
+    "axios": "^1.2.5",
     "framer-motion": "^6.2.9",
     "react": "^18.2.0",
+    "react-audio-voice-recorder": "^1.0.4",
+    "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
     "react-icons": "^3.0.0",
-    "react-mic": "^12.4.6",
     "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "write-json-file": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
