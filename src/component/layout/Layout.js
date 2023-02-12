@@ -23,7 +23,7 @@ function Layout({ _header, _body, children }) {
   const menues = [
     {
       title: 'Home',
-      link: '/',
+      link: '/proto2/all',
       icon: <FaHome />,
     },
     {
@@ -31,7 +31,7 @@ function Layout({ _header, _body, children }) {
       link: '/content',
       icon: <FaUserGraduate />,
     },
-    { title: 'I am a Student', link: '/contact-us', icon: <FaUser /> },
+    { title: 'I am a Student', link: '/proto2/', icon: <FaUser /> },
   ];
   console.log(width);
   return (

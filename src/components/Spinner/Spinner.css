@@ -1,0 +1,55 @@
+/*spinner*/
+/*loading screen*/
+
+#loadingmsg {
+    position: fixed;
+    top: 40%;
+    left: 45%;
+    z-index: 9999;
+}
+
+@media screen and (min-width: 480px) {
+    #loadingmsg {
+        position: fixed;
+        top: 40%;
+        left: 48%;
+        z-index: 9999;
+    }
+}
+
+#loadingover {
+    background: black;
+    z-index: 9998;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+}
+
+.loader {
+    border-top: 5px solid blue;
+    border-right: 5px solid green;
+    border-bottom: 5px solid red;
+    border-left: 5px solid yellow;
+    /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

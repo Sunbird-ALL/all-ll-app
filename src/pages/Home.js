@@ -9,7 +9,7 @@ const menu = [
     link: '/content',
     icon: <FaUserGraduate />,
   },
-  { title: 'I am a Student', link: '/contact-us', icon: <FaUser /> },
+  { title: 'I am a Student', link: '/proto2/', icon: <FaUser /> },
 ];
 
 export default function Home() {
