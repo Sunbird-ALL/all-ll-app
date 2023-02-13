@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 
-import AppNavbar from "../../components/AppNavbar/AppNavbar";
-import TamilGirl from "../../assests/Images/TamilGirl.png";
-import welcome_en from "../../assests/Audio/welcome_en.m4a";
-import welcome_ta from "../../assests/Audio/welcome_ta.mpga";
-import welcome_hi from "../../assests/Audio/welcome_hi.m4a";
+import AppNavbar from '../../components/AppNavbar/AppNavbar';
+import TamilGirl from '../../assests/Images/TamilGirl.png';
+import welcome_en from '../../assests/Audio/welcome_en.m4a';
+import welcome_ta from '../../assests/Audio/welcome_ta.mpga';
+import welcome_hi from '../../assests/Audio/welcome_hi.m4a';
 
-import play from "../../assests/Images/play.png";
-import home_button from "../../assests/Images/home_button.png";
+import play from '../../assests/Images/play.png';
+import home_button from '../../assests/Images/home_button.png';
+
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function Home() {
   const [temp_audio, set_temp_audio] = useState(null);
@@ -16,15 +19,15 @@ function Home() {
   const playAudio = (audio, lang) => {
     set_isplaying(false);
     set_temp_audio(new Audio(audio));
-    localStorage.setItem("apphomelang", lang);
+    localStorage.setItem('apphomelang', lang);
   };
   useEffect(() => {
     if (temp_audio !== null && !isplaying) {
       set_isplaying(true);
       temp_audio.play();
-      temp_audio.addEventListener("ended", () => {
+      temp_audio.addEventListener('ended', () => {
         set_isplaying(false);
-        document.getElementById("link_speak_proto2").click();
+        document.getElementById('link_speak_proto2').click();
       });
     }
     return () => {
@@ -34,6 +37,7 @@ function Home() {
       }
     };
   }, [temp_audio]);
+
   function showHome() {
     return (
       <>
@@ -59,7 +63,7 @@ function Home() {
               <br />
               <div
                 className="row"
-                style={{ marginLeft: "5px", marginRight: "5px" }}
+                style={{ marginLeft: '5px', marginRight: '5px' }}
               >
                 {/*<div
                   className="col s6"
@@ -84,7 +88,7 @@ function Home() {
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_ta, "ta");
+                    playAudio(welcome_ta, 'ta');
                   }}
                 >
                   <center>
@@ -99,6 +103,7 @@ function Home() {
             <div className="cols s12 m3 l4"></div>
           </div>
         </div>
+        <AppFooter />
       </>
     );
   }

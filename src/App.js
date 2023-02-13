@@ -26,6 +26,7 @@ import Score2 from './viewsProto2/Score/Score';
 import ContentList from './viewsProto2/ContentList/ContentList';
 import Content from './viewsProto2/Content/Content';
 import Result from './viewsProto2/Result/Result';
+import AddedContent from './views/AddedContent/AddedContent';
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
         <Route path={'/proto2/result'} element={<Result />} />
 
         <Route path={'/audio'} element={<Audio />} />
+        <Route path={'/addedcontent'} element={<AddedContent />} />
       </Routes>
       <Spinner />
     </BrowserRouter>

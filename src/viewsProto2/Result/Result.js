@@ -9,6 +9,9 @@ import "react-h5-audio-player/lib/styles.css";
 import VoiceCompair from "../../components/VoiceCompair/VoiceCompair";
 import refresh from "../../assests/Images/refresh.svg";
 
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
+
 function Result() {
   const app_history = useNavigate();
   // Get ID from URL
@@ -204,6 +207,7 @@ function Result() {
             <div className="cols s12 m4 l4"></div>
           </div>
         </div>
+        <AppFooter />
       </>
     );
   }

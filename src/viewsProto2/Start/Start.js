@@ -25,6 +25,9 @@ import learn_next from '../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
+
 function Start() {
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
@@ -429,6 +432,7 @@ function Start() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
+        <AppFooter />
       </>
     );
   }

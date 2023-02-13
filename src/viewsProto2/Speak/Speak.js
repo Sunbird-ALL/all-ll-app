@@ -22,6 +22,9 @@ import refresh from "../../assests/Images/refresh.svg";
 
 import { scroll_to_top } from "../../utils/Helper/JSHelper";
 
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
+
 function Speak() {
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem("apphomelang")
@@ -215,6 +218,7 @@ function Speak() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
+        <AppFooter />
       </Animation>
     );
   }

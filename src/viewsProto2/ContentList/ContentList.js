@@ -1,40 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 
-import content_list from "../../utils/Const/Const";
+import content_list from '../../utils/Const/Const';
 
-import { scroll_to_top } from "../../utils/Helper/JSHelper";
+import { scroll_to_top } from '../../utils/Helper/JSHelper';
+
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function ContentList() {
   const [sel_lang, set_sel_lang] = useState(
-    localStorage.getItem("apphomelang")
-      ? localStorage.getItem("apphomelang")
-      : "en"
+    localStorage.getItem('apphomelang')
+      ? localStorage.getItem('apphomelang')
+      : 'en'
   );
   const [sel_cource, set_sel_cource] = useState(
-    localStorage.getItem("apphomecource")
-      ? localStorage.getItem("apphomecource")
-      : "Listen & Speak"
+    localStorage.getItem('apphomecource')
+      ? localStorage.getItem('apphomecource')
+      : 'Listen & Speak'
   );
 
   useEffect(() => {
-    localStorage.setItem("apphomelang", sel_lang);
+    localStorage.setItem('apphomelang', sel_lang);
   }, [sel_lang]);
   useEffect(() => {
-    localStorage.setItem("apphomecource", sel_cource);
+    localStorage.setItem('apphomecource', sel_cource);
   }, [sel_cource]);
 
   const [extractContent, setExtractContent] = useState([]);
   const [load_cnt, set_load_cnt] = useState(0);
   useEffect(() => {
     if (load_cnt == 0) {
-      set_load_cnt((load_cnt) => Number(load_cnt + 1));
-      scroll_to_top("smooth");
+      set_load_cnt(load_cnt => Number(load_cnt + 1));
+      scroll_to_top('smooth');
       //extract title
       let tempContent = [];
       const content_count = Object.keys(content_list).length;
       const content_keys = Object.keys(content_list);
-      content_keys.forEach((key) => {
+      content_keys.forEach(key => {
         tempContent.push({
           title: content_list[key].title,
           key: key,
@@ -117,10 +120,10 @@ function ContentList() {
               <center>
                 {extractContent.map((item, index) => {
                   return (
-                    <Link to={"/proto2/contentstudy/" + item.key}>
+                    <Link to={'/proto2/contentstudy/' + item.key}>
                       <div
                         className="content_view cur_pointer"
-                        key={"content_list_" + index}
+                        key={'content_list_' + index}
                       >
                         {item.title}
                       </div>
@@ -132,6 +135,7 @@ function ContentList() {
             <div className="cols s12 m4 l4"></div>
           </div>
         </div>
+        <AppFooter />
       </>
     );
   }

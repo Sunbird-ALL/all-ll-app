@@ -31,7 +31,13 @@ export function Menu({ item, rightComponent, _card, _body }) {
     >
       <CardBody {..._body}>
         <HStack justifyContent={'space-between'}>
-          <Text>{item?.title ? item?.title : item?.name}</Text>
+          <Text>
+            {item?.title ? item?.title : item?.name}
+            <br />
+            <b> {item?.type ? item?.type : ''}</b>
+            <b> {item?.en ? 'English' : ''}</b>
+            <b> {item?.ta ? 'Tamil' : ''}</b>
+          </Text>
           {rightComponent ? rightComponent : item?.icon}
         </HStack>
       </CardBody>

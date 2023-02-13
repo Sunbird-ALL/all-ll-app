@@ -22,6 +22,9 @@ import play from '../../assests/Images/play.png';
 
 import next from '../../assests/Images/next.png';
 
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
+
 function Score() {
   const navigate = useNavigate();
   const [isStart, set_isStart] = useState(false);
@@ -398,6 +401,7 @@ function Score() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
+        <AppFooter />
       </Animation>
     );
   }

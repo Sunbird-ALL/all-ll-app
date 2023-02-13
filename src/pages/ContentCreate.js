@@ -94,7 +94,7 @@ export default function ContentCreate() {
           />
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>Select language</FormLabel>
+          <FormLabel>Select Type</FormLabel>
           <Select
             placeholder="Select Type"
             name="type"

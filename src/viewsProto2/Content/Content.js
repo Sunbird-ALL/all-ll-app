@@ -10,6 +10,9 @@ import VoiceCompair from "../../components/VoiceCompair/VoiceCompair";
 
 import { showLoading, stopLoading } from "../../utils/Helper/SpinnerHandle";
 
+/*chakra*/
+import AppFooter from '../../components2/AppFooter/AppFooter';
+
 function Content() {
   const app_history = useNavigate();
   // Get ID from URL
@@ -231,6 +234,7 @@ function Content() {
             <div className="cols s12 m4 l4"></div>
           </div>
         </div>
+        <AppFooter />
       </>
     );
   }
