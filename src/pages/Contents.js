@@ -8,12 +8,17 @@ import {
   ModalHeader,
   ModalOverlay,
   VStack,
+  FormControl,
+  FormLabel,
+  Select,
 } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../component/layout/Layout';
 import { Menu } from '../component/Menus';
 import { destroy, getAll } from '../services/contentServices';
+
+import SampleContent from '../utils/Const/SampleContent';
 
 export default function Contents() {
   const navigate = useNavigate();
@@ -36,15 +41,29 @@ export default function Contents() {
       _header={{
         title: 'Contents',
         rightComponent: (
-          <Button
-            size={'sm'}
-            colorScheme={'red'}
-            rounded="3xl"
-            px="6"
-            onClick={addData}
-          >
-            Add
-          </Button>
+          <>
+            <Button
+              size={'sm'}
+              colorScheme={'green'}
+              rounded="3xl"
+              px="6"
+              onClick={() => {
+                localStorage.setItem('contents', JSON.stringify(SampleContent));
+                window.location.reload();
+              }}
+            >
+              Add Sample Content
+            </Button>
+            <Button
+              size={'sm'}
+              colorScheme={'red'}
+              rounded="3xl"
+              px="6"
+              onClick={addData}
+            >
+              Add
+            </Button>
+          </>
         ),
       }}
       _body={{ title: 'Manage Content', _body: { p: 0 } }}
@@ -59,6 +78,7 @@ export default function Contents() {
 const ListComponent = ({ data, getData }) => {
   const navigate = useNavigate();
   const [obejctData, setObejctData] = React.useState();
+  const [filter_type, setfilter_type] = React.useState('');
   const deleteData = () => {
     if (obejctData.id) {
       destroy(obejctData.id);
@@ -69,6 +89,19 @@ const ListComponent = ({ data, getData }) => {
 
   return (
     <VStack w="100%">
+      {/*<FormControl isRequired>
+        <FormLabel>Filter by Type</FormLabel>
+        <Select
+          placeholder="All"
+          name="type"
+          value={filter_type}
+          onChange={e => setfilter_type(e.target.value)}
+        >
+          <option value="Word">Word</option>
+          <option value="Sentence">Sentence</option>
+          <option value="Paragraph">Paragraph</option>
+        </Select>
+      </FormControl>*/}
       {data?.map((item, key) => (
         <Menu
           {...{ key, item }}

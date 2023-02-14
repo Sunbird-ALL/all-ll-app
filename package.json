@@ -20,11 +20,19 @@
     "react-router-dom": "^6.7.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
-    "write-json-file": "^5.0.0"
+    "write-json-file": "^5.0.0",
+    "react-audio-analyser": "^1.0.0",
+    "react-audio-player": "^0.17.0",
+    "react-h5-audio-player": "^3.8.6",
+    "react-indexed-db": "^1.0.12",
+    "react-speech": "^1.0.2",
+    "react-speech-kit": "^3.0.1",
+    "react-use-window-size": "^1.0.1",
+    "reactjs-navbar": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -25,7 +25,7 @@ import { blobToBase64 } from '../utils/helper';
 
 const languageCore = [
   { text: 'English', value: 'en' },
-  { text: 'Hindi - हिंदी', value: 'hi' },
+  /*{ text: 'Hindi - हिंदी', value: 'hi' },*/
   { text: 'Tamil - தமிழ்', value: 'ta' },
 ];
 
@@ -92,6 +92,19 @@ export default function ContentCreate() {
             value={data?.title ? data?.title : ''}
             onChange={handleChange}
           />
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Select Type</FormLabel>
+          <Select
+            placeholder="Select Type"
+            name="type"
+            value={data?.type ? data?.type : ''}
+            onChange={handleChange}
+          >
+            <option value="Word">Word</option>
+            <option value="Sentence">Sentence</option>
+            <option value="Paragraph">Paragraph</option>
+          </Select>
         </FormControl>
         <FormControl isRequired>
           <FormLabel>Image</FormLabel>
