@@ -54,6 +54,9 @@ function StartLearn() {
       ? localStorage.getItem('apphomecource')
       : 'Listen & Speak'
   );
+  const [trysame, set_trysame] = useState(
+    localStorage.getItem('trysame') ? localStorage.getItem('trysame') : 'no'
+  );
 
   const [content, set_content] = useState(null);
   const [content_id, set_content_id] = useState(0);
@@ -87,7 +90,17 @@ function StartLearn() {
       });
       //console.log(JSON.stringify(tempContent[0].content));
       if (tempContent.length > 0) {
-        let getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
+        let getitem = localStorage.getItem('content_random_id')
+          ? localStorage.getItem('content_random_id')
+          : 0;
+        if (trysame != 'yes') {
+          let old_getitem = getitem;
+          while (old_getitem == getitem) {
+            getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
+          }
+        }
+        localStorage.setItem('trysame', 'no');
+        localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
         set_content_id(getitem);
       }
@@ -139,13 +152,13 @@ function StartLearn() {
                     <img className="image_class" src={content?.image} />
                     {sel_lang != 'ta' ? (
                       <div className="content_text_div">
-                        {content['ta'].text}
+                        {content['ta']?.text ? content['ta']?.text : ''}
                       </div>
                     ) : (
                       <></>
                     )}
                     <div className="content_text_div">
-                      {content[sel_lang].text}
+                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
                   </>
                 ) : (
@@ -153,13 +166,13 @@ function StartLearn() {
                     <br />
                     {sel_lang != 'ta' ? (
                       <div className="content_text_div_see">
-                        {content['ta'].text}
+                        {content['ta']?.text ? content['ta']?.text : ''}
                       </div>
                     ) : (
                       <></>
                     )}
                     <div className="content_text_div_see">
-                      {content[sel_lang].text}
+                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
                   </>
                 )}

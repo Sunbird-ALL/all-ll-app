@@ -328,9 +328,33 @@ function Score() {
                 <div className="row" style={{ padding: '5px' }}>
                   {resultnext == '' || apphomelevel === 'Paragraph' ? (
                     <>
-                      <div className="col s12 center">
+                      <div
+                        className={
+                          isfromresult === 'learn'
+                            ? 'col s6 center'
+                            : 'col s12 center'
+                        }
+                      >
+                        <div
+                          onClick={() => {
+                            localStorage.setItem('trysame', 'yes');
+                            navigate(-1);
+                          }}
+                        >
+                          <img src={refresh} className="home_icon"></img>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          isfromresult === 'learn'
+                            ? 'col s6 center'
+                            : 'col s12 center hide'
+                        }
+                      >
                         <div onClick={() => navigate(-1)}>
                           <img src={refresh} className="home_icon"></img>
+                          <br />
+                          try new
                         </div>
                       </div>
                       <div className="col s6 center hide">
@@ -350,9 +374,33 @@ function Score() {
                     </>
                   ) : (
                     <>
-                      <div className="col s12 center">
+                      <div
+                        className={
+                          isfromresult === 'learn'
+                            ? 'col s6 center'
+                            : 'col s12 center'
+                        }
+                      >
+                        <div
+                          onClick={() => {
+                            localStorage.setItem('trysame', 'yes');
+                            navigate(-1);
+                          }}
+                        >
+                          <img src={refresh} className="home_icon"></img>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          isfromresult === 'learn'
+                            ? 'col s6 center'
+                            : 'col s12 center hide'
+                        }
+                      >
                         <div onClick={() => navigate(-1)}>
                           <img src={refresh} className="home_icon"></img>
+                          <br />
+                          try new
                         </div>
                       </div>
                       <div className="col s4 center hide">

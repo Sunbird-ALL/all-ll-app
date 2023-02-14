@@ -167,14 +167,14 @@ function Start() {
                 <div className="col s12">
                   <br />
                   <br />
-                  <div className="learn_level_div">
-                    <Link
-                      to={'/proto2/startlearn'}
-                      onClick={() => {
-                        set_sel_level('Word');
-                        localStorage.setItem('apphomelevel', 'Word');
-                      }}
-                    >
+                  <Link
+                    to={'/proto2/startlearn'}
+                    onClick={() => {
+                      set_sel_level('Word');
+                      localStorage.setItem('apphomelevel', 'Word');
+                    }}
+                  >
+                    <div className="learn_level_div">
                       <div class="col s2">
                         <div className="learn_level_div_start">
                           <img src={new1word} className="learn_level_img" />
@@ -194,17 +194,17 @@ function Start() {
                       <div class="col s2">
                         <img src={learn_next} className="learn_next_img" />
                       </div>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                   <br />
-                  <div className="learn_level_div">
-                    <Link
-                      to={'/proto2/startlearn'}
-                      onClick={() => {
-                        set_sel_level('Word');
-                        localStorage.setItem('apphomelevel', 'Sentence');
-                      }}
-                    >
+                  <Link
+                    to={'/proto2/startlearn'}
+                    onClick={() => {
+                      set_sel_level('Word');
+                      localStorage.setItem('apphomelevel', 'Sentence');
+                    }}
+                  >
+                    <div className="learn_level_div">
                       <div class="col s2">
                         <div className="learn_level_div_start">
                           <img src={new2sentence} className="learn_level_img" />
@@ -224,17 +224,17 @@ function Start() {
                       <div class="col s2">
                         <img src={learn_next} className="learn_next_img" />
                       </div>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                   <br />
-                  <div className="learn_level_div">
-                    <Link
-                      to={'/proto2/startlearn'}
-                      onClick={() => {
-                        set_sel_level('Word');
-                        localStorage.setItem('apphomelevel', 'Paragraph');
-                      }}
-                    >
+                  <Link
+                    to={'/proto2/startlearn'}
+                    onClick={() => {
+                      set_sel_level('Word');
+                      localStorage.setItem('apphomelevel', 'Paragraph');
+                    }}
+                  >
+                    <div className="learn_level_div">
                       <div class="col s2">
                         <div className="learn_level_div_start">
                           <img
@@ -257,8 +257,8 @@ function Start() {
                       <div class="col s2">
                         <img src={learn_next} className="learn_next_img" />
                       </div>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                   {/*<br />
                   <div className="col s4">
                     <img
