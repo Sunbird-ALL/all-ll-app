@@ -29,7 +29,7 @@ function Start() {
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem("apphomelang")
       ? localStorage.getItem("apphomelang")
-      : "en"
+      : "ta"
   );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem("apphomelevel")

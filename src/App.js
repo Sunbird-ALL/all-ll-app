@@ -54,13 +54,15 @@ function App() {
         <Route path="/content/add" element={<ContentCreate />} />
         <Route path="/content/:id" element={<ContentCreate />} />
 
-        <Route path={'/*'} element={<HomeStudent />} />
+        {/*<Route path={'/*'} element={<HomeStudent />} />*/}
+        <Route path={'/*'} element={<Start />} />
         <Route path={'/speak'} element={<Speak />} />
         <Route path={'/start'} element={<Start />} />
         <Route path={'/startlearn'} element={<StartLearn />} />
         <Route path={'/score'} element={<Score />} />
 
-        <Route path={'/proto2/*'} element={<Home2 />} />
+        {/*<Route path={'/proto2/*'} element={<Home2 />} />*/}
+        <Route path={'/proto2/*'} element={<Start2 />} />
         <Route path={'/proto2/speak'} element={<Speak2 />} />
         <Route path={'/proto2/start'} element={<Start2 />} />
         <Route path={'/proto2/startlearn'} element={<StartLearn2 />} />

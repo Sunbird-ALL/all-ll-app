@@ -18,7 +18,7 @@ import Layout from '../component/layout/Layout';
 import { Menu } from '../component/Menus';
 import { destroy, getAll } from '../services/contentServices';
 
-import SampleContent from '../utils/Const/SampleContent';
+import SampleContent from '../utils/Const/SampleContent_Hari';
 
 export default function Contents() {
   const navigate = useNavigate();
