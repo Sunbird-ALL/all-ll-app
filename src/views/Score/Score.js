@@ -189,16 +189,18 @@ function Score() {
     set_isStart(true);
 
     //fluencytestresult
-    if (result_per_words < 40) {
+    if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Fluency Needed to Improve</font>
+        <font className="result_incorrect">Needs to work on fluency</font>
       );
-    } else if (result_per_words >= 40 && result_per_words <= 75) {
+    } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Average Fluency</font>
+        <font className="result_incorrect">Good scope to improve fluency</font>
       );
     } else {
-      setfluencyresult(<font className="result_incorrect">Good Fluency</font>);
+      setfluencyresult(
+        <font className="result_incorrect">You have good level of fluency</font>
+      );
     }
 
     setTestResult(
