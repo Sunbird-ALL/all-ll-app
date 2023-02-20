@@ -103,6 +103,7 @@ function Score() {
   const [voiceTextHighlight, setVoiceTextHighLight] = useState('');
   const [ocurracy_percentage, setOcurracy_percentage] = useState('');
   const [newtextresult, setnewtextresult] = useState('');
+  const [fluencyresult, setfluencyresult] = useState('');
 
   useEffect(() => {
     if (voiceText !== '') {
@@ -190,6 +191,21 @@ function Score() {
     set_numberOfPieces(result_per_words);
     set_isStart(true);
 
+    //fluencytestresult
+    if (result_per_words < 45) {
+      setfluencyresult(
+        <font className="result_incorrect">Needs to work on fluency</font>
+      );
+    } else if (result_per_words >= 45 && result_per_words <= 75) {
+      setfluencyresult(
+        <font className="result_incorrect">Good scope to improve fluency</font>
+      );
+    } else {
+      setfluencyresult(
+        <font className="result_incorrect">You have good level of fluency</font>
+      );
+    }
+
     setTestResult(
       <>
         <h5 className="home_sub_title">Word Result :</h5>
@@ -258,6 +274,9 @@ function Score() {
                   <br />
                   <br />
                   {newtextresult}
+                  <br />
+                  <br />
+                  {fluencyresult}
                   <br />
                   <br />
                   <div className="content_text_div_see">
@@ -342,6 +361,8 @@ function Score() {
                           }}
                         >
                           <img src={refresh} className="home_icon"></img>
+                          <br />
+                          try again
                         </div>
                       </div>
                       <div
@@ -388,6 +409,8 @@ function Score() {
                           }}
                         >
                           <img src={refresh} className="home_icon"></img>
+                          <br />
+                          try again
                         </div>
                       </div>
                       <div

@@ -1,26 +1,26 @@
-import React, { useState, useEffect, createRef } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import ReactAudioPlayer from "react-audio-player";
-import AudioPlayer from "react-h5-audio-player";
+import React, { useState, useEffect, createRef } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import ReactAudioPlayer from 'react-audio-player';
+import AudioPlayer from 'react-h5-audio-player';
 
-import AppNavbar from "../../components/AppNavbar/AppNavbar";
-import NewTopHomeNextBar from "../../components/NewTopHomeNextBar/NewTopHomeNextBar";
-import NewBottomHomeNextBar from "../../components/NewBottomHomeNextBar/NewBottomHomeNextBar";
+import AppNavbar from '../../components/AppNavbar/AppNavbar';
+import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
+import NewBottomHomeNextBar from '../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
 //import HomeNextBar from "../../components/HomeNextBar/HomeNextBar";
-import content_list from "../../utils/Const/ContentJSON";
-import home from "../../assests/Images/home.png";
-import menu from "../../assests/Images/menu.png";
-import next_nav from "../../assests/Images/next_nav.png";
-import "react-h5-audio-player/lib/styles.css";
-import VoiceCompair from "../../components/VoiceCompair/VoiceCompair";
-import refresh from "../../assests/Images/refresh.png";
-import Animation from "../../components/Animation/Animation";
+import content_list from '../../utils/Const/ContentJSON';
+import home from '../../assests/Images/home.png';
+import menu from '../../assests/Images/menu.png';
+import next_nav from '../../assests/Images/next_nav.png';
+import 'react-h5-audio-player/lib/styles.css';
+import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
+import refresh from '../../assests/Images/refresh.png';
+import Animation from '../../components/Animation/Animation';
 
-import { scroll_to_top } from "../../utils/Helper/JSHelper";
+import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
-import play from "../../assests/Images/play.png";
+import play from '../../assests/Images/play.png';
 
-import next from "../../assests/Images/next.png";
+import next from '../../assests/Images/next.png';
 
 function Score() {
   const navigate = useNavigate();
@@ -29,32 +29,32 @@ function Score() {
 
   const [content, set_content] = useState({});
   const [content_id, set_content_id] = useState(
-    localStorage.getItem("contentid") ? localStorage.getItem("contentid") : 0
+    localStorage.getItem('contentid') ? localStorage.getItem('contentid') : 0
   );
   const [contenttype, set_contenttype] = useState(
-    localStorage.getItem("contenttype")
-      ? localStorage.getItem("contenttype")
-      : "Word"
+    localStorage.getItem('contenttype')
+      ? localStorage.getItem('contenttype')
+      : 'Word'
   );
   const [isfromresult, set_isfromresult] = useState(
-    localStorage.getItem("isfromresult")
-      ? localStorage.getItem("isfromresult")
-      : "learn"
+    localStorage.getItem('isfromresult')
+      ? localStorage.getItem('isfromresult')
+      : 'learn'
   );
 
   const [resultnext, set_resultnext] = useState(
-    localStorage.getItem("resultnext") ? localStorage.getItem("resultnext") : ""
+    localStorage.getItem('resultnext') ? localStorage.getItem('resultnext') : ''
   );
   const [resultnextlang, set_resultnextlang] = useState(
-    localStorage.getItem("resultnextlang")
-      ? localStorage.getItem("resultnextlang")
-      : "en"
+    localStorage.getItem('resultnextlang')
+      ? localStorage.getItem('resultnextlang')
+      : 'en'
   );
 
   const [apphomelevel, set_apphomelevel] = useState(
-    localStorage.getItem("apphomelevel")
-      ? localStorage.getItem("apphomelevel")
-      : "Word"
+    localStorage.getItem('apphomelevel')
+      ? localStorage.getItem('apphomelevel')
+      : 'Word'
   );
 
   const [temp_audio, set_temp_audio] = useState(null);
@@ -75,34 +75,35 @@ function Score() {
   const [load_cnt, set_load_cnt] = useState(0);
 
   const [sel_lang, set_sel_lang] = useState(
-    localStorage.getItem("apphomelang")
-      ? localStorage.getItem("apphomelang")
-      : "en"
+    localStorage.getItem('apphomelang')
+      ? localStorage.getItem('apphomelang')
+      : 'en'
   );
 
   useEffect(() => {
     if (load_cnt == 0) {
       set_content(content_list[content_id]);
-      set_load_cnt((load_cnt) => Number(load_cnt + 1));
-      scroll_to_top("smooth");
+      set_load_cnt(load_cnt => Number(load_cnt + 1));
+      scroll_to_top('smooth');
     }
   }, [load_cnt]);
 
   const [recordedAudio, setRecordedAudio] = useState(
-    localStorage.getItem("recordedAudio")
+    localStorage.getItem('recordedAudio')
   );
-  const [testResult, setTestResult] = useState("");
+  const [testResult, setTestResult] = useState('');
   const [teacherText, setTeacherText] = useState(
-    localStorage.getItem("contentText")
+    localStorage.getItem('contentText')
   );
-  const [voiceText, setVoiceText] = useState(localStorage.getItem("voiceText"));
-  const [voiceTextTeacher, setVoiceTextTeacher] = useState("");
-  const [voiceTextHighlight, setVoiceTextHighLight] = useState("");
-  const [ocurracy_percentage, setOcurracy_percentage] = useState("");
-  const [newtextresult, setnewtextresult] = useState("");
+  const [voiceText, setVoiceText] = useState(localStorage.getItem('voiceText'));
+  const [voiceTextTeacher, setVoiceTextTeacher] = useState('');
+  const [voiceTextHighlight, setVoiceTextHighLight] = useState('');
+  const [ocurracy_percentage, setOcurracy_percentage] = useState('');
+  const [newtextresult, setnewtextresult] = useState('');
+  const [fluencyresult, setfluencyresult] = useState('');
 
   useEffect(() => {
-    if (voiceText !== "") {
+    if (voiceText !== '') {
       checkVoice(voiceText);
     }
   }, [voiceText]);
@@ -112,16 +113,16 @@ function Score() {
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText.toLowerCase();
     let tempteacherText = teacherText.toLowerCase();
-    tempteacherText = replaceAll(tempteacherText, ".", "");
-    tempteacherText = replaceAll(tempteacherText, "'", "");
-    tempteacherText = replaceAll(tempteacherText, ",", "");
-    tempteacherText = replaceAll(tempteacherText, "!", "");
-    tempteacherText = replaceAll(tempteacherText, "|", "");
+    tempteacherText = replaceAll(tempteacherText, '.', '');
+    tempteacherText = replaceAll(tempteacherText, "'", '');
+    tempteacherText = replaceAll(tempteacherText, ',', '');
+    tempteacherText = replaceAll(tempteacherText, '!', '');
+    tempteacherText = replaceAll(tempteacherText, '|', '');
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
       setTestResult(
-        <font style={{ fontSize: "20px", color: "green" }}>
+        <font style={{ fontSize: '20px', color: 'green' }}>
           Teacher and Student audio match
         </font>
       );
@@ -130,7 +131,7 @@ function Score() {
       );
     } else {
       setTestResult(
-        <font style={{ fontSize: "20px", color: "red" }}>
+        <font style={{ fontSize: '20px', color: 'red' }}>
           Teacher and Student audio does not match
         </font>
       );
@@ -140,8 +141,8 @@ function Score() {
     }
     //set text highlight
     let texttemp = voiceText.toLowerCase();
-    const studentTextArray = texttemp.split(" ");
-    const teacherTextArray = tempteacherText.split(" ");
+    const studentTextArray = texttemp.split(' ');
+    const teacherTextArray = tempteacherText.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
     let studentswords = studentTextArray.length;
@@ -153,7 +154,7 @@ function Score() {
         correct_words++;
         student_text_result.push(
           <>
-            {" "}
+            {' '}
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
@@ -161,7 +162,7 @@ function Score() {
         wrong_words++;
         student_text_result.push(
           <>
-            {" "}
+            {' '}
             <font className="inc_text">{studentTextArray[i]}</font>
           </>
         );
@@ -169,7 +170,7 @@ function Score() {
     }
     setOcurracy_percentage(
       <>
-        {" "}
+        {' '}
         <font className="res_txt">{result_per_words}/100</font>
       </>
     );
@@ -187,12 +188,27 @@ function Score() {
     set_numberOfPieces(result_per_words);
     set_isStart(true);
 
+    //fluencytestresult
+    if (result_per_words < 45) {
+      setfluencyresult(
+        <font className="result_incorrect">Needs to work on fluency</font>
+      );
+    } else if (result_per_words >= 45 && result_per_words <= 75) {
+      setfluencyresult(
+        <font className="result_incorrect">Good scope to improve fluency</font>
+      );
+    } else {
+      setfluencyresult(
+        <font className="result_incorrect">You have good level of fluency</font>
+      );
+    }
+
     setTestResult(
       <>
         <h5 className="home_sub_title">Word Result :</h5>
         <div className="res_txt">
           {originalwords < studentswords ? (
-            <font style={{ color: "red" }}>You have recorded extra word</font>
+            <font style={{ color: 'red' }}>You have recorded extra word</font>
           ) : (
             <>{result_per_words}/100</>
           )}
@@ -207,13 +223,13 @@ function Score() {
         <div className="res_txt">
           {tempteacherText === tempvoiceText ? (
             <>
-              <font style={{ color: "green" }}>
+              <font style={{ color: 'green' }}>
                 You recorded text match with content text
               </font>
             </>
           ) : (
             <>
-              <font style={{ color: "red" }}>
+              <font style={{ color: 'red' }}>
                 You recorded text does not match with content text
               </font>
             </>
@@ -243,18 +259,21 @@ function Score() {
                   <hr />
                   {testResult}
                   <hr />*/}
-                  {contenttype != "Word" && numberOfPieces > 50 ? (
+                  {contenttype != 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
                       <br />
                       <div className="res_txt">{numberOfPieces}/100</div>
                     </>
                   ) : (
-                    ""
+                    ''
                   )}
                   <br />
                   <br />
                   {newtextresult}
+                  <br />
+                  <br />
+                  {fluencyresult}
                   <br />
                   <br />
                   <div className="content_text_div_see">
@@ -263,9 +282,9 @@ function Score() {
                   <br />
                   <img
                     style={{
-                      width: "40px",
-                      height: "40px",
-                      cursor: "pointer",
+                      width: '40px',
+                      height: '40px',
+                      cursor: 'pointer',
                     }}
                     src={play}
                     onClick={() => playAudio()}
@@ -322,8 +341,8 @@ function Score() {
               {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
 
               <div className="app_footbar_remove">
-                <div className="row" style={{ padding: "5px" }}>
-                  {resultnext == "" || apphomelevel === "Paragraph" ? (
+                <div className="row" style={{ padding: '5px' }}>
+                  {resultnext == '' || apphomelevel === 'Paragraph' ? (
                     <>
                       <div className="col s12 center">
                         <div onClick={() => navigate(-1)}>
@@ -331,9 +350,9 @@ function Score() {
                         </div>
                       </div>
                       <div className="col s6 center hide">
-                        <Link to={isfromresult === "learn" ? "/start" : "/"}>
+                        <Link to={isfromresult === 'learn' ? '/start' : '/'}>
                           <img
-                            src={isfromresult === "learn" ? menu : home}
+                            src={isfromresult === 'learn' ? menu : home}
                             className="home_icon"
                           ></img>
                         </Link>
@@ -347,35 +366,35 @@ function Score() {
                         </div>
                       </div>
                       <div className="col s4 center hide">
-                        <Link to={isfromresult === "learn" ? "/start" : "/"}>
+                        <Link to={isfromresult === 'learn' ? '/start' : '/'}>
                           <img
-                            src={isfromresult === "learn" ? menu : home}
+                            src={isfromresult === 'learn' ? menu : home}
                             className="home_icon"
                           ></img>
                         </Link>
                       </div>
-                      <div className="col s12" style={{ textAlign: "right" }}>
+                      <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
-                            isfromresult === "learn"
-                              ? "/startlearn"
-                              : "/" + resultnext
+                            isfromresult === 'learn'
+                              ? '/startlearn'
+                              : '/' + resultnext
                           }
                           onClick={() => {
                             //localStorage.setItem("apphomelang", resultnextlang);
                             const next_apphomelevel =
-                              apphomelevel === "Word"
-                                ? "Sentence"
-                                : apphomelevel === "Sentence"
-                                ? "Paragraph"
-                                : "Word";
+                              apphomelevel === 'Word'
+                                ? 'Sentence'
+                                : apphomelevel === 'Sentence'
+                                ? 'Paragraph'
+                                : 'Word';
                             localStorage.setItem(
-                              "apphomelevel",
+                              'apphomelevel',
                               next_apphomelevel
                             );
                           }}
                         >
-                          <img src={next_nav} className={"next_nav"}></img>
+                          <img src={next_nav} className={'next_nav'}></img>
                         </Link>
                       </div>
                     </>
