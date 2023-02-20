@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) to view prototype v1 in your
 
 Open [http://localhost:3000/proto2/all](http://localhost:3000/proto2/all) to view prototype v2 with authoring tool in your browser.
 
-**Note: Go to Im Teacher option and then click on Add Sample Content to load already generated JSON file in localstorage**
+**Note: Go to I m Teacher option and then click on Add Sample Content to load already generated JSON file in localstorage**
 
 ### `npm build`
 
