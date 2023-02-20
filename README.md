@@ -16,7 +16,7 @@ to install all required packages
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view prototype v1 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000/proto2/all) to view prototype v2 with authoring tool in your browser.
+Open [http://localhost:3000/proto2/all](http://localhost:3000/proto2/all) to view prototype v2 with authoring tool in your browser.
 
 ### `npm build`
 
