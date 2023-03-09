@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
@@ -10,13 +10,15 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import ReactAudioPlayer from 'react-audio-player';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
-
+import refresh from '../../assests/Images/refresh.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function StartLearn() {
+  const navigate = useNavigate();
+
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
@@ -230,6 +232,11 @@ function StartLearn() {
                 </div>
 
                 <br />
+                <div onClick={() => navigate(0)}>
+                  <img src={refresh} className="home_icon"></img>
+                  <br />
+                  Try new
+                </div>
                 <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
               </div>
               <div className="cols s12 m2 l3"></div>
@@ -241,7 +248,7 @@ function StartLearn() {
               <div className="row">
                 <div className="col s12 m2 l3"></div>
                 <div className="col s12 m8 l6 main_layout">
-                  <h1>No Content Found</h1>
+                  <h1>Loading</h1>
                 </div>
               </div>
             </div>
