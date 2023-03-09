@@ -1,12 +1,6 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import ReactAudioPlayer from 'react-audio-player';
-import AudioPlayer from 'react-h5-audio-player';
 
-import AppNavbar from '../../components/AppNavbar/AppNavbar';
-import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
-import NewBottomHomeNextBar from '../../components2/NewBottomHomeNextBar/NewBottomHomeNextBar';
-//import HomeNextBar from "../../components2/HomeNextBar/HomeNextBar";
 import content_list from '../../utils/Const/ContentJSON';
 import home from '../../assests/Images/home.png';
 import menu from '../../assests/Images/menu.png';
@@ -263,19 +257,10 @@ function Score() {
           <div className="row">
             <div className="col s12 m2 l3"></div>
             <div className="col s12 m8 l6 main_layout">
-              {/*<AppNavbar navtitle="Result" />*/}
               <br />
-              <NewTopHomeNextBar
-                nextlink={resultnext}
-                resultnextlang={resultnextlang}
-                ishomeback={true}
-              />
+
               <div>
                 <center>
-                  {/*<h5 className="home_title">Result</h5>
-                  <hr />
-                  {testResult}
-                  <hr />*/}
                   {contenttype != 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
@@ -319,12 +304,6 @@ function Score() {
                     />
                   )}
 
-                  {/*<ReactAudioPlayer
-                    autoPlay={false}
-                    src={recordedAudio}
-                    controls
-                    style={{ width: "100%" }}
-                  />*/}
                   <br />
                   <br />
                   <br />
@@ -409,8 +388,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/start'
-                              : '/proto2/'
+                              ? '/proto4/start'
+                              : '/proto4/'
                           }
                         >
                           <img
@@ -457,8 +436,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/start'
-                              : '/proto2/'
+                              ? '/proto4/start'
+                              : '/proto4/'
                           }
                         >
                           <img
@@ -471,8 +450,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/startlearn'
-                              : '/proto2/' + resultnext
+                              ? '/proto4/startlearn'
+                              : '/proto4/' + resultnext
                           }
                           onClick={() => {
                             //localStorage.setItem("apphomelang", resultnextlang);
@@ -499,7 +478,7 @@ function Score() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
-        <AppFooter />
+        {/* <AppFooter hideNavigation={true} /> */}
       </Animation>
     );
   }

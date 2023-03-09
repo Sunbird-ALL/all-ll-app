@@ -32,6 +32,7 @@ function Score() {
   const [isStart, set_isStart] = useState(false);
   const [numberOfPieces, set_numberOfPieces] = useState(0);
   const [flag, setFlag] = useState(true);
+
   const [content, set_content] = useState({});
   const [content_id, set_content_id] = useState(
     localStorage.getItem('contentid') ? localStorage.getItem('contentid') : 0
@@ -66,6 +67,7 @@ function Score() {
   const playAudio = () => {
     set_temp_audio(new Audio(recordedAudio));
   };
+
   const pauseAudio = () => {
     if (temp_audio !== null) {
       temp_audio.pause();
@@ -268,7 +270,8 @@ function Score() {
               <NewTopHomeNextBar
                 nextlink={resultnext}
                 resultnextlang={resultnextlang}
-                ishomeback={true}
+                ishomeback={false}
+                isHideNavigation={true}
               />
               <div>
                 <center>
@@ -409,8 +412,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/start'
-                              : '/proto2/'
+                              ? '/proto3/start'
+                              : '/proto3/'
                           }
                         >
                           <img
@@ -457,8 +460,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/start'
-                              : '/proto2/'
+                              ? '/proto3/start'
+                              : '/proto3/'
                           }
                         >
                           <img
@@ -471,8 +474,8 @@ function Score() {
                         <Link
                           to={
                             isfromresult === 'learn'
-                              ? '/proto2/startlearn'
-                              : '/proto2/' + resultnext
+                              ? '/proto3/startlearn'
+                              : '/proto3/' + resultnext
                           }
                           onClick={() => {
                             //localStorage.setItem("apphomelang", resultnextlang);
@@ -499,7 +502,7 @@ function Score() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
-        <AppFooter />
+        {/* <AppFooter hideNavigation={true} /> */}
       </Animation>
     );
   }

@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components2/NewBottomHomeNextBar/NewBottomHomeNextBar';
 //import HomeNextBar from "../../components2/HomeNextBar/HomeNextBar";
-import content_list from '../../utils/Const/Const';
+import { getContentList } from '../../utils/Const/Const';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import ReactAudioPlayer from 'react-audio-player';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 
+import axios from 'axios';
+
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
+import { useWindowSize } from 'react-use-window-size';
+import { getParameter } from '../../utils/helper';
 
 function StartLearn() {
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
+  const location = useLocation();
   const playAudio = () => {
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
+
   const pauseAudio = () => {
     if (temp_audio !== null) {
       temp_audio.pause();
@@ -75,19 +81,14 @@ function StartLearn() {
   const [content_id, set_content_id] = useState(0);
 
   const [load_cnt, set_load_cnt] = useState(0);
+  // const [content_list, setContent_list] = useState(null);
 
   useEffect(() => {
+    // getfromurl();
     if (load_cnt == 0) {
       let count_array = 0;
-      /*for (let value of content_list) {
-        if (value.title == sel_level) {
-          set_content(value);
-          set_content_id(count_array);
-          break;
-        }
-        count_array++;
-      }*/
-      //extract title
+      const content_list = getContentList();
+
       let tempContent = [];
       const content_count = Object.keys(content_list).length;
       const content_keys = Object.keys(content_list);
@@ -101,7 +102,6 @@ function StartLearn() {
           });
         }
       });
-      //console.log(JSON.stringify(tempContent[0].content));
       if (tempContent.length > 0) {
         let getitem = localStorage.getItem('content_random_id')
           ? localStorage.getItem('content_random_id')
@@ -143,7 +143,7 @@ function StartLearn() {
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
-    document.getElementById('link_score_proto2').click();
+    document.getElementById('link_score_proto3').click();
   }
   function showStartLearn() {
     return (
@@ -153,14 +153,14 @@ function StartLearn() {
             <div className="row">
               <div className="col s12 m2 l3"></div>
               <div className="col s12 m8 l6 main_layout">
-                {/*<AppNavbar navtitle={sel_cource + " a " + sel_level} />*/}
                 <br />
-                <NewTopHomeNextBar nextlink={''} ishomeback={true} />
+                <NewTopHomeNextBar
+                  nextlink={''}
+                  ishomeback={false}
+                  isHideNavigation={true}
+                />
                 {sel_cource === 'See & Speak' ? (
                   <>
-                    {/*<div className="content_text_div">
-                    {"Answer in one " + sel_level + ". What is this?"}
-                  </div>*/}
                     <br />
                     <img className="image_class" src={content?.image} />
                     {sel_lang != 'ta' ? (
@@ -189,21 +189,20 @@ function StartLearn() {
                     </div>
                   </>
                 )}
+                <br />
 
                 <div style={{ display: 'inline-flex' }}>
                   {flag ? (
-                    <>
-                      <img
-                        style={{
-                          width: '80px',
-                          height: '80px',
-                          cursor: 'pointer',
-                          marginRight: '80px',
-                        }}
-                        src={play}
-                        onClick={() => playAudio()}
-                      />
-                    </>
+                    <img
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        cursor: 'pointer',
+                        marginRight: '80px',
+                      }}
+                      src={play}
+                      onClick={() => playAudio()}
+                    />
                   ) : (
                     <img
                       style={{
@@ -223,13 +222,12 @@ function StartLearn() {
                     flag={true}
                   />
                 </div>
+
                 <br />
                 <div style={{ display: 'inline-flex' }}>
                   <h4 className="text-play"> Listen</h4>
                   <h4 className="text-speak">speak</h4>
                 </div>
-
-                <br />
                 <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
               </div>
               <div className="cols s12 m2 l3"></div>
@@ -247,7 +245,7 @@ function StartLearn() {
             </div>
           </>
         )}
-        <AppFooter />
+        {/* <AppFooter hideNavigation={true} removeData={true} /> */}
       </>
     );
   }

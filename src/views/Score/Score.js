@@ -18,7 +18,9 @@ import Animation from '../../components/Animation/Animation';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
-import play from '../../assests/Images/play.png';
+import play from '../../assests/Images/play-img.png';
+
+import pause from '../../assests/Images/pause-img.png';
 
 import next from '../../assests/Images/next.png';
 
@@ -26,7 +28,7 @@ function Score() {
   const navigate = useNavigate();
   const [isStart, set_isStart] = useState(false);
   const [numberOfPieces, set_numberOfPieces] = useState(0);
-
+  const [flag, setFlag] = useState(true);
   const [content, set_content] = useState({});
   const [content_id, set_content_id] = useState(
     localStorage.getItem('contentid') ? localStorage.getItem('contentid') : 0
@@ -61,9 +63,17 @@ function Score() {
   const playAudio = () => {
     set_temp_audio(new Audio(recordedAudio));
   };
-  useEffect(() => {
+  const pauseAudio = () => {
+    if (temp_audio !== null) {
+      temp_audio.pause();
+      setFlag(!false);
+    }
+  };
+  const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
+      setFlag(!flag);
+      temp_audio.addEventListener('ended', () => setFlag(true));
       //temp_audio.addEventListener("ended", () => alert("end"));
     }
     return () => {
@@ -71,6 +81,10 @@ function Score() {
         temp_audio.pause();
       }
     };
+  };
+
+  useEffect(() => {
+    learnAudio();
   }, [temp_audio]);
   const [load_cnt, set_load_cnt] = useState(0);
 
@@ -280,15 +294,28 @@ function Score() {
                     {voiceTextHighlight}
                   </div>
                   <br />
-                  <img
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      cursor: 'pointer',
-                    }}
-                    src={play}
-                    onClick={() => playAudio()}
-                  />
+                  {flag ? (
+                    <img
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        cursor: 'pointer',
+                      }}
+                      src={play}
+                      onClick={() => playAudio()}
+                    />
+                  ) : (
+                    <img
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                        cursor: 'pointer',
+                      }}
+                      src={pause}
+                      onClick={() => pauseAudio()}
+                    />
+                  )}
+
                   {/*<ReactAudioPlayer
                     autoPlay={false}
                     src={recordedAudio}

@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
-
-import AppNavbar from '../../components/AppNavbar/AppNavbar';
-import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
-import NewBottomHomeNextBar from '../../components2/NewBottomHomeNextBar/NewBottomHomeNextBar';
-//import HomeNextBar from "../../components2/HomeNextBar/HomeNextBar";
-
-//icons
-import p1Word from '../../assests/Images/Learn/p1Word.jpg';
-import p2Sentence from '../../assests/Images/Learn/p2Sentence.jpg';
-import p3Para from '../../assests/Images/Learn/p3Para.jpg';
-import p1Word_ta from '../../assests/Images/Learn/p1Word_ta.jpg';
-import p2Sentence_ta from '../../assests/Images/Learn/p2Sentence_ta.jpg';
-import p3Para_ta from '../../assests/Images/Learn/p3Para_ta.jpg';
-
-import p1SeanSpeak from '../../assests/Images/Learn/p1SeanSpeak.jpg';
-import p2Listen from '../../assests/Images/Learn/p2Listen.jpg';
-import p3Read from '../../assests/Images/Learn/p3Read.jpg';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import new1word from '../../assests/Images/Learn/new1word.png';
 import new2sentence from '../../assests/Images/Learn/new2sentence.png';
@@ -26,18 +9,28 @@ import learn_next from '../../assests/Images/learn_next.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
-import AppFooter from '../../components2/AppFooter/AppFooter';
+import { getParameter } from '../../utils/helper';
+import axios from 'axios';
 
 function Start() {
+  const [url, setUrl] = useState('');
+  const [tabShow, setTabShow] = useState('');
+  const [tabShowSentece, setTabShowSentence] = useState('');
+  const [tabShowPara, setTabShowPara] = useState('');
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isVisible, setVisible] = useState(false);
+  const location = useLocation();
+
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
       : 'ta'
   );
   const [sel_level, set_sel_level] = useState(
-    localStorage.getItem('apphomelevel')
-      ? localStorage.getItem('apphomelevel')
-      : 'Word'
+    // localStorage.getItem('apphomelevel')
+    //   ? localStorage.getItem('apphomelevel')
+    //   : 'Word'
+    'Word'
   );
   const [sel_cource, set_sel_cource] = useState(
     localStorage.getItem('apphomecource')
@@ -52,13 +45,51 @@ function Start() {
         : 'English'
       : 'English'
   );
+  useEffect(() => {
+    const metadata = window.name ? JSON.parse(window.name) : {};
 
+    const url = getParameter('source', location.search);
+    localStorage.setItem('URL', window.location.href);
+    // setUrl(dataUrl ? dataUrl : metadata.url ? metadata.url : '');
+    setUrl(url ? url : '');
+  }, []);
   useEffect(() => {
     localStorage.setItem('apphomelang', sel_lang);
   }, [sel_lang]);
+
+  const getfromurl = () => {
+    const filePath = getParameter('source', location.search);
+    if (filePath) {
+      axios
+        .get(filePath)
+        .then(res => {
+          localStorage.setItem('contents', JSON.stringify(res.data));
+
+          let data = JSON.parse(JSON.stringify(res.data));
+          let val =
+            data &&
+            Object.values(data).map(item => {
+              return item.type;
+            });
+          let tabShowWord = val && val.find(val => val === 'Word');
+          let tabShowS = val && val.find(val => val === 'Sentence');
+          let tabShowP = val && val.find(val => val === 'Paragraph');
+          setTabShow(tabShowWord);
+          setTabShowSentence(tabShowS);
+          setTabShowPara(tabShowP);
+
+          localStorage.setItem('apphomelevel', tabShowWord);
+        })
+        .catch(err => console.log(err));
+    } else {
+      localStorage.removeItem('contents');
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem('apphomelevel', sel_level);
+    getfromurl();
   }, [sel_level]);
+
   useEffect(() => {
     localStorage.setItem('apphomecource', sel_cource);
   }, [sel_cource]);
@@ -80,11 +111,10 @@ function Start() {
             <div className="col s12 m8 l6 main_layout">
               {/*<AppNavbar navtitle="What would you like to do now?" />*/}
               <br />
-              <NewTopHomeNextBar
+              {/* <NewTopHomeNextBar
                 nextlink={'startlearn'}
                 resultnextlang={sel_lang}
-                hideNavigation={true}
-              />
+              /> */}
               {/*<font className="lang_font_inactive">{sel_lang_text}</font>{" "}
               <font
                 onClick={() => {
@@ -168,98 +198,110 @@ function Start() {
                 <div className="col s12">
                   <br />
                   <br />
-                  <Link
-                    to={'/proto2/startlearn'}
-                    onClick={() => {
-                      set_sel_level('Word');
-                      localStorage.setItem('apphomelevel', 'Word');
-                    }}
-                  >
-                    <div className="learn_level_div">
-                      <div class="col s2">
-                        <div className="learn_level_div_start">
-                          <img src={new1word} className="learn_level_img" />
+                  {tabShow === 'Word' && (
+                    <Link
+                      to={`/proto4/startlearn`}
+                      onClick={() => {
+                        set_sel_level('Word');
+                        localStorage.setItem('apphomelevel', 'Word');
+                      }}
+                    >
+                      <div className="learn_level_div">
+                        <div className="col s2">
+                          <div className="learn_level_div_start">
+                            <img src={new1word} className="learn_level_img" />
+                          </div>
+                        </div>
+                        <div className="col s8">
+                          <div className="learn_level_div_middle">
+                            <font className="learn_title">
+                              {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
+                            </font>
+                            <br />
+                            <font className="learn_sub_title">
+                              Learn to say single word
+                            </font>
+                          </div>
+                        </div>
+                        <div className="col s2">
+                          <img src={learn_next} className="learn_next_img" />
                         </div>
                       </div>
-                      <div class="col s8">
-                        <div className="learn_level_div_middle">
-                          <font className="learn_title">
-                            {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
-                          </font>
-                          <br />
-                          <font className="learn_sub_title">
-                            Learn to say single word
-                          </font>
-                        </div>
-                      </div>
-                      <div class="col s2">
-                        <img src={learn_next} className="learn_next_img" />
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  )}
+
                   <br />
-                  <Link
-                    to={'/proto2/startlearn'}
-                    onClick={() => {
-                      set_sel_level('Word');
-                      localStorage.setItem('apphomelevel', 'Sentence');
-                    }}
-                  >
-                    <div className="learn_level_div">
-                      <div class="col s2">
-                        <div className="learn_level_div_start">
-                          <img src={new2sentence} className="learn_level_img" />
+                  {tabShowSentece === 'Sentence' && (
+                    <Link
+                      to={'/proto4/startlearn'}
+                      onClick={() => {
+                        set_sel_level('Word');
+                        localStorage.setItem('apphomelevel', 'Sentence');
+                      }}
+                    >
+                      <div className="learn_level_div">
+                        <div className="col s2">
+                          <div className="learn_level_div_start">
+                            <img
+                              src={new2sentence}
+                              className="learn_level_img"
+                            />
+                          </div>
+                        </div>
+                        <div className="col s8">
+                          <div className="learn_level_div_middle">
+                            <font className="learn_title">
+                              {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
+                            </font>
+                            <br />
+                            <font className="learn_sub_title">
+                              Learn to say single sentence
+                            </font>
+                          </div>
+                        </div>
+                        <div className="col s2">
+                          <img src={learn_next} className="learn_next_img" />
                         </div>
                       </div>
-                      <div class="col s8">
-                        <div className="learn_level_div_middle">
-                          <font className="learn_title">
-                            {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
-                          </font>
-                          <br />
-                          <font className="learn_sub_title">
-                            Learn to say single sentence
-                          </font>
-                        </div>
-                      </div>
-                      <div class="col s2">
-                        <img src={learn_next} className="learn_next_img" />
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  )}
+
                   <br />
-                  <Link
-                    to={'/proto2/startlearn'}
-                    onClick={() => {
-                      set_sel_level('Word');
-                      localStorage.setItem('apphomelevel', 'Paragraph');
-                    }}
-                  >
-                    <div className="learn_level_div">
-                      <div class="col s2">
-                        <div className="learn_level_div_start">
-                          <img
-                            src={new3paragraph}
-                            className="learn_level_img"
-                          />
+                  {tabShowPara === 'Paragraph' && (
+                    <Link
+                      to={'/proto4/startlearn'}
+                      onClick={() => {
+                        set_sel_level('Word');
+                        localStorage.setItem('apphomelevel', 'Paragraph');
+                      }}
+                    >
+                      <div className="learn_level_div">
+                        <div className="col s2">
+                          <div className="learn_level_div_start">
+                            <img
+                              src={new3paragraph}
+                              className="learn_level_img"
+                            />
+                          </div>
+                        </div>
+                        <div className="col s8">
+                          <div className="learn_level_div_middle">
+                            <font className="learn_title">
+                              {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
+                            </font>
+                            <br />
+                            <font className="learn_sub_title">
+                              Learn to say single paragraph
+                            </font>
+                          </div>
+                        </div>
+                        <div className="col s2">
+                          <img src={learn_next} className="learn_next_img" />
                         </div>
                       </div>
-                      <div class="col s8">
-                        <div className="learn_level_div_middle">
-                          <font className="learn_title">
-                            {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
-                          </font>
-                          <br />
-                          <font className="learn_sub_title">
-                            Learn to say single paragraph
-                          </font>
-                        </div>
-                      </div>
-                      <div class="col s2">
-                        <img src={learn_next} className="learn_next_img" />
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  )}
+
                   {/*<br />
                   <div className="col s4">
                     <img
@@ -433,7 +475,7 @@ function Start() {
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
-        <AppFooter />
+        {/* <AppFooter hideNavigation={true} /> */}
       </>
     );
   }

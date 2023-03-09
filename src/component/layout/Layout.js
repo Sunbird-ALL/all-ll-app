@@ -7,7 +7,7 @@ import {
   ChakraProvider,
   theme,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaHome, FaUser, FaUserGraduate } from 'react-icons/fa';
 import { useWindowSize } from '../../utils/helper';
 import AppBar from './AppBar';
@@ -17,6 +17,7 @@ import Header from './Header';
 export default function App({ isHideLayout, ...props }) {
   return !isHideLayout ? <Layout {...props} /> : props?.children;
 }
+
 function Layout({ _header, _body, children }) {
   const { title, ...__body } = _body ? _body : {};
   const [width, height] = useWindowSize();
@@ -31,9 +32,13 @@ function Layout({ _header, _body, children }) {
       link: '/content',
       icon: <FaUserGraduate />,
     },
-    { title: 'I am a Student', link: '/proto2/', icon: <FaUser /> },
+    {
+      title: 'I am a Student',
+      link: `/proto2/`,
+      icon: <FaUser />,
+    },
   ];
-  console.log(width);
+
   return (
     <ChakraProvider theme={theme}>
       <Center>

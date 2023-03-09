@@ -13,8 +13,9 @@ import { useWindowSize } from '../../utils/helper';
 
 import Footer from '../../component/layout/Footer';
 
-export default function AppFooter() {
+export default function AppFooter({ hideNavigation, removeData }) {
   const [width, height] = useWindowSize();
+
   const menues = [
     {
       title: 'Home',
@@ -32,12 +33,19 @@ export default function AppFooter() {
       icon: <FaUser style={{ color: 'red' }} />,
     },
   ];
-  console.log(width);
+  const menues2 = [
+    {
+      title: 'I am a Student',
+      link: `/proto3/all`,
+      icon: <FaUser style={{ color: 'red' }} />,
+    },
+  ];
+
   return (
     <div className="">
       <div className="row">
         <div className="cols s12">
-          <Footer menues={menues} width={'100%'} />
+          <Footer menues={hideNavigation ? menues2 : menues} width={'100%'} />
         </div>
       </div>
     </div>

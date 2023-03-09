@@ -1,12 +1,13 @@
-import React from "react";
+import React from 'react';
 
-//import * as Recorder from "./recorder";
-import Recorder from "./Recorder";
+// import * as Recorder from './recorder';
+import Recorder from './Recorder';
 
-import mic from "../../assests/Images/mic.png";
-import mic_on from "../../assests/Images/mic_on.png";
-
-import { showLoading, stopLoading } from "../../utils/Helper/SpinnerHandle";
+// import mic from '../../assests/Images/mic.png';
+import mic_on from '../../assests/Images/mic_on.png';
+import mic from '../../assests/Images/mic.png';
+import stop from '../../assests/Images/stop.png';
+import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -27,18 +28,19 @@ var constraints = {
 };
 
 const MODEL_SAMPLING_RATE = 16000;
-const MODEL_LANGUAGE = "ta";
+const MODEL_LANGUAGE = 'ta';
 
 function Mic({
   name,
   onStop,
   value,
+  flag,
   setTamilRecordedAudio,
   setTamilRecordedText,
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
-  const [tamiltext, setTamiltext] = React.useState("");
+  const [tamiltext, setTamiltext] = React.useState('');
 
   React.useEffect(() => {
     setUrl(value);
@@ -50,7 +52,7 @@ function Mic({
       .getUserMedia(constraints)
       .then(function (stream) {
         console.log(
-          "getUserMedia() success, stream created, initializing Recorder.js ..."
+          'getUserMedia() success, stream created, initializing Recorder.js ...'
         );
         /* assign to gumStream for later use */
         gumStream = stream;
@@ -63,11 +65,11 @@ function Mic({
         });
         //start the recording process
         rec.record();
-        console.log("Recording started");
+        console.log('Recording started');
       })
       .catch(function (err) {
         //enable the record button if getUserMedia() fails
-        console.log("error", err);
+        console.log('error', err);
       });
   };
 
@@ -77,11 +79,11 @@ function Mic({
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
-    rec.exportWAV(handleRecording, "audio/wav", MODEL_SAMPLING_RATE);
+    rec.exportWAV(handleRecording, 'audio/wav', MODEL_SAMPLING_RATE);
   };
 
   const pauseRecording = () => {
-    console.log("pauseRecording rec.recording=", rec.recording);
+    console.log('pauseRecording rec.recording=', rec.recording);
     if (rec.recording) {
       rec.stop();
     } else {
@@ -89,11 +91,11 @@ function Mic({
     }
   };
 
-  const handleRecording = (blob) => {
+  const handleRecording = blob => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = () => {
-      var base64Data = reader.result.split(",")[1];
+      var base64Data = reader.result.split(',')[1];
       getASROutput(base64Data, blob);
     };
   };
@@ -102,13 +104,13 @@ function Mic({
     var newUrl = URL.createObjectURL(blob);
     setUrl(newUrl);
     setTamilRecordedAudio(newUrl);
-    console.log(new Date().toISOString() + ".wav", transcript);
+    console.log(new Date().toISOString() + '.wav', transcript);
     if (onStop) onStop({ text: transcript, audio: newUrl });
   };
 
   const getASROutput = (asrInput, blob) => {
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Content-Type', 'application/json');
 
     var payload = JSON.stringify({
       config: {
@@ -116,9 +118,9 @@ function Mic({
           sourceLanguage: MODEL_LANGUAGE,
         },
         transcriptionFormat: {
-          value: "transcript",
+          value: 'transcript',
         },
-        audioFormat: "wav",
+        audioFormat: 'wav',
         samplingRate: MODEL_SAMPLING_RATE,
       },
       audio: [
@@ -129,34 +131,42 @@ function Mic({
     });
 
     var requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: myHeaders,
       body: payload,
-      redirect: "follow",
+      redirect: 'follow',
     };
 
     const ASR_REST_URL =
-      "https://asr-api.ai4bharat.org/asr/v1/recognize/" + MODEL_LANGUAGE;
+      'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
     fetch(ASR_REST_URL, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
+      .then(response => response.text())
+      .then(result => {
         var apiResponse = JSON.parse(result);
-        setTamiltext(apiResponse["output"][0]["source"]);
-        createDownloadLink(blob, apiResponse["output"][0]["source"]);
+        setTamiltext(apiResponse['output'][0]['source']);
+        createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
-        setTamilRecordedText(apiResponse["output"][0]["source"]);
+        setTamilRecordedText(apiResponse['output'][0]['source']);
       })
-      .catch((error) => {
-        console.log("error", error);
+      .catch(error => {
+        console.log('error', error);
         stopLoading();
       });
   };
 
   const IconMic = () => {
     if (record) {
-      return <img src={mic_on} className="micimg mic_stop_record"></img>;
+      return (
+        <>
+          {flag ? (
+            <img src={stop} className="micimg mic_record"></img>
+          ) : (
+            <img src={mic_on} className="micimg mic_stop_record"></img>
+          )}
+        </>
+      );
     } else {
-      return <img src={mic} className="micimg mic_record"></img>;
+      return <img src={mic} className={'micimg mic_record'}></img>;
     }
   };
 
