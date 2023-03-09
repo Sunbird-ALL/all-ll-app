@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
 //custom
-import "./Spinner.css";
+import './Spinner.css';
 
 function Spinner() {
   const styles = {
-    display: "none",
+    display: 'none',
   };
   return (
     <React.Fragment>
-      <div id="loadingmsg" style={styles}>
+      <div id="loadingmsg1" style={styles}>
         <div className="loader"></div>
-        <div id="progresspercentage"></div>
+        <div id="progresspercentage1"></div>
       </div>
-      <div id="loadingover" style={styles}></div>
+      <div id="loadingover1" style={styles}></div>
     </React.Fragment>
   );
 }

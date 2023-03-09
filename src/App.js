@@ -1,5 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import {
+  BrowserRouter,
+  HashRouter,
+  Routes,
+  Route,
+  Link,
+} from 'react-router-dom';
 import ContentCreate from './pages/ContentCreate';
 import Contents from './pages/Contents';
 import Home from './pages/Home';
@@ -7,7 +13,7 @@ import NotFound from './pages/NotFound';
 
 //components
 import Spinner from './components/Spinner/Spinner';
-
+import Dots from './components/Spinner/Dots';
 //view prototype1
 import HomeStudent from './views/Home/Home';
 import Audio from './views/Audio/Audio';
@@ -28,9 +34,19 @@ import Content from './viewsProto2/Content/Content';
 import Result from './viewsProto2/Result/Result';
 import AddedContent from './views/AddedContent/AddedContent';
 
+import StartV3 from './viewsProto3/Start/Start3';
+import StartLearn3 from './viewsProto3/StartLearn/StartLearn';
+import Score3 from './viewsProto3/Score/Score';
+import Speak3 from './viewsProto3/Speak/Speak';
+
+import StartV4 from './viewsProto4/Start/Start';
+import StartLearn4 from './viewsProto4/StartLearn/StartLearn';
+import Score4 from './viewsProto4/Score/Score';
+import Speak4 from './viewsProto4/Speak/Speak';
+
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Link to={'/speak'} id="link_speak" className="hide">
         speak
       </Link>
@@ -41,7 +57,16 @@ function App() {
       <Link to={'/proto2/speak'} id="link_speak_proto2" className="hide">
         speak
       </Link>
+
       <Link to={'/proto2/score'} id="link_score_proto2" className="hide">
+        score
+      </Link>
+
+      <Link to={'/proto3/score'} id="link_score_proto3" className="hide">
+        score
+      </Link>
+
+      <Link to={'/proto4/score'} id="link_score_proto4" className="hide">
         score
       </Link>
 
@@ -74,9 +99,20 @@ function App() {
 
         <Route path={'/audio'} element={<Audio />} />
         <Route path={'/addedcontent'} element={<AddedContent />} />
+
+        <Route path={'/proto3/score'} element={<Score3 />} />
+        <Route path="/proto3/all" element={<StartV3 />} />
+        <Route path={'/proto3/startlearn'} element={<StartLearn3 />} />
+        <Route path={'/proto3/speak'} element={<Speak3 />} />
+
+        <Route path={'/proto4/score'} element={<Score4 />} />
+        <Route path="/proto4/all" element={<StartLearn4 />} />
+        <Route path={'/proto4/startlearn'} element={<StartLearn4 />} />
+        <Route path={'/proto4/speak'} element={<Speak4 />} />
       </Routes>
-      <Spinner />
-    </BrowserRouter>
+      <Dots />
+      {/* <Spinner /> */}
+    </HashRouter>
   );
 }
 

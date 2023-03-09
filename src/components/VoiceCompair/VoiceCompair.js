@@ -1,40 +1,40 @@
-import React, { useState, useEffect } from "react";
-import AudioRecorderCompairUI from "../AudioRecorderCompairUI/AudioRecorderCompairUI";
-import AudioRecorderTamil from "../AudioRecorderTamil/AudioRecorderTamil";
+import React, { useState, useEffect } from 'react';
+import AudioRecorderCompairUI from '../AudioRecorderCompairUI/AudioRecorderCompairUI';
+import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
 
-import { showLoading, stopLoading } from "../../utils/Helper/SpinnerHandle";
+import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 
-const VoiceCompair = (props) => {
+const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
-    localStorage.getItem("apphomelang")
-      ? localStorage.getItem("apphomelang")
-      : "en"
+    localStorage.getItem('apphomelang')
+      ? localStorage.getItem('apphomelang')
+      : 'en'
   );
 
   const ASR_REST_URLS = {
-    bn: "https://asr-api.ai4bharat.org",
-    en: "https://asr-api.ai4bharat.org",
-    gu: "https://asr-api.ai4bharat.org",
-    hi: "https://asr-api.ai4bharat.org",
-    kn: "https://asr-api.ai4bharat.org",
-    ml: "https://asr-api.ai4bharat.org",
-    mr: "https://asr-api.ai4bharat.org",
-    ne: "https://asr-api.ai4bharat.org",
-    or: "https://asr-api.ai4bharat.org",
-    pa: "https://asr-api.ai4bharat.org",
-    sa: "https://asr-api.ai4bharat.org",
-    si: "https://asr-api.ai4bharat.org",
-    ta: "https://asr-api.ai4bharat.org",
+    bn: 'https://asr-api.ai4bharat.org',
+    en: 'https://asr-api.ai4bharat.org',
+    gu: 'https://asr-api.ai4bharat.org',
+    hi: 'https://asr-api.ai4bharat.org',
+    kn: 'https://asr-api.ai4bharat.org',
+    ml: 'https://asr-api.ai4bharat.org',
+    mr: 'https://asr-api.ai4bharat.org',
+    ne: 'https://asr-api.ai4bharat.org',
+    or: 'https://asr-api.ai4bharat.org',
+    pa: 'https://asr-api.ai4bharat.org',
+    sa: 'https://asr-api.ai4bharat.org',
+    si: 'https://asr-api.ai4bharat.org',
+    ta: 'https://asr-api.ai4bharat.org',
     //ta: "https://ai4b-dev-asr.ulcacontrib.org",
-    te: "https://ai4b-dev-asr.ulcacontrib.org",
-    ur: "https://asr-api.ai4bharat.org",
+    te: 'https://ai4b-dev-asr.ulcacontrib.org',
+    ur: 'https://asr-api.ai4bharat.org',
   };
-  const [recordedAudio, setRecordedAudio] = useState("");
-  const [recordedAudioBase64, setRecordedAudioBase64] = useState("");
+  const [recordedAudio, setRecordedAudio] = useState('');
+  const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
 
   //for tamil language
-  const [tamilRecordedAudio, setTamilRecordedAudio] = useState("");
-  const [tamilRecordedText, setTamilRecordedText] = useState("");
+  const [tamilRecordedAudio, setTamilRecordedAudio] = useState('');
+  const [tamilRecordedText, setTamilRecordedText] = useState('');
 
   useEffect(() => {
     props.setVoiceText(tamilRecordedText);
@@ -42,34 +42,34 @@ const VoiceCompair = (props) => {
   }, [tamilRecordedText]);
 
   useEffect(() => {
-    if (recordedAudio !== "") {
+    if (recordedAudio !== '') {
       showLoading();
       let uri = recordedAudio;
       var request = new XMLHttpRequest();
-      request.open("GET", uri, true);
-      request.responseType = "blob";
+      request.open('GET', uri, true);
+      request.responseType = 'blob';
       request.onload = function () {
         var reader = new FileReader();
         reader.readAsDataURL(request.response);
         reader.onload = function (e) {
-          console.log("DataURL:", e.target.result);
-          var base64Data = e.target.result.split(",")[1];
+          console.log('DataURL:', e.target.result);
+          var base64Data = e.target.result.split(',')[1];
           setRecordedAudioBase64(base64Data);
         };
       };
       request.send();
     } else {
       stopLoading();
-      setRecordedAudioBase64("");
-      setAi4bharat("");
+      setRecordedAudioBase64('');
+      setAi4bharat('');
     }
   }, [recordedAudio]);
 
   //sent to AI bharat
-  const [ai4bharat, setAi4bharat] = useState("");
+  const [ai4bharat, setAi4bharat] = useState('');
   useEffect(() => {
-    if (recordedAudioBase64 !== "") {
-      fetchASROutput(localStorage.getItem("apphomelang"), recordedAudioBase64);
+    if (recordedAudioBase64 !== '') {
+      fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
     }
   }, [recordedAudioBase64]);
   useEffect(() => {
@@ -80,20 +80,20 @@ const VoiceCompair = (props) => {
   //call api
   const fetchASROutput = (sourceLanguage, base64Data) => {
     let samplingrate = 30000;
-    if (lang_code === "ta") {
+    if (lang_code === 'ta') {
       samplingrate = 16000;
     }
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Content-Type', 'application/json');
     var payload = JSON.stringify({
       config: {
         language: {
           sourceLanguage: sourceLanguage,
         },
         transcriptionFormat: {
-          value: "transcript",
+          value: 'transcript',
         },
-        audioFormat: "wav",
+        audioFormat: 'wav',
         samplingRate: samplingrate,
         postProcessors: null,
       },
@@ -104,20 +104,20 @@ const VoiceCompair = (props) => {
       ],
     });
     var requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: myHeaders,
       body: payload,
-      redirect: "follow",
+      redirect: 'follow',
     };
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
     fetch(apiURL, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
+      .then(response => response.text())
+      .then(result => {
         var apiResponse = JSON.parse(result);
         setAi4bharat(
-          apiResponse["output"][0]["source"] != ""
-            ? apiResponse["output"][0]["source"]
-            : "-"
+          apiResponse['output'][0]['source'] != ''
+            ? apiResponse['output'][0]['source']
+            : '-'
         );
         stopLoading();
       });
@@ -131,7 +131,7 @@ const VoiceCompair = (props) => {
   useEffect(() => {
     if (loadCnt == 0) {
       getpermision();
-      setLoadCnt((loadCnt) => Number(loadCnt + 1));
+      setLoadCnt(loadCnt => Number(loadCnt + 1));
     }
   }, [loadCnt]);
   const getpermision = () => {
@@ -143,11 +143,11 @@ const VoiceCompair = (props) => {
     navigator.getUserMedia(
       { audio: true },
       () => {
-        console.log("Permission Granted");
+        console.log('Permission Granted');
         setAudioPermission(true);
       },
       () => {
-        console.log("Permission Denied");
+        console.log('Permission Denied');
         setAudioPermission(false);
         //alert("Microphone Permission Denied");
       }
@@ -161,14 +161,16 @@ const VoiceCompair = (props) => {
             if (audioPermission) {
               return (
                 <>
-                  {lang_code == "ta" ? (
+                  {lang_code == 'ta' ? (
                     <AudioRecorderTamil
                       setTamilRecordedAudio={setTamilRecordedAudio}
                       setTamilRecordedText={setTamilRecordedText}
+                      flag={props.flag}
                     />
                   ) : (
                     <AudioRecorderCompairUI
                       setRecordedAudio={setRecordedAudio}
+                      flag={props.flag}
                     />
                   )}
 
