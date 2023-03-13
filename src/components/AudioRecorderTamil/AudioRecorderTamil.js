@@ -143,6 +143,9 @@ function Mic({
       .then(response => response.text())
       .then(result => {
         var apiResponse = JSON.parse(result);
+        if (apiResponse['output'][0]['source'] == '') {
+          alert("Sorry I couldn't hear a voice. Could you please speak again?");
+        }
         setTamiltext(apiResponse['output'][0]['source']);
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
