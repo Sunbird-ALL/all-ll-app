@@ -132,7 +132,7 @@ function StartLearn() {
   const [voiceText, setVoiceText] = useState('');
   useEffect(() => {
     if (voiceText == '-') {
-      alert('AI4Bharat gives empty source');
+      alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
     if ((voiceText !== '') & (voiceText !== '-')) {
