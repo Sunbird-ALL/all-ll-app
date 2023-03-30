@@ -50,6 +50,10 @@ function StartLearn() {
       }
     };
   };
+
+  const newSentence = () => {
+    navigate(0);
+  };
   useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -79,6 +83,7 @@ function StartLearn() {
   const [trysame, set_trysame] = useState(
     localStorage.getItem('trysame') ? localStorage.getItem('trysame') : 'no'
   );
+  let forbiddenChars = ['!', '?', '.'];
 
   const [content, set_content] = useState(null);
   const [content_id, set_content_id] = useState(0);
@@ -118,6 +123,7 @@ function StartLearn() {
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
+        
         set_content_id(getitem);
       }
       scroll_to_top('smooth');
@@ -140,7 +146,7 @@ function StartLearn() {
     }
   }, [voiceText]);
   function go_to_result(voiceText) {
-    localStorage.setItem('contentText', content[sel_lang].text);
+    localStorage.setItem('contentText', content[sel_lang].text);    
     localStorage.setItem('recordedAudio', recordedAudio);
     localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);
@@ -232,7 +238,7 @@ function StartLearn() {
                   <h4 className="text-speak">speak</h4>
                 </div>
                 <br />
-                <div onClick={() => navigate(0)}>
+                <div onClick={newSentence}>
                   <img src={refresh} className="home_icon"></img>
                   <br />
                   Try new
