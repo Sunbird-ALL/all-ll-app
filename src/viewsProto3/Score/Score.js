@@ -15,6 +15,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
+import{removeForbiddenCharacters,splitArray} from "../../utils/helper"
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
@@ -88,6 +89,14 @@ function Score() {
     };
   };
 
+  const newSentence = () => {
+    navigate(-1);
+  };
+  const trySameSentence = () => {
+    localStorage.setItem('trysame', 'yes');
+    navigate(-1);
+  };
+
   useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -129,14 +138,16 @@ function Score() {
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
+
+ 
   function checkVoice(voiceText) {
-    let tempvoiceText = voiceText.toLowerCase();
+    let tempvoiceText = removeForbiddenCharacters(voiceText.toLowerCase());
     let tempteacherText = teacherText.toLowerCase();
-    tempteacherText = replaceAll(tempteacherText, '.', '');
+    // tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
-    tempteacherText = replaceAll(tempteacherText, '|', '');
+    // tempteacherText = replaceAll(tempteacherText, '|', '');
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
@@ -160,8 +171,12 @@ function Score() {
     }
     //set text highlight
     let texttemp = voiceText.toLowerCase();
-    const studentTextArray = texttemp.split(' ');
+    // const studentTextArray = texttemp.split(' ');
+    let studentTextArray;
+
+    studentTextArray = removeForbiddenCharacters(texttemp).split(' ');
     const teacherTextArray = tempteacherText.split(' ');
+
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
     let studentswords = studentTextArray.length;
@@ -169,6 +184,8 @@ function Score() {
     let correct_words = 0;
     let result_per_words = 0;
     for (let i = 0; i < studentTextArray.length; i++) {
+      let mark = studentTextArray[i].slice(-1);
+      let arryResult = splitArray(studentTextArray);
       if (teacherTextArray.includes(studentTextArray[i])) {
         correct_words++;
         student_text_result.push(
@@ -182,7 +199,8 @@ function Score() {
         student_text_result.push(
           <>
             {' '}
-            <font className="inc_text">{studentTextArray[i]}</font>
+            <font className="inc_text">{arryResult[i]}</font>
+            <font>{mark}</font>
           </>
         );
       }
@@ -331,44 +349,6 @@ function Score() {
                   <br />
                   <br />
                   <br />
-                  {/*<font className="speech_title">Your Speech and Audio</font>
-                  <div className="content_view">
-                    <>
-                      <font>
-                        <br />
-                        <b>{voiceTextHighlight}</b>
-                        <br />
-                        <br />
-                        <ReactAudioPlayer
-                          autoPlay={false}
-                          src={recordedAudio}
-                          controls
-                          style={{ width: "100%" }}
-                        />
-                      </font>
-                      <br />
-                    </>
-                  </div>
-                  <font className="speech_title">
-                    Original Speech and Audio
-                  </font>
-                  <div className="content_view">
-                    <>
-                      <font>
-                        <br />
-                        <b>{content[sel_lang]}</b>
-                        <br />
-                        <br />
-                        <ReactAudioPlayer
-                          autoPlay={false}
-                          src={content[sel_lang + "_audio"]}
-                          controls
-                          style={{ width: "100%" }}
-                        />
-                      </font>
-                      <br />
-                    </>
-                  </div>*/}
                 </center>
               </div>
               {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
@@ -384,12 +364,7 @@ function Score() {
                             : 'col s12 center'
                         }
                       >
-                        <div
-                          onClick={() => {
-                            localStorage.setItem('trysame', 'yes');
-                            navigate(-1);
-                          }}
-                        >
+                        <div onClick={trySameSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try again
@@ -402,7 +377,7 @@ function Score() {
                             : 'col s12 center hide'
                         }
                       >
-                        <div onClick={() => navigate(-1)}>
+                        <div onClick={newSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try new

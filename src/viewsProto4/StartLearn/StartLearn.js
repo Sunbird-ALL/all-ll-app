@@ -12,6 +12,7 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
+import{removeForbiddenCharacters,splitArray} from "../../utils/helper"
 
 import mic from '../../assests/Images/mic_old.png';
 import axios from 'axios';
@@ -29,10 +30,12 @@ function StartLearn() {
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const location = useLocation();
+
   const playAudio = () => {
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   const pauseAudio = () => {
+
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -53,6 +56,10 @@ function StartLearn() {
     };
   };
 
+  const newSentence = () => {
+    navigate(0);
+  };
+
   useEffect(() => {
     localStorage.setItem('apphomelang', 'en');
     learnAudio();
@@ -62,6 +69,8 @@ function StartLearn() {
   const [sel_lang_text, set_sel_lang_text] = useState('English');
   const [sel_level, set_sel_level] = useState('Sentence');
   const [sel_cource, set_sel_cource] = useState('Listen & Speak');
+  let forbiddenChars = ['!', '?', '.'];
+
   const [trysame, set_trysame] = useState(
     localStorage.getItem('trysame') ? localStorage.getItem('trysame') : 'no'
   );
@@ -109,7 +118,7 @@ function StartLearn() {
             }
             localStorage.setItem('trysame', 'no');
             localStorage.setItem('content_random_id', getitem);
-            set_content(tempContent[getitem].content);
+            set_content(tempContent[getitem].content);            
             set_content_id(getitem);
           }
           scroll_to_top('smooth');
@@ -139,7 +148,7 @@ function StartLearn() {
     }
   }, [voiceText]);
   function go_to_result(voiceText) {
-    localStorage.setItem('contentText', content[sel_lang].text);
+    localStorage.setItem('contentText', content[sel_lang].text); 
     localStorage.setItem('recordedAudio', recordedAudio);
     localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);
@@ -210,7 +219,7 @@ function StartLearn() {
                   <h4 className="text-speak">speak</h4>
                 </div>
                 <br />
-                <div onClick={() => navigate(0)}>
+                <div onClick={newSentence}>
                   <img src={refresh} className="home_icon"></img>
                   <br />
                   Try new

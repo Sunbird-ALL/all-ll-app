@@ -1,5 +1,5 @@
 import React from 'react';
-
+let forbiddenChars = ['!', '?', '.'];
 export const blobToBase64 = (blob, callback) => {
   var reader = new FileReader();
   reader.addEventListener('load', function () {
@@ -44,4 +44,22 @@ export function getLayout(url) {
     let value = url.split('&')[1] ? url.split('&')[1].split('=')[1] : '';
     return value;
   }
+}
+
+export function removeForbiddenCharacters(input) {
+
+  for (let char of forbiddenChars) {
+    if (localStorage.getItem('contentText').includes(char)) {
+      input = input.concat(char);
+    }
+  }
+  return input;
+}
+
+export function splitArray(studentArray) {
+  
+  for (let char of forbiddenChars) {
+    studentArray = studentArray.map(item => item.replace(char, ''));
+  }
+  return studentArray;
 }
