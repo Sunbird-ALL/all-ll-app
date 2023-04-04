@@ -1,5 +1,5 @@
 import React from 'react';
-let forbiddenChars = ['!', '?', '.',',','-',"'"];
+let forbiddenChars = ['!', '?', '.'];
 export const blobToBase64 = (blob, callback) => {
   var reader = new FileReader();
   reader.addEventListener('load', function () {
@@ -50,7 +50,6 @@ export function removeForbiddenCharacters(input) {
 
   for (let char of forbiddenChars) {
     if (localStorage.getItem('contentText').includes(char)) {
-
       input = input.concat(char);
     }
   }
@@ -64,7 +63,6 @@ export function splitArray(studentArray) {
   }
   return studentArray;
 }
-
 export function findRegex(str){
   var rawString = str
   var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;

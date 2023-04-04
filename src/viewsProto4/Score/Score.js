@@ -175,6 +175,7 @@ function Score() {
     let correct_words = 0;
     let result_per_words = 0;
    
+   
     for (let i = 0; i < studentTextArray.length; i++) {
       let arryResult = teacherText.split(" ");
       if (tempteacherText.includes(studentTextArray[i])) {
@@ -183,7 +184,6 @@ function Score() {
           <>
             {' '}
             <font className="correct_text_remove">{arryResult[i]}</font>
-
           </>
         );
       } else {
