@@ -16,6 +16,7 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
 import{removeForbiddenCharacters,splitArray,findRegex} from "../../utils/helper"
+import {interactCall} from "../../services/callTelemetryIntract"
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
@@ -66,16 +67,19 @@ function Score() {
 
   const [temp_audio, set_temp_audio] = useState(null);
   const playAudio = () => {
+    interactCall()
     set_temp_audio(new Audio(recordedAudio));
   };
 
   const pauseAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
     }
   };
   const learnAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.play();
       setFlag(!flag);
@@ -90,9 +94,11 @@ function Score() {
   };
 
   const newSentence = () => {
+    interactCall()
     navigate(-1);
   };
   const trySameSentence = () => {
+    interactCall()
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };

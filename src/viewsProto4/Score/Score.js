@@ -11,7 +11,7 @@ import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
 import{removeForbiddenCharacters,splitArray,findRegex} from "../../utils/helper"
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-
+import {interactCall} from "../../services/callTelemetryIntract"
 import play from '../../assests/Images/play-img.png';
 
 import pause from '../../assests/Images/pause-img.png';
@@ -58,9 +58,11 @@ function Score() {
 
   const [temp_audio, set_temp_audio] = useState(null);
   const playAudio = () => {
+    interactCall()
     set_temp_audio(new Audio(recordedAudio));
   };
   const pauseAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -81,9 +83,11 @@ function Score() {
   };
 
   const newSentence = () => {
+    interactCall()
     navigate(-1);
   };
   const trySameSentence = () => {
+    interactCall()
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };
