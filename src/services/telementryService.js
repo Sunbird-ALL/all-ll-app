@@ -13,14 +13,14 @@ let telemetryObject = {
   rollup: {},
 };
 let contextdata = {
-  sid: '7283cf2e-d215-9944-b0c5-269489c6fa56', // User sessionid on portal or mobile
+  sid: process.env.REACT_APP_sid,
   uid: 'anonymous', // Current logged in user id
-  channel: '505c7c48ac6dc1edc9b08f21db5a571d', // Unique id of the channel(Channel ID)
+  channel: process.env.REACT_APP_channel,
   pdata: {
     // optional
-    id: 'langlab.portal', // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-    ver: '1.0.0', // Version of the App
-    pid: 'langlab-portal.portal', // Optional. In case the component is distributed, then which instance of that component
+    id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+    ver: process.env.REACT_APP_ver, // Version of the App
+    pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
   },
   endpoint: '',
 }   

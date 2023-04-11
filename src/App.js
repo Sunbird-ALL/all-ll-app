@@ -72,9 +72,9 @@ function App() {
           channel: process.env.REACT_APP_channel, // Unique id of the channel(Channel ID)
           pdata: {
             // optional
-            id: 'langlab.portal', // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-            ver: '1.0.0', // Version of the App
-            pid: 'langlab-portal.portal', // Optional. In case the component is distributed, then which instance of that component
+            id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+            ver: process.env.REACT_APP_ver, // Version of the App
+            pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
           },
           tags: [
             // Defines the tags data
