@@ -15,7 +15,8 @@ import 'react-h5-audio-player/lib/styles.css';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
-import{removeForbiddenCharacters,splitArray} from "../../utils/helper"
+import{removeForbiddenCharacters,splitArray,findRegex} from "../../utils/helper"
+import {interactCall} from "../../services/callTelemetryIntract"
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
@@ -66,16 +67,19 @@ function Score() {
 
   const [temp_audio, set_temp_audio] = useState(null);
   const playAudio = () => {
+    interactCall()
     set_temp_audio(new Audio(recordedAudio));
   };
 
   const pauseAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
     }
   };
   const learnAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.play();
       setFlag(!flag);
@@ -90,9 +94,11 @@ function Score() {
   };
 
   const newSentence = () => {
+    interactCall()
     navigate(-1);
   };
   const trySameSentence = () => {
+    interactCall()
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };
@@ -144,13 +150,13 @@ function Score() {
     let tempvoiceText = removeForbiddenCharacters(voiceText.toLowerCase());
     let tempteacherText = teacherText.toLowerCase();
     // tempteacherText = replaceAll(tempteacherText, '.', '');
-    tempteacherText = replaceAll(tempteacherText, "'", '');
-    tempteacherText = replaceAll(tempteacherText, ',', '');
-    tempteacherText = replaceAll(tempteacherText, '!', '');
-    // tempteacherText = replaceAll(tempteacherText, '|', '');
+    // tempteacherText = replaceAll(tempteacherText, "'", '');
+    // tempteacherText = replaceAll(tempteacherText, ',', '');
+    // tempteacherText = replaceAll(tempteacherText, '!', '');
+    tempteacherText = replaceAll(tempteacherText, '|', '');
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
-    if (tempteacherText === tempvoiceText) {
+    if (findRegex(tempteacherText) === voiceText.toLowerCase()) {
       setTestResult(
         <font style={{ fontSize: '20px', color: 'green' }}>
           Teacher and Student audio match
@@ -174,7 +180,7 @@ function Score() {
     // const studentTextArray = texttemp.split(' ');
     let studentTextArray;
 
-    studentTextArray = removeForbiddenCharacters(texttemp).split(' ');
+    studentTextArray = texttemp.split(' ');
     const teacherTextArray = tempteacherText.split(' ');
 
     let student_text_result = [];
@@ -184,14 +190,14 @@ function Score() {
     let correct_words = 0;
     let result_per_words = 0;
     for (let i = 0; i < studentTextArray.length; i++) {
-      let mark = studentTextArray[i].slice(-1);
-      let arryResult = splitArray(studentTextArray);
-      if (teacherTextArray.includes(studentTextArray[i])) {
+    
+      let arryResult = teacherText.split(" ");
+      if (tempteacherText.includes(studentTextArray[i])) {
         correct_words++;
         student_text_result.push(
           <>
             {' '}
-            <font className="correct_text_remove">{studentTextArray[i]}</font>
+            <font className="correct_text_remove">{arryResult[i]}</font>
           </>
         );
       } else {
@@ -199,8 +205,7 @@ function Score() {
         student_text_result.push(
           <>
             {' '}
-            <font className="inc_text">{arryResult[i]}</font>
-            <font>{mark}</font>
+            <font className="inc_text">{studentTextArray[i]}</font>
           </>
         );
       }
@@ -228,15 +233,15 @@ function Score() {
     //fluencytestresult
     if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Needs to work on fluency</font>
+        <font className="result_incorrect">Needs to work on language skills</font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Good scope to improve fluency</font>
+        <font className="result_incorrect">Good scope to improve language skills</font>
       );
     } else {
       setfluencyresult(
-        <font className="result_incorrect">You have good level of fluency</font>
+        <font className="result_incorrect">You have good level of language skills</font>
       );
     }
 

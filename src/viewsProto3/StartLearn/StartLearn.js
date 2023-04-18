@@ -11,7 +11,7 @@ import ReactAudioPlayer from 'react-audio-player';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
-
+import {startEvent,interactCall} from "../../services/callTelemetryIntract"
 import axios from 'axios';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
@@ -28,10 +28,12 @@ function StartLearn() {
   const [flag, setFlag] = useState(true);
   const location = useLocation();
   const playAudio = () => {
+    interactCall()
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
 
   const pauseAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -39,6 +41,7 @@ function StartLearn() {
   };
 
   const learnAudio = () => {
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.play();
       setFlag(!flag);
@@ -52,6 +55,7 @@ function StartLearn() {
   };
 
   const newSentence = () => {
+    interactCall()
     navigate(0);
   };
   useEffect(() => {

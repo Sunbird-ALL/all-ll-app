@@ -205,15 +205,15 @@ function Score() {
     //fluencytestresult
     if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Needs to work on fluency</font>
+        <font className="result_incorrect">Needs to work on language skills</font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Good scope to improve fluency</font>
+        <font className="result_incorrect">Good scope to improve language skills</font>
       );
     } else {
       setfluencyresult(
-        <font className="result_incorrect">You have good level of fluency</font>
+        <font className="result_incorrect">You have good level of language skills</font>
       );
     }
 

@@ -63,3 +63,9 @@ export function splitArray(studentArray) {
   }
   return studentArray;
 }
+export function findRegex(str){
+  var rawString = str
+  var regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+  var cleanString = rawString.replace(regex, '');
+ return cleanString
+}

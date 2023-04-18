@@ -12,9 +12,9 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
-import{removeForbiddenCharacters,splitArray} from "../../utils/helper"
 
-import mic from '../../assests/Images/mic_old.png';
+import {startEvent,interactCall} from "../../services/callTelemetryIntract"
+
 import axios from 'axios';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
@@ -32,10 +32,11 @@ function StartLearn() {
   const location = useLocation();
 
   const playAudio = () => {
+    interactCall()
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   const pauseAudio = () => {
-
+    interactCall()
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -57,12 +58,14 @@ function StartLearn() {
   };
 
   const newSentence = () => {
+    interactCall()
     navigate(0);
   };
 
   useEffect(() => {
     localStorage.setItem('apphomelang', 'en');
     learnAudio();
+
   }, [temp_audio]);
 
   const [sel_lang, set_sel_lang] = useState('en');
@@ -81,6 +84,7 @@ function StartLearn() {
   const [load_cnt, set_load_cnt] = useState(0);
 
   const getfromurl = () => {
+    
     const filePath = getParameter('source', location.search);
     axios
       .get(filePath)
@@ -130,7 +134,7 @@ function StartLearn() {
 
   useEffect(() => {
     getfromurl();
-  }, [load_cnt]);
+  }, []);
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
