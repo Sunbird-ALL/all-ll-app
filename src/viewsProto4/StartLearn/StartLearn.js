@@ -13,14 +13,12 @@ import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 
-import {startEvent,interactCall} from "../../services/callTelemetryIntract"
-
+import { interactCall } from '../../services/callTelemetryIntract';
 import axios from 'axios';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
-import { Button } from '@chakra-ui/react';
 
 import { getParameter } from '../../utils/helper';
 
@@ -32,11 +30,11 @@ function StartLearn() {
   const location = useLocation();
 
   const playAudio = () => {
-    interactCall()
+    interactCall();
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   const pauseAudio = () => {
-    interactCall()
+    interactCall();
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -58,21 +56,18 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall()
+    interactCall();
     navigate(0);
   };
 
   useEffect(() => {
     localStorage.setItem('apphomelang', 'en');
     learnAudio();
-
   }, [temp_audio]);
 
   const [sel_lang, set_sel_lang] = useState('en');
-  const [sel_lang_text, set_sel_lang_text] = useState('English');
   const [sel_level, set_sel_level] = useState('Sentence');
   const [sel_cource, set_sel_cource] = useState('Listen & Speak');
-  let forbiddenChars = ['!', '?', '.'];
 
   const [trysame, set_trysame] = useState(
     localStorage.getItem('trysame') ? localStorage.getItem('trysame') : 'no'
@@ -84,7 +79,6 @@ function StartLearn() {
   const [load_cnt, set_load_cnt] = useState(0);
 
   const getfromurl = () => {
-    
     const filePath = getParameter('source', location.search);
     axios
       .get(filePath)
@@ -122,7 +116,7 @@ function StartLearn() {
             }
             localStorage.setItem('trysame', 'no');
             localStorage.setItem('content_random_id', getitem);
-            set_content(tempContent[getitem].content);            
+            set_content(tempContent[getitem].content);
             set_content_id(getitem);
           }
           scroll_to_top('smooth');
@@ -134,7 +128,7 @@ function StartLearn() {
 
   useEffect(() => {
     getfromurl();
-  }, []);
+  }, [load_cnt]);
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -152,7 +146,7 @@ function StartLearn() {
     }
   }, [voiceText]);
   function go_to_result(voiceText) {
-    localStorage.setItem('contentText', content[sel_lang].text); 
+    localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
     localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);

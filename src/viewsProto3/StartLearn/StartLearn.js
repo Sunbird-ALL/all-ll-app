@@ -1,39 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components2/NewBottomHomeNextBar/NewBottomHomeNextBar';
 //import HomeNextBar from "../../components2/HomeNextBar/HomeNextBar";
 import { getContentList } from '../../utils/Const/Const';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
-import ReactAudioPlayer from 'react-audio-player';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
-import {startEvent,interactCall} from "../../services/callTelemetryIntract"
-import axios from 'axios';
+import { interactCall } from '../../services/callTelemetryIntract';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-
-/*chakra*/
-import AppFooter from '../../components2/AppFooter/AppFooter';
-import { useWindowSize } from 'react-use-window-size';
-import { getParameter } from '../../utils/helper';
 
 function StartLearn() {
   const navigate = useNavigate();
 
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
-  const location = useLocation();
   const playAudio = () => {
-    interactCall()
+    interactCall();
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
 
   const pauseAudio = () => {
-    interactCall()
+    interactCall();
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -41,7 +32,7 @@ function StartLearn() {
   };
 
   const learnAudio = () => {
-    interactCall()
+    interactCall();
     if (temp_audio !== null) {
       temp_audio.play();
       setFlag(!flag);
@@ -55,7 +46,7 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall()
+    interactCall();
     navigate(0);
   };
   useEffect(() => {
@@ -67,13 +58,7 @@ function StartLearn() {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'Tamil'
-        : 'English'
-      : 'English'
-  );
+
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
       ? localStorage.getItem('apphomelevel')
@@ -87,7 +72,6 @@ function StartLearn() {
   const [trysame, set_trysame] = useState(
     localStorage.getItem('trysame') ? localStorage.getItem('trysame') : 'no'
   );
-  let forbiddenChars = ['!', '?', '.'];
 
   const [content, set_content] = useState(null);
   const [content_id, set_content_id] = useState(0);
@@ -127,7 +111,7 @@ function StartLearn() {
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
-        
+
         set_content_id(getitem);
       }
       scroll_to_top('smooth');
@@ -150,7 +134,7 @@ function StartLearn() {
     }
   }, [voiceText]);
   function go_to_result(voiceText) {
-    localStorage.setItem('contentText', content[sel_lang].text);    
+    localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
     localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);

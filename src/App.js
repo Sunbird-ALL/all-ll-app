@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter,
   HashRouter,
@@ -6,9 +6,9 @@ import {
   Route,
   Link,
 } from 'react-router-dom';
-import { initialize, start } from './services/telementryService';
+import { initialize, start, end } from './services/telementryService';
 import '@project-sunbird/telemetry-sdk/index.js';
-import {startEvent} from "./services/callTelemetryIntract"
+import { startEvent } from './services/callTelemetryIntract';
 import ContentCreate from './pages/ContentCreate';
 import Contents from './pages/Contents';
 import Home from './pages/Home';
@@ -47,29 +47,31 @@ import StartLearn4 from './viewsProto4/StartLearn/StartLearn';
 import Score4 from './viewsProto4/Score/Score';
 import Speak4 from './viewsProto4/Speak/Speak';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-function App() {
-  var ranonce = false;
-  useEffect(() => {
 
+function App() {
+  let ranonce = false;
+
+  useEffect(() => {
     const setFp = async () => {
       const fp = await FingerprintJS.load();
 
       const { visitorId } = await fp.get();
 
-      localStorage.setItem("did",visitorId)
+      localStorage.setItem('did', visitorId);
     };
 
     setFp();
-
-    const initService =()=>{
+    const initService = () => {
       initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: '', // Auth key to make  api calls
-          sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
-          did: localStorage.getItem("did"), // Unique id to identify the device or browser
+          // sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
+          did: localStorage.getItem('did'), // Unique id to identify the device or browser
           uid: 'anonymous', // Current logged in user id
-          channel: process.env.REACT_APP_channel, // Unique id of the channel(Channel ID)
+          channel: process.env.REACT_APP_CHANNEL,
+          env: process.env.REACT_APP_env,
+
           pdata: {
             // optional
             id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
@@ -83,26 +85,30 @@ function App() {
           timeDiff: 0, // Defines the time difference// Defines the object roll up data
           host: process.env.REACT_APP_host, // Defines the from which domain content should be load
           endpoint: process.env.REACT_APP_endpoint,
-          apislug:process.env.REACT_APP_apislug,
-          dispatcher: {
-            dispatch(event) {
-              console.log(`Events from dispatcher: ${JSON.stringify(event)}`);
-            },
-          },
+          apislug: process.env.REACT_APP_apislug,
         },
         config: {},
         // tslint:disable-next-line:max-line-length
         metadata: {},
       });
-    } 
-    initService()
+    };
+    initService();
     if (!ranonce) {
+      startEvent();
 
-      startEvent()
+      ranonce = true;
+    }
+  }, []);
+  useEffect(() => {
+    const cleanup = () => {
+      end();
+    };
 
-      ranonce = true
-  }
-    
+    window.addEventListener('beforeunload', cleanup);
+
+    return () => {
+      window.removeEventListener('beforeunload', cleanup);
+    };
   }, []);
 
   return (
