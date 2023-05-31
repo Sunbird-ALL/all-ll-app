@@ -2,9 +2,11 @@ import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 
+
+
 let contentSessionId;
 let playSessionId;
-
+let url
 let config;
 let telemetryObject = {
   id: {},
@@ -13,9 +15,7 @@ let telemetryObject = {
   rollup: {},
 };
 let contextdata = {
-  sid: process.env.REACT_APP_sid,
   uid: 'anonymous', // Current logged in user id
-  channel: process.env.REACT_APP_channel,
   pdata: {
     // optional
     id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
@@ -23,43 +23,39 @@ let contextdata = {
     pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
   },
   endpoint: '',
-}   
+}
 contentSessionId = uniqueId();
+
+let getUrl = window.location.href;
+url=getUrl && getUrl.includes("#") && getUrl.split("#")[1].split("/")[1]
 
 export const initialize = ({ context, config, metadata }) => {
   context = context;
   config = config;
   playSessionId = uniqueId();
-
   if (!CsTelemetryModule.instance.isInitialised) {
     CsTelemetryModule.instance.init({});
     const telemetryConfig = {
       config: {
         pdata: context.pdata,
-        env: 'contentplayer',
-        channel: context.channel,
-        did: context.did,
-        authtoken: context.authToken || '',
-        uid: context.uid || '',
-        sid: context.sid,
-        batchsize: 1,
-        mode: context.mode,
-        host: context.host || '',
-        apislug: '/telemetry/',
-        endpoint: context.endpoint || '/data/v3/telemetry',
-        tags: context.tags,
-        cdata: [
-          { id: contentSessionId, type: 'ContentSession' },
-          { id: playSessionId, type: 'PlaySession' },
-          { id: '2.0', type: 'PlayerVersion' },
-        ],
+          env: '',
+          channel: context.channel,
+          did: context.did,
+          authtoken: context.authToken || '',
+          uid: context.uid || '',
+          sid: context.sid,
+          batchsize: 2,
+          mode: context.mode,
+          host: context.host,
+          apislug: context.apislug,
+          endpoint: context.endpoint,
+          tags: context.tags,
+          cdata: [{ id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' }]
       },
       userOrgDetails: {},
-      dispatcher: {},
     };
-    if (context.dispatcher) {
-      telemetryConfig.config.dispatcher = context.dispatcher;
-    }
+
     CsTelemetryModule.instance.telemetryService.initTelemetry(telemetryConfig);
   }
 
@@ -72,13 +68,14 @@ export const initialize = ({ context, config, metadata }) => {
   return telemetryObject;
 };
 
-export const start = (duration) => {  
+export const start = (duration) => {
+
   CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
     options: getEventOptions(contextdata,telemetryObject),
     edata: {
       type: 'content',
       mode: 'play',
-      stageid: '',
+      stageid: url,
       duration: Number((duration / 1e3).toFixed(2)),
     },
   });
@@ -97,19 +94,18 @@ export const end = () => {
     edata: {
       type: 'content',
       mode: 'play',
-      pageid: 'sunbird-player-Endpage',
+      pageid: url,
       summary: [],
       duration: '000',
     },
-    options: getEventOptions(),
   });
 };
 
 export const interact = (id) => {
   CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
-    edata: { type: 'TOUCH', subtype: '', id, pageid: "langlab.portal" },
-    
+    edata: { type: 'TOUCH', subtype: '', id, pageid:url  },
   });
+  console.log('working');
 };
 
 export const search = id => {
@@ -150,10 +146,8 @@ export const getEventOptions = (contextdata,telemetryObject) => {
   return {
     object: telemetryObject,
     context: {
-      channel: contextdata.channel,
       pdata: contextdata.pdata,
       env: 'contentplayer',
-      sid: contextdata.sid,
       uid: contextdata.uid,
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
