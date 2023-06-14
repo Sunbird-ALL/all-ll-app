@@ -69,7 +69,7 @@ function App() {
           // sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
           did: localStorage.getItem('did'), // Unique id to identify the device or browser
           uid: 'anonymous', // Current logged in user id
-          channel: process.env.REACT_APP_CHANNEL,
+          channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_env,
 
           pdata: {

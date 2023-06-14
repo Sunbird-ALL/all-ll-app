@@ -118,6 +118,7 @@ function StartLearn() {
             localStorage.setItem('content_random_id', getitem);
             set_content(tempContent[getitem].content);
             set_content_id(getitem);
+            localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
           }
           scroll_to_top('smooth');
           set_load_cnt(load_cnt => Number(load_cnt + 1));

@@ -88,6 +88,7 @@ function StartLearn() {
       scroll_to_top('smooth');
       set_load_cnt(load_cnt => Number(load_cnt + 1));
     }
+    localStorage.setItem('contentText', content[sel_lang]);
   }, [load_cnt]);
 
   const [recordedAudio, setRecordedAudio] = useState('');

@@ -117,13 +117,12 @@ const VoiceCompair = props => {
       .then(response => response.text())
       .then(result => {
         var apiResponse = JSON.parse(result);
-        
-    response({ // Required
-      "target": localStorage.getItem('contentText'), // Required. Target of the response
-      "qid": "", // Required. Unique assessment/question id
-      "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-      "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": localStorage.getItem('voiceText') }] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
-  })
+          response({ // Required
+            "target": localStorage.getItem('contentText'), // Required. Target of the response
+            "qid": "", // Required. Unique assessment/question id
+            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source'] }] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+        })
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''
             ? apiResponse['output'][0]['source']
