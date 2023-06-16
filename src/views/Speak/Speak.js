@@ -57,6 +57,7 @@ function Speak() {
       localStorage.setItem("resultnext", resultnext);
       localStorage.setItem("resultnextlang", sel_lang);
       localStorage.setItem("apphomelevel", "Word");
+      localStorage.setItem("apphomelevel", "Sentence");
     }
   }, [load_cnt]);
 
