@@ -53,10 +53,7 @@ const VoiceCompair = props => {
         var reader = new FileReader();
         reader.readAsDataURL(request.response);
         reader.onload = function (e) {
-         
-          
           var base64Data = e.target.result.split(',')[1];
-          
           setRecordedAudioBase64(base64Data);
         };
       };
@@ -81,7 +78,7 @@ const VoiceCompair = props => {
   }, [ai4bharat]);
 
   //call api
-  const fetchASROutput = (sourceLanguage, base64Data) => {
+  const fetchASROutput = async (sourceLanguage, base64Data) => {
     let samplingrate = 30000;
     if (lang_code === 'ta') {
       samplingrate = 16000;
@@ -113,15 +110,18 @@ const VoiceCompair = props => {
       redirect: 'follow',
     };
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
-    fetch(apiURL, requestOptions)
+    const responseStartTime = new Date().getTime();
+    await fetch(apiURL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        const responseEndTime = new Date().getTime();
+        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
         var apiResponse = JSON.parse(result);
-          response({ // Required
+        response({ // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
             "qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source'] }] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
         })
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''

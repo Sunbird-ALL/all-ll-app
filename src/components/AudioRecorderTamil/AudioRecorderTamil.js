@@ -109,7 +109,7 @@ function Mic({
     if (onStop) onStop({ text: transcript, audio: newUrl });
   };
 
-  const getASROutput = (asrInput, blob) => {
+  const getASROutput = async (asrInput, blob) => {
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
@@ -140,21 +140,28 @@ function Mic({
 
     const ASR_REST_URL =
       'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
-    fetch(ASR_REST_URL, requestOptions)
+    const responseStartTime = new Date().getTime();
+
+    await fetch(ASR_REST_URL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        const responseEndTime = new Date().getTime();
+        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+
         var apiResponse = JSON.parse(result);
+
         if (apiResponse['output'][0]['source'] == '') {
           alert("Sorry I couldn't hear a voice. Could you please speak again?");
         }
         setTamiltext(apiResponse['output'][0]['source']);
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
+
         response({ // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
             "qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source'] }] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
           })
       })
       .catch(error => {
