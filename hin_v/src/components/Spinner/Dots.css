@@ -1,0 +1,44 @@
+.dot {
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: 10px;
+  transform: translateZ(0);
+  animation: move 2s infinite;
+}
+
+#blue {
+  background: #0057e7;
+  animation-delay: 0.5s;
+}
+
+#red {
+  background: #d62d20;
+  animation-delay: 0.1s;
+}
+
+#yellow {
+  background: #ffa700;
+  animation-delay: 0.15s;
+}
+
+#green {
+  background: #008744;
+  animation-delay: 0.5s;
+}
+
+.container {
+  display: inline-block;
+  position: absolute;
+  width: intrinsic;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%) translateZ(0);
+}
+
+@keyframes move {
+  50% {
+    transform: translateY(50%);
+  }
+}

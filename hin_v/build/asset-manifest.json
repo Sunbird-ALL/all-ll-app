@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "./static/css/main.c41b25ee.css",
+    "main.js": "./static/js/main.3a57a629.js",
+    "static/js/27.262d8d9e.chunk.js": "./static/js/27.262d8d9e.chunk.js",
+    "static/media/p1.png": "./static/media/p1.f42980eb5cb6ff6a3be0.png",
+    "static/media/long_para.m4a": "./static/media/long_para.b2f1b49171f253c2cd5c.m4a",
+    "static/media/leena_audio.m4a": "./static/media/leena_audio.7cd3f112f1d8095381c5.m4a",
+    "static/media/a3_ta.mpga": "./static/media/a3_ta.96c415e882782486b2f5.mpga",
+    "static/media/back_map.png": "./static/media/back_map.c8d8284763babd935517.png",
+    "static/media/speak_ta.mpga": "./static/media/speak_ta.6a92c9c7b962912597df.mpga",
+    "static/media/welcome_ta.mpga": "./static/media/welcome_ta.63a9b05b5be0290c6268.mpga",
+    "static/media/a3_hi.m4a": "./static/media/a3_hi.33ced91da55fe7bd7a31.m4a",
+    "static/media/a2_ta.mpga": "./static/media/a2_ta.99189524be63dbf5b78e.mpga",
+    "static/media/welcome_hi.m4a": "./static/media/welcome_hi.7f76660d9151fca019ec.m4a",
+    "static/media/a3_en.m4a": "./static/media/a3_en.09294255d4339dbcfc23.m4a",
+    "static/media/welcome_en.m4a": "./static/media/welcome_en.7fae01a6e1491565abe3.m4a",
+    "static/media/a2_en.m4a": "./static/media/a2_en.f3aca86b4deb0d562835.m4a",
+    "static/media/a2_hi.m4a": "./static/media/a2_hi.7f3eabd252ea392fa0f0.m4a",
+    "static/media/TamilGirl.png": "./static/media/TamilGirl.ff814bbe0bc32aa170f0.png",
+    "static/media/play-img.png": "./static/media/play-img.66abf7e6e517dba3e14e.png",
+    "static/media/a1_ta.mpga": "./static/media/a1_ta.b38478979d71c0587ad5.mpga",
+    "static/media/pause-img.png": "./static/media/pause-img.11cb3a8857c7279f0d0a.png",
+    "static/media/a1_hi.m4a": "./static/media/a1_hi.036d88d1671c8e798c2b.m4a",
+    "static/media/mic_on.jpg": "./static/media/mic_on.d3cb83986dcbb814d66f.jpg",
+    "static/media/a1_en.m4a": "./static/media/a1_en.9262b3eff4d0a0bac776.m4a",
+    "static/media/stop.png": "./static/media/stop.3dcc3d57653e546abc2b.png",
+    "static/media/next.png": "./static/media/next.c135a8c338ec6ad702d4.png",
+    "static/media/home_button.png": "./static/media/home_button.9ba1f7612e063cbd4fab.png",
+    "static/media/p1SeanSpeak.jpg": "./static/media/p1SeanSpeak.0cbc9256cb2b8a0a50ab.jpg",
+    "static/media/p3Read.jpg": "./static/media/p3Read.9ad9049e1f34c97b5d22.jpg",
+    "static/media/p3Para.jpg": "./static/media/p3Para.047baf49479f6d1dae5f.jpg",
+    "static/media/p1Word.jpg": "./static/media/p1Word.3720edae85d6773e8301.jpg",
+    "static/media/p2Listen.jpg": "./static/media/p2Listen.004a22bdc284faf9894c.jpg",
+    "static/media/p1Word_ta.jpg": "./static/media/p1Word_ta.2fc6905831b7d5bb5748.jpg",
+    "index.html": "./index.html",
+    "static/media/refresh.svg": "./static/media/refresh.8c1be5a641e38421bc276e5597e1eaa3.svg"
+  },
+  "entrypoints": [
+    "static/css/main.c41b25ee.css",
+    "static/js/main.3a57a629.js"
+  ]
+}
