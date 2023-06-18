@@ -153,8 +153,8 @@ function StartLearn() {
                 {flag ? (
                   <img
                     style={{
-                      width: '80px',
-                      height: '80px',
+                      width: '72px',
+                      height: '72px',
                       cursor: 'pointer',
                       marginRight: '80px',
                     }}
@@ -164,8 +164,8 @@ function StartLearn() {
                 ) : (
                   <img
                     style={{
-                      width: '80px',
-                      height: '80px',
+                      width: '72px',
+                      height: '72px',
                       cursor: 'pointer',
                       marginRight: '80px',
                     }}

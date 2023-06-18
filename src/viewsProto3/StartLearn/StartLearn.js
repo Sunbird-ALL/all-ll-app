@@ -113,7 +113,10 @@ function StartLearn() {
         set_content(tempContent[getitem].content);
 
         set_content_id(getitem);
-        localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
+        localStorage.setItem(
+          'contentText',
+          tempContent[getitem].content[localStorage.getItem('apphomelang')].text
+        );
       }
       scroll_to_top('smooth');
       set_load_cnt(load_cnt => Number(load_cnt + 1));
@@ -193,8 +196,8 @@ function StartLearn() {
                   {flag ? (
                     <img
                       style={{
-                        width: '80px',
-                        height: '80px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                         marginRight: '80px',
                       }}
@@ -204,8 +207,8 @@ function StartLearn() {
                   ) : (
                     <img
                       style={{
-                        width: '80px',
-                        height: '80px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                         marginRight: '80px',
                       }}

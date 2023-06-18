@@ -205,15 +205,21 @@ function Score() {
     //fluencytestresult
     if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Needs to work on language skills</font>
+        <font className="result_incorrect">
+          Needs to work on language skills
+        </font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Good scope to improve language skills</font>
+        <font className="result_incorrect">
+          Good scope to improve language skills
+        </font>
       );
     } else {
       setfluencyresult(
-        <font className="result_incorrect">You have good level of language skills</font>
+        <font className="result_incorrect">
+          You have good level of language skills
+        </font>
       );
     }
 
@@ -297,8 +303,8 @@ function Score() {
                   {flag ? (
                     <img
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                       }}
                       src={play}
@@ -307,8 +313,8 @@ function Score() {
                   ) : (
                     <img
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                       }}
                       src={pause}

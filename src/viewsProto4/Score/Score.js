@@ -9,9 +9,13 @@ import 'react-h5-audio-player/lib/styles.css';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
-import{removeForbiddenCharacters,splitArray,findRegex} from "../../utils/helper"
+import {
+  removeForbiddenCharacters,
+  splitArray,
+  findRegex,
+} from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-import {interactCall} from "../../services/callTelemetryIntract"
+import { interactCall } from '../../services/callTelemetryIntract';
 import play from '../../assests/Images/play-img.png';
 
 import pause from '../../assests/Images/pause-img.png';
@@ -58,11 +62,11 @@ function Score() {
 
   const [temp_audio, set_temp_audio] = useState(null);
   const playAudio = () => {
-    interactCall()
+    interactCall();
     set_temp_audio(new Audio(recordedAudio));
   };
   const pauseAudio = () => {
-    interactCall()
+    interactCall();
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -83,11 +87,11 @@ function Score() {
   };
 
   const newSentence = () => {
-    interactCall()
+    interactCall();
     navigate(-1);
   };
   const trySameSentence = () => {
-    interactCall()
+    interactCall();
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };
@@ -117,7 +121,8 @@ function Score() {
   const [testResult, setTestResult] = useState('');
   let item;
   const [teacherText, setTeacherText] = useState(
-    localStorage.getItem('contentText')  );
+    localStorage.getItem('contentText')
+  );
 
   const [voiceText, setVoiceText] = useState(localStorage.getItem('voiceText'));
   const [voiceTextTeacher, setVoiceTextTeacher] = useState('');
@@ -134,8 +139,6 @@ function Score() {
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
-
-
 
   function checkVoice(voiceText) {
     let tempvoiceText = removeForbiddenCharacters(voiceText.toLowerCase());
@@ -170,7 +173,7 @@ function Score() {
     let texttemp = voiceText.toLowerCase();
     let studentTextArray;
 
-    studentTextArray = (texttemp).split(' ');
+    studentTextArray = texttemp.split(' ');
     const teacherTextArray = tempteacherText.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
@@ -178,10 +181,9 @@ function Score() {
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
-   
-   
+
     for (let i = 0; i < studentTextArray.length; i++) {
-      let arryResult = teacherText.split(" ");
+      let arryResult = teacherText.split(' ');
       if (tempteacherText.includes(studentTextArray[i])) {
         correct_words++;
         student_text_result.push(
@@ -223,15 +225,21 @@ function Score() {
     //fluencytestresult
     if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Needs to work on language skills</font>
+        <font className="result_incorrect">
+          Needs to work on language skills
+        </font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Good scope to improve language skills</font>
+        <font className="result_incorrect">
+          Good scope to improve language skills
+        </font>
       );
     } else {
       setfluencyresult(
-        <font className="result_incorrect">You have good level of language skills</font>
+        <font className="result_incorrect">
+          You have good level of language skills
+        </font>
       );
     }
 
@@ -306,8 +314,8 @@ function Score() {
                   {flag ? (
                     <img
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                       }}
                       src={play}
@@ -316,8 +324,8 @@ function Score() {
                   ) : (
                     <img
                       style={{
-                        width: '40px',
-                        height: '40px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                       }}
                       src={pause}

@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import AudioAnalyser from "react-audio-analyser";
-import mic from "../../assests/Images/mic.png";
-import mic_on from "../../assests/Images/mic_on.jpg";
+import React, { Component } from 'react';
+import AudioAnalyser from 'react-audio-analyser';
+import mic from '../../assests/Images/mic.png';
+import mic_on from '../../assests/Images/mic_on.jpg';
 
 export default class AudioRecorder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: "",
+      status: '',
     };
   }
 
@@ -25,7 +25,7 @@ export default class AudioRecorder extends Component {
 
   componentDidMount() {
     this.setState({
-      audioType: "audio/wav",
+      audioType: 'audio/wav',
     });
   }
 
@@ -37,43 +37,44 @@ export default class AudioRecorder extends Component {
       status,
       audioSrc,
       timeslice: 1000, // timeslice
-      startCallback: (e) => {
+      startCallback: e => {
         this.setState({
-          audioSrc: "",
+          audioSrc: '',
         });
-        this.props.setRecordedAudio("");
-        console.log("succ start", e);
+        this.props.setRecordedAudio('');
+        console.log('succ start', e);
       },
-      pauseCallback: (e) => {
-        console.log("succ pause", e);
+      pauseCallback: e => {
+        console.log('succ pause', e);
       },
-      stopCallback: (e) => {
+      stopCallback: e => {
         let temp_audioSrc = window.URL.createObjectURL(e);
         this.setState({
           audioSrc: temp_audioSrc,
         });
         this.props.setRecordedAudio(temp_audioSrc);
-        console.log("succ stop", e);
+        console.log('succ stop', e);
       },
-      onRecordCallback: (e) => {
-        console.log("recording", e);
+      onRecordCallback: e => {
+        console.log('recording', e);
       },
-      errorCallback: (err) => {
-        console.log("error", err);
+      errorCallback: err => {
+        console.log('error', err);
       },
     };
+
     return (
       <div>
         <center>
           {(() => {
-            if (status == "recording") {
+            if (status === 'recording') {
               return (
                 <>
                   <p>Listening... Click to stop and save audio</p>
                   <img
                     src={mic_on}
                     className="micimg mic_stop_record"
-                    onClick={() => document.getElementById("stopaudio").click()}
+                    onClick={() => document.getElementById('stopaudio').click()}
                   ></img>
                 </>
               );
@@ -85,7 +86,7 @@ export default class AudioRecorder extends Component {
                     src={mic}
                     className="micimg mic_record"
                     onClick={() =>
-                      document.getElementById("startaudio").click()
+                      document.getElementById('startaudio').click()
                     }
                   ></img>
                 </>
@@ -98,14 +99,14 @@ export default class AudioRecorder extends Component {
               <button
                 className="btn"
                 id="startaudio"
-                onClick={() => this.controlAudio("recording")}
+                onClick={() => this.controlAudio('recording')}
               >
                 Start
               </button>
               <button
                 className="btn"
                 id="stopaudio"
-                onClick={() => this.controlAudio("inactive")}
+                onClick={() => this.controlAudio('inactive')}
               >
                 Stop
               </button>

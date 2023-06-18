@@ -29,8 +29,8 @@ code {
 }
 
 .micimg {
-  width: 75px;
-  height: 75px;
+  width: 72px;
+  height: 72px;
   cursor: pointer;
   border: 0px solid #aaaaaa;
   border-radius: 50%;
@@ -38,7 +38,7 @@ code {
 }
 
 .mic_record {
-  /* background-color: #99e500;*/
+  /* background-color: #99e500; */
 }
 
 .mic_stop_record {
@@ -190,8 +190,8 @@ code {
 }
 
 .home_icon {
-  width: 50px;
-  height: 50px;
+  width: 72px;
+  height: 72px;
   cursor: pointer;
   border-radius: 50%;
 }
