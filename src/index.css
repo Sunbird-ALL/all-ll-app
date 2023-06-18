@@ -29,12 +29,12 @@ code {
 }
 
 .micimg {
-  width: 72px;
-  height: 72px;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   border: 0px solid #aaaaaa;
   border-radius: 50%;
-  padding: 0px;
+  padding: 5px;
 }
 
 .mic_record {
@@ -189,6 +189,13 @@ code {
   font-weight: bold;
 }
 
+.play_btn {
+  padding: 5px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border-radius: 50%;
+}
 .home_icon {
   width: 72px;
   height: 72px;
@@ -319,6 +326,7 @@ code {
   font-weight: 500;
 }
 .main_layout {
+  width: 50%;
   background-color: #fff;
   min-height: 100vh !important;
   /*padding: 0px !important;*/
@@ -1617,7 +1625,9 @@ nav .brand-logo.center {
   max-width: 1280px;
   width: 90%;
 }
-
+.m-0 {
+  margin: 0 !important;
+}
 @media only screen and (min-width: 601px) {
   .container {
     width: 85%;

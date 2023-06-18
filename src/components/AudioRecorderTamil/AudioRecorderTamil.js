@@ -8,7 +8,7 @@ import mic_on from '../../assests/Images/mic_on.png';
 import mic from '../../assests/Images/mic.png';
 import stop from '../../assests/Images/stop.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
-import { response,interact } from '../../services/telementryService';
+import { response, interact } from '../../services/telementryService';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -38,6 +38,7 @@ function Mic({
   flag,
   setTamilRecordedAudio,
   setTamilRecordedText,
+  isAudioPlay,
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
@@ -49,6 +50,7 @@ function Mic({
 
   const startRecording = () => {
     setRecord(true);
+    isAudioPlay('recording');
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
@@ -77,6 +79,7 @@ function Mic({
   const stopRecording = () => {
     showLoading();
     setRecord(false);
+    isAudioPlay('inactive');
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
@@ -146,7 +149,9 @@ function Mic({
       .then(response => response.text())
       .then(result => {
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
 
         var apiResponse = JSON.parse(result);
 
@@ -157,12 +162,17 @@ function Mic({
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
 
-        response({ // Required
-            "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
-            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
-          })
+        response({
+          // Required
+          target: localStorage.getItem('contentText'), // Required. Target of the response
+          qid: '', // Required. Unique assessment/question id
+          type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+          values: [
+            { original_text: localStorage.getItem('contentText') },
+            { response_text: apiResponse['output'][0]['source'] },
+            { duration: responseDuration },
+          ], // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+        });
       })
       .catch(error => {
         console.log('error', error);
@@ -172,15 +182,7 @@ function Mic({
 
   const IconMic = () => {
     if (record) {
-      return (
-        <>
-          {flag ? (
-            <img src={stop} className="micimg mic_record"></img>
-          ) : (
-            <img src={mic_on} className="micimg mic_stop_record"></img>
-          )}
-        </>
-      );
+      return <img src={mic} className="micimg mic_stop_record"></img>;
     } else {
       return <img src={mic} className={'micimg mic_record'}></img>;
     }
