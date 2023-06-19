@@ -164,14 +164,19 @@ function StartLearn() {
                   _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                   flag={true}
                 />
-                <h4 className="text-speak m-0">speak</h4>
+                <h4 className="text-speak m-0">Speak</h4>
               </VStack>
+              {isAudioPlay !== 'recording' && (
+                <VStack>
+                  <img
+                    src={refresh}
+                    className="home_icon"
+                    onClick={() => navigate(0)}
+                  />
+                  <h4 className="text-speak m-0">Try new</h4>
+                </VStack>
+              )}
             </HStack>
-            {/* <div onClick={() => navigate(0)}>
-            <img src={refresh} className="home_icon"></img>
-            <br />
-            Try new
-          </div> */}
             {/* <NewBottomHomeNextBar nextlink={''} ishomeback={true} /> */}
           </Box>
         </Box>
