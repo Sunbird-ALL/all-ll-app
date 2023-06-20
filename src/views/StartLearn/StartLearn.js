@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-
-import AppNavbar from '../../components/AppNavbar/AppNavbar';
+import { useNavigate } from 'react-router-dom';
 import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
 //import HomeNextBar from "../../components/HomeNextBar/HomeNextBar";
 import content_list from '../../utils/Const/ContentJSON';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
-import ReactAudioPlayer from 'react-audio-player';
 // import play from '../../assests/Images/play.png';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
-
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 
 function StartLearn() {
   const navigate = useNavigate();
-
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
+  const [isAudioPlay, setIsAudioPlay] = useState(true);
   const playAudio = () => {
     set_temp_audio(new Audio(content[sel_lang + '_audio']));
   };
+
   const pauseAudio = () => {
     if (temp_audio !== null) {
       temp_audio.pause();
@@ -71,7 +69,6 @@ function StartLearn() {
 
   const [content, set_content] = useState({});
   const [content_id, set_content_id] = useState(0);
-
   const [load_cnt, set_load_cnt] = useState(0);
 
   useEffect(() => {
@@ -102,6 +99,7 @@ function StartLearn() {
       go_to_result(voiceText);
     }
   }, [voiceText]);
+
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang]);
     localStorage.setItem('recordedAudio', recordedAudio);
@@ -113,90 +111,76 @@ function StartLearn() {
   }
   function showStartLearn() {
     return (
-      <>
-        <div className="">
-          <div className="row">
-            <div className="col s12 m2 l3"></div>
-            <div className="col s12 m8 l6 main_layout">
-              {/*<AppNavbar navtitle={sel_cource + " a " + sel_level} />*/}
-              <br />
-              <NewTopHomeNextBar nextlink={''} ishomeback={true} />
-              {sel_cource === 'See & Speak' ? (
-                <>
-                  {/*<div className="content_text_div">
-                    {"Answer in one " + sel_level + ". What is this?"}
-                  </div>*/}
-                  <br />
-                  <img className="image_class" src={content?.image} />
-                  {sel_lang != 'ta' ? (
-                    <div className="content_text_div">{content['ta']}</div>
-                  ) : (
-                    <></>
-                  )}
-                  <div className="content_text_div">{content[sel_lang]}</div>
-                </>
-              ) : (
-                <>
-                  <br />
-                  {sel_lang != 'ta' ? (
-                    <div className="content_text_div_see">{content['ta']}</div>
-                  ) : (
-                    <></>
-                  )}
-                  <div className="content_text_div_see">
-                    {content[sel_lang]}
-                  </div>
-                </>
+      <VStack>
+        <Box className="main_layout" gap="20">
+          <br />
+          <NewTopHomeNextBar nextlink={''} ishomeback={true} />
+          {sel_cource === 'See & Speak' ? (
+            <VStack>
+              <img className="image_class" src={content?.image} />
+              {sel_lang != 'ta' && (
+                <div className="content_text_div">{content['ta']}</div>
               )}
-              <br />
-              <div style={{ display: 'inline-flex' }}>
-                {flag ? (
-                  <img
-                    style={{
-                      width: '72px',
-                      height: '72px',
-                      cursor: 'pointer',
-                      marginRight: '80px',
-                    }}
-                    src={play}
-                    onClick={() => playAudio()}
-                  />
-                ) : (
-                  <img
-                    style={{
-                      width: '72px',
-                      height: '72px',
-                      cursor: 'pointer',
-                      marginRight: '80px',
-                    }}
-                    src={pause}
-                    onClick={() => pauseAudio()}
-                  />
-                )}
+              <div className="content_text_div">{content[sel_lang]}</div>
+            </VStack>
+          ) : (
+            <VStack>
+              {sel_lang != 'ta' && (
+                <div className="content_text_div_see">{content['ta']}</div>
+              )}
+              <div className="content_text_div_see">{content[sel_lang]}</div>
+            </VStack>
+          )}
 
+          <Box
+            position="fixed"
+            bottom="20px"
+            left="50%"
+            transform="translate(-50%, 0%)"
+          >
+            <HStack gap={'10'} alignItems="center">
+              {isAudioPlay !== 'recording' && (
+                <VStack alignItems="center" gap="5">
+                  {flag ? (
+                    <img
+                      className="play_btn"
+                      src={play}
+                      onClick={() => playAudio()}
+                    />
+                  ) : (
+                    <img
+                      className="play_btn"
+                      src={pause}
+                      onClick={() => pauseAudio()}
+                    />
+                  )}
+                  <h4 className="text-play m-0">Listen</h4>
+                </VStack>
+              )}
+              <VStack>
                 <VoiceCompair
                   setVoiceText={setVoiceText}
                   setRecordedAudio={setRecordedAudio}
+                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                   flag={true}
                 />
-              </div>
-              <br />
-              <div style={{ display: 'inline-flex' }}>
-                <h4 className="text-play"> Listen</h4>
-                <h4 className="text-speak">speak</h4>
-              </div>
-              <br />
-              <div onClick={() => navigate(0)}>
-                <img src={refresh} className="home_icon"></img>
-                <br />
-                Try new
-              </div>
-              <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
-            </div>
-            <div className="cols s12 m2 l3"></div>
-          </div>
-        </div>
-      </>
+                <h4 className="text-speak m-0">Speak</h4>
+              </VStack>
+              {isAudioPlay !== 'recording' && (
+                <VStack>
+                  <img
+                    src={refresh}
+                    className="home_icon"
+                    onClick={() => navigate(0)}
+                  />
+                  <h4 className="text-speak m-0">Try new</h4>
+                </VStack>
+              )}
+            </HStack>
+            {/* <NewBottomHomeNextBar nextlink={''} ishomeback={true} /> */}
+          </Box>
+        </Box>
+      </VStack>
     );
   }
   return <React.Fragment>{showStartLearn()}</React.Fragment>;

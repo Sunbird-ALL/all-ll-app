@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AudioRecorderCompairUI from '../AudioRecorderCompairUI/AudioRecorderCompairUI';
 import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
-import { response,interact } from '../../services/telementryService';
+import { response, interact } from '../../services/telementryService';
 
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 
@@ -115,14 +115,21 @@ const VoiceCompair = props => {
       .then(response => response.text())
       .then(result => {
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
         var apiResponse = JSON.parse(result);
-        response({ // Required
-            "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
-            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
-        })
+        response({
+          // Required
+          target: localStorage.getItem('contentText'), // Required. Target of the response
+          qid: '', // Required. Unique assessment/question id
+          type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+          values: [
+            { original_text: localStorage.getItem('contentText') },
+            { response_text: apiResponse['output'][0]['source'] },
+            { duration: responseDuration },
+          ], // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+        });
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''
             ? apiResponse['output'][0]['source']
@@ -162,28 +169,30 @@ const VoiceCompair = props => {
       }
     );
   };
-  return (
-    <>
-      <center>
-        {(() => {
-          if (audioPermission != null) {
-            if (audioPermission) {
-              return (
-                <>
-                  {lang_code == 'ta' ? (
-                    <AudioRecorderTamil
-                      setTamilRecordedAudio={setTamilRecordedAudio}
-                      setTamilRecordedText={setTamilRecordedText}
-                      flag={props.flag}
-                    />
-                  ) : (
-                    <AudioRecorderCompairUI
-                      setRecordedAudio={setRecordedAudio}
-                      flag={props.flag}
-                    />
-                  )}
 
-                  {/*recordedAudio !== "" ? (
+  return (
+    <center>
+      {(() => {
+        if (audioPermission != null) {
+          if (audioPermission) {
+            return (
+              <div>
+                {lang_code == 'ta' ? (
+                  <AudioRecorderTamil
+                    setTamilRecordedAudio={setTamilRecordedAudio}
+                    setTamilRecordedText={setTamilRecordedText}
+                    flag={props.flag}
+                    {...(props?._audio ? props?._audio : {})}
+                  />
+                ) : (
+                  <AudioRecorderCompairUI
+                    setRecordedAudio={setRecordedAudio}
+                    flag={props.flag}
+                    {...(props?._audio ? props?._audio : {})}
+                  />
+                )}
+
+                {/*recordedAudio !== "" ? (
                     <>
                       <br />
                       Wav File URL : {recordedAudio}
@@ -195,18 +204,15 @@ const VoiceCompair = props => {
                   ) : (
                     ""
                   )*/}
-                  {/*recordedAudio != "" ? blobToBase64(recordedAudio) : ""*/}
-                </>
-              );
-            } else {
-              return (
-                <h5 className="deniedtext">Microphone Permission Denied</h5>
-              );
-            }
+                {/*recordedAudio != "" ? blobToBase64(recordedAudio) : ""*/}
+              </div>
+            );
+          } else {
+            return <h5 className="deniedtext">Microphone Permission Denied</h5>;
           }
-        })()}
-      </center>
-    </>
+        }
+      })()}
+    </center>
   );
 };
 

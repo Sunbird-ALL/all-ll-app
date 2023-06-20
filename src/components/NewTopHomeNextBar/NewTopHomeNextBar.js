@@ -27,13 +27,11 @@ const NewTopHomeNextBar = props => {
             </div>
           </>
         ) : (
-          <>
-            <div className="col s12 home_icon_div">
-              <Link to={'/'}>
-                <img src={home} className="home_icon_new"></img>
-              </Link>
-            </div>
-          </>
+          <div className="col s12 home_icon_div">
+            <Link to={'/'}>
+              <img src={home} className="home_icon_new"></img>
+            </Link>
+          </div>
         )}
       </div>
     </div>
