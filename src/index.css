@@ -42,8 +42,8 @@ code {
 }
 
 .mic_stop_record {
-  background-color: green;
-  padding: 5px;
+  /* background-color: green;
+  padding: 5px; */
 }
 
 .black-border {
@@ -198,8 +198,8 @@ code {
 }
 .home_icon {
   padding: 5px;
-  width: 28px;
-  height: 28px;
+  width: 72px;
+  height: 72px;
   cursor: pointer;
   border-radius: 50%;
 }
@@ -328,11 +328,11 @@ code {
 }
 .main_layout {
   width: 50%;
-  background-color: #fff;
+  /* background-color: #fff; */
   min-height: 100vh !important;
   /*padding: 0px !important;*/
   text-align: center;
-  background: url('./assests/Images/back_map.png') no-repeat center center;
+  /* background: url('./assests/Images/back_map.png') no-repeat center center; */
   background-position: bottom;
 }
 

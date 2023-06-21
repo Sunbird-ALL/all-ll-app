@@ -73,6 +73,7 @@ export default class AudioRecorder extends Component {
                   <p>Listening... Click to stop and save audio</p>
                   <img
                     src={mic_on}
+                    
                     className="micimg mic_stop_record"
                     onClick={() => document.getElementById('stopaudio').click()}
                   ></img>

@@ -180,13 +180,13 @@ function Mic({
       });
   };
 
-  const IconMic = () => {
-    if (record) {
-      return <img src={mic} className="micimg mic_stop_record"></img>;
-    } else {
-      return <img src={mic} className={'micimg mic_record'}></img>;
-    }
-  };
+    const IconMic = () => {
+      if (record) {
+        return <img src={mic} className="micimg mic_stop_record"></img>;
+      } else {
+        return <img src={mic} className={'micimg mic_record'}></img>;
+      }
+    };
 
   return (
     <div spacing={4} overflow="hidden">

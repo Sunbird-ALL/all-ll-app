@@ -133,28 +133,36 @@ function StartLearn() {
           )}
 
           <Box
-            position="fixed"
-            bottom="20px"
-            left="50%"
-            transform="translate(-50%, 0%)"
+            // position="fixed"
+            // bottom="20px"
+            // left="50%"
+            // transform="translate(-50%, 0%)"
+
+            display={'flex'}
+            justifyContent={'center'}
+            mt={'20'}
           >
-            <HStack gap={'10'} alignItems="center">
+            <VStack gap={'10'} alignItems="center">
+              <HStack display={'flex'} gap={'28'} justifyContent={'justify-between'}>
+
               {isAudioPlay !== 'recording' && (
                 <VStack alignItems="center" gap="5">
                   {flag ? (
                     <img
-                      className="play_btn"
+                    className="play_btn"
                       src={play}
+                      style={{ height: '72px', width: '72px' }}
                       onClick={() => playAudio()}
-                    />
+                      />
                   ) : (
                     <img
-                      className="play_btn"
+                    className="play_btn"
                       src={pause}
+                      style={{ height: '72px', width: '72px' }}
                       onClick={() => pauseAudio()}
-                    />
-                  )}
-                  <h4 className="text-play m-0">Listen</h4>
+                      />
+                      )}
+                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
                 </VStack>
               )}
               <VStack>
@@ -163,20 +171,22 @@ function StartLearn() {
                   setRecordedAudio={setRecordedAudio}
                   _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                   flag={true}
-                />
+                  />
                 <h4 className="text-speak m-0">Speak</h4>
-              </VStack>
+                  </VStack>
+              </HStack>
               {isAudioPlay !== 'recording' && (
                 <VStack>
                   <img
                     src={refresh}
                     className="home_icon"
+                    style={{ height: '72px', width: '72px' }}
                     onClick={() => navigate(0)}
                   />
                   <h4 className="text-speak m-0">Try new</h4>
                 </VStack>
               )}
-            </HStack>
+            </VStack>
             {/* <NewBottomHomeNextBar nextlink={''} ishomeback={true} /> */}
           </Box>
         </Box>
