@@ -4,6 +4,7 @@ import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
 import { response,interact } from '../../services/telementryService';
 
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
+import { replaceAll } from '../../utils/helper';
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -109,9 +110,6 @@ const VoiceCompair = props => {
       body: payload,
       redirect: 'follow',
     };
-    function replaceAll(string, search, replace) {
-        return string.split(search).join(replace);
-    }
     function compareArrays(arr1, arr2) {
         let words_result = [];
 

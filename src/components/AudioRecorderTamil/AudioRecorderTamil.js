@@ -9,6 +9,7 @@ import mic from '../../assests/Images/mic.png';
 import stop from '../../assests/Images/stop.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { response,interact } from '../../services/telementryService';
+import { replaceAll } from '../../utils/helper';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -131,9 +132,6 @@ function Mic({
       ],
     });
 
-    function replaceAll(string, search, replace) {
-        return string.split(search).join(replace);
-    }
     function compareArrays(arr1, arr2) {
         let words_result = [];
 

@@ -24,6 +24,8 @@ import pause from '../../assests/Images/pause-img.png';
 
 import next from '../../assests/Images/next.png';
 
+import { replaceAll } from '../../utils/helper';
+
 function Score() {
   const navigate = useNavigate();
   const [isStart, set_isStart] = useState(false);
@@ -121,9 +123,7 @@ function Score() {
       checkVoice(voiceText);
     }
   }, [voiceText]);
-  function replaceAll(string, search, replace) {
-    return string.split(search).join(replace);
-  }
+
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText.toLowerCase();
     let tempteacherText = teacherText.toLowerCase();

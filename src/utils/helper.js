@@ -73,3 +73,7 @@ export function useGetUrl() {
   const location = useLocation();
   return location.pathname + location.search;
 }
+
+export function replaceAll(string, search, replace) {
+  return string.split(search).join(replace);
+}
