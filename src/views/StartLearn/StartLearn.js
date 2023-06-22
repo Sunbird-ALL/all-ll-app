@@ -143,7 +143,7 @@ function StartLearn() {
             mt={'20'}
           >
             <VStack gap={'10'} alignItems="center">
-              <HStack display={'flex'} gap={'28'} justifyContent={'justify-between'}>
+              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
 
               {isAudioPlay !== 'recording' && (
                 <VStack alignItems="center" gap="5">
