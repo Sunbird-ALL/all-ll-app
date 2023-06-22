@@ -157,6 +157,7 @@ function Mic({
         setTamiltext(apiResponse['output'][0]['source']);
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
+        setTamilRecordedText(apiResponse['output'][0]['source']);
 
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();

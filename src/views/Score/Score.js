@@ -189,6 +189,7 @@ function Score() {
       </>
     );
     setVoiceTextHighLight(student_text_result);
+
     //calculation method
     if (originalwords >= studentswords) {
       result_per_words = Math.round(
@@ -225,40 +226,14 @@ function Score() {
 
     setTestResult(
       <>
-        <h5 className="home_sub_title">Word Result :</h5>
         <div className="res_txt">
-          {originalwords < studentswords ? (
-            <font style={{ color: 'red' }}>You have recorded extra word</font>
-          ) : (
             <>{result_per_words}/100</>
-          )}
-        </div>
-        <br />
-        <font className="ori_res_txt">Original Words : {originalwords} | </font>
-        <font className="stu_res_txt">Your Words : {studentswords} | </font>
-        <font className="cor_res_txt">Correct Words : {correct_words} | </font>
-        <font className="icor_res_txt">Incorrect Words : {wrong_words}</font>
-        <hr />
-        <h5 className="home_sub_title">Sentence Result :</h5>
-        <div className="res_txt">
-          {tempteacherText === tempvoiceText ? (
-            <>
-              <font style={{ color: 'green' }}>
-                You recorded text match with content text
-              </font>
-            </>
-          ) : (
-            <>
-              <font style={{ color: 'red' }}>
-                You recorded text does not match with content text
-              </font>
-            </>
-          )}
         </div>
         <br />
       </>
     );
   }
+
   function showScore() {
     return (
       <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
@@ -275,19 +250,7 @@ function Score() {
               />
               <div>
                 <center>
-                  {/*<h5 className="home_title">Result</h5>
-                  <hr />
                   {testResult}
-                  <hr />*/}
-                  {contenttype != 'Word' && numberOfPieces > 50 ? (
-                    <>
-                      <br />
-                      <br />
-                      <div className="res_txt">{numberOfPieces}/100</div>
-                    </>
-                  ) : (
-                    ''
-                  )}
                   <br />
                   <br />
                   {newtextresult}
