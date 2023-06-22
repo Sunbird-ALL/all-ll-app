@@ -169,6 +169,7 @@ function Mic({
         tempteacherText = replaceAll(tempteacherText, ',', '');
         tempteacherText = replaceAll(tempteacherText, '!', '');
         tempteacherText = replaceAll(tempteacherText, '|', '');
+        tempteacherText = replaceAll(tempteacherText, '?', '');
         const teacherTextArray = tempteacherText.split(' ');;
 
         let student_correct_words_result = [];

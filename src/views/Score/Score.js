@@ -132,6 +132,7 @@ function Score() {
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
+    tempteacherText = replaceAll(tempteacherText, '?', '');
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
