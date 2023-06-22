@@ -4,7 +4,7 @@ import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
 import { response,interact } from '../../services/telementryService';
 
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
-import { replaceAll } from '../../utils/helper';
+import { replaceAll, compareArrays } from '../../utils/helper';
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -110,33 +110,6 @@ const VoiceCompair = props => {
       body: payload,
       redirect: 'follow',
     };
-    function compareArrays(arr1, arr2) {
-        let words_result = [];
-
-        // Iterate over each element and compare
-        for (var k in arr1){
-            if (arr2[k] == "" || arr2[k] == undefined)
-            {
-                // Element not available on the same key
-                words_result.push('-1');
-            }
-            else if (arr1[k] === arr2[k]) {
-                // Elements match on the same key
-                words_result.push('1');
-            }
-            else {
-                // Element does not match on the same key
-                words_result.push('0');
-            }
-        }
-        if (arr1.length < arr2.length)
-        {
-           for (let i = arr1.length; i < arr2.length; i++){
-              words_result.push('-1');
-           }
-        }
-        return words_result;
-    }
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
     const responseStartTime = new Date().getTime();
     await fetch(apiURL, requestOptions)
