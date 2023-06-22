@@ -188,6 +188,7 @@ const VoiceCompair = props => {
                   <AudioRecorderCompairUI
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
+                  
                     {...(props?._audio ? props?._audio : {})}
                   />
                 )}

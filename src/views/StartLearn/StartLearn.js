@@ -171,8 +171,9 @@ function StartLearn() {
                   setRecordedAudio={setRecordedAudio}
                   _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                   flag={true}
+                  
                   />
-                <h4 className="text-speak m-0">Speak</h4>
+                {/* <h4 className="text-speak m-0">Speak</h4> */}
                   </VStack>
               </HStack>
               {isAudioPlay !== 'recording' && (

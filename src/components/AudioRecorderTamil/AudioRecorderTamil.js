@@ -47,6 +47,7 @@ function Mic({
   React.useEffect(() => {
     setUrl(value);
   }, [value]);
+  
 
   const startRecording = () => {
     setRecord(true);

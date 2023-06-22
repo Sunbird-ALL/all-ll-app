@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AudioAnalyser from 'react-audio-analyser';
 import mic from '../../assests/Images/mic.png';
-import mic_on from '../../assests/Images/mic_on.png';     
-import mic_play from '../../assests/Images/mic_play.svg'   
+import mic_on from '../../assests/Images/mic_on.png';
+import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
   constructor(props) {
@@ -105,28 +105,32 @@ export default class AudioRecorderCompair extends Component {
             if (status == 'recording') {
               return (
                 <>
-                  {this.props.flag ? (
-                    <img
-                      src={mic_play}
-                      style={{height:'72px', width:'72px'}}
-                      className="micimg mic_stop_record"
-                      
-                      onClick={() =>
-                        document.getElementById('stopaudio_compair').click()
-                      }
-                    />
+                    {this.props.flag ? (
+                    <>
+                      <img
+                        src={mic_play}
+                        style={{ height: '72px', width: '72px' }}
+                        className="micimg mic_stop_record"
+                        onClick={() =>
+                          document.getElementById('stopaudio_compair').click()
+                        }
+                      />
+                       <h4 className="text-speak m-0">Stop</h4>
+                    </>
                   ) : (
-                    <img
-                      src={mic_on}
-                      style={{height:'72px', width:'72px'}}
-                      className="micimg mic_stop_record"
-                      onClick={() =>
-                        document.getElementById('stopaudio_compair').click()
-                      }
-                    />
+                    <>
+                      <img
+                        src={mic}
+                        style={{ height: '72px', width: '72px' }}
+                        className="micimg mic_stop_record"
+                        onClick={() =>
+                          document.getElementById('stopaudio_compair').click()
+                        }
+                      />  
+                     
+                    </>
                   )}
-
-                  {/*<p className="listen_text">Listening...</p>*/}
+         
                 </>
               );
             } else {
@@ -134,14 +138,15 @@ export default class AudioRecorderCompair extends Component {
                 <>
                   <img
                     src={mic}
-                    style={{height:'72px', width:'72px'}}
+                    style={{ height: '72px', width: '72px' }}
                     className={'micimg mic_record'}
                     onClick={() =>
                       document.getElementById('startaudio_compair').click()
                     }
                   ></img>
 
-                  {/*<p className="record_text">Speak and Record</p>*/}
+                  {/* <h4 className="record_text text-speak m-0">Stop</h4> */}
+                  <h4 className="text-speak m-0">Speak</h4>
                 </>
               );
             }
