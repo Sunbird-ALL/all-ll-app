@@ -4,6 +4,7 @@ import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
 import { response, interact } from '../../services/telementryService';
 
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
+import { replaceAll, compareArrays } from '../../utils/helper';
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -119,17 +120,74 @@ const VoiceCompair = props => {
           (responseEndTime - responseStartTime) / 1000
         );
         var apiResponse = JSON.parse(result);
-        response({
-          // Required
-          target: localStorage.getItem('contentText'), // Required. Target of the response
-          qid: '', // Required. Unique assessment/question id
-          type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-          values: [
-            { original_text: localStorage.getItem('contentText') },
-            { response_text: apiResponse['output'][0]['source'] },
-            { duration: responseDuration },
-          ], // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
-        });
+
+        // Data Manipulation on result capturing for telemetry log
+        let texttemp = apiResponse['output'][0]['source'].toLowerCase();
+        const studentTextArray = texttemp.split(' ');
+
+        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        tempteacherText = replaceAll(tempteacherText, '.', '');
+        tempteacherText = replaceAll(tempteacherText, "'", '');
+        tempteacherText = replaceAll(tempteacherText, ',', '');
+        tempteacherText = replaceAll(tempteacherText, '!', '');
+        tempteacherText = replaceAll(tempteacherText, '|', '');
+        tempteacherText = replaceAll(tempteacherText, '?', '');
+        const teacherTextArray = tempteacherText.split(' ');;
+
+        let student_correct_words_result = [];
+        let student_incorrect_words_result = [];
+        let originalwords = teacherTextArray.length;
+        let studentswords = studentTextArray.length;
+        let wrong_words = 0;
+        let correct_words = 0;
+        let result_per_words = 0;
+        let result_per_words1 = 0;
+        let occuracy_percentage = 0;
+
+        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+
+        for (let i = 0; i < studentTextArray.length; i++) {
+            if (teacherTextArray.includes(studentTextArray[i])) {
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
+            } else {
+                wrong_words++;
+                student_incorrect_words_result.push(
+                   studentTextArray[i]
+                );
+            }
+        }
+        //calculation method
+        if (originalwords >= studentswords) {
+           result_per_words = Math.round(
+                 Number((correct_words / originalwords) * 100)
+           );
+        } else {
+            result_per_words = Math.round(
+              Number((correct_words / studentswords) * 100)
+            );
+        }
+ 
+        let word_result = (result_per_words == 100) ? "correct" : "incorrect";
+
+        response({ // Required
+            "target": localStorage.getItem('contentText'), // Required. Target of the response
+            "qid": "", // Required. Unique assessment/question id
+            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            "values": [
+                { "original_text": localStorage.getItem('contentText') },
+                { "response_text": apiResponse['output'][0]['source']},
+                { "response_correct_words_array": student_correct_words_result},
+                { "response_incorrect_words_array": student_incorrect_words_result},
+                { "response_word_array_result": word_result_array},
+                { "response_word_result": word_result},
+                { "accuracy_percentage": result_per_words},
+                { "duration":  responseDuration}
+             ]
+        })
+
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''
             ? apiResponse['output'][0]['source']
