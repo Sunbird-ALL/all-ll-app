@@ -115,7 +115,7 @@ export default class AudioRecorderCompair extends Component {
                           document.getElementById('stopaudio_compair').click()
                         }
                       />
-                       <h4 className="text-speak m-0">Stop</h4>
+                       {/* <h4 className="text-speak m-0">Stop</h4> */}
                     </>
                   ) : (
                     <>
@@ -146,7 +146,7 @@ export default class AudioRecorderCompair extends Component {
                   ></img>
 
                   {/* <h4 className="record_text text-speak m-0">Stop</h4> */}
-                  <h4 className="text-speak m-0">Speak</h4>
+                  {/* <h4 className="text-speak m-0">Speak</h4> */}
                 </>
               );
             }

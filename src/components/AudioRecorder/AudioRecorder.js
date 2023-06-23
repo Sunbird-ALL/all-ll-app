@@ -74,7 +74,7 @@ export default class AudioRecorder extends Component {
                   <img
                     src={mic_on}
                     
-                    className="micimg mic_stop_record"
+                    // className="micimg mic_stop_record"
                     onClick={() => document.getElementById('stopaudio').click()}
                   ></img>
                 </>
@@ -85,7 +85,7 @@ export default class AudioRecorder extends Component {
                   <p>Click to record voice</p>
                   <img
                     src={mic}
-                    className="micimg mic_record"
+                    // className="micimg mic_record"
                     onClick={() =>
                       document.getElementById('startaudio').click()
                     }

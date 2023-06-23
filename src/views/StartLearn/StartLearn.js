@@ -173,7 +173,8 @@ function StartLearn() {
                   flag={true}
                   
                   />
-                {/* <h4 className="text-speak m-0">Speak</h4> */}
+                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
+                
                   </VStack>
               </HStack>
               {isAudioPlay !== 'recording' && (

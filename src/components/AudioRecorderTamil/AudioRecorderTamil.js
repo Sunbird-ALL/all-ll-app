@@ -2,7 +2,7 @@ import React from 'react';
 
 // import * as Recorder from './recorder';
 import Recorder from './Recorder';
-
+import mic_play from '../../assests/Images/mic_play.svg'
 // import mic from '../../assests/Images/mic.png';
 import mic_on from '../../assests/Images/mic_on.png';
 import mic from '../../assests/Images/mic.png';
@@ -183,7 +183,7 @@ function Mic({
 
     const IconMic = () => {
       if (record) {
-        return <img src={mic} className="micimg mic_stop_record"></img>;
+        return <img src={mic_play} className="micimg mic_stop_record"></img>;
       } else {
         return <img src={mic} className={'micimg mic_record'}></img>;
       }
