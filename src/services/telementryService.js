@@ -44,7 +44,7 @@ export const initialize = ({ context, config, metadata }) => {
           authtoken: context.authToken || '',
           uid: context.uid || '',
           sid: context.sid,
-          batchsize: 2,
+          batchsize: process.env.REACT_APP_batchsize,
           mode: context.mode,
           host: context.host,
           apislug: context.apislug,
