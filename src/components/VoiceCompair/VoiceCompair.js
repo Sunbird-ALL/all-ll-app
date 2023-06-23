@@ -111,9 +111,10 @@ const VoiceCompair = props => {
     };
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
     const responseStartTime = new Date().getTime();
-    await fetch(apiURL, requestOptions)
+    fetch(apiURL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
         var apiResponse = JSON.parse(result);
@@ -123,6 +124,7 @@ const VoiceCompair = props => {
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
         })
+
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''
             ? apiResponse['output'][0]['source']
@@ -130,6 +132,7 @@ const VoiceCompair = props => {
         );
         stopLoading();
       });
+      const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
   //get permission
