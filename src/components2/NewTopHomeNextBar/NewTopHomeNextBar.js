@@ -15,20 +15,21 @@ const NewTopHomeNextBar = props => {
       <div className="row">
         {ishomeback ? (
           <>
-            <div className="col s6 home_icon_div">
-              <Link to={'/proto2/'}>
+            <div className="col s6 home_icon_div" onClick={() => navigate(-1)}>
+              {/* <Link to={'/proto2/'}> */}
+              
                 <img src={home} className="home_icon_new"></img>
-              </Link>
+              {/* </Link> */}
             </div>
             <div className="col s6 menu_icon_div">
-              <Link to={'/proto2/start'}>
+              {/* <Link to={'/proto2/start'}>
                 <img src={menu} className="menu_icon_new"></img>
-              </Link>
+              </Link> */}
             </div>
           </>
         ) : props.isHideNavigation ? (
           <>
-            <div className="col s6 home_icon_div" onClick={() => navigate(-1)}>
+            <div className="col s6 home_icon_div" onClick={() => navigate(-2)}>
               {/* <Link to={`${localStorage.getItem('URL')}`}> */}
               <img src={home} className="home_icon_new"></img>
               {/* </Link> */}

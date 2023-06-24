@@ -312,6 +312,7 @@ function Score() {
                   </div>
                   <br />
                   {flag ? (
+                    <>
                     <img
                       style={{
                         width: '72px',
@@ -320,8 +321,21 @@ function Score() {
                       }}
                       src={play}
                       onClick={() => playAudio()}
-                    />
+                      />
+                    <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Play
+                      </p>
+                      </>
                   ) : (
+                    <>
                     <img
                       style={{
                         width: '72px',
@@ -330,7 +344,19 @@ function Score() {
                       }}
                       src={pause}
                       onClick={() => pauseAudio()}
-                    />
+                      />
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Pause
+                      </p>
+                      </>
                   )}
 
                   <br />
@@ -387,37 +413,40 @@ function Score() {
                     </>
                   ) : (
                     <>
+                    <div style={{display:'flex', justifyContent:'center', gap:'74px', marginTop:'-10px'}}>
+
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center'
-                        }
-                      >
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center'
+                        // }
+                        >
                         <div
                           onClick={() => {
                             localStorage.setItem('trysame', 'yes');
                             navigate(-1);
                           }}
-                        >
+                          >
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try again
                         </div>
                       </div>
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center hide'
-                        }
-                      >
+                        // className={
+                        //   isfromresult === 'learn'
+                        //   ? 'col s6 center'
+                        //   : 'col s12 center hide'
+                        // }
+                        >
                         <div onClick={newSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try new
                         </div>
                       </div>
+                        </div>
                       <div className="col s4 center hide">
                         <Link
                           to={
@@ -432,7 +461,7 @@ function Score() {
                           ></img>
                         </Link>
                       </div>
-                      <div className="col s12" style={{ textAlign: 'right' }}>
+                      {/* <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
                             isfromresult === 'learn'
@@ -455,7 +484,7 @@ function Score() {
                         >
                           <img src={next_nav} className={'next_nav'}></img>
                         </Link>
-                      </div>
+                      </div> */}
                     </>
                   )}
                 </div>

@@ -10,18 +10,18 @@ import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import { interactCall } from '../../services/callTelemetryIntract';
-
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-
 function StartLearn() {
   const navigate = useNavigate();
-
+  const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
     interactCall();
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
+  // console.log(isAudioPlay);
 
   const pauseAudio = () => {
     interactCall();
@@ -64,6 +64,24 @@ function StartLearn() {
       ? localStorage.getItem('apphomelevel')
       : 'Word'
   );
+
+  const [apphomelevel, set_apphomelevel] = useState(
+    localStorage.getItem('apphomelevel')
+      ? localStorage.getItem('apphomelevel')
+      : 'Word'
+  );
+
+  const [isfromresult, set_isfromresult] = useState(
+    localStorage.getItem('isfromresult')
+      ? localStorage.getItem('isfromresult')
+      : 'learn'
+  );
+
+  const [resultnext, set_resultnext] = useState(
+    localStorage.getItem('resultnext') ? localStorage.getItem('resultnext') : ''
+  );
+
+
   const [sel_cource, set_sel_cource] = useState(
     localStorage.getItem('apphomecource')
       ? localStorage.getItem('apphomecource')
@@ -157,14 +175,14 @@ function StartLearn() {
                 <br />
                 <NewTopHomeNextBar
                   nextlink={''}
-                  ishomeback={false}
+                  ishomeback={true}
                   isHideNavigation={true}
                 />
                 {sel_cource === 'See & Speak' ? (
                   <>
                     <br />
                     <img className="image_class" src={content?.image} />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang !== 'ta' ? (
                       <div className="content_text_div">
                         {content['ta']?.text ? content['ta']?.text : ''}
                       </div>
@@ -178,7 +196,7 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang !== 'ta' ? (
                       <div className="content_text_div_see">
                         {content['ta']?.text ? content['ta']?.text : ''}
                       </div>
@@ -192,7 +210,7 @@ function StartLearn() {
                 )}
                 <br />
 
-                <div style={{ display: 'inline-flex' }}>
+                {/* <div style={{ display: 'inline-flex' }}>
                   {flag ? (
                     <img
                       style={{
@@ -220,8 +238,10 @@ function StartLearn() {
                   <VoiceCompair
                     setVoiceText={setVoiceText}
                     setRecordedAudio={setRecordedAudio}
+                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                     flag={true}
                   />
+                  {console.log(recordedAudio)}
                 </div>
 
                 <br />
@@ -234,7 +254,74 @@ function StartLearn() {
                   <img src={refresh} className="home_icon"></img>
                   <br />
                   Try new
-                </div>
+                </div> */}
+                  <VStack gap={'10'} alignItems="center">
+              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
+
+              {isAudioPlay !== 'recording' && (
+                <VStack alignItems="center" gap="5">
+                  {flag ? (
+                    <img
+                    className="play_btn"
+                      src={play}
+                      style={{ height: '72px', width: '72px' }}
+                      onClick={() => playAudio()}
+                      />
+                  ) : (
+                    <img
+                    className="play_btn"
+                      src={pause}
+                      style={{ height: '72px', width: '72px' }}
+                      onClick={() => pauseAudio()}
+                      />
+                      )}
+                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
+                </VStack>
+              )}
+              <VStack>
+                <VoiceCompair
+                  setVoiceText={setVoiceText}
+                  setRecordedAudio={setRecordedAudio}
+                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                  flag={true}
+                  
+                  />
+                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
+                
+                  </VStack>
+              </HStack>
+              {isAudioPlay !== 'recording' && (
+                <VStack>
+                  <img
+                    src={refresh}
+                    className="home_icon"
+                    style={{ height: '72px', width: '72px' }}
+                    // onClick={() => navigate(0)}
+                    alt=''
+                    onClick={() => {
+                      //localStorage.setItem("apphomelang", resultnextlang);
+                      const next_apphomelevel =
+                      apphomelevel === 'Word'
+                        ? 'Sentence'
+                        : apphomelevel === 'Sentence'
+                        ? 'Paragraph'
+                        : 'Word';
+                    localStorage.setItem(
+                      'apphomelevel',
+                      next_apphomelevel
+                    );
+                      navigate(
+                        isfromresult === 'learn'
+                          ? '/startlearn'
+                          : '/' + resultnext
+                      );
+                    }}
+                    
+                  />
+                  <h4 className="text-speak m-0">Try new</h4>
+                </VStack>
+              )}
+            </VStack>
                 <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
               </div>
               <div className="cols s12 m2 l3"></div>

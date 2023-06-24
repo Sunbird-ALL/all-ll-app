@@ -208,15 +208,21 @@ function Score() {
     //fluencytestresult
     if (result_per_words < 45) {
       setfluencyresult(
-        <font className="result_incorrect">Needs to work on language skills</font>
+        <font className="result_incorrect">
+          Needs to work on language skills
+        </font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
-        <font className="result_incorrect">Good scope to improve language skills</font>
+        <font className="result_incorrect">
+          Good scope to improve language skills
+        </font>
       );
     } else {
       setfluencyresult(
-        <font className="result_incorrect">You have good level of language skills</font>
+        <font className="result_incorrect">
+          You have good level of language skills
+        </font>
       );
     }
 
@@ -298,25 +304,51 @@ function Score() {
                   </div>
                   <br />
                   {flag ? (
-                    <img
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        cursor: 'pointer',
-                      }}
-                      src={play}
-                      onClick={() => playAudio()}
-                    />
+                    <>
+                      <img
+                        style={{
+                          width: '72px',
+                          height: '72px',
+                          cursor: 'pointer',
+                        }}
+                        src={play}
+                        onClick={() => playAudio()}
+                      />
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Play
+                      </p>
+                    </>
                   ) : (
-                    <img
-                      style={{
-                        width: '40px',
-                        height: '40px',
-                        cursor: 'pointer',
-                      }}
-                      src={pause}
-                      onClick={() => pauseAudio()}
-                    />
+                    <>
+                      <img
+                        style={{
+                          width: '72px',
+                          height: '72px',
+                          cursor: 'pointer',
+                        }}
+                        src={pause}
+                        onClick={() => pauseAudio()}
+                      />
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Pause
+                      </p>
+                    </>
                   )}
 
                   {/*<ReactAudioPlayer
@@ -372,7 +404,7 @@ function Score() {
 
               <div className="app_footbar_remove">
                 <div className="row" style={{ padding: '5px' }}>
-                  {resultnext == '' || apphomelevel === 'Paragraph' ? (
+                  {resultnext === '' || apphomelevel === 'Paragraph' ? (
                     <>
                       <div
                         className={
@@ -423,34 +455,43 @@ function Score() {
                   ) : (
                     <>
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center'
-                        }
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          gap: '74px',
+                          marginTop: '-30px',
+                        }}
                       >
                         <div
-                          onClick={() => {
-                            localStorage.setItem('trysame', 'yes');
-                            navigate(-1);
-                          }}
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center'
+                        // }
                         >
-                          <img src={refresh} className="home_icon"></img>
-                          <br />
-                          try again
+                          <div
+                            onClick={() => {
+                              localStorage.setItem('trysame', 'yes');
+                              navigate(-1);
+                            }}
+                          >
+                            <img src={refresh} className="home_icon"></img>
+                            <br />
+                            try again
+                          </div>
                         </div>
-                      </div>
-                      <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center hide'
-                        }
-                      >
-                        <div onClick={() => navigate(-1)}>
-                          <img src={refresh} className="home_icon"></img>
-                          <br />
-                          try new
+                        <div
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center hide'
+                        // }
+                        >
+                          <div onClick={() => navigate(-1)}>
+                            <img src={refresh} className="home_icon"></img>
+                            <br />
+                            try new
+                          </div>
                         </div>
                       </div>
                       <div className="col s4 center hide">
@@ -467,7 +508,7 @@ function Score() {
                           ></img>
                         </Link>
                       </div>
-                      <div className="col s12" style={{ textAlign: 'right' }}>
+                      {/* <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
                             isfromresult === 'learn'
@@ -490,7 +531,7 @@ function Score() {
                         >
                           <img src={next_nav} className={'next_nav'}></img>
                         </Link>
-                      </div>
+                      </div> */}
                     </>
                   )}
                 </div>
