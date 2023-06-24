@@ -111,14 +111,19 @@ function App() {
     };
     initService();
     if (!ranonce) {
-      startEvent();
+
+      if (localStorage.getItem('contentSessionId') === null) {
+        startEvent();
+      }
 
       ranonce = true;
     }
   }, []);
   useEffect(() => {
     const cleanup = () => {
-      end();
+      if (localStorage.getItem('contentSessionId') === null) {
+        end();
+      }
     };
 
     window.addEventListener('beforeunload', cleanup);
