@@ -29,12 +29,14 @@ code {
 }
 
 .micimg {
-  width: 72px;
+  /* width: 28px;
+  height: 28px; */
+   width: 72px;
   height: 72px;
   cursor: pointer;
   border: 0px solid #aaaaaa;
   border-radius: 50%;
-  padding: 0px;
+  padding: 5px;
 }
 
 .mic_record {
@@ -42,8 +44,8 @@ code {
 }
 
 .mic_stop_record {
-  background-color: green;
-  padding: 5px;
+  /* background-color: green;
+  padding: 5px; */
 }
 
 .black-border {
@@ -189,7 +191,15 @@ code {
   font-weight: bold;
 }
 
+.play_btn {
+  padding: 5px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  border-radius: 50%;
+}
 .home_icon {
+  padding: 5px;
   width: 72px;
   height: 72px;
   cursor: pointer;
@@ -319,11 +329,12 @@ code {
   font-weight: 500;
 }
 .main_layout {
-  background-color: #fff;
+  width: 50%;
+  /* background-color: #fff; */
   min-height: 100vh !important;
   /*padding: 0px !important;*/
   text-align: center;
-  background: url('./assests/Images/back_map.png') no-repeat center center;
+  /* background: url('./assests/Images/back_map.png') no-repeat center center; */
   background-position: bottom;
 }
 
@@ -1617,7 +1628,9 @@ nav .brand-logo.center {
   max-width: 1280px;
   width: 90%;
 }
-
+.m-0 {
+  margin: 0 !important;
+}
 @media only screen and (min-width: 601px) {
   .container {
     width: 85%;

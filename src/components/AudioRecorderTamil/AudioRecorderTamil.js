@@ -2,7 +2,7 @@ import React from 'react';
 
 // import * as Recorder from './recorder';
 import Recorder from './Recorder';
-
+import mic_play from '../../assests/Images/mic_play.svg'
 // import mic from '../../assests/Images/mic.png';
 import mic_on from '../../assests/Images/mic_on.png';
 import mic from '../../assests/Images/mic.png';
@@ -39,6 +39,7 @@ function Mic({
   flag,
   setTamilRecordedAudio,
   setTamilRecordedText,
+  isAudioPlay,
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
@@ -47,9 +48,11 @@ function Mic({
   React.useEffect(() => {
     setUrl(value);
   }, [value]);
+  
 
   const startRecording = () => {
     setRecord(true);
+    isAudioPlay('recording');
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
@@ -78,6 +81,7 @@ function Mic({
   const stopRecording = () => {
     showLoading();
     setRecord(false);
+    isAudioPlay('inactive');
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
@@ -148,7 +152,9 @@ function Mic({
       .then(result => {
         clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
 
         var apiResponse = JSON.parse(result);
 
@@ -233,21 +239,13 @@ function Mic({
     const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
-  const IconMic = () => {
-    if (record) {
-      return (
-        <>
-          {flag ? (
-            <img src={stop} className="micimg mic_record"></img>
-          ) : (
-            <img src={mic_on} className="micimg mic_stop_record"></img>
-          )}
-        </>
-      );
-    } else {
-      return <img src={mic} className={'micimg mic_record'}></img>;
-    }
-  };
+    const IconMic = () => {
+      if (record) {
+        return <img src={mic_play} className="micimg mic_stop_record"></img>;
+      } else {
+        return <img src={mic} className={'micimg mic_record'}></img>;
+      }
+    };
 
   return (
     <div spacing={4} overflow="hidden">

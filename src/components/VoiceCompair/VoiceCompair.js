@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AudioRecorderCompairUI from '../AudioRecorderCompairUI/AudioRecorderCompairUI';
 import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
-import { response,interact } from '../../services/telementryService';
+import { response, interact } from '../../services/telementryService';
 
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { replaceAll, compareArrays } from '../../utils/helper';
@@ -117,7 +117,9 @@ const VoiceCompair = props => {
       .then(result => {
         clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
         var apiResponse = JSON.parse(result);
 
         // Data Manipulation on result capturing for telemetry log
@@ -227,28 +229,31 @@ const VoiceCompair = props => {
       }
     );
   };
-  return (
-    <>
-      <center>
-        {(() => {
-          if (audioPermission != null) {
-            if (audioPermission) {
-              return (
-                <>
-                  {lang_code == 'ta' ? (
-                    <AudioRecorderTamil
-                      setTamilRecordedAudio={setTamilRecordedAudio}
-                      setTamilRecordedText={setTamilRecordedText}
-                      flag={props.flag}
-                    />
-                  ) : (
-                    <AudioRecorderCompairUI
-                      setRecordedAudio={setRecordedAudio}
-                      flag={props.flag}
-                    />
-                  )}
 
-                  {/*recordedAudio !== "" ? (
+  return (
+    <center>
+      {(() => {
+        if (audioPermission != null) {
+          if (audioPermission) {
+            return (
+              <div>
+                {lang_code == 'ta' ? (
+                  <AudioRecorderTamil
+                    setTamilRecordedAudio={setTamilRecordedAudio}
+                    setTamilRecordedText={setTamilRecordedText}
+                    flag={props.flag}
+                    {...(props?._audio ? props?._audio : {})}
+                  />
+                ) : (
+                  <AudioRecorderCompairUI
+                    setRecordedAudio={setRecordedAudio}
+                    flag={props.flag}
+                  
+                    {...(props?._audio ? props?._audio : {})}
+                  />
+                )}
+
+                {/*recordedAudio !== "" ? (
                     <>
                       <br />
                       Wav File URL : {recordedAudio}
@@ -260,18 +265,15 @@ const VoiceCompair = props => {
                   ) : (
                     ""
                   )*/}
-                  {/*recordedAudio != "" ? blobToBase64(recordedAudio) : ""*/}
-                </>
-              );
-            } else {
-              return (
-                <h5 className="deniedtext">Microphone Permission Denied</h5>
-              );
-            }
+                {/*recordedAudio != "" ? blobToBase64(recordedAudio) : ""*/}
+              </div>
+            );
+          } else {
+            return <h5 className="deniedtext">Microphone Permission Denied</h5>;
           }
-        })()}
-      </center>
-    </>
+        }
+      })()}
+    </center>
   );
 };
 

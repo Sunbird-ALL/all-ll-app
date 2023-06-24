@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import AudioAnalyser from 'react-audio-analyser';
 import mic from '../../assests/Images/mic.png';
-import stop from '../../assests/Images/stop.png';
-
 import mic_on from '../../assests/Images/mic_on.png';
+import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
   constructor(props) {
@@ -14,6 +13,7 @@ export default class AudioRecorderCompair extends Component {
   }
 
   controlAudio(status) {
+    if (this?.props?.isAudioPlay) this?.props?.isAudioPlay(status);
     this.setState({
       status,
     });
@@ -46,10 +46,10 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: '',
         });
         this.props.setRecordedAudio('');
-        console.log('succ start', e);
+        // console.log('succ start', e);
       },
       pauseCallback: e => {
-        console.log('succ pause', e);
+        // console.log('succ pause', e);
       },
       stopCallback: e => {
         let temp_audioSrc = window.URL.createObjectURL(e);
@@ -57,13 +57,13 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: temp_audioSrc,
         });
         this.props.setRecordedAudio(temp_audioSrc);
-        console.log('succ stop', e);
+        // console.log('succ stop', e);
       },
       onRecordCallback: e => {
-        console.log('recording', e);
+        // console.log('recording', e);
       },
       errorCallback: err => {
-        console.log('error', err);
+        // console.log('error', err);
       },
     };
     //for tamil language
@@ -102,28 +102,35 @@ export default class AudioRecorderCompair extends Component {
       <div>
         <center>
           {(() => {
-            if (status == 'recording') {
+            if (status === 'recording') {
               return (
                 <>
-                  {this.props.flag ? (
-                    <img
-                      src={stop}
-                      className="micimg mic_record"
-                      onClick={() =>
-                        document.getElementById('stopaudio_compair').click()
-                      }
-                    ></img>
+                    {this.props.flag ? (
+                    <>
+                      <img
+                        src={mic_play}
+                        style={{ height: '72px', width: '72px' }}
+                        className="micimg mic_stop_record"
+                        onClick={() =>
+                          document.getElementById('stopaudio_compair').click()
+                        }
+                      />
+                       {/* <h4 className="text-speak m-0">Stop</h4> */}
+                    </>
                   ) : (
-                    <img
-                      src={mic_on}
-                      className="micimg mic_stop_record"
-                      onClick={() =>
-                        document.getElementById('stopaudio_compair').click()
-                      }
-                    ></img>
+                    <>
+                      <img
+                        src={mic}
+                        style={{ height: '72px', width: '72px' }}
+                        className="micimg mic_stop_record"
+                        onClick={() =>
+                          document.getElementById('stopaudio_compair').click()
+                        }
+                      />  
+                     
+                    </>
                   )}
-
-                  {/*<p className="listen_text">Listening...</p>*/}
+         
                 </>
               );
             } else {
@@ -131,13 +138,15 @@ export default class AudioRecorderCompair extends Component {
                 <>
                   <img
                     src={mic}
+                    style={{ height: '72px', width: '72px' }}
                     className={'micimg mic_record'}
                     onClick={() =>
                       document.getElementById('startaudio_compair').click()
                     }
                   ></img>
 
-                  {/*<p className="record_text">Speak and Record</p>*/}
+                  {/* <h4 className="record_text text-speak m-0">Stop</h4> */}
+                  {/* <h4 className="text-speak m-0">Speak</h4> */}
                 </>
               );
             }
