@@ -63,16 +63,20 @@ function App() {
 
     setFp();
     const initService = () => {
-      let jwtToken = localStorage.getItem('token');
-      let userDetails = jwt(jwtToken);
+      if (localStorage.getItem('token') !== null) {
+        let jwtToken = localStorage.getItem('token');
+        var userDetails = jwt(jwtToken);
+        var useridDetails = userDetails.emis_username;
+      } else {
+        var useridDetails = 'anonymous'
+      }
       initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: '', // Auth key to make  api calls
           // sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
           did: localStorage.getItem('did'), // Unique id to identify the device or browser
-          //uid: 'anonymous', // Current logged in user id
-          uid: userDetails.emis_username || 'anonymous', // Current logged in user id
+          uid: useridDetails, // Current logged in user id
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_env,
 
