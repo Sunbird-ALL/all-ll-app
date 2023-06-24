@@ -1,13 +1,15 @@
 import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
-
+import jwt from 'jwt-decode'
 
 
 let contentSessionId;
 let playSessionId;
 let url
 let config;
+let jwtToken = localStorage.getItem('token');
+let userDetails = jwt('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWlzX3VzZXJuYW1lIjoiNzg3MTc0NDM3OSIsInN0dWRlbnRfbmFtZSI6IkFzaG9rIEt1bWFyIFMiLCJzY2hvb2xfbmFtZSI6IkdIU1MgKEcpIFVEQVlBUlBBTEFZQU0iLCJzZWN0aW9uIjoiQSIsImVtaXNfdXNlcnR5cGUiOiIxMSIsInN0dWRlbnRfaWQiOiIxIiwiZW1pc191c2VydHlwZTEiOiIzMjM4NyIsInNjaG9vbF9pZCI6IjMyMzg3IiwiZW1haWwiOm51bGwsIm1vYmlsZSI6bnVsbCwidWRpc2VfY29kZSI6IjMzMzIwOTAwNDAyIiwiY2xhc3Nfc3R1ZHlpbmdfaWQiOiIzIiwibWVkaXVtX2lkIjoiMTYiLCJncm91cF9pZCI6IjgwNyIsInN0YXR1cyI6IkFjdGl2ZSIsIm5ld3NjaGwiOm51bGwsImlhdCI6MTY4NzU4MjI0MywiZXhwIjoxNjkwMTc0MjQzfQ.SbWzk-xe9NQo8vAIPFtFaNX-TwuSD4sYkY5VyyjBv-w');
 let telemetryObject = {
   id: {},
   type: 'Content',
@@ -15,7 +17,8 @@ let telemetryObject = {
   rollup: {},
 };
 let contextdata = {
-  uid: 'anonymous', // Current logged in user id
+  //uid: 'anonymous', // Current logged in user id
+  uid: userDetails.emis_username,
   pdata: {
     // optional
     id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
