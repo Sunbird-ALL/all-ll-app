@@ -47,6 +47,7 @@ import StartLearn4 from './viewsProto4/StartLearn/StartLearn';
 import Score4 from './viewsProto4/Score/Score';
 import Speak4 from './viewsProto4/Speak/Speak';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import jwt from 'jwt-decode'
 
 function App() {
   let ranonce = false;
@@ -62,13 +63,16 @@ function App() {
 
     setFp();
     const initService = () => {
+      let jwtToken = localStorage.getItem('token');
+      let userDetails = jwt(jwtToken);
       initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: '', // Auth key to make  api calls
           // sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
           did: localStorage.getItem('did'), // Unique id to identify the device or browser
-          uid: 'anonymous', // Current logged in user id
+          //uid: 'anonymous', // Current logged in user id
+          uid: userDetails.emis_username || 'anonymous', // Current logged in user id
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_env,
 
