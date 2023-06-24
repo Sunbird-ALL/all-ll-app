@@ -8,8 +8,14 @@ let contentSessionId;
 let playSessionId;
 let url
 let config;
-let jwtToken = localStorage.getItem('token');
-let userDetails = jwt(jwtToken);
+if (localStorage.getItem('token') !== null) {
+  let jwtToken = localStorage.getItem('token');
+  var userDetails = jwt(jwtToken);
+  var useridDetails = userDetails.emis_username;
+} else {
+  var useridDetails = 'anonymous'
+}
+
 let telemetryObject = {
   id: {},
   type: 'Content',
@@ -17,8 +23,7 @@ let telemetryObject = {
   rollup: {},
 };
 let contextdata = {
-  //uid: 'anonymous', // Current logged in user id
-  uid: userDetails.emis_username || 'anonymous',
+  uid: useridDetails, // Current logged in user id
   pdata: {
     // optional
     id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
