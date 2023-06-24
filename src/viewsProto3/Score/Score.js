@@ -4,7 +4,7 @@ import ReactAudioPlayer from 'react-audio-player';
 import AudioPlayer from 'react-h5-audio-player';
 
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
-import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
+// import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
 //import HomeNextBar from "../../components/HomeNextBar/HomeNextBar";
 import content_list from '../../utils/Const/ContentJSON';
@@ -25,6 +25,7 @@ import pause from '../../assests/Images/pause-img.png';
 import next from '../../assests/Images/next.png';
 
 import { replaceAll } from '../../utils/helper';
+import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
 
 function Score() {
   const navigate = useNavigate();
@@ -236,93 +237,91 @@ function Score() {
   }
 
   // function showScore() {
-    // const [isAudioPlay , setIsAudioPlay] = React.useState(true);
-    return (
-      <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
-        <div className="">
-          <div className="row">
-            <div className="col s12 m2 l3"></div>
-            <div className="col s12 m8 l6 main_layout">
-              {/*<AppNavbar navtitle="Result" />*/}
-              <br />
-              <NewTopHomeNextBar
-                nextlink={resultnext}
-                resultnextlang={resultnextlang}
-                ishomeback={true}
-              />
-              <div>
-                <center>
-                  {testResult}
-                  {/* <br />
+  // const [isAudioPlay , setIsAudioPlay] = React.useState(true);
+  return (
+    <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
+      <div className="">
+        <div className="row">
+          <div className="col s12 m2 l3"></div>
+          <div className="col s12 m8 l6 main_layout">
+            {/*<AppNavbar navtitle="Result" />*/}
+            <br />
+            <NewTopHomeNextBar
+              nextlink={''}
+              ishomeback={false}
+              isHideNavigation={true}
+            />
+            <div>
+              <center>
+                {testResult}
+                {/* <br />
                   <br /> */}
-                  {newtextresult}
-                  <br />
-                  <br />
-                  {fluencyresult}
-                  <br />
-                  {/* <br /> */}
-                  <div className="content_text_div_see">
-                    {voiceTextHighlight}
+                {newtextresult}
+                <br />
+                <br />
+                {fluencyresult}
+                <br />
+                {/* <br /> */}
+                <div className="content_text_div_see">{voiceTextHighlight}</div>
+                <br />
+                {flag ? (
+                  <div style={{ marginBottom: '-30px' }}>
+                    <img
+                      style={{
+                        width: '72px',
+                        height: '72px',
+                        cursor: 'pointer',
+                      }}
+                      src={play}
+                      onClick={() => playAudio()}
+                    />
+                    <p
+                      style={{
+                        position: 'relative',
+                        marginTop: '-1px',
+                        marginBottom: '-15px',
+                        color: '#5286E4',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Play
+                    </p>
                   </div>
-                  <br />
-                  {flag ? (
-                    <div style={{marginBottom:'-30px'}}>
-                      <img
-                        style={{
-                          width: '72px',
-                          height: '72px',
-                          cursor: 'pointer',
-                        }}
-                        src={play}
-                        onClick={() => playAudio()}
-                      />
-                      <p
-                        style={{
-                          position: 'relative',
-                          marginTop: '-1px',
-                          marginBottom: '-15px',
-                          color: '#5286E4',
-                          fontWeight: 600,
-                        }}
-                      >
-                        Play
-                      </p>
-                    </div>
-                  ) : (
-                    <>
-                      <img
-                        style={{
-                          width: '72px',
-                          height: '72px',
-                          cursor: 'pointer',
-                        }}
-                        src={pause}
-                        onClick={() => pauseAudio()}
-                      />
-                      <p
-                        style={{
-                          position: 'relative',
-                          marginTop: '-1px',
-                          marginBottom: '-15px',
-                          color: '#5286E4',
-                          fontWeight: 600,
-                        }}
-                      >
-                        Pause
-                      </p>
-                    </>
-                  )}
+                ) : (
+                  <>
+                    <img
+                      style={{
+                        width: '72px',
+                        height: '72px',
+                        cursor: 'pointer',
+                      }}
+                      src={pause}
+                      onClick={() => pauseAudio()}
+                    />
+                    <p
+                      style={{
+                        position: 'relative',
+                        marginTop: '-1px',
+                        marginBottom: '-15px',
+                        color: '#5286E4',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Pause
+                    </p>
+                  </>
+                )}
 
-                  {/*<ReactAudioPlayer
+                {/*<ReactAudioPlayer
                     autoPlay={false}
                     src={recordedAudio}
                     controls
                     style={{ width: "100%" }}
                   />*/}
-                  <br />
-                  <br />
-                  <br />
-                  {/*<font className="speech_title">Your Speech and Audio</font>
+                <br />
+                <br />
+                <br />
+                {/*<font className="speech_title">Your Speech and Audio</font>
                   <div className="content_view">
                     <>
                       <font>
@@ -360,39 +359,47 @@ function Score() {
                       <br />
                     </>
                   </div>*/}
-                </center>
-              </div>
-              {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
-              
-              <div className="app_footbar_remove">
-                <div className="row" style={{ padding: '5px' }}>
-                  {resultnext === 'as' || apphomelevel === 'Paragraph' ? (
-                    <>
-                      <div onClick={() => navigate(-1)}>
-                          <img src={refresh} className="home_icon"></img>
-                          <p
-                            style={{
-                              position: 'relative',
-                              marginTop: '-1px',
-                              marginBottom: '-15px',
-                              color: '#E7815E',
-                              fontWeight: 600,
-                            }}
-                          >
-                            Try New
-                          </p>
-                        </div>
-                    </>
-                  ) : (
-                    <>
-                      <div style={{display:'flex', justifyContent:'center', gap:'54px', marginTop:'-10px'}} className="col s12 center">
-                        <div>
+              </center>
+            </div>
+            {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
+
+            <div className="app_footbar_remove">
+              <div className="row" style={{ padding: '5px' }}>
+                {resultnext === 'as' || apphomelevel === 'Paragraph' ? (
+                  <>
+                    <div onClick={() => navigate(-1)}>
+                      <img src={refresh} className="home_icon"></img>
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#E7815E',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Try New
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '54px',
+                        marginTop: '-10px',
+                      }}
+                      className="col s12 center"
+                    >
+                      <div>
                         <div
                           onClick={() => {
                             localStorage.setItem('trysame', 'yes');
                             navigate(-1);
                           }}
-                          >
+                        >
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           <p
@@ -404,36 +411,35 @@ function Score() {
                               fontWeight: 600,
                             }}
                           >
-                       
-                          Try Again
+                            Try Again
                           </p>
                         </div>
-                          {/* {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>} */}
-                        </div>
-                        <div onClick={() => navigate(-1)}>
-                          <img src={refresh} className="home_icon"></img>
-                          <p
-                            style={{
-                              position: 'relative',
-                              marginTop: '-1px',
-                              marginBottom: '-15px',
-                              color: '#E7815E',
-                              fontWeight: 600,
-                            }}
-                          >
-                            Try New
-                          </p>
-                        </div>
+                        {/* {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>} */}
                       </div>
-                      <div className="col s4 center hide">
-                        <Link to={isfromresult === 'learn' ? '/start' : '/'}>
-                          <img
-                            src={isfromresult === 'learn' ? menu : home}
-                            className="home_icon"
-                          ></img>
-                        </Link>
+                      <div onClick={() => navigate(-1)}>
+                        <img src={refresh} className="home_icon"></img>
+                        <p
+                          style={{
+                            position: 'relative',
+                            marginTop: '-1px',
+                            marginBottom: '-15px',
+                            color: '#E7815E',
+                            fontWeight: 600,
+                          }}
+                        >
+                          Try New
+                        </p>
                       </div>
-                      {/* <div className="col s12" style={{ textAlign: 'right' }}>
+                    </div>
+                    <div className="col s4 center hide">
+                      <Link to={isfromresult === 'learn' ? '/start' : '/'}>
+                        <img
+                          src={isfromresult === 'learn' ? menu : home}
+                          className="home_icon"
+                        ></img>
+                      </Link>
+                    </div>
+                    {/* <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
                             isfromresult === 'learn'
@@ -457,18 +463,18 @@ function Score() {
                           <img src={next_nav} className={'next_nav'}></img>
                         </Link>
                       </div> */}
-                    </>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
             </div>
-            <div className="cols s12 m2 l3"></div>
           </div>
+          <div className="cols s12 m2 l3"></div>
         </div>
-      </Animation>
-    );
-  }
-  // return <React.Fragment>{showScore()}</React.Fragment>;
+      </div>
+    </Animation>
+  );
+}
+// return <React.Fragment>{showScore()}</React.Fragment>;
 // }
 
 export default Score;

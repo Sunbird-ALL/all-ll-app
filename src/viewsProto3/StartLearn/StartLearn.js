@@ -175,7 +175,7 @@ function StartLearn() {
                 <br />
                 <NewTopHomeNextBar
                   nextlink={''}
-                  ishomeback={false}
+                  ishomeback={true}
                   isHideNavigation={true}
                 />
                 {sel_cource === 'See & Speak' ? (
