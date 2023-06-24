@@ -156,7 +156,7 @@ function App() {
         <Route path={'/proto2/*'} element={<Start2 />} />
         <Route path={'/proto2/speak'} element={<Speak2 />} />
         <Route path={'/proto2/start'} element={<Start2 />} />
-        <Route path={'/proto2/startlearn'} element={<StartLearn />} />
+        <Route path={'/proto2/startlearn'} element={<StartLearn2 />} />
         <Route path={'/proto2/score'} element={<Score2 />} />
 
         <Route path={'/proto2/contentlist'} element={<ContentList />} />
@@ -168,12 +168,12 @@ function App() {
 
         <Route path={'/proto3/score'} element={<Score3 />} />
         <Route path="/proto3/all" element={<StartV3 />} />
-        <Route path={'/proto3/startlearn'} element={<StartLearn />} />
+        <Route path={'/proto3/startlearn'} element={<StartLearn3 />} />
         <Route path={'/proto3/speak'} element={<Speak3 />} />
 
         <Route path={'/proto4/score'} element={<Score4 />} />
-        <Route path="/proto4/all" element={<StartLearn />} />
-        <Route path={'/proto4/startlearn'} element={<StartLearn />} />
+        <Route path="/proto4/all" element={<StartLearn4 />} />
+        <Route path={'/proto4/startlearn'} element={<StartLearn4 />} />
         <Route path={'/proto4/speak'} element={<Speak4 />} />
       </Routes>
       <Dots />

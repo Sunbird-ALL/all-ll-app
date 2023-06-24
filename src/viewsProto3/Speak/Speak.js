@@ -140,8 +140,8 @@ function Speak() {
               <br />
               <img
                 style={{
-                  width: "45px",
-                  height: "45px",
+                  width: "72px",
+                  height: "72px",
                   cursor: "pointer",
                 }}
                 src={play}

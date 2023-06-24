@@ -21,9 +21,9 @@ const NewTopHomeNextBar = props => {
               </Link>
             </div>
             <div className="col s6 menu_icon_div">
-              <Link to={'/proto2/start'}>
+              {/* <Link to={'/proto2/start'}>
                 <img src={menu} className="menu_icon_new"></img>
-              </Link>
+              </Link> */}
             </div>
           </>
         ) : props.isHideNavigation ? (

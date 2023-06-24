@@ -11,7 +11,7 @@ import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { Box, HStack, VStack } from '@chakra-ui/react';
-
+console.log("view/startlearn");
 function StartLearn() {
   const navigate = useNavigate();
   const [temp_audio, set_temp_audio] = useState(null);

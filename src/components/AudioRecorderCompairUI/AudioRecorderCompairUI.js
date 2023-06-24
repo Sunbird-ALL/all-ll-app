@@ -102,7 +102,7 @@ export default class AudioRecorderCompair extends Component {
       <div>
         <center>
           {(() => {
-            if (status == 'recording') {
+            if (status === 'recording') {
               return (
                 <>
                     {this.props.flag ? (

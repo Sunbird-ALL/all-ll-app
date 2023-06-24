@@ -67,7 +67,7 @@ function Start3() {
           let tabShowWord = val && val.find(val => val === 'Word');
           let tabShowS = val && val.find(val => val === 'Sentence');
           let tabShowP = val && val.find(val => val === 'Paragraph');
-          console.log(tabShowP);
+          // console.log(tabShowP);
 
           setTabShow(tabShowWord);
           setTabShowSentence(tabShowS);
