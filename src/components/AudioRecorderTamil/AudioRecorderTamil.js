@@ -147,9 +147,10 @@ function Mic({
       'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
     const responseStartTime = new Date().getTime();
 
-    await fetch(ASR_REST_URL, requestOptions)
+    fetch(ASR_REST_URL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
           (responseEndTime - responseStartTime) / 1000
@@ -235,6 +236,7 @@ function Mic({
         console.log('error', error);
         stopLoading();
       });
+    const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
     const IconMic = () => {

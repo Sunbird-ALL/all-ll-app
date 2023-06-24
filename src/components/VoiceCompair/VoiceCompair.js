@@ -112,9 +112,10 @@ const VoiceCompair = props => {
     };
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
     const responseStartTime = new Date().getTime();
-    await fetch(apiURL, requestOptions)
+    fetch(apiURL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
           (responseEndTime - responseStartTime) / 1000
@@ -195,6 +196,7 @@ const VoiceCompair = props => {
         );
         stopLoading();
       });
+      const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
   //get permission

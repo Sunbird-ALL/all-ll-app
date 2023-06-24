@@ -1,13 +1,21 @@
 import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
-
+import jwt from 'jwt-decode'
 
 
 let contentSessionId;
 let playSessionId;
 let url
 let config;
+if (localStorage.getItem('token') !== null) {
+  let jwtToken = localStorage.getItem('token');
+  var userDetails = jwt(jwtToken);
+  var useridDetails = userDetails.emis_username;
+} else {
+  var useridDetails = 'anonymous'
+}
+
 let telemetryObject = {
   id: {},
   type: 'Content',
@@ -15,7 +23,7 @@ let telemetryObject = {
   rollup: {},
 };
 let contextdata = {
-  uid: 'anonymous', // Current logged in user id
+  uid: useridDetails, // Current logged in user id
   pdata: {
     // optional
     id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
@@ -44,7 +52,7 @@ export const initialize = ({ context, config, metadata }) => {
           authtoken: context.authToken || '',
           uid: context.uid || '',
           sid: context.sid,
-          batchsize: 2,
+          batchsize: process.env.REACT_APP_batchsize,
           mode: context.mode,
           host: context.host,
           apislug: context.apislug,
