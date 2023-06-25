@@ -48,7 +48,7 @@ function Mic({
   React.useEffect(() => {
     setUrl(value);
   }, [value]);
-  
+
 
   const startRecording = () => {
     setRecord(true);
@@ -218,7 +218,7 @@ function Mic({
 
         response({ // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
+            //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [
                 { "original_text": localStorage.getItem('contentText') },
