@@ -170,12 +170,12 @@ const VoiceCompair = props => {
               Number((correct_words / studentswords) * 100)
             );
         }
- 
+
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
         response({ // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
+            //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [
                 { "original_text": localStorage.getItem('contentText') },
@@ -248,7 +248,7 @@ const VoiceCompair = props => {
                   <AudioRecorderCompairUI
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
-                  
+
                     {...(props?._audio ? props?._audio : {})}
                   />
                 )}

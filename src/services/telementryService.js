@@ -4,7 +4,7 @@ import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import jwt from 'jwt-decode'
 
 
-let contentSessionId;
+var contentSessionId;
 let playSessionId;
 let url
 let config;
@@ -32,7 +32,12 @@ let contextdata = {
   },
   endpoint: '',
 }
-contentSessionId = uniqueId();
+
+if (localStorage.getItem('contentSessionId') !== null) {
+  contentSessionId = localStorage.getItem('contentSessionId');
+} else {
+  contentSessionId = uniqueId();
+}
 
 let getUrl = window.location.href;
 url=getUrl && getUrl.includes("#") && getUrl.split("#")[1].split("/")[1]
@@ -91,9 +96,7 @@ export const start = (duration) => {
 
 export const response = (context, options) => {
   CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry({
-    edata: {
-      context
-    },
+      ...context
   });
 };
 
