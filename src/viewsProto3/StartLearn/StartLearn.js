@@ -32,9 +32,9 @@ function StartLearn() {
   };
 
   const learnAudio = () => {
-    interactCall();
     if (temp_audio !== null) {
       temp_audio.play();
+      interactCall();
       setFlag(!flag);
       temp_audio.addEventListener('ended', () => setFlag(true));
     }
@@ -47,6 +47,7 @@ function StartLearn() {
 
   const newSentence = () => {
     interactCall();
+
     navigate(0);
   };
   useEffect(() => {
@@ -108,7 +109,7 @@ function StartLearn() {
       const content_keys = Object.keys(content_list);
       content_keys.forEach(key => {
         if (
-          content_list[key].type == sel_level &&
+          content_list[key].type === sel_level &&
           content_list[key]?.[sel_lang]
         ) {
           tempContent.push({
@@ -120,7 +121,7 @@ function StartLearn() {
         let getitem = localStorage.getItem('content_random_id')
           ? localStorage.getItem('content_random_id')
           : 0;
-        if (trysame != 'yes') {
+        if (trysame !== 'yes') {
           let old_getitem = getitem;
           while (old_getitem == getitem) {
             getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
@@ -210,51 +211,6 @@ function StartLearn() {
                 )}
                 <br />
 
-                {/* <div style={{ display: 'inline-flex' }}>
-                  {flag ? (
-                    <img
-                      style={{
-                        width: '72px',
-                        height: '72px',
-                        cursor: 'pointer',
-                        marginRight: '80px',
-                      }}
-                      src={play}
-                      onClick={() => playAudio()}
-                    />
-                  ) : (
-                    <img
-                      style={{
-                        width: '72px',
-                        height: '72px',
-                        cursor: 'pointer',
-                        marginRight: '80px',
-                      }}
-                      src={pause}
-                      onClick={() => pauseAudio()}
-                    />
-                  )}
-
-                  <VoiceCompair
-                    setVoiceText={setVoiceText}
-                    setRecordedAudio={setRecordedAudio}
-                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                    flag={true}
-                  />
-                  {console.log(recordedAudio)}
-                </div>
-
-                <br />
-                <div style={{ display: 'inline-flex' }}>
-                  <h4 className="text-play"> Listen</h4>
-                  <h4 className="text-speak">speak</h4>
-                </div>
-                <br />
-                <div onClick={newSentence}>
-                  <img src={refresh} className="home_icon"></img>
-                  <br />
-                  Try new
-                </div> */}
                   <VStack gap={'10'} alignItems="center">
               <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
 
@@ -266,6 +222,7 @@ function StartLearn() {
                       src={play}
                       style={{ height: '72px', width: '72px' }}
                       onClick={() => playAudio()}
+                      alt='play_audio'
                       />
                   ) : (
                     <img
@@ -273,6 +230,7 @@ function StartLearn() {
                       src={pause}
                       style={{ height: '72px', width: '72px' }}
                       onClick={() => pauseAudio()}
+                      alt='pause_audio'
                       />
                       )}
                   <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
@@ -296,29 +254,13 @@ function StartLearn() {
                     src={refresh}
                     className="home_icon"
                     style={{ height: '72px', width: '72px' }}
-                    // onClick={() => navigate(0)}
-                    alt=''
-                    onClick={() => {
-                      //localStorage.setItem("apphomelang", resultnextlang);
-                      const next_apphomelevel =
-                      apphomelevel === 'Word'
-                        ? 'Sentence'
-                        : apphomelevel === 'Sentence'
-                        ? 'Paragraph'
-                        : 'Word';
-                    localStorage.setItem(
-                      'apphomelevel',
-                      next_apphomelevel
-                    );
-                      navigate(
-                        isfromresult === 'learn'
-                          ? '/startlearn'
-                          : '/' + resultnext
-                      );
-                    }}
                     
+                    alt='try_new_btn'
+                   
+                    onClick={newSentence}
                   />
                   <h4 className="text-speak m-0">Try new</h4>
+                  
                 </VStack>
               )}
             </VStack>

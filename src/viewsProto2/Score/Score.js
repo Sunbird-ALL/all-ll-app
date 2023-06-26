@@ -128,8 +128,8 @@ function Score() {
     return string.split(search).join(replace);
   }
   function checkVoice(voiceText) {
-    let tempvoiceText = voiceText.toLowerCase();
-    let tempteacherText = teacherText.toLowerCase();
+    let tempvoiceText = voiceText?.toLowerCase();
+    let tempteacherText = teacherText?.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
@@ -157,16 +157,16 @@ function Score() {
       );
     }
     //set text highlight
-    let texttemp = voiceText.toLowerCase();
-    const studentTextArray = texttemp.split(' ');
-    const teacherTextArray = tempteacherText.split(' ');
+    let texttemp = voiceText?.toLowerCase();
+    const studentTextArray = texttemp?.split(' ');
+    const teacherTextArray = tempteacherText?.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
-    let studentswords = studentTextArray.length;
+    let studentswords = studentTextArray?.length;
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
-    for (let i = 0; i < studentTextArray.length; i++) {
+    for (let i = 0; i < studentTextArray?.length; i++) {
       if (teacherTextArray.includes(studentTextArray[i])) {
         correct_words++;
         student_text_result.push(
