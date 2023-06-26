@@ -85,7 +85,7 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
       .then(res => {
         localStorage.setItem('contents', JSON.stringify(res.data));
 
-        if (load_cnt == 0) {
+        if (load_cnt === 0) {
           const content_list = getContentList();
 
           let tempContent = [];
@@ -93,7 +93,7 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
 
           content_keys.forEach(key => {
             if (
-              content_list[key].type == sel_level &&
+              content_list[key].type === sel_level &&
               content_list[key]?.[sel_lang]
             ) {
               tempContent.push({
@@ -160,74 +160,7 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
       <>
       
         {content != null && content[sel_lang] ? (
-          // <div className="">
-          //   <div className="row">
-          //     <div className="col s12 m2 l3"></div>
-          //     <div className="col s12 m8 l6 main_layout">
-          //       <br />
-          //       {/* <h1>Speak like me</h1> */}
-
-          //       <br />
-                // {sel_cource === 'See & Speak' ? (
-                //   <>
-                //     <div className="content_text_div">
-                //       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                //     </div>
-                //   </>
-                // ) : (
-                //   <h2 className="">
-                //     {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                //   </h2>
-                // )}
-
-          //       <div style={{ display: 'inline-flex' }}>
-          //         {flag ? (
-          //           <>
-          //             <img
-          //               style={{
-          //                 width: '72px',
-          //                 height: '72px',
-          //                 cursor: 'pointer',
-          //                 marginRight: '80px',
-          //               }}
-          //               src={play}
-          //               onClick={() => playAudio()}
-          //             />
-          //           </>
-          //         ) : (
-          //           <img
-          //             style={{
-          //               width: '72px',
-          //               height: '72px',
-          //               cursor: 'pointer',
-          //               marginRight: '80px',
-          //             }}
-          //             src={pause}
-          //             onClick={() => pauseAudio()}
-          //           />
-          //         )}
-
-          //         <VoiceCompair
-          //           setVoiceText={setVoiceText}
-          //           setRecordedAudio={setRecordedAudio}
-          //           flag={true}
-          //         />
-          //       </div>
-          //       <br />
-          //       <div style={{ display: 'inline-flex' }}>
-          //         <h4 className="text-play"> Listen</h4>
-          //         <h4 className="text-speak">speak</h4>
-          //       </div>
-          //       <br />
-          //       <div onClick={newSentence}>
-          //         <img src={refresh} className="home_icon"></img>
-          //         <br />
-          //         Try new
-          //       </div>
-          //     </div>
-          //     <div className="cols s12 m2 l3"></div>
-          //   </div>
-          // </div>
+        
             <VStack gap={'10'} alignItems="center">
                {sel_cource === 'See & Speak' ? (
                   <>
@@ -280,26 +213,9 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
                     src={refresh}
                     className="home_icon"
                     style={{ height: '72px', width: '72px' }}
-                    // onClick={() => navigate(0)}
+                    onClick={newSentence}
                     alt=''
-                    // onClick={() => {
-                    //   //localStorage.setItem("apphomelang", resultnextlang);
-                    //   const next_apphomelevel =
-                    //   apphomelevel === 'Word'
-                    //     ? 'Sentence'
-                    //     : apphomelevel === 'Sentence'
-                    //     ? 'Paragraph'
-                    //     : 'Word';
-                    // localStorage.setItem(
-                    //   'apphomelevel',
-                    //   next_apphomelevel
-                    // );
-                    //   navigate(
-                    //     isfromresult === 'learn'
-                    //       ? '/startlearn'
-                    //       : '/' + resultnext
-                    //   );
-                    // }}
+                  
                     
                   />
                   <h4 className="text-speak m-0">Try new</h4>
@@ -319,7 +235,7 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
             </div>
           </>
         )}
-        {/* <AppFooter hideNavigation={true} removeData={true} /> */}
+       
       </>
     );
   }
