@@ -183,6 +183,9 @@ function StartLearn() {
                   <>
                     <br />
                     <img className="image_class" src={content?.image} />
+                    <div className="content_text_div">
+                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
+                    </div>
                     {sel_lang !== 'ta' ? (
                       <div className="content_text_div">
                         {content['ta']?.text ? content['ta']?.text : ''}
@@ -190,13 +193,13 @@ function StartLearn() {
                     ) : (
                       <></>
                     )}
-                    <div className="content_text_div">
-                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                    </div>
                   </>
                 ) : (
                   <>
                     <br />
+                    <div className="content_text_div_see" style={{fontWeight:'600'}}>
+                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
+                    </div>
                     {sel_lang !== 'ta' ? (
                       <div className="content_text_div_see">
                         {content['ta']?.text ? content['ta']?.text : ''}
@@ -204,9 +207,6 @@ function StartLearn() {
                     ) : (
                       <></>
                     )}
-                    <div className="content_text_div_see">
-                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                    </div>
                   </>
                 )}
                 <br />
