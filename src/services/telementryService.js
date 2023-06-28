@@ -146,7 +146,7 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_env,
-      uid: emis_username,
+      uid: emis_username || "anonymous",
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
