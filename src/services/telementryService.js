@@ -136,9 +136,6 @@ export const getEventOptions = () => {
     var userDetails = jwt(jwtToken);
     emis_username = userDetails.emis_username;
   }
-
-  console.log(emis_username);
-  alert(emis_username);
   return {
     object: {},
     context: {
