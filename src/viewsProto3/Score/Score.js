@@ -261,7 +261,7 @@ function Score() {
                 <br />
                 {fluencyresult}
                 <br />
-                {/* <br /> */}
+                <br />
                 <div className="content_text_div_see">{voiceTextHighlight}</div>
                 <br />
                 {flag ? (
