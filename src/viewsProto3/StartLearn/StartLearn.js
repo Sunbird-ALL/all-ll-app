@@ -197,11 +197,11 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    <div className="content_text_div_see" style={{fontWeight:'600'}}>
+                    <div className="content_text_div_see">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
                     {sel_lang !== 'ta' ? (
-                      <div className="content_text_div_see">
+                      <div className="content_text_div_see_ta"  style={{fontSize:'21px'}}>
                         {content['ta']?.text ? content['ta']?.text : ''}
                       </div>
                     ) : (

@@ -453,6 +453,15 @@ code {
 .content_text_div_see {
   font-size: 30px !important;
   color: #000;
+  /* font-weight: 600; */
+}
+.content_text_div_see1{
+  font-size: 30px !important;
+  color: #000;
+  font-weight: 600; 
+}
+.content_text_div_see_ta{
+  font-size: 21px !important;
 }
 
 .button_learn {
