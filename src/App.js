@@ -63,13 +63,6 @@ function App() {
 
     setFp();
     const initService = () => {
-      if (localStorage.getItem('token') !== null) {
-        let jwtToken = localStorage.getItem('token');
-        var userDetails = jwt(jwtToken);
-        var useridDetails = userDetails.emis_username;
-      } else {
-        var useridDetails = 'anonymous'
-      }
 
 
       if (localStorage.getItem('fpDetails_v2') !== null) {
@@ -83,9 +76,8 @@ function App() {
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: '', // Auth key to make  api calls
-          // sid: process.env.REACT_APP_sid, // User sessionid on portal or mobile
           did: did, // Unique id to identify the device or browser
-          uid: useridDetails, // Current logged in user id
+          uid: 'anonymous',
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_env,
 
