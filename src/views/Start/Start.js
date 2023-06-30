@@ -174,7 +174,7 @@ function Start() {
                     >
                       <div className="col s2">
                         <div className="learn_level_div_start">
-                          <img src={new1word} className="learn_level_img" />
+                          <img src={new1word} className="learn_level_img" alt={sel_lang === "en" ? "Word" : "வார்த்தை"} />
                         </div>
                       </div>
                       <div className="col s8">
@@ -189,7 +189,7 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" />
+                        <img src={learn_next} className="learn_next_img" alt={sel_lang === "en" ? "Start Learning" : "கற்றுக்கொள்ளத் தொடங்குங்கள்"} />
                       </div>
                     </Link>
                   </div>
@@ -204,7 +204,7 @@ function Start() {
                     >
                       <div className="col s2">
                         <div className="learn_level_div_start">
-                          <img src={new2sentence} className="learn_level_img" />
+                          <img src={new2sentence} className="learn_level_img" alt={sel_lang === "en" ? "Sentence" : "வாக்கியம்"} />
                         </div>
                       </div>
                       <div className="col s8">
@@ -219,7 +219,7 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" />
+                        <img src={learn_next} className="learn_next_img" alt={sel_lang === "en" ? "Start Learning" : "கற்றுக்கொள்ளத் தொடங்குங்கள்"} />
                       </div>
                     </Link>
                   </div>
@@ -237,6 +237,7 @@ function Start() {
                           <img
                             src={new3paragraph}
                             className="learn_level_img"
+                            alt={sel_lang === "en" ? "Paragraph" : "வரிகள்/பத்தி"}
                           />
                         </div>
                       </div>
@@ -252,7 +253,7 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" />
+                        <img src={learn_next} className="learn_next_img" alt={sel_lang === "en" ? "Start Learning" : "கற்றுக்கொள்ளத் தொடங்குங்கள்"} />
                       </div>
                     </Link>
                   </div>
