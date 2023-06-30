@@ -9,11 +9,6 @@ import { getLayout } from '../../utils/helper';
 
 const NewTopHomeNextBar = props => {
   const { trylink, nextlink, ishomeback, resultnextlang } = props;
- 
-  const lang_code = localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang')
-      : 'en';
-  console.log(lang_code);
   const navigate = useNavigate();
   return (
     <div className="app_footbar_remove">
@@ -23,7 +18,7 @@ const NewTopHomeNextBar = props => {
             <div className="col s6 home_icon_div" onClick={() => navigate(-1)}>
               {/* <Link to={'/proto2/'}> */}
               
-                <img src={home} className="home_icon_new" alt={lang_code === "en" ? "Home" : "வீடு"}></img>
+                <img src={home} className="home_icon_new" alt="Home"></img>
               {/* </Link> */}
             </div>
             <div className="col s6 menu_icon_div">
@@ -36,7 +31,7 @@ const NewTopHomeNextBar = props => {
           <>
             <div className="col s6 home_icon_div" onClick={() => navigate(-2)}>
               {/* <Link to={`${localStorage.getItem('URL')}`}> */}
-              <img src={home} className="home_icon_new" alt={lang_code === "en" ? "Home" : "வீடு"}></img>
+              <img src={home} className="home_icon_new" alt="Home"></img>
               {/* </Link> */}
             </div>
           </>
@@ -44,7 +39,7 @@ const NewTopHomeNextBar = props => {
           <>
             <div className="col s12 home_icon_div">
               <Link to={'/proto2/'}>
-                <img src={home} className="home_icon_new" alt={lang_code === "en" ? "Home" : "வீடு"}></img>
+                <img src={home} className="home_icon_new" alt="Home"></img>
               </Link>
             </div>
           </>

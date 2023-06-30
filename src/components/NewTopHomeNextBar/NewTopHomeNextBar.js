@@ -8,9 +8,6 @@ import refresh from '../../assests/Images/refresh.svg';
 import { getLayout } from '../../utils/helper';
 
 const NewTopHomeNextBar = props => {
-  const lang_code = localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang')
-      : 'en';
   const { trylink, nextlink, ishomeback, resultnextlang } = props;
   return (
     <div className="app_footbar_remove">
@@ -19,7 +16,7 @@ const NewTopHomeNextBar = props => {
           <>
             <div className="col s6 home_icon_div">
               <Link to={'/'}>
-                <img src={home} className="home_icon_new" alt={lang_code === "en" ? "Home" : "வீடு"}></img>
+                <img src={home} className="home_icon_new" alt="Home"></img>
               </Link>
               
             </div>
@@ -32,7 +29,7 @@ const NewTopHomeNextBar = props => {
         ) : (
           <div className="col s12 home_icon_div">
             <Link to={'/'}>
-              <img src={home} className="home_icon_new" alt={lang_code === "en" ? "Home" : "வீடு"}></img>
+              <img src={home} className="home_icon_new" alt="Home"></img>
             </Link>
           </div>
         )}
