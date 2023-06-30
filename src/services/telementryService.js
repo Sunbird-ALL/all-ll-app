@@ -11,26 +11,7 @@ let config;
 if (localStorage.getItem('token') !== null) {
   let jwtToken = localStorage.getItem('token');
   var userDetails = jwt(jwtToken);
-  var useridDetails = userDetails.emis_username;
-} else {
-  var useridDetails = 'anonymous'
-}
-
-let telemetryObject = {
-  id: {},
-  type: 'Content',
-  ver: '1.0',
-  rollup: {},
-};
-let contextdata = {
-  uid: useridDetails, // Current logged in user id
-  pdata: {
-    // optional
-    id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-    ver: process.env.REACT_APP_ver, // Version of the App
-    pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
-  },
-  endpoint: '',
+  var emis_username = userDetails.emis_username;
 }
 
 if (localStorage.getItem('contentSessionId') !== null) {
@@ -55,7 +36,7 @@ export const initialize = ({ context, config, metadata }) => {
           channel: context.channel,
           did: context.did,
           authtoken: context.authToken || '',
-          uid: context.uid || '',
+          uid: 'anonymous',
           sid: context.sid,
           batchsize: process.env.REACT_APP_batchsize,
           mode: context.mode,
@@ -71,20 +52,12 @@ export const initialize = ({ context, config, metadata }) => {
 
     CsTelemetryModule.instance.telemetryService.initTelemetry(telemetryConfig);
   }
-
-  telemetryObject = {
-    id: metadata.identifier,
-    type: 'Content',
-    ver: metadata.pkgVersion + '' || '1.0',
-    rollup: context.objectRollup || {},
-  };
-  return telemetryObject;
 };
 
 export const start = (duration) => {
 
   CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
-    options: getEventOptions(contextdata,telemetryObject),
+    options: getEventOptions(),
     edata: {
       type: 'content',
       mode: 'play',
@@ -96,8 +69,10 @@ export const start = (duration) => {
 
 export const response = (context, options) => {
   CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry({
-      ...context
-  });
+    ...context,
+  },
+  getEventOptions()
+  );
 };
 
 export const end = () => {
@@ -114,6 +89,7 @@ export const end = () => {
 
 export const interact = (id) => {
   CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
+    options: getEventOptions(),
     edata: { type: 'TOUCH', subtype: '', id, pageid:url  },
   });
   console.log('working');
@@ -153,19 +129,30 @@ export const error = (error, data) => {
   });
 };
 
-export const getEventOptions = (contextdata,telemetryObject) => {
+export const getEventOptions = () => {
+  var emis_username = 'anonymous'
+  if (localStorage.getItem('token') !== null) {
+    let jwtToken = localStorage.getItem('token');
+    var userDetails = jwt(jwtToken);
+    emis_username = userDetails.emis_username;
+  }
   return {
-    object: telemetryObject,
+    object: {},
     context: {
-      pdata: contextdata.pdata,
-      env: 'contentplayer',
-      uid: contextdata.uid,
+      pdata:{
+        // optional
+        id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+        ver: process.env.REACT_APP_ver, // Version of the App
+        pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
+      },
+      env: process.env.REACT_APP_env,
+      uid: emis_username || "anonymous",
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
         { id: '2.0', type: 'PlayerVersion' },
       ],
-      rollup: contextdata.contextRollup || {},
+      rollup: {},
     },
   };
 };
