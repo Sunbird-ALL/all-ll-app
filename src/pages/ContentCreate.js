@@ -25,8 +25,8 @@ import { blobToBase64 } from '../utils/helper';
 
 const languageCore = [
   { text: 'English', value: 'en' },
-  /*{ text: 'Hindi - हिंदी', value: 'hi' },*/
-  { text: 'Tamil - தமிழ்', value: 'ta' },
+  { text: 'Hindi - हिंदी', value: 'hi' },
+  /*{ text: 'Tamil - தமிழ்', value: 'ta' },*/
 ];
 
 export default function ContentCreate() {

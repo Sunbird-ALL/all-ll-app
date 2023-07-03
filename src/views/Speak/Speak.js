@@ -48,7 +48,7 @@ function Speak() {
   const [load_cnt, set_load_cnt] = useState(0);
 
   const [resultnext, set_resultnext] = useState("start");
-  const [resultnextlang, set_resultnextlang] = useState("ta");
+  const [resultnextlang, set_resultnextlang] = useState("hi");
 
   useEffect(() => {
     if (load_cnt == 0) {
@@ -137,8 +137,8 @@ function Speak() {
               <br />
               <img
                 style={{
-                  width: "45px",
-                  height: "45px",
+                  width: "72px",
+                  height: "72px",
                   cursor: "pointer",
                 }}
                 src={play}

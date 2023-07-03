@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-
+import { VStack,HStack } from '@chakra-ui/react';
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components2/NewBottomHomeNextBar/NewBottomHomeNextBar';
@@ -15,9 +15,11 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
-
+console.log("proto2/startlearn");
 function StartLearn() {
   const navigate = useNavigate();
+
+  const [isAudioPlay, setIsAudioPlay] = useState(true);
 
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
@@ -54,8 +56,8 @@ function StartLearn() {
   );
   const [sel_lang_text, set_sel_lang_text] = useState(
     localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'Tamil'
+      ? localStorage.getItem('apphomelang') === 'hi'
+        ? 'हिंदी'
         : 'English'
       : 'English'
   );
@@ -165,9 +167,9 @@ function StartLearn() {
                   </div>*/}
                     <br />
                     <img className="image_class" src={content?.image} />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang != 'hi' ? (
                       <div className="content_text_div">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -179,9 +181,9 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang != 'hi' ? (
                       <div className="content_text_div_see">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -192,13 +194,14 @@ function StartLearn() {
                   </>
                 )}
 
-                <div style={{ display: 'inline-flex' }}>
+                {/* <div style={{ display: 'inline-flex' }}>
                   {flag ? (
                     <>
+                     
                       <img
                         style={{
-                          width: '80px',
-                          height: '80px',
+                          width: '72px',
+                          height: '72px',
                           cursor: 'pointer',
                           marginRight: '80px',
                         }}
@@ -209,8 +212,8 @@ function StartLearn() {
                   ) : (
                     <img
                       style={{
-                        width: '80px',
-                        height: '80px',
+                        width: '72px',
+                        height: '72px',
                         cursor: 'pointer',
                         marginRight: '80px',
                       }}
@@ -222,6 +225,7 @@ function StartLearn() {
                   <VoiceCompair
                     setVoiceText={setVoiceText}
                     setRecordedAudio={setRecordedAudio}
+                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                     flag={true}
                   />
                 </div>
@@ -236,7 +240,54 @@ function StartLearn() {
                   <img src={refresh} className="home_icon"></img>
                   <br />
                   Try new
-                </div>
+                </div> */}
+                 <VStack gap={'10'} alignItems="center">
+              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
+
+              {isAudioPlay !== 'recording' && (
+                <VStack alignItems="center" gap="5">
+                  {flag ? (
+                    <img
+                    className="play_btn"
+                      src={play}
+                      style={{ height: '72px', width: '72px' }}
+                      onClick={() => playAudio()}
+                      />
+                  ) : (
+                    <img
+                    className="play_btn"
+                      src={pause}
+                      style={{ height: '72px', width: '72px' }}
+                      onClick={() => pauseAudio()}
+                      />
+                      )}
+                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
+                </VStack>
+              )}
+              <VStack>
+                <VoiceCompair
+                  setVoiceText={setVoiceText}
+                  setRecordedAudio={setRecordedAudio}
+                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                  flag={true}
+                  
+                  />
+                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
+                
+                  </VStack>
+              </HStack>
+              {isAudioPlay !== 'recording' && (
+                <VStack>
+                  <img
+                    src={refresh}
+                    className="home_icon"
+                    style={{ height: '72px', width: '72px' }}
+                    onClick={() => navigate(0)}
+                  />
+                  <h4 className="text-speak m-0">Try new</h4>
+                </VStack>
+              )}
+            </VStack>
                 <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
               </div>
               <div className="cols s12 m2 l3"></div>

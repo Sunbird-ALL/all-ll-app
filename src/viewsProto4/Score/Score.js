@@ -141,7 +141,7 @@ function Score() {
   }
 
   function checkVoice(voiceText) {
-    let tempvoiceText = removeForbiddenCharacters(voiceText.toLowerCase());
+    let tempvoiceText = removeForbiddenCharacters(voiceText?.toLowerCase());
     let tempteacherText = teacherText.toLowerCase();
     // tempteacherText = replaceAll(tempteacherText, '.', '');
     // tempteacherText = replaceAll(tempteacherText, "'", '');
@@ -149,7 +149,7 @@ function Score() {
     // tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
     setVoiceTextTeacher(tempteacherText);
-    if (findRegex(tempteacherText) === voiceText.toLowerCase()) {
+    if (findRegex(tempteacherText) === voiceText?.toLowerCase()) {
       setTestResult(
         <font style={{ fontSize: '20px', color: 'green' }}>
           Teacher and Student audio match
@@ -170,19 +170,19 @@ function Score() {
     }
     //set text highlight
 
-    let texttemp = voiceText.toLowerCase();
+    let texttemp = voiceText?.toLowerCase();
     let studentTextArray;
 
-    studentTextArray = texttemp.split(' ');
+    studentTextArray = texttemp?.split(' ');
     const teacherTextArray = tempteacherText.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
-    let studentswords = studentTextArray.length;
+    let studentswords = studentTextArray?.length;
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
 
-    for (let i = 0; i < studentTextArray.length; i++) {
+    for (let i = 0; i < studentTextArray?.length; i++) {
       let arryResult = teacherText.split(' ');
       if (tempteacherText.includes(studentTextArray[i])) {
         correct_words++;
@@ -312,6 +312,7 @@ function Score() {
                   </div>
                   <br />
                   {flag ? (
+                    <>
                     <img
                       style={{
                         width: '72px',
@@ -320,8 +321,21 @@ function Score() {
                       }}
                       src={play}
                       onClick={() => playAudio()}
-                    />
+                      />
+                    <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Play
+                      </p>
+                      </>
                   ) : (
+                    <>
                     <img
                       style={{
                         width: '72px',
@@ -330,7 +344,19 @@ function Score() {
                       }}
                       src={pause}
                       onClick={() => pauseAudio()}
-                    />
+                      />
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#5286E4',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Pause
+                      </p>
+                      </>
                   )}
 
                   <br />
@@ -342,32 +368,38 @@ function Score() {
 
               <div className="app_footbar_remove">
                 <div className="row" style={{ padding: '5px' }}>
-                  {resultnext == '' || apphomelevel === 'Paragraph' ? (
-                    <>
+                  {resultnext === '' || apphomelevel === 'Paragraph' ? (
+                    <div  style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '54px',
+                      marginTop: '-10px',
+                    }}>
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center'
-                        }
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center'
+                        // }
+                        
                       >
                         <div onClick={trySameSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
-                          try again
+                          Try Again
                         </div>
                       </div>
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center hide'
-                        }
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center hide'
+                        // }
                       >
                         <div onClick={newSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
-                          try new
+                          Try New
                         </div>
                       </div>
                       <div className="col s6 center hide">
@@ -384,40 +416,43 @@ function Score() {
                           ></img>
                         </Link>
                       </div>
-                    </>
+                    </div>
                   ) : (
                     <>
+                    <div style={{display:'flex', justifyContent:'center', gap:'74px', marginTop:'-10px'}}>
+
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center'
-                        }
-                      >
+                        // className={
+                        //   isfromresult === 'learn'
+                        //     ? 'col s6 center'
+                        //     : 'col s12 center'
+                        // }
+                        >
                         <div
                           onClick={() => {
                             localStorage.setItem('trysame', 'yes');
                             navigate(-1);
                           }}
-                        >
+                          >
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try again
                         </div>
                       </div>
                       <div
-                        className={
-                          isfromresult === 'learn'
-                            ? 'col s6 center'
-                            : 'col s12 center hide'
-                        }
-                      >
+                        // className={
+                        //   isfromresult === 'learn'
+                        //   ? 'col s6 center'
+                        //   : 'col s12 center hide'
+                        // }
+                        >
                         <div onClick={newSentence}>
                           <img src={refresh} className="home_icon"></img>
                           <br />
                           try new
                         </div>
                       </div>
+                        </div>
                       <div className="col s4 center hide">
                         <Link
                           to={
@@ -432,7 +467,7 @@ function Score() {
                           ></img>
                         </Link>
                       </div>
-                      <div className="col s12" style={{ textAlign: 'right' }}>
+                      {/* <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
                             isfromresult === 'learn'
@@ -455,7 +490,7 @@ function Score() {
                         >
                           <img src={next_nav} className={'next_nav'}></img>
                         </Link>
-                      </div>
+                      </div> */}
                     </>
                   )}
                 </div>

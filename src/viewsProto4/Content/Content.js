@@ -45,7 +45,7 @@ function Content() {
       config: {
         gender: 'female',
         language: {
-          sourceLanguage: 'ta',
+          sourceLanguage: 'hi',
         },
       },
     });

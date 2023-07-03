@@ -9,7 +9,6 @@ import { getLayout } from '../../utils/helper';
 
 const NewTopHomeNextBar = props => {
   const { trylink, nextlink, ishomeback, resultnextlang } = props;
-
   return (
     <div className="app_footbar_remove">
       <div className="row">
@@ -17,23 +16,22 @@ const NewTopHomeNextBar = props => {
           <>
             <div className="col s6 home_icon_div">
               <Link to={'/'}>
-                <img src={home} className="home_icon_new"></img>
+                <img src={home} className="home_icon_new" alt="Home"></img>
               </Link>
+              
             </div>
             <div className="col s6 menu_icon_div">
-              <Link to={'/start'}>
+              {/* <Link to={'/start'}>
                 <img src={menu} className="menu_icon_new"></img>
-              </Link>
+              </Link> */}
             </div>
           </>
         ) : (
-          <>
-            <div className="col s12 home_icon_div">
-              <Link to={'/'}>
-                <img src={home} className="home_icon_new"></img>
-              </Link>
-            </div>
-          </>
+          <div className="col s12 home_icon_div">
+            <Link to={'/'}>
+              <img src={home} className="home_icon_new" alt="Home"></img>
+            </Link>
+          </div>
         )}
       </div>
     </div>

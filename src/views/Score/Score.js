@@ -24,6 +24,8 @@ import pause from '../../assests/Images/pause-img.png';
 
 import next from '../../assests/Images/next.png';
 
+import { replaceAll } from '../../utils/helper';
+
 function Score() {
   const navigate = useNavigate();
   const [isStart, set_isStart] = useState(false);
@@ -117,21 +119,20 @@ function Score() {
   const [fluencyresult, setfluencyresult] = useState('');
 
   useEffect(() => {
-    if (voiceText !== '') {
+    if (voiceText && voiceText !== '') {
       checkVoice(voiceText);
     }
   }, [voiceText]);
-  function replaceAll(string, search, replace) {
-    return string.split(search).join(replace);
-  }
+
   function checkVoice(voiceText) {
-    let tempvoiceText = voiceText.toLowerCase();
-    let tempteacherText = teacherText.toLowerCase();
+    let tempvoiceText = voiceText?.toLowerCase();
+    let tempteacherText = teacherText?.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
+    tempteacherText = replaceAll(tempteacherText, '?', '');
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
@@ -189,6 +190,7 @@ function Score() {
       </>
     );
     setVoiceTextHighLight(student_text_result);
+
     //calculation method
     if (originalwords >= studentswords) {
       result_per_words = Math.round(
@@ -225,82 +227,41 @@ function Score() {
 
     setTestResult(
       <>
-        <h5 className="home_sub_title">Word Result :</h5>
         <div className="res_txt">
-          {originalwords < studentswords ? (
-            <font style={{ color: 'red' }}>You have recorded extra word</font>
-          ) : (
-            <>{result_per_words}/100</>
-          )}
-        </div>
-        <br />
-        <font className="ori_res_txt">Original Words : {originalwords} | </font>
-        <font className="stu_res_txt">Your Words : {studentswords} | </font>
-        <font className="cor_res_txt">Correct Words : {correct_words} | </font>
-        <font className="icor_res_txt">Incorrect Words : {wrong_words}</font>
-        <hr />
-        <h5 className="home_sub_title">Sentence Result :</h5>
-        <div className="res_txt">
-          {tempteacherText === tempvoiceText ? (
-            <>
-              <font style={{ color: 'green' }}>
-                You recorded text match with content text
-              </font>
-            </>
-          ) : (
-            <>
-              <font style={{ color: 'red' }}>
-                You recorded text does not match with content text
-              </font>
-            </>
-          )}
+          <>{result_per_words}/100</>
         </div>
         <br />
       </>
     );
   }
-  function showScore() {
-    return (
-      <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
-        <div className="">
-          <div className="row">
-            <div className="col s12 m2 l3"></div>
-            <div className="col s12 m8 l6 main_layout">
-              {/*<AppNavbar navtitle="Result" />*/}
-              <br />
-              <NewTopHomeNextBar
-                nextlink={resultnext}
-                resultnextlang={resultnextlang}
-                ishomeback={true}
-              />
-              <div>
-                <center>
-                  {/*<h5 className="home_title">Result</h5>
-                  <hr />
-                  {testResult}
-                  <hr />*/}
-                  {contenttype != 'Word' && numberOfPieces > 50 ? (
-                    <>
-                      <br />
-                      <br />
-                      <div className="res_txt">{numberOfPieces}/100</div>
-                    </>
-                  ) : (
-                    ''
-                  )}
-                  <br />
-                  <br />
-                  {newtextresult}
-                  <br />
-                  <br />
-                  {fluencyresult}
-                  <br />
-                  <br />
-                  <div className="content_text_div_see">
-                    {voiceTextHighlight}
-                  </div>
-                  <br />
-                  {flag ? (
+  return (
+    <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
+      <div className="">
+        <div className="row">
+          <div className="col s12 m2 l3"></div>
+          <div className="col s12 m8 l6 main_layout">
+            {/*<AppNavbar navtitle="Result" />*/}
+            <br />
+            <NewTopHomeNextBar
+              nextlink={resultnext}
+              resultnextlang={resultnextlang}
+              ishomeback={true}
+            />
+            <div>
+              <center>
+                {testResult}
+                <br />
+                <br />
+                {newtextresult}
+                <br />
+                <br />
+                {fluencyresult}
+                <br />
+                <br />
+                <div className="content_text_div_see">{voiceTextHighlight}</div>
+                <br />
+                {flag ? (
+                  <>
                     <img
                       style={{
                         width: '72px',
@@ -310,7 +271,20 @@ function Score() {
                       src={play}
                       onClick={() => playAudio()}
                     />
-                  ) : (
+                    <p
+                      style={{
+                        position: 'relative',
+                        marginTop: '-1px',
+                        marginBottom: '-15px',
+                        color: '#5286E4',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Play
+                    </p>
+                  </>
+                ) : (
+                  <>
                     <img
                       style={{
                         width: '72px',
@@ -320,18 +294,30 @@ function Score() {
                       src={pause}
                       onClick={() => pauseAudio()}
                     />
-                  )}
+                    <p
+                      style={{
+                        position: 'relative',
+                        marginTop: '-1px',
+                        marginBottom: '-15px',
+                        color: '#5286E4',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Pause
+                    </p>
+                  </>
+                )}
 
-                  {/*<ReactAudioPlayer
+                {/*<ReactAudioPlayer
                     autoPlay={false}
                     src={recordedAudio}
                     controls
                     style={{ width: "100%" }}
                   />*/}
-                  <br />
-                  <br />
-                  <br />
-                  {/*<font className="speech_title">Your Speech and Audio</font>
+                <br />
+                <br />
+                <br />
+                {/*<font className="speech_title">Your Speech and Audio</font>
                   <div className="content_view">
                     <>
                       <font>
@@ -369,44 +355,46 @@ function Score() {
                       <br />
                     </>
                   </div>*/}
-                </center>
-              </div>
-              {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
+              </center>
+            </div>
+            {/*<HomeNextBar trylink={"startlearn"} ishomeback={true} />*/}
 
-              <div className="app_footbar_remove">
-                <div className="row" style={{ padding: '5px' }}>
-                  {resultnext == '' || apphomelevel === 'Paragraph' ? (
+            <div className="app_footbar_remove">
+              <div className="row" style={{ padding: '5px' }}>
+                {/* {resultnext === 'as' || apphomelevel === 'Paragraph' ? (
                     <>
-                      <div className="col s12 center">
-                        <div onClick={() => navigate(-1)}>
+                      <div onClick={() => navigate(-1)}>
                           <img src={refresh} className="home_icon"></img>
+                          <p
+                            style={{
+                              position: 'relative',
+                              marginTop: '-1px',
+                              marginBottom: '-15px',
+                              color: '#E7815E',
+                              fontWeight: 600,
+                            }}
+                          >
+                            Try New
+                          </p>
                         </div>
-                      </div>
-                      <div className="col s6 center hide">
-                        <Link to={isfromresult === 'learn' ? '/start' : '/'}>
-                          <img
-                            src={isfromresult === 'learn' ? menu : home}
-                            className="home_icon"
-                          ></img>
-                        </Link>
-                      </div>
                     </>
-                  ) : (
-                    <>
-                      <div className="col s12 center">
-                        <div onClick={() => navigate(-1)}>
-                          <img src={refresh} className="home_icon"></img>
-                        </div>
+                  ) : ( */}
+                <>
+                  <>
+                    {/* <div className="col s12 center">
+                      <div onClick={() => navigate(-1)}>
+                        <img src={refresh} className="home_icon"></img>
                       </div>
-                      <div className="col s4 center hide">
-                        <Link to={isfromresult === 'learn' ? '/start' : '/'}>
-                          <img
-                            src={isfromresult === 'learn' ? menu : home}
-                            className="home_icon"
-                          ></img>
-                        </Link>
-                      </div>
-                      <div className="col s12" style={{ textAlign: 'right' }}>
+                    </div> */}
+                    <div className="col s4 center hide">
+                      <Link to={isfromresult === 'learn' ? '/start' : '/'}>
+                        <img
+                          src={isfromresult === 'learn' ? menu : home}
+                          className="home_icon"
+                        ></img>
+                      </Link>
+                    </div>
+                    {/* <div className="col s12" style={{ textAlign: 'right' }}>
                         <Link
                           to={
                             isfromresult === 'learn'
@@ -429,19 +417,106 @@ function Score() {
                         >
                           <img src={next_nav} className={'next_nav'}></img>
                         </Link>
-                      </div>
-                    </>
-                  )}
-                </div>
+                      </div> */}
+                  </>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '44px',
+                    }}
+                    className="col s12 center"
+                  >
+                    <div onClick={() => navigate(-1)}>
+                      <img src={refresh} className="home_icon"></img>
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#E7815E',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Try Again
+                      </p>
+                    </div>
+                    <div
+                      onClick={() => {
+                        //localStorage.setItem("apphomelang", resultnextlang);
+                        const next_apphomelevel =
+                        apphomelevel === 'Word'
+                          ? 'Sentence'
+                          : apphomelevel === 'Sentence'
+                          ? 'Paragraph'
+                          : 'Word';
+                      localStorage.setItem(
+                        'apphomelevel',
+                        next_apphomelevel
+                      );
+                        navigate(
+                          isfromresult === 'learn'
+                            ? '/startlearn'
+                            : '/' + resultnext
+                        );
+                      }}
+                    >
+                      <img src={refresh} className="home_icon"></img>
+                      <p
+                        style={{
+                          position: 'relative',
+                          marginTop: '-1px',
+                          marginBottom: '-15px',
+                          color: '#E7815E',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Try New
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col s4 center hide">
+                    <Link to={isfromresult === 'learn' ? '/start' : '/'}>
+                      <img
+                        src={isfromresult === 'learn' ? menu : home}
+                        className="home_icon"
+                      ></img>
+                    </Link>
+                  </div>
+                  {/* <div className="col s12" style={{ textAlign: 'right' }}>
+                        <Link
+                          to={
+                            isfromresult === 'learn'
+                              ? '/startlearn'
+                              : '/' + resultnext
+                          }
+                          onClick={() => {
+                            //localStorage.setItem("apphomelang", resultnextlang);
+                            const next_apphomelevel =
+                              apphomelevel === 'Word'
+                                ? 'Sentence'
+                                : apphomelevel === 'Sentence'
+                                ? 'Paragraph'
+                                : 'Word';
+                            localStorage.setItem(
+                              'apphomelevel',
+                              next_apphomelevel
+                            );
+                          }}
+                        >
+                          <img src={next_nav} className={'next_nav'}></img>
+                        </Link>
+                      </div> */}
+                </>
+                {/* )} */}
               </div>
             </div>
-            <div className="cols s12 m2 l3"></div>
           </div>
+          <div className="cols s12 m2 l3"></div>
         </div>
-      </Animation>
-    );
-  }
-  return <React.Fragment>{showScore()}</React.Fragment>;
+      </div>
+    </Animation>
+  );
 }
 
 export default Score;

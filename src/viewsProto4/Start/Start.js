@@ -11,7 +11,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 /*chakra*/
 import { getParameter } from '../../utils/helper';
 import axios from 'axios';
-
+console.log("proto4");
 function Start() {
   const [url, setUrl] = useState('');
   const [tabShow, setTabShow] = useState('');
@@ -24,7 +24,7 @@ function Start() {
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
-      : 'ta'
+      : 'hi'
   );
   const [sel_level, set_sel_level] = useState(
     // localStorage.getItem('apphomelevel')
@@ -40,8 +40,8 @@ function Start() {
 
   const [sel_lang_text, set_sel_lang_text] = useState(
     localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'தமிழ்'
+      ? localStorage.getItem('apphomelang') === 'hi'
+        ? 'हिंदी'
         : 'English'
       : 'English'
   );
@@ -151,18 +151,18 @@ function Start() {
                       <div className="col s6">
                         <div
                           className={
-                            sel_lang === 'ta'
+                            sel_lang === 'hi'
                               ? 'lang_select_div_active'
                               : 'lang_select_div_inactive'
                           }
                           onClick={() => {
-                            let temp_dt = 'ta';
+                            let temp_dt = 'hi';
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
                             //window.location.reload();
                           }}
                         >
-                          Try in தமிழ்
+                          Try in हिंदी
                         </div>
                       </div>
                     </div>
@@ -209,13 +209,13 @@ function Start() {
                       <div className="learn_level_div">
                         <div className="col s2">
                           <div className="learn_level_div_start">
-                            <img src={new1word} className="learn_level_img" />
+                            <img src={new1word} className="learn_level_img" alt="Word" />
                           </div>
                         </div>
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
+                              {sel_lang === 'en' ? 'Word' : 'शब्द'}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -224,7 +224,7 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" />
+                          <img src={learn_next} className="learn_next_img" alt="Start Learning" />
                         </div>
                       </div>
                     </Link>
@@ -245,13 +245,14 @@ function Start() {
                             <img
                               src={new2sentence}
                               className="learn_level_img"
+                              alt="Sentence"
                             />
                           </div>
                         </div>
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
+                              {sel_lang === 'en' ? 'Sentence' : 'वाक्य'}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -260,7 +261,7 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" />
+                          <img src={learn_next} className="learn_next_img" alt="Start Learning" />
                         </div>
                       </div>
                     </Link>
@@ -281,13 +282,14 @@ function Start() {
                             <img
                               src={new3paragraph}
                               className="learn_level_img"
+                              alt="Paragraph"
                             />
                           </div>
                         </div>
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
+                              {sel_lang === 'en' ? 'Paragraph' : 'अनुच्छेद'}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -296,7 +298,7 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" />
+                          <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
                         </div>
                       </div>
                     </Link>

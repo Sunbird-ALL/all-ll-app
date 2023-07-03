@@ -6,7 +6,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import { getContentList } from '../../utils/Const/Const';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
@@ -24,7 +24,7 @@ import { getParameter } from '../../utils/helper';
 
 function StartLearn() {
   const navigate = useNavigate();
-
+const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const location = useLocation();
@@ -85,7 +85,7 @@ function StartLearn() {
       .then(res => {
         localStorage.setItem('contents', JSON.stringify(res.data));
 
-        if (load_cnt == 0) {
+        if (load_cnt === 0) {
           const content_list = getContentList();
 
           let tempContent = [];
@@ -93,7 +93,7 @@ function StartLearn() {
 
           content_keys.forEach(key => {
             if (
-              content_list[key].type == sel_level &&
+              content_list[key].type === sel_level &&
               content_list[key]?.[sel_lang]
             ) {
               tempContent.push({
@@ -158,16 +158,11 @@ function StartLearn() {
   function showStartLearn() {
     return (
       <>
+      
         {content != null && content[sel_lang] ? (
-          <div className="">
-            <div className="row">
-              <div className="col s12 m2 l3"></div>
-              <div className="col s12 m8 l6 main_layout">
-                <br />
-                {/* <h1>Speak like me</h1> */}
-
-                <br />
-                {sel_cource === 'See & Speak' ? (
+        
+            <VStack gap={'10'} alignItems="center">
+               {sel_cource === 'See & Speak' ? (
                   <>
                     <div className="content_text_div">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
@@ -178,55 +173,55 @@ function StartLearn() {
                     {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                   </h2>
                 )}
+              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
 
-                <div style={{ display: 'inline-flex' }}>
+              {isAudioPlay !== 'recording' && (
+                <VStack alignItems="center" gap="5">
                   {flag ? (
-                    <>
-                      <img
-                        style={{
-                          width: '80px',
-                          height: '80px',
-                          cursor: 'pointer',
-                          marginRight: '80px',
-                        }}
-                        src={play}
-                        onClick={() => playAudio()}
+                    <img
+                    className="play_btn"
+                      src={play}
+                      style={{ height: '72px', width: '72px' }}
+                      onClick={() => playAudio()}
                       />
-                    </>
                   ) : (
                     <img
-                      style={{
-                        width: '80px',
-                        height: '80px',
-                        cursor: 'pointer',
-                        marginRight: '80px',
-                      }}
+                    className="play_btn"
                       src={pause}
+                      style={{ height: '72px', width: '72px' }}
                       onClick={() => pauseAudio()}
-                    />
-                  )}
-
-                  <VoiceCompair
-                    setVoiceText={setVoiceText}
-                    setRecordedAudio={setRecordedAudio}
-                    flag={true}
+                      />
+                      )}
+                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
+                </VStack>
+              )}
+              <VStack>
+                <VoiceCompair
+                  setVoiceText={setVoiceText}
+                  setRecordedAudio={setRecordedAudio}
+                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                  flag={true}
+                  
                   />
-                </div>
-                <br />
-                <div style={{ display: 'inline-flex' }}>
-                  <h4 className="text-play"> Listen</h4>
-                  <h4 className="text-speak">speak</h4>
-                </div>
-                <br />
-                <div onClick={newSentence}>
-                  <img src={refresh} className="home_icon"></img>
-                  <br />
-                  Try new
-                </div>
-              </div>
-              <div className="cols s12 m2 l3"></div>
-            </div>
-          </div>
+                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
+                
+                  </VStack>
+              </HStack>
+              {isAudioPlay !== 'recording' && (
+                <VStack>
+                  <img
+                    src={refresh}
+                    className="home_icon"
+                    style={{ height: '72px', width: '72px' }}
+                    onClick={newSentence}
+                    alt=''
+                  
+                    
+                  />
+                  <h4 className="text-speak m-0">Try new</h4>
+                </VStack>
+              )}
+            </VStack>
         ) : (
           <>
             <div className="">
@@ -240,7 +235,7 @@ function StartLearn() {
             </div>
           </>
         )}
-        {/* <AppFooter hideNavigation={true} removeData={true} /> */}
+       
       </>
     );
   }
@@ -248,3 +243,4 @@ function StartLearn() {
 }
 
 export default StartLearn;
+ 

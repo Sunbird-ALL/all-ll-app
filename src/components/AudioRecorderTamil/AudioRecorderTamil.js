@@ -2,13 +2,14 @@ import React from 'react';
 
 // import * as Recorder from './recorder';
 import Recorder from './Recorder';
-
+import mic_play from '../../assests/Images/mic_play.svg'
 // import mic from '../../assests/Images/mic.png';
 import mic_on from '../../assests/Images/mic_on.png';
 import mic from '../../assests/Images/mic.png';
 import stop from '../../assests/Images/stop.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { response,interact } from '../../services/telementryService';
+import { replaceAll, compareArrays } from '../../utils/helper';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -38,6 +39,7 @@ function Mic({
   flag,
   setTamilRecordedAudio,
   setTamilRecordedText,
+  isAudioPlay,
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
@@ -47,8 +49,10 @@ function Mic({
     setUrl(value);
   }, [value]);
 
+
   const startRecording = () => {
     setRecord(true);
+    isAudioPlay('recording');
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
@@ -77,6 +81,7 @@ function Mic({
   const stopRecording = () => {
     showLoading();
     setRecord(false);
+    isAudioPlay('inactive');
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
@@ -142,11 +147,14 @@ function Mic({
       'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
     const responseStartTime = new Date().getTime();
 
-    await fetch(ASR_REST_URL, requestOptions)
+    fetch(ASR_REST_URL, requestOptions)
       .then(response => response.text())
       .then(result => {
+        clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
 
         var apiResponse = JSON.parse(result);
 
@@ -156,35 +164,88 @@ function Mic({
         setTamiltext(apiResponse['output'][0]['source']);
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
+        setTamilRecordedText(apiResponse['output'][0]['source']);
+
+        // Data Manipulation on result capturing for telemetry log
+        let texttemp = apiResponse['output'][0]['source'].toLowerCase();
+        const studentTextArray = texttemp.split(' ');
+
+        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        tempteacherText = replaceAll(tempteacherText, '.', '');
+        tempteacherText = replaceAll(tempteacherText, "'", '');
+        tempteacherText = replaceAll(tempteacherText, ',', '');
+        tempteacherText = replaceAll(tempteacherText, '!', '');
+        tempteacherText = replaceAll(tempteacherText, '|', '');
+        tempteacherText = replaceAll(tempteacherText, '?', '');
+        const teacherTextArray = tempteacherText.split(' ');;
+
+        let student_correct_words_result = [];
+        let student_incorrect_words_result = [];
+        let originalwords = teacherTextArray.length;
+        let studentswords = studentTextArray.length;
+        let wrong_words = 0;
+        let correct_words = 0;
+        let result_per_words = 0;
+        let result_per_words1 = 0;
+        let occuracy_percentage = 0;
+
+        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+
+        for (let i = 0; i < studentTextArray.length; i++) {
+            if (teacherTextArray.includes(studentTextArray[i])) {
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
+            } else {
+                wrong_words++;
+                student_incorrect_words_result.push(
+                   studentTextArray[i]
+                );
+            }
+        }
+        //calculation method
+        if (originalwords >= studentswords) {
+           result_per_words = Math.round(
+                 Number((correct_words / originalwords) * 100)
+           );
+        } else {
+            result_per_words = Math.round(
+              Number((correct_words / studentswords) * 100)
+            );
+        }
+        let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
         response({ // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
+            //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
+            "values": [
+                { "original_text": localStorage.getItem('contentText') },
+                { "response_text": apiResponse['output'][0]['source']},
+                { "response_correct_words_array": student_correct_words_result},
+                { "response_incorrect_words_array": student_incorrect_words_result},
+                { "response_word_array_result": word_result_array},
+                { "response_word_result": word_result},
+                { "accuracy_percentage": result_per_words},
+                { "duration":  responseDuration}
+             ]
           })
       })
       .catch(error => {
         console.log('error', error);
         stopLoading();
       });
+    const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
-  const IconMic = () => {
-    if (record) {
-      return (
-        <>
-          {flag ? (
-            <img src={stop} className="micimg mic_record"></img>
-          ) : (
-            <img src={mic_on} className="micimg mic_stop_record"></img>
-          )}
-        </>
-      );
-    } else {
-      return <img src={mic} className={'micimg mic_record'}></img>;
-    }
-  };
+    const IconMic = () => {
+      if (record) {
+        return <img src={mic_play} className="micimg mic_stop_record"></img>;
+      } else {
+        return <img src={mic} className={'micimg mic_record'}></img>;
+      }
+    };
 
   return (
     <div spacing={4} overflow="hidden">

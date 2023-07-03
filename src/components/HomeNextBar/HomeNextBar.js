@@ -26,7 +26,7 @@ const HomeNextBar = (props) => {
                   localStorage.setItem("apphomelang", resultnextlang)
                 }
               >
-                <img src={trylink ? refresh : next} className="home_icon"></img>
+                <img   src={trylink ? refresh : next} className="home_icon"></img>
               </Link>
             </div>
           </>
