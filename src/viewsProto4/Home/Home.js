@@ -88,7 +88,7 @@ function Home() {
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_ta, 'ta');
+                    playAudio(welcome_hi, 'hi');
                   }}
                 >
                   <center>

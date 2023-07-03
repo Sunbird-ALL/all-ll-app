@@ -24,7 +24,7 @@ function Start() {
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
-      : 'ta'
+      : 'hi'
   );
   const [sel_level, set_sel_level] = useState(
     // localStorage.getItem('apphomelevel')
@@ -40,8 +40,8 @@ function Start() {
 
   const [sel_lang_text, set_sel_lang_text] = useState(
     localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'தமிழ்'
+      ? localStorage.getItem('apphomelang') === 'hi'
+        ? 'हिंदी'
         : 'English'
       : 'English'
   );
@@ -151,18 +151,18 @@ function Start() {
                       <div className="col s6">
                         <div
                           className={
-                            sel_lang === 'ta'
+                            sel_lang === 'hi'
                               ? 'lang_select_div_active'
                               : 'lang_select_div_inactive'
                           }
                           onClick={() => {
-                            let temp_dt = 'ta';
+                            let temp_dt = 'hi';
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
                             //window.location.reload();
                           }}
                         >
-                          Try in தமிழ்
+                          Try in हिंदी
                         </div>
                       </div>
                     </div>
@@ -215,7 +215,7 @@ function Start() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
+                              {sel_lang === 'en' ? 'Word' : 'शब्द'}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -252,7 +252,7 @@ function Start() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
+                              {sel_lang === 'en' ? 'Sentence' : 'वाक्य'}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -289,7 +289,7 @@ function Start() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
+                              {sel_lang === 'en' ? 'Paragraph' : 'अनुच्छेद'}
                             </font>
                             <br />
                             <font className="learn_sub_title">

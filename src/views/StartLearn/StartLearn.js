@@ -11,7 +11,7 @@ import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { Box, HStack, VStack } from '@chakra-ui/react';
-console.log("view/startlearn");
+
 function StartLearn() {
   const navigate = useNavigate();
   const [temp_audio, set_temp_audio] = useState(null);
@@ -51,7 +51,7 @@ function StartLearn() {
   );
   const [sel_lang_text, set_sel_lang_text] = useState(
     localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
+      ? localStorage.getItem('apphomelang') === 'hi'
         ? 'Tamil'
         : 'English'
       : 'English'
@@ -118,15 +118,15 @@ function StartLearn() {
           {sel_cource === 'See & Speak' ? (
             <VStack>
               <img className="image_class" src={content?.image} />
-              {sel_lang != 'ta' && (
-                <div className="content_text_div">{content['ta']}</div>
+              {sel_lang != 'hi' && (
+                <div className="content_text_div">{content['hi']}</div>
               )}
               <div className="content_text_div">{content[sel_lang]}</div>
             </VStack>
           ) : (
             <VStack>
-              {sel_lang != 'ta' && (
-                <div className="content_text_div_see">{content['ta']}</div>
+              {sel_lang != 'hi' && (
+                <div className="content_text_div_see">{content['hi']}</div>
               )}
               <div className="content_text_div_see">{content[sel_lang]}</div>
             </VStack>

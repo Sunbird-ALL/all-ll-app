@@ -56,8 +56,8 @@ function StartLearn() {
   );
   const [sel_lang_text, set_sel_lang_text] = useState(
     localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'Tamil'
+      ? localStorage.getItem('apphomelang') === 'hi'
+        ? 'हिंदी'
         : 'English'
       : 'English'
   );
@@ -167,9 +167,9 @@ function StartLearn() {
                   </div>*/}
                     <br />
                     <img className="image_class" src={content?.image} />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang != 'hi' ? (
                       <div className="content_text_div">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -181,9 +181,9 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang != 'hi' ? (
                       <div className="content_text_div_see">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>

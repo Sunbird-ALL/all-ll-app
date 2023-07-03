@@ -186,9 +186,9 @@ function StartLearn() {
                     <div className="content_text_div">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
-                    {sel_lang !== 'ta' ? (
+                    {sel_lang !== 'hi' ? (
                       <div className="content_text_div">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -200,9 +200,9 @@ function StartLearn() {
                     <div className="content_text_div_see">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
-                    {sel_lang !== 'ta' ? (
+                    {sel_lang !== 'hi' ? (
                       <div className="content_text_div_see_ta"  style={{fontSize:'21px'}}>
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content['hi']?.text ? content['hi']?.text : ''}
                       </div>
                     ) : (
                       <></>
