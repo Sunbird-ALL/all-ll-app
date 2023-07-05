@@ -104,11 +104,15 @@ const VoiceCompair = props => {
         },
       ],
     });
+
+    const abortController = new AbortController();
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
+      signal: abortController.signal
     };
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
     const responseStartTime = new Date().getTime();
@@ -148,45 +152,45 @@ const VoiceCompair = props => {
         let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
         for (let i = 0; i < studentTextArray.length; i++) {
-            if (teacherTextArray.includes(studentTextArray[i])) {
-               correct_words++;
-               student_correct_words_result.push(
-                  studentTextArray[i]
-               );
-            } else {
-                wrong_words++;
-                student_incorrect_words_result.push(
-                   studentTextArray[i]
-                );
-            }
+          if (teacherTextArray.includes(studentTextArray[i])) {
+            correct_words++;
+            student_correct_words_result.push(
+              studentTextArray[i]
+            );
+          } else {
+            wrong_words++;
+            student_incorrect_words_result.push(
+              studentTextArray[i]
+            );
+          }
         }
         //calculation method
         if (originalwords >= studentswords) {
-           result_per_words = Math.round(
-                 Number((correct_words / originalwords) * 100)
-           );
+          result_per_words = Math.round(
+            Number((correct_words / originalwords) * 100)
+          );
         } else {
-            result_per_words = Math.round(
-              Number((correct_words / studentswords) * 100)
-            );
+          result_per_words = Math.round(
+            Number((correct_words / studentswords) * 100)
+          );
         }
 
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
         response({ // Required
-            "target": localStorage.getItem('contentText'), // Required. Target of the response
-            //"qid": "", // Required. Unique assessment/question id
-            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [
-                { "original_text": localStorage.getItem('contentText') },
-                { "response_text": apiResponse['output'][0]['source']},
-                { "response_correct_words_array": student_correct_words_result},
-                { "response_incorrect_words_array": student_incorrect_words_result},
-                { "response_word_array_result": word_result_array},
-                { "response_word_result": word_result},
-                { "accuracy_percentage": result_per_words},
-                { "duration":  responseDuration}
-             ]
+          "target": localStorage.getItem('contentText'), // Required. Target of the response
+          //"qid": "", // Required. Unique assessment/question id
+          "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+          "values": [
+            { "original_text": localStorage.getItem('contentText') },
+            { "response_text": apiResponse['output'][0]['source'] },
+            { "response_correct_words_array": student_correct_words_result },
+            { "response_incorrect_words_array": student_incorrect_words_result },
+            { "response_word_array_result": word_result_array },
+            { "response_word_result": word_result },
+            { "accuracy_percentage": result_per_words },
+            { "duration": responseDuration }
+          ]
         })
 
         setAi4bharat(
@@ -195,8 +199,19 @@ const VoiceCompair = props => {
             : '-'
         );
         stopLoading();
+      }).catch(error => {
+        clearTimeout(waitAlert);
+        stopLoading();
+        if (error.name !== 'AbortError') {
+          alert('Unable to process your request at the moment.Please try again later.');
+          console.log('error', error);
+        }
       });
-      const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
+
+    const waitAlert = setTimeout(() => {
+      abortController.abort();
+      alert('Server response is slow at this time. Please explore other lessons');
+    }, 10000);
   };
 
   //get permission
