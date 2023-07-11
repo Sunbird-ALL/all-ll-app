@@ -36,24 +36,28 @@ export default function Contents() {
     navigate('/content/add');
   };
 
+  let contentItemList = JSON.parse(localStorage.getItem("contents"));
+  
   return (
     <Layout
       _header={{
         title: 'Contents',
         rightComponent: (
           <>
-            <Button
-              size={'sm'}
-              colorScheme={'green'}
-              rounded="3xl"
-              px="6"
-              onClick={() => {
-                localStorage.setItem('contents', JSON.stringify(SampleContent));
-                window.location.reload();
-              }}
-            >
-              Add Sample Content
-            </Button>
+            {(JSON.stringify(contentItemList) === '{}' || contentItemList === null)  && (
+              <Button
+                size={'sm'}
+                colorScheme={'green'}
+                rounded="3xl"
+                px="6"
+                onClick={() => {
+                  localStorage.setItem('contents', JSON.stringify(SampleContent));
+                  window.location.reload();
+                }}
+              >
+                Add Sample Content
+              </Button>
+            )}
             <Button
               size={'sm'}
               colorScheme={'red'}

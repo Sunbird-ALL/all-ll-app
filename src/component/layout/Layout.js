@@ -43,11 +43,11 @@ function Layout({ _header, _body, children }) {
     <ChakraProvider theme={theme}>
       <Center>
         <Box w={width} h={height} shadow="md">
-          <AppBar />
-          <Header {..._header} />
+          {/* <AppBar /> */}
+          <Header {..._header} background="#e8f4f9" />
           <Card m="4" mt="0" rounded={6} {...__body}>
             {title ? (
-              <CardHeader bg="red.100" roundedTop={6} {...__body?._cardHeader}>
+              <CardHeader bg="#e8f4f9" roundedTop={6} {...__body?._cardHeader}>
                 {title}
               </CardHeader>
             ) : (
@@ -55,7 +55,7 @@ function Layout({ _header, _body, children }) {
             )}
             <CardBody {...__body?._body}>{children}</CardBody>
           </Card>
-          <Footer menues={menues} width={width} />
+          {/* <Footer menues={menues} width={width} /> */}
         </Box>
       </Center>
     </ChakraProvider>

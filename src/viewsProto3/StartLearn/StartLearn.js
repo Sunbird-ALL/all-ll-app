@@ -13,6 +13,7 @@ import { interactCall } from '../../services/callTelemetryIntract';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 function StartLearn() {
+	console.log(getContentList());
   const navigate = useNavigate();
   const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null);
@@ -103,6 +104,7 @@ function StartLearn() {
     if (load_cnt == 0) {
       let count_array = 0;
       const content_list = getContentList();
+      console.log(content_list);
 
       let tempContent = [];
       const content_count = Object.keys(content_list).length;
