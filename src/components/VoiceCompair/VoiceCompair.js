@@ -14,22 +14,22 @@ const VoiceCompair = props => {
   );
 
   const ASR_REST_URLS = {
-    bn: 'https://asr-api.ai4bharat.org',
-    en: 'https://asr-api.ai4bharat.org',
-    gu: 'https://asr-api.ai4bharat.org',
-    hi: 'https://asr-api.ai4bharat.org',
-    kn: 'https://asr-api.ai4bharat.org',
-    ml: 'https://asr-api.ai4bharat.org',
-    mr: 'https://asr-api.ai4bharat.org',
-    ne: 'https://asr-api.ai4bharat.org',
-    or: 'https://asr-api.ai4bharat.org',
-    pa: 'https://asr-api.ai4bharat.org',
-    sa: 'https://asr-api.ai4bharat.org',
-    si: 'https://asr-api.ai4bharat.org',
-    ta: 'https://asr-api.ai4bharat.org',
+    bn: 'https://api.dhruva.ai4bharat.org',
+    en: 'https://api.dhruva.ai4bharat.org',
+    gu: 'https://api.dhruva.ai4bharat.org',
+    hi: 'https://api.dhruva.ai4bharat.org',
+    kn: 'https://api.dhruva.ai4bharat.org',
+    ml: 'https://api.dhruva.ai4bharat.org',
+    mr: 'https://api.dhruva.ai4bharat.org',
+    ne: 'https://api.dhruva.ai4bharat.org',
+    or: 'https://api.dhruva.ai4bharat.org',
+    pa: 'https://api.dhruva.ai4bharat.org',
+    sa: 'https://api.dhruva.ai4bharat.org',
+    si: 'https://api.dhruva.ai4bharat.org',
+    ta: 'https://api.dhruva.ai4bharat.org',
     //ta: "https://ai4b-dev-asr.ulcacontrib.org",
     te: 'https://ai4b-dev-asr.ulcacontrib.org',
-    ur: 'https://asr-api.ai4bharat.org',
+    ur: 'https://api.dhruva.ai4bharat.org',
   };
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
@@ -38,6 +38,18 @@ const VoiceCompair = props => {
   const [tamilRecordedAudio, setTamilRecordedAudio] = useState('');
   const [tamilRecordedText, setTamilRecordedText] = useState('');
 
+  const [asr_language_code, set_asr_language_code] = useState('ai4bharat/whisper-medium-en--gpu--t4');
+
+  useEffect(() => {
+	if (lang_code === 'hi')
+	{
+		set_asr_language_code('ai4bharat/conformer-hi-gpu--t4');
+	}
+	else
+	{
+		set_asr_language_code('ai4bharat/whisper-medium-en--gpu--t4');
+	}
+  }, [])
   useEffect(() => {
     props.setVoiceText(tamilRecordedText);
     props.setRecordedAudio(tamilRecordedAudio);
@@ -84,8 +96,11 @@ const VoiceCompair = props => {
     if (lang_code === 'ta') {
       samplingrate = 16000;
     }
+
+    const asr_api_key = process.env.REACT_APP_ASR_API_KEY;
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', asr_api_key);
     var payload = JSON.stringify({
       config: {
         language: {
@@ -110,7 +125,8 @@ const VoiceCompair = props => {
       body: payload,
       redirect: 'follow',
     };
-    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
+
+    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr/?serviceId=${asr_language_code}`;
     const responseStartTime = new Date().getTime();
     fetch(apiURL, requestOptions)
       .then(response => response.text())
