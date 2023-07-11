@@ -14,22 +14,22 @@ const VoiceCompair = props => {
   );
 
   const ASR_REST_URLS = {
-    bn: 'https://asr-api.ai4bharat.org',
-    en: 'https://asr-api.ai4bharat.org',
-    gu: 'https://asr-api.ai4bharat.org',
-    hi: 'https://asr-api.ai4bharat.org',
-    kn: 'https://asr-api.ai4bharat.org',
-    ml: 'https://asr-api.ai4bharat.org',
-    mr: 'https://asr-api.ai4bharat.org',
-    ne: 'https://asr-api.ai4bharat.org',
-    or: 'https://asr-api.ai4bharat.org',
-    pa: 'https://asr-api.ai4bharat.org',
-    sa: 'https://asr-api.ai4bharat.org',
-    si: 'https://asr-api.ai4bharat.org',
-    ta: 'https://asr-api.ai4bharat.org',
+    bn: 'https://api.dhruva.ai4bharat.org',
+    en: 'https://api.dhruva.ai4bharat.org',
+    gu: 'https://api.dhruva.ai4bharat.org',
+    hi: 'https://api.dhruva.ai4bharat.org',
+    kn: 'https://api.dhruva.ai4bharat.org',
+    ml: 'https://api.dhruva.ai4bharat.org',
+    mr: 'https://api.dhruva.ai4bharat.org',
+    ne: 'https://api.dhruva.ai4bharat.org',
+    or: 'https://api.dhruva.ai4bharat.org',
+    pa: 'https://api.dhruva.ai4bharat.org',
+    sa: 'https://api.dhruva.ai4bharat.org',
+    si: 'https://api.dhruva.ai4bharat.org',
+    ta: 'https://api.dhruva.ai4bharat.org',
     //ta: "https://ai4b-dev-asr.ulcacontrib.org",
     te: 'https://ai4b-dev-asr.ulcacontrib.org',
-    ur: 'https://asr-api.ai4bharat.org',
+    ur: 'https://api.dhruva.ai4bharat.org',
   };
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
@@ -38,6 +38,18 @@ const VoiceCompair = props => {
   const [tamilRecordedAudio, setTamilRecordedAudio] = useState('');
   const [tamilRecordedText, setTamilRecordedText] = useState('');
 
+  const [asr_language_code, set_asr_language_code] = useState('ai4bharat/whisper-medium-en--gpu--t4');
+
+  useEffect(() => {
+	if (lang_code === 'hi')
+	{
+		set_asr_language_code('ai4bharat/conformer-hi-gpu--t4');
+	}
+	else
+	{
+		set_asr_language_code('ai4bharat/whisper-medium-en--gpu--t4');
+	}
+  }, [])
   useEffect(() => {
     props.setVoiceText(tamilRecordedText);
     props.setRecordedAudio(tamilRecordedAudio);
@@ -84,8 +96,11 @@ const VoiceCompair = props => {
     if (lang_code === 'ta') {
       samplingrate = 16000;
     }
+
+    const asr_api_key = process.env.REACT_APP_ASR_API_KEY;
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', asr_api_key);
     var payload = JSON.stringify({
       config: {
         language: {
@@ -104,17 +119,14 @@ const VoiceCompair = props => {
         },
       ],
     });
-
-    const abortController = new AbortController();
-
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
-      signal: abortController.signal
     };
-    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/asr/v1/recognize/${sourceLanguage}`;
+
+    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr/?serviceId=${asr_language_code}`;
     const responseStartTime = new Date().getTime();
     fetch(apiURL, requestOptions)
       .then(response => response.text())
@@ -152,45 +164,45 @@ const VoiceCompair = props => {
         let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
         for (let i = 0; i < studentTextArray.length; i++) {
-          if (teacherTextArray.includes(studentTextArray[i])) {
-            correct_words++;
-            student_correct_words_result.push(
-              studentTextArray[i]
-            );
-          } else {
-            wrong_words++;
-            student_incorrect_words_result.push(
-              studentTextArray[i]
-            );
-          }
+            if (teacherTextArray.includes(studentTextArray[i])) {
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
+            } else {
+                wrong_words++;
+                student_incorrect_words_result.push(
+                   studentTextArray[i]
+                );
+            }
         }
         //calculation method
         if (originalwords >= studentswords) {
-          result_per_words = Math.round(
-            Number((correct_words / originalwords) * 100)
-          );
+           result_per_words = Math.round(
+                 Number((correct_words / originalwords) * 100)
+           );
         } else {
-          result_per_words = Math.round(
-            Number((correct_words / studentswords) * 100)
-          );
+            result_per_words = Math.round(
+              Number((correct_words / studentswords) * 100)
+            );
         }
 
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
         response({ // Required
-          "target": localStorage.getItem('contentText'), // Required. Target of the response
-          //"qid": "", // Required. Unique assessment/question id
-          "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-          "values": [
-            { "original_text": localStorage.getItem('contentText') },
-            { "response_text": apiResponse['output'][0]['source'] },
-            { "response_correct_words_array": student_correct_words_result },
-            { "response_incorrect_words_array": student_incorrect_words_result },
-            { "response_word_array_result": word_result_array },
-            { "response_word_result": word_result },
-            { "accuracy_percentage": result_per_words },
-            { "duration": responseDuration }
-          ]
+            "target": localStorage.getItem('contentText'), // Required. Target of the response
+            //"qid": "", // Required. Unique assessment/question id
+            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            "values": [
+                { "original_text": localStorage.getItem('contentText') },
+                { "response_text": apiResponse['output'][0]['source']},
+                { "response_correct_words_array": student_correct_words_result},
+                { "response_incorrect_words_array": student_incorrect_words_result},
+                { "response_word_array_result": word_result_array},
+                { "response_word_result": word_result},
+                { "accuracy_percentage": result_per_words},
+                { "duration":  responseDuration}
+             ]
         })
 
         setAi4bharat(
@@ -199,19 +211,8 @@ const VoiceCompair = props => {
             : '-'
         );
         stopLoading();
-      }).catch(error => {
-        clearTimeout(waitAlert);
-        stopLoading();
-        if (error.name !== 'AbortError') {
-          alert('Unable to process your request at the moment.Please try again later.');
-          console.log('error', error);
-        }
       });
-
-    const waitAlert = setTimeout(() => {
-      abortController.abort();
-      alert('Server response is slow at this time. Please explore other lessons');
-    }, 10000);
+      const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
 
   //get permission
