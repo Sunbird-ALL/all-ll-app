@@ -31,6 +31,10 @@ const VoiceCompair = props => {
     te: 'https://ai4b-dev-asr.ulcacontrib.org',
     ur: 'https://api.dhruva.ai4bharat.org',
   };
+
+  const DEFAULT_ASR_LANGUAGE_CODE = 'ai4bharat/whisper-medium-en--gpu--t4';
+  const HINDI_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-hi-gpu--t4';
+
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
 
@@ -38,16 +42,16 @@ const VoiceCompair = props => {
   const [tamilRecordedAudio, setTamilRecordedAudio] = useState('');
   const [tamilRecordedText, setTamilRecordedText] = useState('');
 
-  const [asr_language_code, set_asr_language_code] = useState('ai4bharat/whisper-medium-en--gpu--t4');
+  const [asr_language_code, set_asr_language_code] = useState(DEFAULT_ASR_LANGUAGE_CODE);
 
   useEffect(() => {
 	switch (lang_code) {
-		case 'hi':
-			set_asr_language_code('ai4bharat/conformer-hi-gpu--t4');
-			break;
-		default:
-			set_asr_language_code('ai4bharat/whisper-medium-en--gpu--t4');
-			break;
+	case 'hi':
+		set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
+		break;
+	default:
+		set_asr_language_code(DEFAULT_ASR_LANGUAGE_CODE);
+		break;
 	}
   }, []);
 
