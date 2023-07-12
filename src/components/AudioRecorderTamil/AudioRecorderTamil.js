@@ -115,8 +115,10 @@ function Mic({
   };
 
   const getASROutput = async (asrInput, blob) => {
+    const asr_api_key = process.env.REACT_APP_ASR_API_KEY;
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', asr_api_key);
 
     var payload = JSON.stringify({
       config: {
@@ -147,7 +149,7 @@ function Mic({
     };
 
     const ASR_REST_URL =
-      'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
+      'https://api.dhruva.ai4bharat.org/services/inference/asr/?serviceId=ai4bharat/conformer-multilingual-dravidian-gpu--t4';
     const responseStartTime = new Date().getTime();
 
     fetch(ASR_REST_URL, requestOptions)
