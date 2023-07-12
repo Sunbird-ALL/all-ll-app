@@ -41,15 +41,16 @@ const VoiceCompair = props => {
   const [asr_language_code, set_asr_language_code] = useState('ai4bharat/whisper-medium-en--gpu--t4');
 
   useEffect(() => {
-	if (lang_code === 'hi')
-	{
-		set_asr_language_code('ai4bharat/conformer-hi-gpu--t4');
+	switch (lang_code) {
+		case 'hi':
+			set_asr_language_code('ai4bharat/conformer-hi-gpu--t4');
+			break;
+		default:
+			set_asr_language_code('ai4bharat/whisper-medium-en--gpu--t4');
+			break;
 	}
-	else
-	{
-		set_asr_language_code('ai4bharat/whisper-medium-en--gpu--t4');
-	}
-  }, [])
+  }, []);
+
   useEffect(() => {
     props.setVoiceText(tamilRecordedText);
     props.setRecordedAudio(tamilRecordedAudio);
