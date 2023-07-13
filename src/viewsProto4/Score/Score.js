@@ -141,13 +141,23 @@ function Score() {
   }
 
   function checkVoice(voiceText) {
-    let tempvoiceText = removeForbiddenCharacters(voiceText?.toLowerCase());
+    //let tempvoiceText = removeForbiddenCharacters(voiceText?.toLowerCase());
+    let tempvoiceText = voiceText?.toLowerCase();
+      tempvoiceText = replaceAll(tempvoiceText, '.', '');
+        tempvoiceText = replaceAll(tempvoiceText, "'", '');
+        tempvoiceText = replaceAll(tempvoiceText, ',', '');
+        tempvoiceText = replaceAll(tempvoiceText, '!', '');
+        tempvoiceText = replaceAll(tempvoiceText, '|', '');
+        tempvoiceText = replaceAll(tempvoiceText, '?', '');
+        
     let tempteacherText = teacherText.toLowerCase();
-    // tempteacherText = replaceAll(tempteacherText, '.', '');
-    // tempteacherText = replaceAll(tempteacherText, "'", '');
-    // tempteacherText = replaceAll(tempteacherText, ',', '');
-    // tempteacherText = replaceAll(tempteacherText, '!', '');
+    tempteacherText = replaceAll(tempteacherText, '.', '');
+    tempteacherText = replaceAll(tempteacherText, "'", '');
+    tempteacherText = replaceAll(tempteacherText, ',', '');
+    tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
+    tempteacherText = replaceAll(tempteacherText, '?', '');
+
     setVoiceTextTeacher(tempteacherText);
     if (findRegex(tempteacherText) === voiceText?.toLowerCase()) {
       setTestResult(
@@ -171,9 +181,14 @@ function Score() {
     //set text highlight
 
     let texttemp = voiceText?.toLowerCase();
-    let studentTextArray;
-
-    studentTextArray = texttemp?.split(' ');
+    texttemp = replaceAll(texttemp, '.', '');
+    texttemp = replaceAll(texttemp, "'", '');
+        texttemp = replaceAll(texttemp, ',', '');
+        texttemp = replaceAll(texttemp, '!', '');
+        texttemp = replaceAll(texttemp, '|', '');
+        texttemp = replaceAll(texttemp, '?', '');
+        const studentTextArray = texttemp.split(' ');
+        
     const teacherTextArray = tempteacherText.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
