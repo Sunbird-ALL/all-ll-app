@@ -124,6 +124,12 @@ const VoiceCompair = props => {
 
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();
+        texttemp = replaceAll(texttemp, '.', '');
+        texttemp = replaceAll(texttemp, "'", '');
+        texttemp = replaceAll(texttemp, ',', '');
+        texttemp = replaceAll(texttemp, '!', '');
+        texttemp = replaceAll(texttemp, '|', '');
+        texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
 
         let tempteacherText = localStorage.getItem('contentText').toLowerCase();
@@ -179,7 +185,7 @@ const VoiceCompair = props => {
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [
                 { "original_text": localStorage.getItem('contentText') },
-                { "response_text": apiResponse['output'][0]['source']},
+                { "response_text": studentTextArray},
                 { "response_correct_words_array": student_correct_words_result},
                 { "response_incorrect_words_array": student_incorrect_words_result},
                 { "response_word_array_result": word_result_array},

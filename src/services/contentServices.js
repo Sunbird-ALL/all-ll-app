@@ -1,12 +1,10 @@
+import axios from 'axios';
+
 const schemaName = 'contents';
 const getDb = () => {
   const SchemaData = localStorage.getItem(schemaName);
   return SchemaData ? JSON.parse(SchemaData) : {};
 };
-
-//~ const saveDb = data => {
-  //~ localStorage.setItem(schemaName, JSON.stringify(data, null, 4));
-//~ };
 
 const saveDb = data => {
   // Filter out null values
@@ -71,4 +69,22 @@ export const destroy = (id, callback) => {
   const db = getDb();
   delete db[id];
   saveDb(db, callback);
+};
+
+export const publishDataOnServer = (item, callback) => {
+  axios.post('https://9077-2405-201-1007-e3b-819a-df35-ce87-418f.ngrok-free.app/WordSentence', item)
+    .then(response => {
+      // Handle successful API response
+      console.log('Data published successfully:', response.data);
+      if (callback) {
+        callback(response.data);
+      }
+    })
+    .catch(error => {
+      // Handle API error
+      console.error('Error publishing data:', error);
+      if (callback) {
+        callback(null, error);
+      }
+    });
 };
