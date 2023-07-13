@@ -163,7 +163,6 @@ function Score() {
     }
     //set text highlight
     let texttemp = voiceText.toLowerCase();
-    console.log(texttemp,tempteacherText);
     texttemp = replaceAll(texttemp, '.', '');
     texttemp = replaceAll(texttemp, "'", '');
         texttemp = replaceAll(texttemp, ',', '');
@@ -172,7 +171,6 @@ function Score() {
         texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
     const teacherTextArray = tempteacherText.split(' ');
-    console.log(tempteacherText);
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
     let studentswords = studentTextArray.length;
@@ -252,7 +250,6 @@ function Score() {
       </>
     );
   }
-  // console.log(percentages);
   return (
     <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
       <div className="">
