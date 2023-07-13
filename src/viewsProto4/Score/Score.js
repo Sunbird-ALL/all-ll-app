@@ -145,6 +145,7 @@ function Score() {
     let tempvoiceText = voiceText?.toLowerCase();
       tempvoiceText = replaceAll(tempvoiceText, '.', '');
         tempvoiceText = replaceAll(tempvoiceText, "'", '');
+        tempvoiceText = replaceAll(tempvoiceText, "’", '');
         tempvoiceText = replaceAll(tempvoiceText, ',', '');
         tempvoiceText = replaceAll(tempvoiceText, '!', '');
         tempvoiceText = replaceAll(tempvoiceText, '|', '');
@@ -153,6 +154,7 @@ function Score() {
     let tempteacherText = teacherText.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
+    tempteacherText = replaceAll(tempteacherText, "’", '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
@@ -183,6 +185,7 @@ function Score() {
     let texttemp = voiceText?.toLowerCase();
     texttemp = replaceAll(texttemp, '.', '');
     texttemp = replaceAll(texttemp, "'", '');
+    texttemp = replaceAll(texttemp, "’", '');
         texttemp = replaceAll(texttemp, ',', '');
         texttemp = replaceAll(texttemp, '!', '');
         texttemp = replaceAll(texttemp, '|', '');
