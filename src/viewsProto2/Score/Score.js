@@ -129,6 +129,12 @@ function Score() {
   }
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText?.toLowerCase();
+    tempvoiceText = replaceAll(tempvoiceText, '.', '');
+    tempvoiceText = replaceAll(tempvoiceText, "'", '');
+	tempvoiceText = replaceAll(tempvoiceText, ',', '');
+	tempvoiceText = replaceAll(tempvoiceText, '!', '');
+	tempvoiceText = replaceAll(tempvoiceText, '|', '');
+	tempvoiceText = replaceAll(tempvoiceText, '?', '');
     let tempteacherText = teacherText?.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
