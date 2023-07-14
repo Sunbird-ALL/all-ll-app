@@ -39,6 +39,7 @@ function Home() {
   }, [temp_audio]);
 
   function showHome() {
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         <div className="">
@@ -88,7 +89,7 @@ function Home() {
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_ta, 'hi');
+                    playAudio(welcome_ta, myCurrectLanguage);
                   }}
                 >
                   <center>

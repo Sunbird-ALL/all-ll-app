@@ -97,7 +97,7 @@ function StartLearn() {
       const content_keys = Object.keys(content_list);
       content_keys.forEach(key => {
         if (
-          content_list[key].type == sel_level &&
+          content_list[key].type === sel_level &&
           content_list[key]?.[sel_lang]
         ) {
           tempContent.push({
@@ -150,6 +150,8 @@ function StartLearn() {
     document.getElementById('link_score_proto2').click();
   }
   function showStartLearn() {
+
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         {content != null && content[sel_lang] ? (
@@ -167,9 +169,9 @@ function StartLearn() {
                   </div>*/}
                     <br />
                     <img className="image_class" src={content?.image} />
-                    {sel_lang != 'hi' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div">
-                        {content['hi']?.text ? content['hi']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -181,9 +183,9 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    {sel_lang != 'hi' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div_see">
-                        {content['hi']?.text ? content['hi']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>

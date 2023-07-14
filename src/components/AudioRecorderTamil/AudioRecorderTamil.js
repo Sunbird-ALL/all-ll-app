@@ -115,8 +115,10 @@ function Mic({
   };
 
   const getASROutput = async (asrInput, blob) => {
+    const asr_api_key = process.env.REACT_APP_ASR_API_KEY;
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', asr_api_key);
 
     var payload = JSON.stringify({
       config: {
@@ -136,15 +138,18 @@ function Mic({
       ],
     });
 
+    const abortController = new AbortController();
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
+      signal: abortController.signal
     };
 
     const ASR_REST_URL =
-      'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
+      'https://api.dhruva.ai4bharat.org/services/inference/asr/?serviceId=ai4bharat/conformer-multilingual-dravidian-gpu--t4';
     const responseStartTime = new Date().getTime();
 
     fetch(ASR_REST_URL, requestOptions)
@@ -233,17 +238,24 @@ function Mic({
           })
       })
       .catch(error => {
-        console.log('error', error);
+        clearTimeout(waitAlert);
         stopLoading();
+        if (error.name !== 'AbortError') {
+          alert('Unable to process your request at the moment.Please try again later.');
+          console.log('error', error);
+        }
       });
-    const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
+    const waitAlert = setTimeout(() => {
+      abortController.abort();
+      alert('Server response is slow at this time. Please explore other lessons');
+    }, 10000);
   };
 
     const IconMic = () => {
       if (record) {
-        return <img src={mic_play} className="micimg mic_stop_record"></img>;
+        return <img alt='mic_play' src={mic_play} className="micimg mic_stop_record"></img>;
       } else {
-        return <img src={mic} className={'micimg mic_record'}></img>;
+        return <img alt='mic' src={mic} className={'micimg mic_record'}></img>;
       }
     };
 

@@ -14,6 +14,7 @@ import home_button from '../../assests/Images/home_button.png';
 import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function Home() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const [temp_audio, set_temp_audio] = useState(null);
   const [isplaying, set_isplaying] = useState(false);
   const playAudio = (audio, lang) => {
@@ -88,7 +89,7 @@ function Home() {
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_hi, 'hi');
+                    playAudio(welcome_hi, myCurrectLanguage);
                   }}
                 >
                   <center>

@@ -24,15 +24,17 @@ import new3paragraph from '../../assests/Images/Learn/new3paragraph.png';
 import learn_next from '../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
+import lang_constants from '../../lang/lang_constants.json'
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function Start() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
-      : 'hi'
+      : myCurrectLanguage
   );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
@@ -70,6 +72,11 @@ function Start() {
       scroll_to_top('smooth');
     }
   }, [load_cnt]);
+
+  function getLanguageConstants(languageCode) {
+    return lang_constants[languageCode] || lang_constants['en'];
+  }
+
 
   function showStart() {
     return (
@@ -121,18 +128,18 @@ function Start() {
                       <div className="col s6">
                         <div
                           className={
-                            sel_lang === 'hi'
+                            sel_lang === myCurrectLanguage
                               ? 'lang_select_div_active'
                               : 'lang_select_div_inactive'
                           }
                           onClick={() => {
-                            let temp_dt = 'hi';
+                            let temp_dt = myCurrectLanguage;
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
                             //window.location.reload();
                           }}
                         >
-                          Try in हिंदी
+                         {getLanguageConstants(myCurrectLanguage).HOME_TRY_IN}
                         </div>
                       </div>
                     </div>
@@ -184,7 +191,7 @@ function Start() {
                       <div class="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Word' : 'शब्द'}
+                          {sel_lang === 'en' ? getLanguageConstants('en').COMMON_WORD : getLanguageConstants(myCurrectLanguage).COMMON_WORD}
                           </font>
                           <br />
                           <font className="learn_sub_title">
@@ -214,7 +221,7 @@ function Start() {
                       <div class="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Sentence' : 'वाक्य'}
+                          {sel_lang === 'en' ? getLanguageConstants('en').COMMON_SENTENCE : getLanguageConstants(myCurrectLanguage).COMMON_SENTENCE}
                           </font>
                           <br />
                           <font className="learn_sub_title">
@@ -248,7 +255,7 @@ function Start() {
                       <div class="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Paragraph' : 'अनुच्छेद'}
+                          {sel_lang === 'en' ? getLanguageConstants('en').COMMON_PARAGRAPH : getLanguageConstants(myCurrectLanguage).COMMON_PARAGRAPH}
                           </font>
                           <br />
                           <font className="learn_sub_title">

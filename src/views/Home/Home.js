@@ -35,6 +35,9 @@ function Home() {
     };
   }, [temp_audio]);
   function showHome() {
+
+    // Taking Language from ..env.local file
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         <div className="">
@@ -84,7 +87,7 @@ function Home() {
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_hi, "hi");
+                    playAudio(welcome_hi, myCurrectLanguage);
                   }}
                 >
                   <center>
