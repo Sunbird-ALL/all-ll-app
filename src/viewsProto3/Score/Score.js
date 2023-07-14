@@ -126,6 +126,25 @@ function Score() {
     }
   }, [voiceText]);
 
+  function handleScore(){
+        
+    let tempVoiceText = voiceText.toLowerCase().split(' ');
+    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+    
+    // console.log(tempVoiceText,tempVoiceTeacher);
+  let rightWords=0;
+    for(let i=0;i<tempVoiceText.length;i++){
+      if(tempVoiceText[i]===tempVoiceTeacher[i]){
+        // console.log(tempVoiceText[i],tempVoiceTeacher[i]);
+        rightWords++;
+      }
+    }
+    let myPercentages = Math.round((rightWords/tempVoiceTeacher.length)*100)
+    // setShowScore(myPercentages)
+    return myPercentages
+  }
+
+
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText?.toLowerCase();
     tempvoiceText = replaceAll(tempvoiceText, '.', '');
@@ -241,7 +260,7 @@ function Score() {
     setTestResult(
       <>
         <div className="res_txt">
-          <>{result_per_words}/100</>
+          <>{handleScore()}/100</>
         </div>
         <br />
       </>
@@ -275,7 +294,7 @@ function Score() {
                 <br />
                 <br />
                 <div className="content_text_div_see">
-                  {percentages===100? teacherText:voiceTextHighlight}
+                  {handleScore()===100? teacherText:voiceTextHighlight}
                   </div>
                 <br />
                 {flag ? (
