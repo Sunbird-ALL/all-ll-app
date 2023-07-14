@@ -54,13 +54,6 @@ function StartLearn() {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'hi'
-        ? 'हिंदी'
-        : 'English'
-      : 'English'
-  );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
       ? localStorage.getItem('apphomelevel')

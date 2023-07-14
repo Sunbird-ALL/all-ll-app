@@ -23,6 +23,8 @@ import refresh from "../../assests/Images/refresh.svg";
 import { scroll_to_top } from "../../utils/Helper/JSHelper";
 
 function Speak() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
+
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem("apphomelang")
       ? localStorage.getItem("apphomelang")
@@ -44,11 +46,10 @@ function Speak() {
   const playRecordAudio = () => {
     set_temp_audio2(new Audio(recordedAudio));
   };
-  useEffect(() => {}, []);
   const [load_cnt, set_load_cnt] = useState(0);
 
   const [resultnext, set_resultnext] = useState("start");
-  const [resultnextlang, set_resultnextlang] = useState("hi");
+  const [resultnextlang, set_resultnextlang] = useState(myCurrectLanguage);
 
   useEffect(() => {
     if (load_cnt == 0) {

@@ -64,26 +64,7 @@ function Home() {
                 className="row"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
               >
-                {/*<div
-                  className="col s6"
-                  onClick={() => {
-                    playAudio(welcome_en, "en");
-                  }}
-                >
-                  <center>
-                    <div className="button_home" style={{ width: "150px" }}>
-                      English - ஆங்கிலம்
-                    </div>
-                  </center>
-                </div>*/}
-                {/*<div
-                  className="col s4"
-                  onClick={() => {
-                    playAudio(welcome_hi, "hi");
-                  }}
-                >
-                  <div className="button_home">Hindi</div>
-                </div>*/}
+               
                 <div
                   className="col s12"
                   onClick={() => {

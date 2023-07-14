@@ -39,13 +39,6 @@ function Start() {
       : 'Listen & Speak'
   );
 
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'hi'
-        ? 'हिंदी'
-        : 'English'
-      : 'English'
-  );
   useEffect(() => {
     const metadata = window.name ? JSON.parse(window.name) : {};
 
@@ -173,33 +166,7 @@ function Start() {
                     </div>
                   </center>
                 </div>
-                {/*<div className="col s12">
-                  <br />
-                  <div className="col s6">
-                    <div
-                      className={
-                        sel_lang === "en"
-                          ? "button_learn_active"
-                          : "button_learn"
-                      }
-                      onClick={() => set_sel_lang("en")}
-                    >
-                      English - ஆங்கிலம்
-                    </div>
-                  </div>
-                  <div className="col s6">
-                    <div
-                      className={
-                        sel_lang === "ta"
-                          ? "button_learn_active"
-                          : "button_learn"
-                      }
-                      onClick={() => set_sel_lang("ta")}
-                    >
-                      தமிழ்
-                    </div>
-                  </div>
-                </div>*/}
+           
                 <div className="col s12">
                   <br />
                   <br />
@@ -309,180 +276,19 @@ function Start() {
                     </Link>
                   )}
 
-                  {/*<br />
-                  <div className="col s4">
-                    <img
-                      className={
-                        sel_level === "Word"
-                          ? "icon_image_active"
-                          : "icon_image"
-                      }
-                      onClick={() => set_sel_level("Word")}
-                      src={sel_lang == "en" ? p1Word : p1Word_ta}
-                    />
-                  </div>
-                  <div className="col s4">
-                    <img
-                      className={
-                        sel_level === "Sentence"
-                          ? "icon_image_active"
-                          : "icon_image"
-                      }
-                      onClick={() => set_sel_level("Sentence")}
-                      src={sel_lang == "en" ? p2Sentence : p2Sentence_ta}
-                    />
-                  </div>
-                  <div className="col s4">
-                    <img
-                      className={
-                        sel_level === "Paragraph"
-                          ? "icon_image_active"
-                          : "icon_image"
-                      }
-                      onClick={() => set_sel_level("Paragraph")}
-                      src={sel_lang == "en" ? p3Para : p3Para_ta}
-                    />
-                    </div>*/}
+            
                 </div>
-                {/*<div className="col s12">
-                  <br />
-                  <div className="col s4">
-                    <img
-                      className={
-                        sel_cource === "See & Speak"
-                          ? "icon_image_active icon_cource"
-                          : "icon_image icon_cource"
-                      }
-                      onClick={() => set_sel_cource("See & Speak")}
-                      src={p1SeanSpeak}
-                    />
-                  </div>
-                  <div className="col s6">
-                    <img
-                      className={
-                        sel_cource === "Listen & Speak"
-                          ? "icon_image_active icon_cource"
-                          : "icon_image icon_cource"
-                      }
-                      onClick={() => set_sel_cource("Listen & Speak")}
-                      src={p2Listen}
-                    />
-                  </div>
-                  <div className="col s6">
-                    <img
-                      className={
-                        sel_cource === "Read & Speak"
-                          ? "icon_image_active icon_cource"
-                          : "icon_image icon_cource"
-                      }
-                      onClick={() => set_sel_cource("Read & Speak")}
-                      src={p3Read}
-                    />
-                  </div>
-                </div>*/}
-                {/*<div className="col s12">
-                  <Select
-                    label="Select Language"
-                    multiple={false}
-                    options={{
-                      classes: "",
-                      dropdownOptions: {
-                        alignment: "left",
-                        autoTrigger: true,
-                        closeOnClick: true,
-                        constrainWidth: true,
-                        coverTrigger: true,
-                        hover: false,
-                        inDuration: 150,
-                        onCloseEnd: null,
-                        onCloseStart: null,
-                        onOpenEnd: null,
-                        onOpenStart: null,
-                        outDuration: 250,
-                      },
-                    }}
-                    value={sel_lang}
-                    onChange={(e) => set_sel_lang(e.target.value)}
-                    s={12}
-                  >
-                    <option value="en">English</option>
-                    <option value="hi">Hindi</option>
-                    <option value="ta">Tamil</option>
-                  </Select>
-                </div>
-                <div className="col s12">
-                  <Select
-                    label="Select Level"
-                    multiple={false}
-                    options={{
-                      classes: "",
-                      dropdownOptions: {
-                        alignment: "left",
-                        autoTrigger: true,
-                        closeOnClick: true,
-                        constrainWidth: true,
-                        coverTrigger: true,
-                        hover: false,
-                        inDuration: 150,
-                        onCloseEnd: null,
-                        onCloseStart: null,
-                        onOpenEnd: null,
-                        onOpenStart: null,
-                        outDuration: 250,
-                      },
-                    }}
-                    value={sel_level}
-                    onChange={(e) => set_sel_level(e.target.value)}
-                    s={12}
-                  >
-                    <option value="Word">Word</option>
-                    <option value="Sentence">Sentence</option>
-                    <option value="Paragraph">Paragraph</option>
-                  </Select>
-                </div>
-                <div className="col s12">
-                  <Select
-                    label="Select Course"
-                    multiple={false}
-                    options={{
-                      classes: "",
-                      dropdownOptions: {
-                        alignment: "left",
-                        autoTrigger: true,
-                        closeOnClick: true,
-                        constrainWidth: true,
-                        coverTrigger: true,
-                        hover: false,
-                        inDuration: 150,
-                        onCloseEnd: null,
-                        onCloseStart: null,
-                        onOpenEnd: null,
-                        onOpenStart: null,
-                        outDuration: 250,
-                      },
-                    }}
-                    value={sel_cource}
-                    onChange={(e) => set_sel_cource(e.target.value)}
-                    s={12}
-                  >
-                    <option value="See & Speak">See & Speak</option>
-                    <option value="Listen & Speak">Listen & Speak</option>
-                    <option value="Read & Speak">Read & Speak</option>
-                  </Select>
-                  </div>*/}
+               
               </div>
               <br />
               <div>
-                {/*<NewBottomHomeNextBar
-                  nextlink={"startlearn"}
-                  resultnextlang={sel_lang}
-                />*/}
+
               </div>
             </div>
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
-        {/* <AppFooter hideNavigation={true} /> */}
+    
       </>
     );
   }
