@@ -133,13 +133,20 @@ function Score() {
     
     // console.log(tempVoiceText,tempVoiceTeacher);
   let rightWords=0;
-    for(let i=0;i<tempVoiceText.length;i++){
+  let myLength = 0;
+  if(tempVoiceTeacher.length>tempVoiceText.length){
+    myLength=tempVoiceTeacher.length;
+  }
+  else{
+    myLength=tempVoiceText.length;
+  }
+    for(let i=0;i<myLength;i++){
       if(tempVoiceText[i]===tempVoiceTeacher[i]){
         // console.log(tempVoiceText[i],tempVoiceTeacher[i]);
         rightWords++;
       }
     }
-    let myPercentages = Math.round((rightWords/tempVoiceTeacher.length)*100)
+    let myPercentages = Math.round((rightWords/myLength)*100)
     // setShowScore(myPercentages)
     return myPercentages
   }
@@ -194,8 +201,9 @@ function Score() {
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
-    for (let i = 0; i < studentTextArray.length; i++) {
-      if (teacherTextArray.includes(studentTextArray[i])) {
+
+    for(let i = 0; i < studentTextArray?.length; i++){
+      if (teacherTextArray[i]===studentTextArray[i]) {
         correct_words++;
         student_text_result.push(
           <>
@@ -213,6 +221,25 @@ function Score() {
         );
       }
     }
+    // for (let i = 0; i < studentTextArray.length; i++) {
+    //   if (teacherTextArray.includes(studentTextArray[i])) {
+    //     correct_words++;
+    //     student_text_result.push(
+    //       <>
+    //         {' '}
+    //         <font className="correct_text_remove">{studentTextArray[i]}</font>
+    //       </>
+    //     );
+    //   } else {
+    //     wrong_words++;
+    //     student_text_result.push(
+    //       <>
+    //         {' '}
+    //         <font className="inc_text">{studentTextArray[i]}</font>
+    //       </>
+    //     );
+    //   }
+    // }
     setOcurracy_percentage(
       <>
         {' '}
