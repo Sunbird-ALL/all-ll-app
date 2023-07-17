@@ -7,11 +7,10 @@ import new3paragraph from '../../assests/Images/Learn/new3paragraph.png';
 import learn_next from '../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-import lang_constants from '../../lang/lang_constants.json'
+import lang_constants from '../../lang/lang_constants.json';
 /*chakra*/
 import { getParameter } from '../../utils/helper';
 import axios from 'axios';
-console.log("proto4");
 function Start() {
   const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const [url, setUrl] = useState('');
@@ -100,7 +99,6 @@ function Start() {
     return lang_constants[languageCode] || lang_constants['en'];
   }
 
-
   function showStart() {
     return (
       <>
@@ -144,7 +142,7 @@ function Start() {
                             //window.location.reload();
                           }}
                         >
-                          Try in English
+                          {getLanguageConstants('en').HOME_TRY_IN}
                         </div>
                       </div>
                       <div className="col s6">
@@ -160,13 +158,13 @@ function Start() {
                             set_sel_lang(temp_dt);
                           }}
                         >
-                          Try in हिंदी
+                          {getLanguageConstants(myCurrectLanguage).HOME_TRY_IN}
                         </div>
                       </div>
                     </div>
                   </center>
                 </div>
-           
+
                 <div className="col s12">
                   <br />
                   <br />
@@ -181,13 +179,20 @@ function Start() {
                       <div className="learn_level_div">
                         <div className="col s2">
                           <div className="learn_level_div_start">
-                            <img src={new1word} className="learn_level_img" alt="Word" />
+                            <img
+                              src={new1word}
+                              className="learn_level_img"
+                              alt="Word"
+                            />
                           </div>
                         </div>
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_WORD : getLanguageConstants(myCurrectLanguage).COMMON_WORD}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_WORD
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_WORD}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -196,7 +201,11 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning" />
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
@@ -224,7 +233,10 @@ function Start() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_SENTENCE : getLanguageConstants(myCurrectLanguage).COMMON_SENTENCE}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_SENTENCE
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_SENTENCE}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -233,7 +245,11 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning" />
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
@@ -261,7 +277,10 @@ function Start() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_PARAGRAPH : getLanguageConstants(myCurrectLanguage).COMMON_PARAGRAPH}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_PARAGRAPH
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_PARAGRAPH}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -270,25 +289,190 @@ function Start() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
                   )}
 
-            
+                  {/*<br />
+                  <div className="col s4">
+                    <img
+                      className={
+                        sel_level === "Word"
+                          ? "icon_image_active"
+                          : "icon_image"
+                      }
+                      onClick={() => set_sel_level("Word")}
+                      src={sel_lang == "en" ? p1Word : p1Word_ta}
+                    />
+                  </div>
+                  <div className="col s4">
+                    <img
+                      className={
+                        sel_level === "Sentence"
+                          ? "icon_image_active"
+                          : "icon_image"
+                      }
+                      onClick={() => set_sel_level("Sentence")}
+                      src={sel_lang == "en" ? p2Sentence : p2Sentence_ta}
+                    />
+                  </div>
+                  <div className="col s4">
+                    <img
+                      className={
+                        sel_level === "Paragraph"
+                          ? "icon_image_active"
+                          : "icon_image"
+                      }
+                      onClick={() => set_sel_level("Paragraph")}
+                      src={sel_lang == "en" ? p3Para : p3Para_ta}
+                    />
+                    </div>*/}
                 </div>
-               
+                {/*<div className="col s12">
+                  <br />
+                  <div className="col s4">
+                    <img
+                      className={
+                        sel_cource === "See & Speak"
+                          ? "icon_image_active icon_cource"
+                          : "icon_image icon_cource"
+                      }
+                      onClick={() => set_sel_cource("See & Speak")}
+                      src={p1SeanSpeak}
+                    />
+                  </div>
+                  <div className="col s6">
+                    <img
+                      className={
+                        sel_cource === "Listen & Speak"
+                          ? "icon_image_active icon_cource"
+                          : "icon_image icon_cource"
+                      }
+                      onClick={() => set_sel_cource("Listen & Speak")}
+                      src={p2Listen}
+                    />
+                  </div>
+                  <div className="col s6">
+                    <img
+                      className={
+                        sel_cource === "Read & Speak"
+                          ? "icon_image_active icon_cource"
+                          : "icon_image icon_cource"
+                      }
+                      onClick={() => set_sel_cource("Read & Speak")}
+                      src={p3Read}
+                    />
+                  </div>
+                </div>*/}
+                {/*<div className="col s12">
+                  <Select
+                    label="Select Language"
+                    multiple={false}
+                    options={{
+                      classes: "",
+                      dropdownOptions: {
+                        alignment: "left",
+                        autoTrigger: true,
+                        closeOnClick: true,
+                        constrainWidth: true,
+                        coverTrigger: true,
+                        hover: false,
+                        inDuration: 150,
+                        onCloseEnd: null,
+                        onCloseStart: null,
+                        onOpenEnd: null,
+                        onOpenStart: null,
+                        outDuration: 250,
+                      },
+                    }}
+                    value={sel_lang}
+                    onChange={(e) => set_sel_lang(e.target.value)}
+                    s={12}
+                  >
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="ta">Tamil</option>
+                  </Select>
+                </div>
+                <div className="col s12">
+                  <Select
+                    label="Select Level"
+                    multiple={false}
+                    options={{
+                      classes: "",
+                      dropdownOptions: {
+                        alignment: "left",
+                        autoTrigger: true,
+                        closeOnClick: true,
+                        constrainWidth: true,
+                        coverTrigger: true,
+                        hover: false,
+                        inDuration: 150,
+                        onCloseEnd: null,
+                        onCloseStart: null,
+                        onOpenEnd: null,
+                        onOpenStart: null,
+                        outDuration: 250,
+                      },
+                    }}
+                    value={sel_level}
+                    onChange={(e) => set_sel_level(e.target.value)}
+                    s={12}
+                  >
+                    <option value="Word">Word</option>
+                    <option value="Sentence">Sentence</option>
+                    <option value="Paragraph">Paragraph</option>
+                  </Select>
+                </div>
+                <div className="col s12">
+                  <Select
+                    label="Select Course"
+                    multiple={false}
+                    options={{
+                      classes: "",
+                      dropdownOptions: {
+                        alignment: "left",
+                        autoTrigger: true,
+                        closeOnClick: true,
+                        constrainWidth: true,
+                        coverTrigger: true,
+                        hover: false,
+                        inDuration: 150,
+                        onCloseEnd: null,
+                        onCloseStart: null,
+                        onOpenEnd: null,
+                        onOpenStart: null,
+                        outDuration: 250,
+                      },
+                    }}
+                    value={sel_cource}
+                    onChange={(e) => set_sel_cource(e.target.value)}
+                    s={12}
+                  >
+                    <option value="See & Speak">See & Speak</option>
+                    <option value="Listen & Speak">Listen & Speak</option>
+                    <option value="Read & Speak">Read & Speak</option>
+                  </Select>
+                  </div>*/}
               </div>
               <br />
               <div>
-
+                {/*<NewBottomHomeNextBar
+                  nextlink={"startlearn"}
+                  resultnextlang={sel_lang}
+                />*/}
               </div>
             </div>
             <div className="cols s12 m2 l3"></div>
           </div>
         </div>
-    
+        {/* <AppFooter hideNavigation={true} /> */}
       </>
     );
   }

@@ -33,13 +33,7 @@ function Start3() {
       : 'Listen & Speak'
   );
 
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === myCurrectLanguage
-        ? 'हिंदी'
-        : 'English'
-      : 'English'
-  );
+
   useEffect(() => {
     const metadata = window.name ? JSON.parse(window.name) : {};
     const url = getParameter('source', location.search);
@@ -132,7 +126,7 @@ function Start3() {
                             //window.location.reload();
                           }}
                         >
-                          Try in English
+                         {getLanguageConstants('en').HOME_TRY_IN}
                         </div>
                       </div>
                       <div className="col s6">

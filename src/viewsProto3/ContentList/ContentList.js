@@ -56,7 +56,66 @@ function ContentList() {
             <div className="col s12 m12 l2"></div>
             <div className="col s12 m12 l8 content_list">
               <div className="row">
-             
+               {/*<div className="col s12">
+                  <Select
+                    label="Select Language"
+                    multiple={false}
+                    options={{
+                      classes: "",
+                      dropdownOptions: {
+                        alignment: "left",
+                        autoTrigger: true,
+                        closeOnClick: true,
+                        constrainWidth: true,
+                        coverTrigger: true,
+                        hover: false,
+                        inDuration: 150,
+                        onCloseEnd: null,
+                        onCloseStart: null,
+                        onOpenEnd: null,
+                        onOpenStart: null,
+                        outDuration: 250,
+                      },
+                    }}
+                    value={sel_lang}
+                    onChange={(e) => set_sel_lang(e.target.value)}
+                    s={12}
+                  >
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="ta">Tamil</option>
+                  </Select>
+                </div>
+                <div className="col s12">
+                  <Select
+                    label="Select Course"
+                    multiple={false}
+                    options={{
+                      classes: "",
+                      dropdownOptions: {
+                        alignment: "left",
+                        autoTrigger: true,
+                        closeOnClick: true,
+                        constrainWidth: true,
+                        coverTrigger: true,
+                        hover: false,
+                        inDuration: 150,
+                        onCloseEnd: null,
+                        onCloseStart: null,
+                        onOpenEnd: null,
+                        onOpenStart: null,
+                        outDuration: 250,
+                      },
+                    }}
+                    value={sel_cource}
+                    onChange={(e) => set_sel_cource(e.target.value)}
+                    s={12}
+                  >
+                    <option value="See & Speak">See & Speak</option>
+                    <option value="Listen & Speak">Listen & Speak</option>
+                    <option value="Read & Speak">Read & Speak</option>
+                  </Select>
+                </div>*/}
               </div>
               <center>
                 {extractContent.map((item, index) => {
