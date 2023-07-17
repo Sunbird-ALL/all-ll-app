@@ -13,6 +13,7 @@ import { interactCall } from '../../services/callTelemetryIntract';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 function StartLearn() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const navigate = useNavigate();
   const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null);
@@ -166,6 +167,7 @@ function StartLearn() {
     document.getElementById('link_score_proto3').click();
   }
   function showStartLearn() {
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         {content != null && content[sel_lang] ? (
@@ -186,9 +188,9 @@ function StartLearn() {
                     <div className="content_text_div">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
-                    {sel_lang !== 'ta' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -200,9 +202,9 @@ function StartLearn() {
                     <div className="content_text_div_see">
                       {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
                     </div>
-                    {sel_lang !== 'ta' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div_see_ta"  style={{fontSize:'21px'}}>
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>

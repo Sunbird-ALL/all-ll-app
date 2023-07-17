@@ -35,6 +35,9 @@ function Home() {
     };
   }, [temp_audio]);
   function showHome() {
+
+    // Taking Language from ..env.local file
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         <div className="">
@@ -61,30 +64,11 @@ function Home() {
                 className="row"
                 style={{ marginLeft: "5px", marginRight: "5px" }}
               >
-                {/*<div
-                  className="col s6"
-                  onClick={() => {
-                    playAudio(welcome_en, "en");
-                  }}
-                >
-                  <center>
-                    <div className="button_home" style={{ width: "150px" }}>
-                      English - ஆங்கிலம்
-                    </div>
-                  </center>
-                </div>*/}
-                {/*<div
-                  className="col s4"
-                  onClick={() => {
-                    playAudio(welcome_hi, "hi");
-                  }}
-                >
-                  <div className="button_home">Hindi</div>
-                </div>*/}
+               
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_ta, "ta");
+                    playAudio(welcome_hi, myCurrectLanguage);
                   }}
                 >
                   <center>

@@ -253,9 +253,9 @@ function Mic({
 
     const IconMic = () => {
       if (record) {
-        return <img src={mic_play} className="micimg mic_stop_record"></img>;
+        return <img alt='mic_play' src={mic_play} className="micimg mic_stop_record"></img>;
       } else {
-        return <img src={mic} className={'micimg mic_record'}></img>;
+        return <img alt='mic' src={mic} className={'micimg mic_record'}></img>;
       }
     };
 
