@@ -1,4 +1,5 @@
 import axios from 'axios';
+import uuid from 'react-uuid';
 
 const schemaName = 'contents';
 const getDb = () => {
@@ -6,13 +7,8 @@ const getDb = () => {
   return SchemaData ? JSON.parse(SchemaData) : {};
 };
 
-const saveDb = data => {
-  // Filter out null values
-  const filteredData = Object.entries(data)
-    .filter(([_, value]) => value !== null)
-    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-
-  localStorage.setItem(schemaName, JSON.stringify(filteredData, null, 4));
+const saveDb = (data) => {
+  localStorage.setItem(schemaName, JSON.stringify(data, null, 4));
 };
 
 export const getAll = () => {
@@ -40,14 +36,11 @@ export const getOne = id => {
   return data.find(it => it.id == id);
 };
 
-export const create = data => {
+export const create = (data) => {
   const db = getDb();
-  const idArr = Object.keys(db);
-  let id = 0;
-  if (idArr.length > 0) {
-    id = Math.max(...idArr);
-  }
-  db[id + 1] = data;
+  let id = "";
+  data.id =  uuid();
+  db[id+1] = data;
   saveDb(db);
 };
 
@@ -71,8 +64,9 @@ export const destroy = (id, callback) => {
   saveDb(db, callback);
 };
 
+
 export const publishDataOnServer = (item, callback) => {
-  axios.post('https://9077-2405-201-1007-e3b-819a-df35-ce87-418f.ngrok-free.app/WordSentence', item)
+  axios.post('https://all-content-respository-backend.onrender.com/v1/WordSentence', item)
     .then(response => {
       // Handle successful API response
       console.log('Data published successfully:', response.data);

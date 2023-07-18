@@ -18,6 +18,18 @@ import p1 from "../../assests/Images/Content/p1.png";
 import p2 from "../../assests/Images/Content/p2.jpeg";
 import p3 from "../../assests/Images/Content/p3.jpeg";
 
+
+/*
+// Get the data according to content type with limit
+const response = await fetch("https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Word&page=1&limit=5", {
+	method: "get",
+	headers: {
+	'ngrok-skip-browser-warning': 6124
+	}
+});
+
+const dataFromAPI = await response.json();
+*/
 const content_list = [
   {
     title: "Word",
