@@ -63,9 +63,19 @@ function Start() {
       axios
         .get(filePath)
         .then(res => {
-          localStorage.setItem('contents', JSON.stringify(res.data));
+			let contentItemListA = localStorage.getItem("contents");
+			let data = null;
 
-          let data = JSON.parse(JSON.stringify(res.data));
+			if (contentItemListA == null) {
+				console.log("no data in local storage. Inserting default data");
+			    localStorage.setItem('contents', JSON.stringify(res.data));
+			    data = JSON.parse(JSON.stringify(res.data));
+			} else {
+				console.log("inserting data from local storage");
+			  // Handle the case when "contents" item does not exist in localStorage
+			  contentItemListA = Object.values(JSON.parse(contentItemListA));
+			  data = JSON.parse(JSON.stringify(contentItemListA));
+			}
           let val =
             data &&
             Object.values(data).map(item => {
@@ -81,8 +91,6 @@ function Start() {
           localStorage.setItem('apphomelevel', tabShowWord);
         })
         .catch(err => console.log(err));
-    } else {
-      localStorage.removeItem('contents');
     }
   };
 

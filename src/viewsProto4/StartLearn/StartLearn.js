@@ -83,7 +83,19 @@ const [isAudioPlay, setIsAudioPlay] = useState(true);
     axios
       .get(filePath)
       .then(res => {
-        localStorage.setItem('contents', JSON.stringify(res.data));
+        let contentItemListA = localStorage.getItem("contents");
+		let data = null;
+
+		if (contentItemListA == null) {
+			console.log("no data in local storage. Inserting default data");
+			localStorage.setItem('contents', JSON.stringify(res.data));
+			data = JSON.parse(JSON.stringify(res.data));
+		} else {
+			console.log("inserting data from local storage");
+		  // Handle the case when "contents" item does not exist in localStorage
+		  contentItemListA = Object.values(JSON.parse(contentItemListA));
+		  data = JSON.parse(JSON.stringify(contentItemListA));
+		}
 
         if (load_cnt === 0) {
           const content_list = getContentList();
