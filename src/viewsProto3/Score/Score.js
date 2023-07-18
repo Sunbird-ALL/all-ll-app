@@ -118,7 +118,7 @@ function Score() {
   const [ocurracy_percentage, setOcurracy_percentage] = useState('');
   const [newtextresult, setnewtextresult] = useState('');
   const [fluencyresult, setfluencyresult] = useState('');
-  const [percentages, setpercentages] = useState(0)
+  const [percentages, setpercentages] = useState(0);
 
   useEffect(() => {
     if (voiceText && voiceText !== '') {
@@ -126,20 +126,40 @@ function Score() {
     }
   }, [voiceText]);
 
+  function handleScore() {
+    let tempVoiceText = voiceText.toLowerCase().split(' ');
+    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+
+    let rightWords = 0;
+    let myLength = 0;
+    if (tempVoiceTeacher.length > tempVoiceText.length) {
+      myLength = tempVoiceTeacher.length;
+    } else {
+      myLength = tempVoiceText.length;
+    }
+    for (let i = 0; i < myLength; i++) {
+      if (tempVoiceText[i] === tempVoiceTeacher[i]) {
+        rightWords++;
+      }
+    }
+    let myPercentages = Math.round((rightWords / myLength) * 100);
+    return myPercentages;
+  }
+
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText?.toLowerCase();
     tempvoiceText = replaceAll(tempvoiceText, '.', '');
     tempvoiceText = replaceAll(tempvoiceText, "'", '');
-    tempvoiceText = replaceAll(tempvoiceText, "’", '');
-	tempvoiceText = replaceAll(tempvoiceText, ',', '');
-	tempvoiceText = replaceAll(tempvoiceText, '!', '');
-	tempvoiceText = replaceAll(tempvoiceText, '|', '');
-	tempvoiceText = replaceAll(tempvoiceText, '?', '');
+    tempvoiceText = replaceAll(tempvoiceText, '’', '');
+    tempvoiceText = replaceAll(tempvoiceText, ',', '');
+    tempvoiceText = replaceAll(tempvoiceText, '!', '');
+    tempvoiceText = replaceAll(tempvoiceText, '|', '');
+    tempvoiceText = replaceAll(tempvoiceText, '?', '');
 
     let tempteacherText = teacherText?.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
-    tempteacherText = replaceAll(tempteacherText, "’", '');
+    tempteacherText = replaceAll(tempteacherText, '’', '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
@@ -175,8 +195,9 @@ function Score() {
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
-    for (let i = 0; i < studentTextArray.length; i++) {
-      if (teacherTextArray.includes(studentTextArray[i])) {
+
+    for (let i = 0; i < studentTextArray?.length; i++) {
+      if (teacherTextArray[i] === studentTextArray[i]) {
         correct_words++;
         student_text_result.push(
           <>
@@ -207,12 +228,12 @@ function Score() {
       result_per_words = Math.round(
         Number((correct_words / originalwords) * 100)
       );
-      setpercentages(result_per_words)
+      setpercentages(result_per_words);
     } else {
       result_per_words = Math.round(
         Number((correct_words / studentswords) * 100)
       );
-      setpercentages(result_per_words)
+      setpercentages(result_per_words);
     }
     set_numberOfPieces(result_per_words);
     set_isStart(true);
@@ -241,7 +262,7 @@ function Score() {
     setTestResult(
       <>
         <div className="res_txt">
-          <>{result_per_words}/100</>
+          <>{handleScore()}/100</>
         </div>
         <br />
       </>
@@ -275,8 +296,8 @@ function Score() {
                 <br />
                 <br />
                 <div className="content_text_div_see">
-                  {percentages===100? teacherText:voiceTextHighlight}
-                  </div>
+                  {handleScore() === 100 ? teacherText : voiceTextHighlight}
+                </div>
                 <br />
                 {flag ? (
                   <div style={{ marginBottom: '-30px' }}>

@@ -127,14 +127,34 @@ function Score() {
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
+  function handleScore() {
+    let tempVoiceText = voiceText.toLowerCase().split(' ');
+    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+
+    let rightWords = 0;
+    let myLength = 0;
+    if (tempVoiceTeacher.length > tempVoiceText.length) {
+      myLength = tempVoiceTeacher.length;
+    } else {
+      myLength = tempVoiceText.length;
+    }
+    for (let i = 0; i < myLength; i++) {
+      if (tempVoiceText[i] === tempVoiceTeacher[i]) {
+        rightWords++;
+      }
+    }
+    let myPercentages = Math.round((rightWords / myLength) * 100);
+    return myPercentages;
+  }
+
   function checkVoice(voiceText) {
     let tempvoiceText = voiceText?.toLowerCase();
     tempvoiceText = replaceAll(tempvoiceText, '.', '');
     tempvoiceText = replaceAll(tempvoiceText, "'", '');
-	tempvoiceText = replaceAll(tempvoiceText, ',', '');
-	tempvoiceText = replaceAll(tempvoiceText, '!', '');
-	tempvoiceText = replaceAll(tempvoiceText, '|', '');
-	tempvoiceText = replaceAll(tempvoiceText, '?', '');
+    tempvoiceText = replaceAll(tempvoiceText, ',', '');
+    tempvoiceText = replaceAll(tempvoiceText, '!', '');
+    tempvoiceText = replaceAll(tempvoiceText, '|', '');
+    tempvoiceText = replaceAll(tempvoiceText, '?', '');
     let tempteacherText = teacherText?.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
@@ -172,8 +192,9 @@ function Score() {
     let wrong_words = 0;
     let correct_words = 0;
     let result_per_words = 0;
+
     for (let i = 0; i < studentTextArray?.length; i++) {
-      if (teacherTextArray.includes(studentTextArray[i])) {
+      if (teacherTextArray[i] === studentTextArray[i]) {
         correct_words++;
         student_text_result.push(
           <>
@@ -239,7 +260,7 @@ function Score() {
           {originalwords < studentswords ? (
             <font style={{ color: 'red' }}>You have recorded extra word</font>
           ) : (
-            <>{result_per_words}/100</>
+            <>{handleScore()}/100</>
           )}
         </div>
         <br />
@@ -288,7 +309,7 @@ function Score() {
                   <hr />
                   {testResult}
                   <hr />*/}
-                  {contenttype != 'Word' && numberOfPieces > 50 ? (
+                  {contenttype !== 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
                       <br />

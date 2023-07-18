@@ -140,21 +140,42 @@ function Score() {
     return string.split(search).join(replace);
   }
 
+  function handleScore() {
+    let tempVoiceText = voiceText.toLowerCase().split(' ');
+    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+
+    let rightWords = 0;
+    let myLength = 0;
+    if (tempVoiceTeacher.length > tempVoiceText.length) {
+      myLength = tempVoiceTeacher.length;
+    } else {
+      myLength = tempVoiceText.length;
+    }
+    for (let i = 0; i < myLength; i++) {
+      if (tempVoiceText[i] === tempVoiceTeacher[i]) {
+        rightWords++;
+      }
+    }
+    let myPercentages = Math.round((rightWords / myLength) * 100);
+
+    return myPercentages;
+  }
+
   function checkVoice(voiceText) {
     //let tempvoiceText = removeForbiddenCharacters(voiceText?.toLowerCase());
     let tempvoiceText = voiceText?.toLowerCase();
-      tempvoiceText = replaceAll(tempvoiceText, '.', '');
-        tempvoiceText = replaceAll(tempvoiceText, "'", '');
-        tempvoiceText = replaceAll(tempvoiceText, "’", '');
-        tempvoiceText = replaceAll(tempvoiceText, ',', '');
-        tempvoiceText = replaceAll(tempvoiceText, '!', '');
-        tempvoiceText = replaceAll(tempvoiceText, '|', '');
-        tempvoiceText = replaceAll(tempvoiceText, '?', '');
-        
+    tempvoiceText = replaceAll(tempvoiceText, '.', '');
+    tempvoiceText = replaceAll(tempvoiceText, "'", '');
+    tempvoiceText = replaceAll(tempvoiceText, '’', '');
+    tempvoiceText = replaceAll(tempvoiceText, ',', '');
+    tempvoiceText = replaceAll(tempvoiceText, '!', '');
+    tempvoiceText = replaceAll(tempvoiceText, '|', '');
+    tempvoiceText = replaceAll(tempvoiceText, '?', '');
+
     let tempteacherText = teacherText.toLowerCase();
     tempteacherText = replaceAll(tempteacherText, '.', '');
     tempteacherText = replaceAll(tempteacherText, "'", '');
-    tempteacherText = replaceAll(tempteacherText, "’", '');
+    tempteacherText = replaceAll(tempteacherText, '’', '');
     tempteacherText = replaceAll(tempteacherText, ',', '');
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
@@ -185,13 +206,13 @@ function Score() {
     let texttemp = voiceText?.toLowerCase();
     texttemp = replaceAll(texttemp, '.', '');
     texttemp = replaceAll(texttemp, "'", '');
-    texttemp = replaceAll(texttemp, "’", '');
-        texttemp = replaceAll(texttemp, ',', '');
-        texttemp = replaceAll(texttemp, '!', '');
-        texttemp = replaceAll(texttemp, '|', '');
-        texttemp = replaceAll(texttemp, '?', '');
-        const studentTextArray = texttemp.split(' ');
-        
+    texttemp = replaceAll(texttemp, '’', '');
+    texttemp = replaceAll(texttemp, ',', '');
+    texttemp = replaceAll(texttemp, '!', '');
+    texttemp = replaceAll(texttemp, '|', '');
+    texttemp = replaceAll(texttemp, '?', '');
+    const studentTextArray = texttemp.split(' ');
+
     const teacherTextArray = tempteacherText.split(' ');
     let student_text_result = [];
     let originalwords = teacherTextArray.length;
@@ -201,13 +222,12 @@ function Score() {
     let result_per_words = 0;
 
     for (let i = 0; i < studentTextArray?.length; i++) {
-      let arryResult = teacherText.split(' ');
-      if (tempteacherText.includes(studentTextArray[i])) {
+      if (teacherTextArray[i] === studentTextArray[i]) {
         correct_words++;
         student_text_result.push(
           <>
             {' '}
-            <font className="correct_text_remove">{arryResult[i]}</font>
+            <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
       } else {
@@ -268,7 +288,7 @@ function Score() {
           {originalwords < studentswords ? (
             <font style={{ color: 'red' }}>You have recorded extra word</font>
           ) : (
-            <>{result_per_words}/100</>
+            <>{handleScore()}/100</>
           )}
         </div>
         <br />
@@ -308,7 +328,7 @@ function Score() {
 
               <div>
                 <center>
-                  {contenttype != 'Word' && numberOfPieces > 50 ? (
+                  {contenttype !== 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
                       <br />
@@ -331,16 +351,16 @@ function Score() {
                   <br />
                   {flag ? (
                     <>
-                    <img
-                      style={{
-                        width: '72px',
-                        height: '72px',
-                        cursor: 'pointer',
-                      }}
-                      src={play}
-                      onClick={() => playAudio()}
+                      <img
+                        style={{
+                          width: '72px',
+                          height: '72px',
+                          cursor: 'pointer',
+                        }}
+                        src={play}
+                        onClick={() => playAudio()}
                       />
-                    <p
+                      <p
                         style={{
                           position: 'relative',
                           marginTop: '-1px',
@@ -351,17 +371,17 @@ function Score() {
                       >
                         Play
                       </p>
-                      </>
+                    </>
                   ) : (
                     <>
-                    <img
-                      style={{
-                        width: '72px',
-                        height: '72px',
-                        cursor: 'pointer',
-                      }}
-                      src={pause}
-                      onClick={() => pauseAudio()}
+                      <img
+                        style={{
+                          width: '72px',
+                          height: '72px',
+                          cursor: 'pointer',
+                        }}
+                        src={pause}
+                        onClick={() => pauseAudio()}
                       />
                       <p
                         style={{
@@ -374,7 +394,7 @@ function Score() {
                       >
                         Pause
                       </p>
-                      </>
+                    </>
                   )}
 
                   <br />
@@ -387,19 +407,20 @@ function Score() {
               <div className="app_footbar_remove">
                 <div className="row" style={{ padding: '5px' }}>
                   {resultnext === '' || apphomelevel === 'Paragraph' ? (
-                    <div  style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      gap: '54px',
-                      marginTop: '-10px',
-                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: '54px',
+                        marginTop: '-10px',
+                      }}
+                    >
                       <div
-                        // className={
-                        //   isfromresult === 'learn'
-                        //     ? 'col s6 center'
-                        //     : 'col s12 center'
-                        // }
-                        
+                      // className={
+                      //   isfromresult === 'learn'
+                      //     ? 'col s6 center'
+                      //     : 'col s12 center'
+                      // }
                       >
                         <div onClick={trySameSentence}>
                           <img src={refresh} className="home_icon"></img>
@@ -408,11 +429,11 @@ function Score() {
                         </div>
                       </div>
                       <div
-                        // className={
-                        //   isfromresult === 'learn'
-                        //     ? 'col s6 center'
-                        //     : 'col s12 center hide'
-                        // }
+                      // className={
+                      //   isfromresult === 'learn'
+                      //     ? 'col s6 center'
+                      //     : 'col s12 center hide'
+                      // }
                       >
                         <div onClick={newSentence}>
                           <img src={refresh} className="home_icon"></img>
@@ -437,40 +458,46 @@ function Score() {
                     </div>
                   ) : (
                     <>
-                    <div style={{display:'flex', justifyContent:'center', gap:'74px', marginTop:'-10px'}}>
-
                       <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          gap: '74px',
+                          marginTop: '-10px',
+                        }}
+                      >
+                        <div
                         // className={
                         //   isfromresult === 'learn'
                         //     ? 'col s6 center'
                         //     : 'col s12 center'
                         // }
                         >
-                        <div
-                          onClick={() => {
-                            localStorage.setItem('trysame', 'yes');
-                            navigate(-1);
-                          }}
+                          <div
+                            onClick={() => {
+                              localStorage.setItem('trysame', 'yes');
+                              navigate(-1);
+                            }}
                           >
-                          <img src={refresh} className="home_icon"></img>
-                          <br />
-                          try again
+                            <img src={refresh} className="home_icon"></img>
+                            <br />
+                            try again
+                          </div>
                         </div>
-                      </div>
-                      <div
+                        <div
                         // className={
                         //   isfromresult === 'learn'
                         //   ? 'col s6 center'
                         //   : 'col s12 center hide'
                         // }
                         >
-                        <div onClick={newSentence}>
-                          <img src={refresh} className="home_icon"></img>
-                          <br />
-                          try new
+                          <div onClick={newSentence}>
+                            <img src={refresh} className="home_icon"></img>
+                            <br />
+                            try new
+                          </div>
                         </div>
                       </div>
-                        </div>
                       <div className="col s4 center hide">
                         <Link
                           to={
