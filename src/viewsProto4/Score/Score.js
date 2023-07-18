@@ -24,6 +24,7 @@ import next from '../../assests/Images/next.png';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
+import { feedback } from '../../services/telementryService';
 
 function Score() {
   const navigate = useNavigate();
@@ -328,7 +329,7 @@ function Score() {
 
               <div>
                 <center>
-                  {contenttype !== 'Word' && numberOfPieces > 50 ? (
+                  {/* {contenttype !== 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
                       <br />
@@ -336,7 +337,40 @@ function Score() {
                     </>
                   ) : (
                     ''
-                  )}
+                  )} */}
+
+                  <div
+                    style={{
+                      position: 'absolute',
+                      right: '30%',
+                      marginTop: '20px',
+                      backgroundColor: 'white',
+                      padding: '5px',
+                    }}
+                  >
+                    <button
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        boxShadow: 'none',
+                      }}
+                      onClick={() => feedback(1, teacherText)}
+                    >
+                      👍
+                    </button>
+                    <button
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        boxShadow: 'none',
+                      }}
+                      onClick={() => feedback(-1, teacherText)}
+                    >
+                      👎
+                    </button>
+                  </div>
+                  <div className="res_txt">{handleScore()}/100</div>
+
                   <br />
                   <br />
                   {newtextresult}

@@ -26,6 +26,7 @@ import next from '../../assests/Images/next.png';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
+import { feedback } from '../../services/telementryService';
 
 function Score() {
   const navigate = useNavigate();
@@ -298,11 +299,44 @@ function Score() {
             <div className="col s12 m8 l6 main_layout">
               {/*<AppNavbar navtitle="Result" />*/}
               <br />
-              <NewTopHomeNextBar
-                nextlink={resultnext}
-                resultnextlang={resultnextlang}
-                ishomeback={true}
-              />
+              <div style={{ display: 'flex' }}>
+                <NewTopHomeNextBar
+                  nextlink={resultnext}
+                  resultnextlang={resultnextlang}
+                  ishomeback={true}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: '30%',
+                    marginTop: '20px',
+                    backgroundColor: 'white',
+                    padding: '5px',
+                  }}
+                >
+                  <button
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      boxShadow: 'none',
+                    }}
+                    onClick={() => feedback(1, teacherText)}
+                  >
+                    👍
+                  </button>
+                  <button
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      boxShadow: 'none',
+                    }}
+                    onClick={() => feedback(-1, teacherText)}
+                  >
+                    👎
+                  </button>
+                </div>
+              </div>
+
               <div>
                 <center>
                   {/*<h5 className="home_title">Result</h5>

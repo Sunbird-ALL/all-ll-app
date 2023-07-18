@@ -21,7 +21,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import play from '../../assests/Images/play-img.png';
 
 import pause from '../../assests/Images/pause-img.png';
-
+import { feedback } from '../../services/telementryService';
 import next from '../../assests/Images/next.png';
 
 import { replaceAll } from '../../utils/helper';
@@ -283,11 +283,18 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
-            <NewTopHomeNextBar
-              nextlink={resultnext}
-              resultnextlang={resultnextlang}
-              ishomeback={true}
-            />
+            <div style={{ display: 'flex', }}>
+              <NewTopHomeNextBar
+                nextlink={resultnext}
+                resultnextlang={resultnextlang}
+                ishomeback={true}
+              />
+              <div style={{position:'absolute', right:'30%', marginTop:'20px', backgroundColor:'white', padding:"5px"}}>
+                <button style={{ background: "none",  border: "none",  boxShadow: 'none'}} onClick={()=>  feedback(1,teacherText)}>👍</button>
+                <button style={{ background: "none",  border: "none",  boxShadow: 'none'}} onClick={()=>  feedback(-1,teacherText)}>👎</button>
+              </div>
+            </div>
+
             <div>
               <center>
                 {testResult}

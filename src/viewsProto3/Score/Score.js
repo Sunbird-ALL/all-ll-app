@@ -26,6 +26,7 @@ import next from '../../assests/Images/next.png';
 
 import { replaceAll } from '../../utils/helper';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
+import { feedback } from '../../services/telementryService';
 
 function Score() {
   const navigate = useNavigate();
@@ -279,11 +280,43 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
-            <NewTopHomeNextBar
-              nextlink={''}
-              ishomeback={false}
-              isHideNavigation={true}
-            />
+            <div style={{ display: 'flex' }}>
+              <NewTopHomeNextBar
+                nextlink={''}
+                ishomeback={false}
+                isHideNavigation={true}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '30%',
+                  marginTop: '20px',
+                  backgroundColor: 'white',
+                  padding: '5px',
+                }}
+              >
+                <button
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    boxShadow: 'none',
+                  }}
+                  onClick={() => feedback(1, teacherText)}
+                >
+                  👍
+                </button>
+                <button
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    boxShadow: 'none',
+                  }}
+                  onClick={() => feedback(-1, teacherText)}
+                >
+                  👎
+                </button>
+              </div>
+            </div>
             <div>
               <center>
                 {testResult}
