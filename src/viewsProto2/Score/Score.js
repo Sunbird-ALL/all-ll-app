@@ -128,8 +128,24 @@ function Score() {
     return string.split(search).join(replace);
   }
   function handleScore() {
-    let tempVoiceText = voiceText.toLowerCase().split(' ');
-    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+
+    let voiceTextNoSymbol = replaceAll(voiceText, '?', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, "'", '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '.', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '’', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '|', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, ',', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '!', '');
+    let tempVoiceText = voiceTextNoSymbol.toLowerCase().split(' ');
+
+    let teacherTextNoSymbol = replaceAll(teacherText, '?', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, "'", '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '.', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '’', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '|', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, ',', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '!', '');
+    let tempVoiceTeacher = teacherTextNoSymbol.toLowerCase().split(' ');
 
     let rightWords = 0;
     let myLength = 0;
@@ -202,7 +218,17 @@ function Score() {
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
-      } else {
+      }
+      else if(teacherTextArray.includes(studentTextArray[i])){
+        student_text_result.push(
+          <>
+            {' '}
+            <font className="correct_seq_wrong" >{studentTextArray[i]}</font>
+          
+          </>
+        );
+      } 
+       else {
         wrong_words++;
         student_text_result.push(
           <>

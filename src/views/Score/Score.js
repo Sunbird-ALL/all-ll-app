@@ -126,8 +126,25 @@ function Score() {
   }, [voiceText]);
 
   function handleScore() {
-    let tempVoiceText = voiceText.toLowerCase().split(' ');
-    let tempVoiceTeacher = teacherText.toLowerCase().split(' ');
+
+    let voiceTextNoSymbol = replaceAll(voiceText, '?', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, "'", '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '.', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '’', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '|', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, ',', '');
+    voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '!', '');
+    let tempVoiceText = voiceTextNoSymbol.toLowerCase().split(' ');
+
+
+   let teacherTextNoSymbol = replaceAll(teacherText, '?', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, "'", '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '.', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '’', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '|', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, ',', '');
+   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '!', '');
+    let tempVoiceTeacher = teacherTextNoSymbol.toLowerCase().split(' ');
 
     let rightWords = 0;
     let myLength = 0;
@@ -137,7 +154,9 @@ function Score() {
       myLength = tempVoiceText.length;
     }
     for (let i = 0; i < myLength; i++) {
+      // console.log(i);
       if (tempVoiceText[i] === tempVoiceTeacher[i]) {
+        // console.log(i);
         rightWords++;
       }
     }
@@ -210,7 +229,17 @@ function Score() {
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
-      } else {
+      }
+      else if(teacherTextArray.includes(studentTextArray[i])){
+        student_text_result.push(
+          <>
+            {' '}
+            <font className="correct_seq_wrong" >{studentTextArray[i]}</font>
+          
+          </>
+        );
+      } 
+      else {
         wrong_words++;
         student_text_result.push(
           <>
@@ -283,11 +312,11 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
-            <NewTopHomeNextBar
-              nextlink={resultnext}
-              resultnextlang={resultnextlang}
-              ishomeback={true}
-            />
+              <NewTopHomeNextBar
+                nextlink={resultnext}
+                resultnextlang={resultnextlang}
+                ishomeback={true}
+              />
             <div>
               <center>
                 {testResult}
