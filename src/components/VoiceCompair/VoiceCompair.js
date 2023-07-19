@@ -124,11 +124,14 @@ const VoiceCompair = props => {
         },
       ],
     });
+
+    const abortController = new AbortController();
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
+      signal: abortController.signal
     };
 
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr/?serviceId=${asr_language_code}`;
@@ -230,7 +233,10 @@ const VoiceCompair = props => {
           console.log('error', error);
         }
       });
-      const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
+      const waitAlert = setTimeout(() => {
+      abortController.abort();
+      alert('Server response is slow at this time. Please explore other lessons');
+    }, 10000);
   };
 
   //get permission
