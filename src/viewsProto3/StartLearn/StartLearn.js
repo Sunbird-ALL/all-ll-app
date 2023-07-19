@@ -125,49 +125,51 @@ function StartLearn() {
           await checkitem();
         })
 
-      async function checkitem() {
-        const content_list = getContentList();
-        let tempContent = [];
-        const content_count = Object.keys(content_list).length;
-        const content_keys = Object.keys(content_list);
-        content_keys.forEach(key => {
-          if (
-            content_list[key].type === sel_level &&
-            content_list[key]?.[sel_lang]
-          ) {
-            tempContent.push({
-              content: content_list[key],
-            });
-          }
-      });
+        async function checkitem() {
+          const content_list = getContentList();
+          let tempContent = [];
+          const content_count = Object.keys(content_list).length;
+          const content_keys = Object.keys(content_list);
+          content_keys.forEach(key => {
+            if (
+              content_list[key].type === sel_level &&
+              content_list[key]?.[sel_lang]
+            ) {
+              tempContent.push({
+                content: content_list[key],
+              });
+            }
+        });
 
-      localStorage.setItem('content_random_id', getitem);
-      set_content(tempContent[getitem].content);
-      set_content_id(getitem);
+        localStorage.setItem('content_random_id', getitem);
+        set_content(tempContent[getitem].content);
+        set_content_id(getitem);
 
-      localStorage.setItem(
-        'contentText',
-        tempContent[getitem].content[localStorage.getItem('apphomelang')].text
-      );
+        localStorage.setItem(
+          'contentText',
+          tempContent[getitem].content[localStorage.getItem('apphomelang')].text
+        );
 
+        }
       }
-  }
+
       scroll_to_top('smooth');
       set_load_cnt(load_cnt => Number(load_cnt + 1));
       console.log(load_cnt);
     }
   }, [load_cnt]);
 
-async function randomIntFromInterval( max) {
+  async function randomIntFromInterval(max) {
+
     if (parseInt(localStorage.getItem('content_random_id')) === max) {
       let pageno = parseInt(localStorage.getItem('pageno')) + 1;
-      const response = await fetch(`https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Word&page=${pageno}&limit=5`, {
+      const response = await fetch(`https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=${sel_level}&page=${pageno}&limit=${process.env.REACT_APP_CONTENT_SIZE}`, {
         method: "get",
         headers: {
           'ngrok-skip-browser-warning': 6124
         }
       }).then((res) => res.json())
-      .then((res) => {
+      .then(async (res) => {
         const dataFromAPI = res;
         let contentdata = []
         dataFromAPI.data.forEach((element, index) => {
@@ -179,9 +181,35 @@ async function randomIntFromInterval( max) {
             contentObj.image = element.image
             contentdata[index] = contentObj;
         });
-        localStorage.setItem('contents', JSON.stringify(contentdata));
-        localStorage.setItem('content_random_id', 0);
-        localStorage.setItem('pageno',pageno);
+
+        if (contentdata.length == 0) {
+          const response = await fetch(`https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=${sel_level}&page=1&limit=${process.env.REACT_APP_CONTENT_SIZE}`, {
+            method: "get",
+            headers: {
+              'ngrok-skip-browser-warning': 6124
+            }
+          }).then((res) => res.json())
+          .then((res) => {
+            const dataFromAPI = res;
+            let contentdata = []
+          dataFromAPI.data.forEach((element, index) => {
+              let contentObj = {};
+              contentObj.title = element.title
+              contentObj.type = element.type
+              contentObj.ta = element.data[0].ta
+              contentObj.en = element.data[0].en
+              contentObj.image = element.image
+              contentdata[index] = contentObj;
+          });
+          localStorage.setItem('contents', JSON.stringify(contentdata));
+          localStorage.setItem('content_random_id', 0);
+          localStorage.setItem('pageno', 1);
+        })
+        }else{
+          localStorage.setItem('contents', JSON.stringify(contentdata));
+          localStorage.setItem('content_random_id', 0);
+          localStorage.setItem('pageno', pageno);
+        }
         return 0;
       })
       return 0;
@@ -317,10 +345,18 @@ async function randomIntFromInterval( max) {
         ) : (
           <>
             <div className="">
-              <div className="row">
-                <div className="col s12 m2 l3"></div>
-                <div className="col s12 m8 l6 main_layout">
-                  <h1>Loading...</h1>
+                <div className="row">
+                  <div className="col s12 m2 l3"></div>
+
+                  <div className="col s12 m8 l6 main_layout">
+                                    <NewTopHomeNextBar
+                  nextlink={''}
+                  ishomeback={true}
+                  isHideNavigation={true}
+                    />
+                      <>
+                        <h1>Loading....</h1>
+                      </>
                 </div>
               </div>
             </div>

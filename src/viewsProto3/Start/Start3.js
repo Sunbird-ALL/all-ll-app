@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation,useNavigate } from 'react-router-dom';
 
 import new1word from '../../assests/Images/Learn/new1word.png';
 import new2sentence from '../../assests/Images/Learn/new2sentence.png';
@@ -39,6 +39,8 @@ function Start3() {
         : 'English'
       : 'English'
   );
+
+  const navigate = useNavigate();
   useEffect(() => {
     const metadata = window.name ? JSON.parse(window.name) : {};
     const url = getParameter('source', location.search);
@@ -49,9 +51,8 @@ function Start3() {
     localStorage.setItem('apphomelang', sel_lang);
   }, [sel_lang]);
 
-  const getfromurl = async () => {
-
-    const response = await fetch("https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Word&page=1&limit=5", {
+  const getfromurl = async (type) => {
+    const response = await fetch(`https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=${type}&page=1&limit=${process.env.REACT_APP_CONTENT_SIZE}`, {
       method: "get",
       headers: {
         'ngrok-skip-browser-warning': 6124
@@ -63,7 +64,6 @@ function Start3() {
     const dataFromAPI = await response.json();
     let contentdata = []
     await dataFromAPI.data.forEach((element, index) => {
-      console.log(element);
       let contentObj = {};
       contentObj.title = element.title
       contentObj.type = element.type
@@ -73,12 +73,8 @@ function Start3() {
       contentdata[index] = contentObj;
     });
 
-    console.log(contentdata);
-
-    let contentItemListA = localStorage.getItem("contents");
     let data = null;
 
-    console.log("no data in local storage. Inserting default data");
     localStorage.setItem('contents', JSON.stringify(contentdata));
     data = JSON.parse(JSON.stringify(contentdata));
 
@@ -96,11 +92,13 @@ function Start3() {
     setTabShowPara(tabShowP);
 
     localStorage.setItem('apphomelevel', tabShowWord);
-  };
 
-  useEffect(() => {
-    getfromurl();
-  }, [sel_level]);
+    if (contentdata.length === 0) {
+      return 'Empty Response';
+    } else {
+      return 'Data fetched';
+    }
+  };
 
   useEffect(() => {
     localStorage.setItem('apphomecource', sel_cource);
@@ -168,12 +166,21 @@ function Start3() {
                 <div className="col s12">
                   <br />
                   <br />
-                  {tabShow === 'Word' && (
+                  {/* {tabShow === 'Word' && ( */}
                     <Link
                       to={`/proto3/startlearn`}
-                      onClick={() => {
-                        set_sel_level('Word');
-                        localStorage.setItem('apphomelevel', 'Word');
+                      onClick={async (event) => {
+                        // Prevent default navigation behavior
+                        event.preventDefault();
+                        await getfromurl('Word').then((result) => {
+                          set_sel_level('Word');
+                          localStorage.setItem('apphomelevel', 'Word');
+                          if (result === 'Empty Response') {
+                            alert('No data Available for this content');
+                          } else {
+                            navigate('/proto3/startlearn');
+                          }
+                        });
                       }}
                     >
                       <div className="learn_level_div">
@@ -198,15 +205,25 @@ function Start3() {
                         </div>
                       </div>
                     </Link>
-                  )}
+                  {/* )} */}
 
                   <br />
-                  {tabShowSentece === 'Sentence' && (
+                  {/* {tabShowSentece === 'Sentence' && ( */}
                     <Link
                       to={'/proto3/startlearn'}
-                      onClick={() => {
-                        set_sel_level('Word');
-                        localStorage.setItem('apphomelevel', 'Sentence');
+                      onClick={async (event) => {
+                        // Prevent default navigation behavior
+                        event.preventDefault();
+                        await getfromurl('Sentence').then((result) => {
+                          set_sel_level('Sentence');
+                          localStorage.setItem('apphomelevel', 'Sentence');
+                          if (result === 'Empty Response') {
+                            alert('No data Available for this content');
+                          } else {
+                            navigate('/proto3/startlearn');
+                          }
+                        });
+
                       }}
                     >
                       <div className="learn_level_div">
@@ -235,7 +252,7 @@ function Start3() {
                         </div>
                       </div>
                     </Link>
-                  )}
+                  {/* )} */}
 
                   <br />
                   {tabShowPara === 'Paragraph' && (
