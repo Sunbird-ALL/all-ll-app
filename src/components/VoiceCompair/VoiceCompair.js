@@ -222,6 +222,13 @@ const VoiceCompair = props => {
             : '-'
         );
         stopLoading();
+      }).catch(error => {
+        clearTimeout(waitAlert);
+        stopLoading();
+        if (error.name !== 'AbortError') {
+          alert('Unable to process your request at the moment.Please try again later.');
+          console.log('error', error);
+        }
       });
       const waitAlert = setTimeout(()=>{alert('Server response is slow at this time. Please explore other lessons')}, 10000);
   };
