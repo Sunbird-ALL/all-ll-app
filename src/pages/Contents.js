@@ -50,6 +50,7 @@ export default function Contents() {
         title: obj.title,
         type: obj.type,
         image: obj.image,
+        pstatus: obj.status,
         en,
         ta
       };
@@ -126,9 +127,9 @@ const ListComponent = ({ data, getData }) => {
     }
   };
   
-  const publishData = async (item) => {
+  const publishData = async (item, key) => {
     if (item.id) {
-      await publishDataOnServer(item); // Add 'await' keyword before destroy
+      await publishDataOnServer(item, key); // Add 'await' keyword before destroy
       setObejctData(null); // Reset the selected item
       getData();
     }
@@ -137,7 +138,7 @@ const ListComponent = ({ data, getData }) => {
   const [isOpen, setIsOpen] = React.useState(false); // State to control modal visibility
   const [modalContent, setModalContent] = React.useState(null); // State to store modal content
 
-  const handlePublish = (item) => {
+  const handlePublish = (item, key) => {
     setObejctData(item); // Set the selected item
 	const newItemValue = {
 		id: item.id,
@@ -178,7 +179,7 @@ const ListComponent = ({ data, getData }) => {
         // Code to handle publish action
         setIsOpen(false); // Close the modal
         setModalContent(null); // Reset the modal content
-        await publishData(newItemValue); // Call the publishData function with the item
+        await publishData(newItemValue, key); // Call the publishData function with the item
       },
       actionName: 'publish', // Add the action name 'publish'
     });
@@ -187,7 +188,6 @@ const ListComponent = ({ data, getData }) => {
 
   const handleDelete = (item, key) => {
     setObejctData(item); // Set the selected item
-    console.log(item);
     setModalContent({
       title: `Delete ${item.title}`,
       message: `Are you sure you want to delete ${item.title}?`,
@@ -214,9 +214,14 @@ const ListComponent = ({ data, getData }) => {
           _card={{ size: 'sm', borderWidth: 1, borderColor: 'gray.300' }}
           rightComponent={
             <ButtonGroup size={'xs'}>
-              <Button colorScheme="blue" onClick={() => handlePublish(item)}>
+              {/*<Button colorScheme="blue" onClick={() => handlePublish(item)}>
                 Publish
-              </Button>
+              </Button>*/}
+              {item.pstatus !== 1 && (
+				  <Button colorScheme="blue" onClick={() => handlePublish(item, key)}>
+					Publish
+				  </Button>
+				)}
               <Button
                 colorScheme="green"
                 onClick={e => navigate(`/content/${item?.id}`)}

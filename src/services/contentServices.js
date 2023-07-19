@@ -8,7 +8,10 @@ const getDb = () => {
 };
 
 const saveDb = (data) => {
-  localStorage.setItem(schemaName, JSON.stringify(data, null, 4));
+  const contentdata = data.filter((item) => {
+	return item.title !== undefined
+	})
+  localStorage.setItem(schemaName, JSON.stringify(contentdata, null, 4));
 };
 
 export const getAll = () => {
@@ -65,11 +68,12 @@ export const destroy = (id, callback) => {
 };
 
 
-export const publishDataOnServer = (item, callback) => {
+export const publishDataOnServer = (item, key, callback) => {
   axios.post('https://all-content-respository-backend.onrender.com/v1/WordSentence', item)
     .then(response => {
       // Handle successful API response
       console.log('Data published successfully:', response.data);
+      destroy(key);
       if (callback) {
         callback(response.data);
       }
