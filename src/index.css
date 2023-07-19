@@ -155,7 +155,10 @@ code {
   background-color: green;
   color: #fff;
 }
-
+.correct_seq_wrong {
+  background-color: #ff8c20;
+  color: #fff;
+} 
 .content_list {
   border: 1px solid #aaaaaa;
   -moz-box-shadow: 1px 1px 3px 2px #aaaaaa;
