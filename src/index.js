@@ -11,10 +11,11 @@ const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <StrictMode>
+  <>
     <ColorModeScript />
     <App />
-  </StrictMode>
+  </>
+
 );
 
 // If you want your app to work offline and load faster, you can change

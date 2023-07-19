@@ -49,46 +49,53 @@ function Start3() {
     localStorage.setItem('apphomelang', sel_lang);
   }, [sel_lang]);
 
-  const getfromurl = () => {
-    const filePath = getParameter('source', location.search);
+  const getfromurl = async () => {
 
-    if (filePath) {
-      axios
-        .get(filePath)
-        .then(res => {
-			
-			let contentItemListA = localStorage.getItem("contents");
-			let data = null;
+    const response = await fetch("https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Word&page=1&limit=5", {
+      method: "get",
+      headers: {
+        'ngrok-skip-browser-warning': 6124
+      }
+    });
+    localStorage.removeItem('content_random_id');
+    localStorage.setItem('content_random_id', -1);
+    localStorage.setItem('pageno',1);
+    const dataFromAPI = await response.json();
+    let contentdata = []
+    await dataFromAPI.data.forEach((element, index) => {
+      console.log(element);
+      let contentObj = {};
+      contentObj.title = element.title
+      contentObj.type = element.type
+      contentObj.ta = element.data[0].ta
+      contentObj.en = element.data[0].en
+      contentObj.image = element.image
+      contentdata[index] = contentObj;
+    });
 
-			if (contentItemListA == null) {
-				console.log("no data in local storage. Inserting default data");
-			    localStorage.setItem('contents', JSON.stringify(res.data));
-			    data = JSON.parse(JSON.stringify(res.data));
-			} else {
-				console.log("inserting data from local storage");
-			  // Handle the case when "contents" item does not exist in localStorage
-			  contentItemListA = Object.values(JSON.parse(contentItemListA));
-			  data = JSON.parse(JSON.stringify(contentItemListA));
-			}
+    console.log(contentdata);
 
-          let val =
-            data &&
-            Object.values(data).map(item => {
-              return item.type;
-            });
-          let tabShowWord = val && val.find(val => val === 'Word');
-          let tabShowS = val && val.find(val => val === 'Sentence');
-          let tabShowP = val && val.find(val => val === 'Paragraph');
-          // console.log(tabShowP);
+    let contentItemListA = localStorage.getItem("contents");
+    let data = null;
 
-          setTabShow(tabShowWord);
-          setTabShowSentence(tabShowS);
-          setTabShowPara(tabShowP);
+    console.log("no data in local storage. Inserting default data");
+    localStorage.setItem('contents', JSON.stringify(contentdata));
+    data = JSON.parse(JSON.stringify(contentdata));
 
-          localStorage.setItem('apphomelevel', tabShowWord);
-        })
-        .catch(err => console.log(err));
-    }
+    let val =
+      data &&
+      Object.values(data).map(item => {
+        return item.type;
+      });
+    let tabShowWord = val && val.find(val => val === 'Word');
+    let tabShowS = val && val.find(val => val === 'Sentence');
+    let tabShowP = val && val.find(val => val === 'Paragraph');
+
+    setTabShow(tabShowWord);
+    setTabShowSentence(tabShowS);
+    setTabShowPara(tabShowP);
+
+    localStorage.setItem('apphomelevel', tabShowWord);
   };
 
   useEffect(() => {
@@ -208,7 +215,7 @@ function Start3() {
                             <img
                               src={new2sentence}
                               className="learn_level_img"
-                              alt="Sentence" 
+                              alt="Sentence"
                             />
                           </div>
                         </div>
