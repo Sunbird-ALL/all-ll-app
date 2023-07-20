@@ -134,9 +134,9 @@ export const feedback = (data,contentId) => {
   CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
     options: getEventOptions(),
     edata: {
-      "contentId": contentId, // Required. Id of the content
-      "rating": data, // Optional. Numeric score (+1 for like, -1 for dislike, or 4.5 stars given in a rating)
-      "comments": "User entered feedback" // Optional. Text feedback (if any)
+      "contentId": contentId,
+      "rating": data, 
+      "comments": "User entered feedback" 
     }
   })
 }
