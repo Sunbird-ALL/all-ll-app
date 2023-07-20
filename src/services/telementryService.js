@@ -1,12 +1,11 @@
 import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
-import jwt from 'jwt-decode'
-
+import jwt from 'jwt-decode';
 
 var contentSessionId;
 let playSessionId;
-let url
+let url;
 let config;
 if (localStorage.getItem('token') !== null) {
   let jwtToken = localStorage.getItem('token');
@@ -21,7 +20,7 @@ if (localStorage.getItem('contentSessionId') !== null) {
 }
 
 let getUrl = window.location.href;
-url=getUrl && getUrl.includes("#") && getUrl.split("#")[1].split("/")[1]
+url = getUrl && getUrl.includes('#') && getUrl.split('#')[1].split('/')[1];
 
 export const initialize = ({ context, config, metadata }) => {
   context = context;
@@ -32,20 +31,22 @@ export const initialize = ({ context, config, metadata }) => {
     const telemetryConfig = {
       config: {
         pdata: context.pdata,
-          env: '',
-          channel: context.channel,
-          did: context.did,
-          authtoken: context.authToken || '',
-          uid: 'anonymous',
-          sid: context.sid,
-          batchsize: process.env.REACT_APP_batchsize,
-          mode: context.mode,
-          host: context.host,
-          apislug: context.apislug,
-          endpoint: context.endpoint,
-          tags: context.tags,
-          cdata: [{ id: contentSessionId, type: 'ContentSession' },
-          { id: playSessionId, type: 'PlaySession' }]
+        env: '',
+        channel: context.channel,
+        did: context.did,
+        authtoken: context.authToken || '',
+        uid: 'anonymous',
+        sid: context.sid,
+        batchsize: process.env.REACT_APP_batchsize,
+        mode: context.mode,
+        host: context.host,
+        apislug: context.apislug,
+        endpoint: context.endpoint,
+        tags: context.tags,
+        cdata: [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+        ],
       },
       userOrgDetails: {},
     };
@@ -54,8 +55,7 @@ export const initialize = ({ context, config, metadata }) => {
   }
 };
 
-export const start = (duration) => {
-
+export const start = duration => {
   CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
     options: getEventOptions(),
     edata: {
@@ -68,10 +68,11 @@ export const start = (duration) => {
 };
 
 export const response = (context, options) => {
-  CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry({
-    ...context,
-  },
-  getEventOptions()
+  CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
+    {
+      ...context,
+    },
+    getEventOptions()
   );
 };
 
@@ -87,10 +88,10 @@ export const end = () => {
   });
 };
 
-export const interact = (id) => {
+export const interact = id => {
   CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
     options: getEventOptions(),
-    edata: { type: 'TOUCH', subtype: '', id, pageid:url  },
+    edata: { type: 'TOUCH', subtype: '', id, pageid: url },
   });
   console.log('working');
 };
@@ -129,8 +130,19 @@ export const error = (error, data) => {
   });
 };
 
+export const feedback = (data, contentId) => {
+  CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
+    options: getEventOptions(),
+    edata: {
+      contentId: contentId,
+      rating: data,
+      comments: '',
+    },
+  });
+};
+
 export const getEventOptions = () => {
-  var emis_username = 'anonymous'
+  var emis_username = 'anonymous';
   if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
     var userDetails = jwt(jwtToken);
@@ -139,14 +151,14 @@ export const getEventOptions = () => {
   return {
     object: {},
     context: {
-      pdata:{
+      pdata: {
         // optional
         id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
         ver: process.env.REACT_APP_ver, // Version of the App
         pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_env,
-      uid: emis_username || "anonymous",
+      uid: emis_username || 'anonymous',
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },

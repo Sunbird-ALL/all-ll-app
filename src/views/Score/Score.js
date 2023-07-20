@@ -2,7 +2,8 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ReactAudioPlayer from 'react-audio-player';
 import AudioPlayer from 'react-h5-audio-player';
-
+import Thumbs_up from '../../assests/Images/Thumbs_up.svg';
+import Thumbs_Down from '../../assests/Images/Thumbs_Down.svg';
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
@@ -21,7 +22,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import play from '../../assests/Images/play-img.png';
 
 import pause from '../../assests/Images/pause-img.png';
-
+import { feedback } from '../../services/telementryService';
 import next from '../../assests/Images/next.png';
 
 import { replaceAll } from '../../utils/helper';
@@ -126,7 +127,6 @@ function Score() {
   }, [voiceText]);
 
   function handleScore() {
-
     let voiceTextNoSymbol = replaceAll(voiceText, '?', '');
     voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, "'", '');
     voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '.', '');
@@ -136,14 +136,13 @@ function Score() {
     voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '!', '');
     let tempVoiceText = voiceTextNoSymbol.toLowerCase().split(' ');
 
-
-   let teacherTextNoSymbol = replaceAll(teacherText, '?', '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, "'", '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '.', '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '’', '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '|', '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, ',', '');
-   teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '!', '');
+    let teacherTextNoSymbol = replaceAll(teacherText, '?', '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, "'", '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '.', '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '’', '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '|', '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, ',', '');
+    teacherTextNoSymbol = replaceAll(teacherTextNoSymbol, '!', '');
     let tempVoiceTeacher = teacherTextNoSymbol.toLowerCase().split(' ');
 
     let rightWords = 0;
@@ -154,9 +153,7 @@ function Score() {
       myLength = tempVoiceText.length;
     }
     for (let i = 0; i < myLength; i++) {
-      // console.log(i);
       if (tempVoiceText[i] === tempVoiceTeacher[i]) {
-        // console.log(i);
         rightWords++;
       }
     }
@@ -230,6 +227,7 @@ function Score() {
           </>
         );
       }
+
       else if(teacherTextArray.includes(studentTextArray[i])){
         student_text_result.push(
           <>
@@ -239,6 +237,7 @@ function Score() {
           </>
         );
       } 
+      
       else {
         wrong_words++;
         student_text_result.push(
@@ -312,11 +311,35 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
+              <div style={{ display: 'flex' }}>
               <NewTopHomeNextBar
-                nextlink={resultnext}
-                resultnextlang={resultnextlang}
-                ishomeback={true}
-              />
+                  nextlink={resultnext}
+                  resultnextlang={resultnextlang}
+                  ishomeback={true}
+                />
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '30%',
+                  marginTop: '10px',
+                  padding: '5px',
+                  cursor:'pointer'
+                }}
+              >
+                <img
+                  style={{ marginRight: '15px' }}
+                  onClick={() => feedback(1, teacherText)}
+                  src={Thumbs_up}
+                  alt="thumbs-up"
+                />
+                <img
+                  onClick={() => feedback(-1, teacherText)}
+                  src={Thumbs_Down}
+                  alt="thumbs-down"
+                />
+              </div>
+            </div>
+
             <div>
               <center>
                 {testResult}

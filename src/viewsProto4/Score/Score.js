@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-
+import Thumbs_up from '../../assests/Images/Thumbs_up.svg';
+import Thumbs_Down from '../../assests/Images/Thumbs_Down.svg';
 import content_list from '../../utils/Const/ContentJSON';
 import home from '../../assests/Images/home.png';
 import menu from '../../assests/Images/menu.png';
@@ -24,6 +25,7 @@ import next from '../../assests/Images/next.png';
 
 /*chakra*/
 import AppFooter from '../../components2/AppFooter/AppFooter';
+import { feedback } from '../../services/telementryService';
 
 function Score() {
   const navigate = useNavigate();
@@ -197,7 +199,7 @@ function Score() {
     tempteacherText = replaceAll(tempteacherText, '?', '');
 
     setVoiceTextTeacher(tempteacherText);
-    if (findRegex(tempteacherText) === voiceText?.toLowerCase()) {
+    if (findRegex(tempteacherText) === tempvoiceText?.toLowerCase()) {
       setTestResult(
         <font style={{ fontSize: '20px', color: 'green' }}>
           Teacher and Student audio match
@@ -353,7 +355,7 @@ function Score() {
 
               <div>
                 <center>
-                  {contenttype !== 'Word' && numberOfPieces > 50 ? (
+                  {/* {contenttype !== 'Word' && numberOfPieces > 50 ? (
                     <>
                       <br />
                       <br />
@@ -361,7 +363,30 @@ function Score() {
                     </>
                   ) : (
                     ''
-                  )}
+                  )} */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      right: '30%',
+                      marginTop:'-10px',
+                      padding: '5px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <img
+                      style={{ marginRight: '15px' }}
+                      onClick={() => feedback(1, teacherText)}
+                      src={Thumbs_up}
+                      alt="thumbs-up"
+                    />
+                    <img
+                      onClick={() => feedback(-1, teacherText)}
+                      src={Thumbs_Down}
+                      alt="thumbs-down"
+                    />
+                  </div>
+                  <div className="res_txt">{handleScore()}/100</div>
+
                   <br />
                   <br />
                   {newtextresult}
