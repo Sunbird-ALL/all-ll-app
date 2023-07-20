@@ -2,7 +2,8 @@ import React, { useState, useEffect, createRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ReactAudioPlayer from 'react-audio-player';
 import AudioPlayer from 'react-h5-audio-player';
-
+import Thumbs_up from '../../assests/Images/Thumbs_up.svg';
+import Thumbs_Down from '../../assests/Images/Thumbs_Down.svg';
 import AppNavbar from '../../components/AppNavbar/AppNavbar';
 import NewTopHomeNextBar from '../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
@@ -283,15 +284,32 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
-            <div style={{ display: 'flex', }}>
+            <div style={{ display: 'flex' }}>
               <NewTopHomeNextBar
                 nextlink={resultnext}
                 resultnextlang={resultnextlang}
                 ishomeback={true}
               />
-              <div style={{position:'absolute', right:'30%', marginTop:'20px', backgroundColor:'white', padding:"5px"}}>
-                <button style={{ background: "none",  border: "none",  boxShadow: 'none'}} onClick={()=>  feedback(1,teacherText)}>👍</button>
-                <button style={{ background: "none",  border: "none",  boxShadow: 'none'}} onClick={()=>  feedback(-1,teacherText)}>👎</button>
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '30%',
+                  marginTop: '10px',
+                  padding: '5px',
+                  cursor:'pointer'
+                }}
+              >
+                <img
+                  style={{ marginRight: '15px' }}
+                  onClick={() => feedback(1, teacherText)}
+                  src={Thumbs_up}
+                  alt="thumbs-up"
+                />
+                <img
+                  onClick={() => feedback(-1, teacherText)}
+                  src={Thumbs_Down}
+                  alt="thumbs-down"
+                />
               </div>
             </div>
 

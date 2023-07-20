@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-
+import Thumbs_up from '../../assests/Images/Thumbs_up.svg';
+import Thumbs_Down from '../../assests/Images/Thumbs_Down.svg';
 import content_list from '../../utils/Const/ContentJSON';
 import home from '../../assests/Images/home.png';
 import menu from '../../assests/Images/menu.png';
@@ -338,36 +339,26 @@ function Score() {
                   ) : (
                     ''
                   )} */}
-
                   <div
                     style={{
                       position: 'absolute',
                       right: '30%',
-                      marginTop: '20px',
-                      backgroundColor: 'white',
+                  
                       padding: '5px',
+                      cursor: 'pointer',
                     }}
                   >
-                    <button
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        boxShadow: 'none',
-                      }}
+                    <img
+                      style={{ marginRight: '15px' }}
                       onClick={() => feedback(1, teacherText)}
-                    >
-                      👍
-                    </button>
-                    <button
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        boxShadow: 'none',
-                      }}
+                      src={Thumbs_up}
+                      alt="thumbs-up"
+                    />
+                    <img
                       onClick={() => feedback(-1, teacherText)}
-                    >
-                      👎
-                    </button>
+                      src={Thumbs_Down}
+                      alt="thumbs-down"
+                    />
                   </div>
                   <div className="res_txt">{handleScore()}/100</div>
 
