@@ -24,12 +24,16 @@ import new3paragraph from '../../assests/Images/Learn/new3paragraph.png';
 import learn_next from '../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
+import lang_constants from '../../lang/lang_constants.json';
 
 function Start() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
+  // console.log(myCurrectLanguage);
+
   const [sel_lang, set_sel_lang] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
-      : 'ta'
+      : myCurrectLanguage
   );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
@@ -40,14 +44,6 @@ function Start() {
     localStorage.getItem('apphomecource')
       ? localStorage.getItem('apphomecource')
       : 'Listen & Speak'
-  );
-
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'தமிழ்'
-        : 'English'
-      : 'English'
   );
 
   useEffect(() => {
@@ -68,6 +64,13 @@ function Start() {
     }
   }, [load_cnt]);
 
+  // This is for language selection
+
+  function getLanguageConstants(languageCode) {
+    return lang_constants[languageCode] || lang_constants['en'];
+  }
+
+  // console.log(getLanguageConstants('en').COMMON_WORD);
   function showStart() {
     return (
       <>
@@ -108,27 +111,27 @@ function Start() {
                             let temp_dt = 'en';
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
-                            //window.location.reload();
+                            getLanguageConstants(temp_dt);
                           }}
                         >
-                          Try in English
+                          {getLanguageConstants('en').HOME_TRY_IN}
                         </div>
                       </div>
                       <div className="col s6">
                         <div
                           className={
-                            sel_lang === 'ta'
+                            sel_lang === myCurrectLanguage
                               ? 'lang_select_div_active'
                               : 'lang_select_div_inactive'
                           }
                           onClick={() => {
-                            let temp_dt = 'ta';
+                            let temp_dt = myCurrectLanguage;
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
-                            //window.location.reload();
+                            getLanguageConstants(temp_dt);
                           }}
                         >
-                          Try in தமிழ்
+                          {getLanguageConstants(myCurrectLanguage).HOME_TRY_IN}
                         </div>
                       </div>
                     </div>
@@ -174,13 +177,20 @@ function Start() {
                     >
                       <div className="col s2">
                         <div className="learn_level_div_start">
-                          <img src={new1word} className="learn_level_img" alt="Word" />
+                          <img
+                            src={new1word}
+                            className="learn_level_img"
+                            alt="Word"
+                          />
                         </div>
                       </div>
                       <div className="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
+                            {sel_lang === 'en'
+                              ? getLanguageConstants('en').COMMON_WORD
+                              : getLanguageConstants(myCurrectLanguage)
+                                  .COMMON_WORD}
                           </font>
                           <br />
                           <font className="learn_sub_title">
@@ -189,7 +199,11 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" alt="Start Learning" />
+                        <img
+                          src={learn_next}
+                          className="learn_next_img"
+                          alt="Start Learning"
+                        />
                       </div>
                     </Link>
                   </div>
@@ -204,13 +218,20 @@ function Start() {
                     >
                       <div className="col s2">
                         <div className="learn_level_div_start">
-                          <img src={new2sentence} className="learn_level_img" alt="Sentence" />
+                          <img
+                            src={new2sentence}
+                            className="learn_level_img"
+                            alt="Sentence"
+                          />
                         </div>
                       </div>
                       <div className="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
+                            {sel_lang === 'en'
+                              ? getLanguageConstants('en').COMMON_SENTENCE
+                              : getLanguageConstants(myCurrectLanguage)
+                                  .COMMON_SENTENCE}
                           </font>
                           <br />
                           <font className="learn_sub_title">
@@ -219,7 +240,11 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
+                        <img
+                          src={learn_next}
+                          className="learn_next_img"
+                          alt="Start Learning"
+                        />
                       </div>
                     </Link>
                   </div>
@@ -244,7 +269,10 @@ function Start() {
                       <div className="col s8">
                         <div className="learn_level_div_middle">
                           <font className="learn_title">
-                            {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
+                            {sel_lang === 'en'
+                              ? getLanguageConstants('en').COMMON_PARAGRAPH
+                              : getLanguageConstants(myCurrectLanguage)
+                                  .COMMON_PARAGRAPH}
                           </font>
                           <br />
                           <font className="learn_sub_title">
@@ -253,12 +281,16 @@ function Start() {
                         </div>
                       </div>
                       <div className="col s2">
-                        <img src={learn_next} className="learn_next_img" alt="Start Learning" />
+                        <img
+                          src={learn_next}
+                          className="learn_next_img"
+                          alt="Start Learning"
+                        />
                       </div>
                     </Link>
                   </div>
                   {/*<br />
-                  <div className="col s4">
+                            <div className="col s4">
                     <img
                       className={
                         sel_level === "Word"
@@ -291,8 +323,7 @@ function Start() {
                       src={sel_lang == "en" ? p3Para : p3Para_ta}
                     />
                     </div>*/}
-                </div>
-                {/*<div className="col s12">
+                  {/*<div className="col s12">
                   <br />
                   <div className="col s4">
                     <img
@@ -328,7 +359,7 @@ function Start() {
                     />
                   </div>
                 </div>*/}
-                {/*<div className="col s12">
+                  {/*<div className="col s12">
                   <Select
                     label="Select Language"
                     multiple={false}
@@ -357,8 +388,7 @@ function Start() {
                     <option value="hi">Hindi</option>
                     <option value="ta">Tamil</option>
                   </Select>
-                </div>
-                <div className="col s12">
+                     <div className="col s12">
                   <Select
                     label="Select Level"
                     multiple={false}
@@ -418,14 +448,10 @@ function Start() {
                     <option value="Read & Speak">Read & Speak</option>
                   </Select>
                   </div>*/}
+                </div>
               </div>
               <br />
-              <div>
-                {/*<NewBottomHomeNextBar
-                  nextlink={"startlearn"}
-                  resultnextlang={sel_lang}
-                />*/}
-              </div>
+              <div></div>
             </div>
             <div className="cols s12 m2 l3"></div>
           </div>

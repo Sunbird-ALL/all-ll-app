@@ -11,8 +11,9 @@ import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { Box, HStack, VStack } from '@chakra-ui/react';
-console.log("view/startlearn");
+
 function StartLearn() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const navigate = useNavigate();
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
@@ -49,13 +50,6 @@ function StartLearn() {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'Tamil'
-        : 'English'
-      : 'English'
-  );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
       ? localStorage.getItem('apphomelevel')
@@ -75,7 +69,7 @@ function StartLearn() {
     if (load_cnt == 0) {
       let count_array = 0;
       for (let value of content_list) {
-        if (value.title == sel_level) {
+        if (value.title === sel_level) {
           set_content(value);
           set_content_id(count_array);
           break;
@@ -110,6 +104,8 @@ function StartLearn() {
     document.getElementById('link_score').click();
   }
   function showStartLearn() {
+
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <VStack>
         <Box className="main_layout" gap="20">
@@ -118,15 +114,15 @@ function StartLearn() {
           {sel_cource === 'See & Speak' ? (
             <VStack>
               <img className="image_class" src={content?.image} />
-              {sel_lang != 'ta' && (
-                <div className="content_text_div">{content['ta']}</div>
+              {sel_lang !== myCurrectLanguage && (
+                <div className="content_text_div">{content[myCurrectLanguage]}</div>
               )}
               <div className="content_text_div">{content[sel_lang]}</div>
             </VStack>
           ) : (
             <VStack>
-              {sel_lang != 'ta' && (
-                <div className="content_text_div_see">{content['ta']}</div>
+              {sel_lang !== myCurrectLanguage && (
+                <div className="content_text_div_see">{content[myCurrectLanguage]}</div>
               )}
               <div className="content_text_div_see">{content[sel_lang]}</div>
             </VStack>
@@ -181,6 +177,7 @@ function StartLearn() {
                 <VStack>
                   <img
                     src={refresh}
+                    alt='refresh'
                     className="home_icon"
                     style={{ height: '72px', width: '72px' }}
                     onClick={() => navigate(0)}

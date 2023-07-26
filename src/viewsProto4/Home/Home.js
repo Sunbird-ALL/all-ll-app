@@ -14,6 +14,7 @@ import home_button from '../../assests/Images/home_button.png';
 import AppFooter from '../../components2/AppFooter/AppFooter';
 
 function Home() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const [temp_audio, set_temp_audio] = useState(null);
   const [isplaying, set_isplaying] = useState(false);
   const playAudio = (audio, lang) => {
@@ -65,36 +66,15 @@ function Home() {
                 className="row"
                 style={{ marginLeft: '5px', marginRight: '5px' }}
               >
-                {/*<div
-                  className="col s6"
-                  onClick={() => {
-                    playAudio(welcome_en, "en");
-                  }}
-                >
-                  <center>
-                    <div className="button_home" style={{ width: "150px" }}>
-                      English - ஆங்கிலம்
-                    </div>
-                  </center>
-                </div>*/}
-                {/*<div
-                  className="col s4"
-                  onClick={() => {
-                    playAudio(welcome_hi, "hi");
-                  }}
-                >
-                  <div className="button_home">Hindi</div>
-                </div>*/}
+           
                 <div
                   className="col s12"
                   onClick={() => {
-                    playAudio(welcome_ta, 'ta');
+                    playAudio(welcome_hi, myCurrectLanguage);
                   }}
                 >
                   <center>
-                    {/*<div className="button_home" style={{ width: "150px" }}>
-                      தமிழ்
-                    </div>*/}
+                
                     <img src={home_button} className="play_button_home" />
                   </center>
                 </div>

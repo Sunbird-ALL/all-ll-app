@@ -179,25 +179,25 @@ const VoiceCompair = props => {
 
         for (let i = 0; i < studentTextArray.length; i++) {
             if (teacherTextArray.includes(studentTextArray[i])) {
-               correct_words++;
-               student_correct_words_result.push(
-                  studentTextArray[i]
-               );
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
             } else {
                 wrong_words++;
                 student_incorrect_words_result.push(
-                   studentTextArray[i]
+                   studentTextArray[i]
                 );
             }
         }
         //calculation method
         if (originalwords >= studentswords) {
-           result_per_words = Math.round(
+           result_per_words = Math.round(
                  Number((correct_words / originalwords) * 100)
-           );
+           );
         } else {
             result_per_words = Math.round(
-              Number((correct_words / studentswords) * 100)
+              Number((correct_words / studentswords) * 100)
             );
         }
 
@@ -215,7 +215,7 @@ const VoiceCompair = props => {
                 { "response_word_array_result": word_result_array},
                 { "response_word_result": word_result},
                 { "accuracy_percentage": result_per_words},
-                { "duration":  responseDuration}
+                { "duration":  responseDuration}
              ]
         })
 
