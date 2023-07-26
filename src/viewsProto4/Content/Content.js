@@ -32,6 +32,7 @@ function Content() {
   const [textAreaheight, settextAreaheight] = useState('0px');
   const [contentText, setContentText] = useState('');
   const convertai4bharat = () => {
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     settexttospeechaudio('');
     showLoading();
     var myHeaders = new Headers();
@@ -45,7 +46,7 @@ function Content() {
       config: {
         gender: 'female',
         language: {
-          sourceLanguage: 'ta',
+          sourceLanguage: myCurrectLanguage,
         },
       },
     });

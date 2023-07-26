@@ -1,0 +1,20 @@
+{
+  "hi": {
+    "HOME_TRY_IN": "try in हिंदी",
+    "COMMON_WORD": "शब्द",
+    "COMMON_SENTENCE": "वाक्य",
+    "COMMON_PARAGRAPH": "अनुच्छेद"
+  },
+  "ta": {
+    "HOME_TRY_IN": "try in தமிழ்",
+    "COMMON_WORD": "வார்த்தை",
+    "COMMON_SENTENCE": "வாக்கியம்",
+    "COMMON_PARAGRAPH": "வரிகள்/பத்தி"
+  } ,
+  "en": {
+    "HOME_TRY_IN": "try in English",
+    "COMMON_WORD": "Word",
+    "COMMON_SENTENCE": "Sentence",
+    "COMMON_PARAGRAPH": "Paragraph"
+  }
+}

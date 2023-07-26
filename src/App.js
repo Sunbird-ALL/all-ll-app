@@ -51,7 +51,7 @@ import jwt from 'jwt-decode'
 
 function App() {
   let ranonce = false;
-
+  
   useEffect(() => {
     const setFp = async () => {
       const fp = await FingerprintJS.load();

@@ -54,13 +54,6 @@ function StartLearn() {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'Tamil'
-        : 'English'
-      : 'English'
-  );
   const [sel_level, set_sel_level] = useState(
     localStorage.getItem('apphomelevel')
       ? localStorage.getItem('apphomelevel')
@@ -97,7 +90,7 @@ function StartLearn() {
       const content_keys = Object.keys(content_list);
       content_keys.forEach(key => {
         if (
-          content_list[key].type == sel_level &&
+          content_list[key].type === sel_level &&
           content_list[key]?.[sel_lang]
         ) {
           tempContent.push({
@@ -150,6 +143,8 @@ function StartLearn() {
     document.getElementById('link_score_proto2').click();
   }
   function showStartLearn() {
+
+    const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <>
         {content != null && content[sel_lang] ? (
@@ -167,9 +162,9 @@ function StartLearn() {
                   </div>*/}
                     <br />
                     <img className="image_class" src={content?.image} />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>
@@ -181,9 +176,9 @@ function StartLearn() {
                 ) : (
                   <>
                     <br />
-                    {sel_lang != 'ta' ? (
+                    {sel_lang !== myCurrectLanguage ? (
                       <div className="content_text_div_see">
-                        {content['ta']?.text ? content['ta']?.text : ''}
+                        {content[myCurrectLanguage]?.text ? content[myCurrectLanguage]?.text : ''}
                       </div>
                     ) : (
                       <></>

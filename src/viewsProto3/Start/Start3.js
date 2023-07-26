@@ -7,19 +7,20 @@ import new3paragraph from '../../assests/Images/Learn/new3paragraph.png';
 import learn_next from '../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-
+import lang_constants from '../../lang/lang_constants.json'
 /*chakra*/
 import { getParameter } from '../../utils/helper';
 import axios from 'axios';
 
 function Start3() {
+  const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const [url, setUrl] = useState('');
   const [tabShow, setTabShow] = useState('');
   const [tabShowSentece, setTabShowSentence] = useState('');
   const [tabShowPara, setTabShowPara] = useState('');
 
   const location = useLocation();
-  const [sel_lang, set_sel_lang] = useState('ta');
+  const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
   const [sel_level, set_sel_level] = useState(
     // localStorage.getItem('apphomelevel')
     //   ? localStorage.getItem('apphomelevel')
@@ -32,13 +33,7 @@ function Start3() {
       : 'Listen & Speak'
   );
 
-  const [sel_lang_text, set_sel_lang_text] = useState(
-    localStorage.getItem('apphomelang')
-      ? localStorage.getItem('apphomelang') === 'ta'
-        ? 'தமிழ்'
-        : 'English'
-      : 'English'
-  );
+
   useEffect(() => {
     const metadata = window.name ? JSON.parse(window.name) : {};
     const url = getParameter('source', location.search);
@@ -97,6 +92,13 @@ function Start3() {
     }
   }, [load_cnt]);
 
+  // This is for language selection
+
+    function getLanguageConstants(languageCode) {
+      return lang_constants[languageCode] || lang_constants['en'];
+    }
+  
+
   function showStart() {
     return (
       <>
@@ -124,24 +126,24 @@ function Start3() {
                             //window.location.reload();
                           }}
                         >
-                          Try in English
+                         {getLanguageConstants('en').HOME_TRY_IN}
                         </div>
                       </div>
                       <div className="col s6">
                         <div
                           className={
-                            sel_lang === 'ta'
+                            sel_lang === myCurrectLanguage
                               ? 'lang_select_div_active'
                               : 'lang_select_div_inactive'
                           }
                           onClick={() => {
-                            let temp_dt = 'ta';
+                            let temp_dt = myCurrectLanguage;
                             localStorage.setItem('apphomelang', temp_dt);
                             set_sel_lang(temp_dt);
                             //window.location.reload();
                           }}
                         >
-                          Try in தமிழ்
+                          {getLanguageConstants(myCurrectLanguage).HOME_TRY_IN}
                         </div>
                       </div>
                     </div>
@@ -168,7 +170,7 @@ function Start3() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Word' : 'வார்த்தை'}
+                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_WORD : getLanguageConstants(myCurrectLanguage).COMMON_WORD}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -205,7 +207,7 @@ function Start3() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Sentence' : 'வாக்கியம்'}
+                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_SENTENCE : getLanguageConstants(myCurrectLanguage).COMMON_SENTENCE}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -242,7 +244,7 @@ function Start3() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                              {sel_lang === 'en' ? 'Paragraph' : 'வரிகள்/பத்தி'}
+                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_PARAGRAPH : getLanguageConstants(myCurrectLanguage).COMMON_PARAGRAPH}
                             </font>
                             <br />
                             <font className="learn_sub_title">

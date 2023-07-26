@@ -56,7 +56,7 @@ function ContentList() {
             <div className="col s12 m12 l2"></div>
             <div className="col s12 m12 l8 content_list">
               <div className="row">
-                {/*<div className="col s12">
+               {/*<div className="col s12">
                   <Select
                     label="Select Language"
                     multiple={false}
