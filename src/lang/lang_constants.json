@@ -11,6 +11,12 @@
     "COMMON_SENTENCE": "வாக்கியம்",
     "COMMON_PARAGRAPH": "வரிகள்/பத்தி"
   } ,
+  "kn": {
+    "HOME_TRY_IN": "try in ಕನ್ನಡ",
+    "COMMON_WORD": "ಪದ",
+    "COMMON_SENTENCE": "ವಾಕ್ಯ",
+    "COMMON_PARAGRAPH": "ಪ್ಯಾರಾಗ್ರಾಫ್"
+  },
   "en": {
     "HOME_TRY_IN": "try in English",
     "COMMON_WORD": "Word",
