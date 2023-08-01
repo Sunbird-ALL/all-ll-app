@@ -1,7 +1,3 @@
-//assests
-import leena_audio from "../../assests/Audio/leena_audio.m4a";
-import long_para from "../../assests/Audio/long_para.m4a";
-
 //audio content
 import a1_en from "../../assests/Audio/Content/a1_en.m4a";
 import a1_ta from "../../assests/Audio/Content/a1_ta.mpga";
