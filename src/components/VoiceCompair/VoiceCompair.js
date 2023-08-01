@@ -27,6 +27,7 @@ const VoiceCompair = props => {
     sa: 'https://api.dhruva.ai4bharat.org',
     si: 'https://api.dhruva.ai4bharat.org',
     ta: 'https://api.dhruva.ai4bharat.org',
+    kn: 'https://api.dhruva.ai4bharat.org',
     //ta: "https://ai4b-dev-asr.ulcacontrib.org",
     te: 'https://ai4b-dev-asr.ulcacontrib.org',
     ur: 'https://api.dhruva.ai4bharat.org',
@@ -34,7 +35,8 @@ const VoiceCompair = props => {
 
   const DEFAULT_ASR_LANGUAGE_CODE = 'ai4bharat/whisper-medium-en--gpu--t4';
   const HINDI_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-hi-gpu--t4';
-
+  const KANNADA_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian-gpu--t4';
+  const TAMIL_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian-gpu--t4';
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
 
@@ -46,9 +48,15 @@ const VoiceCompair = props => {
 
   useEffect(() => {
 	switch (lang_code) {
-	case 'hi':
-		set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
+	case 'kn':
+		set_asr_language_code(KANNADA_ASR_LANGUAGE_CODE);
 		break;
+  case 'ta':
+    set_asr_language_code(TAMIL_ASR_LANGUAGE_CODE);
+  break;
+  case 'hi':
+    set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
+    break;
 	default:
 		set_asr_language_code(DEFAULT_ASR_LANGUAGE_CODE);
 		break;
