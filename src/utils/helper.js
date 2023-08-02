@@ -31,7 +31,7 @@ export function useWindowSize() {
 export function getParameter(key, location) {
   if (key) {
     const query = new URLSearchParams(location);
-    return location.split('=')[1];
+    return query.get(key);
   }
   // if (key) {
   //   const query = new URLSearchParams(window.location.search);
