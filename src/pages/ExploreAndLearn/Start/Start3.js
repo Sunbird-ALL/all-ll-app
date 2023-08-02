@@ -48,7 +48,7 @@ function Start3() {
   const getfromurl = () => {
     const filePath = getParameter('source', location.search);
 
-    if (filePath) {
+    if (filePath && filePath != 'null') {
       axios
         .get(filePath)
         .then(res => {
