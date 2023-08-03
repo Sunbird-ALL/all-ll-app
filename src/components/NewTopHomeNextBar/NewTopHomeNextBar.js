@@ -9,29 +9,32 @@ import { getLayout } from '../../utils/helper';
 
 const NewTopHomeNextBar = props => {
   const { trylink, nextlink, ishomeback, resultnextlang } = props;
+  const navigate = useNavigate();
   return (
     <div className="app_footbar_remove">
       <div className="row">
         {ishomeback ? (
           <>
-            <div className="col s6 home_icon_div">
-              <Link to={'/'}>
+            <div className="col s6 home_icon_div" onClick={() => navigate(-1)}>
                 <img src={home} className="home_icon_new" alt="Home"></img>
-              </Link>
-              
             </div>
             <div className="col s6 menu_icon_div">
-              {/* <Link to={'/start'}>
-                <img src={menu} className="menu_icon_new"></img>
-              </Link> */}
+            </div>
+          </>
+        ) : props.isHideNavigation ? (
+          <>
+            <div className="col s6 home_icon_div" onClick={() => navigate(-2)}>
+              <img src={home} className="home_icon_new" alt="Home"></img>
             </div>
           </>
         ) : (
-          <div className="col s12 home_icon_div">
-            <Link to={'/'}>
-              <img src={home} className="home_icon_new" alt="Home"></img>
-            </Link>
-          </div>
+          <>
+            <div className="col s12 home_icon_div">
+              <Link to={'/exploreandlearn/'}>
+                <img src={home} className="home_icon_new" alt="Home"></img>
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </div>

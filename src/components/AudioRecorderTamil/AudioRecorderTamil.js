@@ -1,12 +1,7 @@
 import React from 'react';
-
-// import * as Recorder from './recorder';
 import Recorder from './Recorder';
 import mic_play from '../../assests/Images/mic_play.svg'
-// import mic from '../../assests/Images/mic.png';
-import mic_on from '../../assests/Images/mic_on.png';
 import mic from '../../assests/Images/mic.png';
-import stop from '../../assests/Images/stop.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { response,interact } from '../../services/telementryService';
 import { replaceAll, compareArrays } from '../../utils/helper';
