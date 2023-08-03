@@ -56,43 +56,54 @@ export const initialize = ({ context, config, metadata }) => {
 };
 
 export const start = duration => {
-  CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
-    options: getEventOptions(),
-    edata: {
-      type: 'content',
-      mode: 'play',
-      stageid: url,
-      duration: Number((duration / 1e3).toFixed(2)),
-    },
-  });
+  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+    CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
+      options: getEventOptions(),
+      edata: {
+        type: 'content',
+        mode: 'play',
+        stageid: url,
+        duration: Number((duration / 1e3).toFixed(2)),
+      },
+    });
+  }
+
 };
 
 export const response = (context, options) => {
-  CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
-    {
-      ...context,
-    },
-    getEventOptions()
-  );
+  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+    CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
+      {
+        ...context,
+      },
+      getEventOptions()
+    );
+  }
+
 };
 
 export const end = () => {
-  CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
-    edata: {
-      type: 'content',
-      mode: 'play',
-      pageid: url,
-      summary: [],
-      duration: '000',
-    },
-  });
+  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+    CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
+      edata: {
+        type: 'content',
+        mode: 'play',
+        pageid: url,
+        summary: [],
+        duration: '000',
+      },
+    });
+  }
+
 };
 
-export const interact = id => {
-  CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
-    options: getEventOptions(),
-    edata: { type: 'TOUCH', subtype: '', id, pageid: url },
-  });
+export const interact = (telemetryMode,id) => {
+  if (process.env.REACT_APP_TELEMETRY_MODE === telemetryMode) {
+    CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
+      options: getEventOptions(),
+      edata: { type: 'TOUCH', subtype: '', id, pageid: url },
+    });
+  }
   console.log('working');
 };
 
@@ -112,33 +123,39 @@ export const search = id => {
   });
 };
 
-export const impression = currentPage => {
-  CsTelemetryModule.instance.telemetryService.raiseImpressionTelemetry({
-    options: getEventOptions(),
-    edata: { type: 'workflow', subtype: '', pageid: currentPage + '', uri: '' },
-  });
+export const impression = (currentPage, telemetryMode) => {
+  if (process.env.REACT_APP_TELEMETRY_MODE === telemetryMode) {
+    CsTelemetryModule.instance.telemetryService.raiseImpressionTelemetry({
+      options: getEventOptions(),
+      edata: { type: 'workflow', subtype: '', pageid: currentPage + '', uri: '' },
+    });
+  }
 };
 
 export const error = (error, data) => {
-  CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
-    options: getEventOptions(),
-    edata: {
-      err: data.err,
-      errtype: data.errtype,
-      stacktrace: error.toString() || '',
-    },
-  });
+  if (process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+    CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
+      options: getEventOptions(),
+      edata: {
+        err: data.err,
+        errtype: data.errtype,
+        stacktrace: error.toString() || '',
+      },
+    });
+  }
 };
 
 export const feedback = (data, contentId) => {
-  CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
-    options: getEventOptions(),
-    edata: {
-      contentId: contentId,
-      rating: data,
-      comments: '',
-    },
-  });
+  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+      CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
+        options: getEventOptions(),
+        edata: {
+          contentId: contentId,
+          rating: data,
+          comments: '',
+        },
+      });
+  }
 };
 
 export const getEventOptions = () => {

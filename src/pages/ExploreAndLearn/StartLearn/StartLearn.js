@@ -21,13 +21,13 @@ function StartLearn() {
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
-    interactCall();
+    interactCall('DT');
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   // console.log(isAudioPlay);
 
   const pauseAudio = () => {
-    interactCall();
+    interactCall('DT');
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -37,7 +37,7 @@ function StartLearn() {
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
-      interactCall();
+      interactCall('DT');
       setFlag(!flag);
       temp_audio.addEventListener('ended', () => setFlag(true));
     }
@@ -49,7 +49,7 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall();
+    interactCall('DT');
 
     navigate(0);
   };
