@@ -225,7 +225,9 @@ const VoiceCompair = props => {
                 { "accuracy_percentage": result_per_words},
                 { "duration":  responseDuration}
              ]
-        })
+        },
+          'ET'
+        )
 
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''

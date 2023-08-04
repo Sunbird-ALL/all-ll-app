@@ -387,7 +387,7 @@ function Score() {
                     <img
                       style={{ marginRight: '15px' }}
                       onClick={() => {
-                        feedback(1, teacherText);
+                        feedback(1, teacherText,'ET');
                         setIsFeedbackDone(true);
                       }}
                       src={Thumbs_up}
@@ -395,7 +395,7 @@ function Score() {
                     />
                     <img
                       onClick={() => {
-                        feedback(-1, teacherText);
+                        feedback(-1, teacherText,'ET');
                         setIsFeedbackDone(true);
                       }}
                       src={Thumbs_Down}

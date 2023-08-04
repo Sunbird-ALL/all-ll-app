@@ -56,7 +56,6 @@ export const initialize = ({ context, config, metadata }) => {
 };
 
 export const start = duration => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
     CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
       options: getEventOptions(),
       edata: {
@@ -66,24 +65,21 @@ export const start = duration => {
         duration: Number((duration / 1e3).toFixed(2)),
       },
     });
-  }
-
 };
 
-export const response = (context, options) => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
-    CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
-      {
-        ...context,
-      },
-      getEventOptions()
-    );
+export const response = (context, telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
+      CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
+        {
+          ...context,
+        },
+        getEventOptions()
+      );
   }
 
 };
 
 export const end = () => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
     CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
       edata: {
         type: 'content',
@@ -93,18 +89,15 @@ export const end = () => {
         duration: '000',
       },
     });
-  }
-
 };
 
-export const interact = (telemetryMode,id) => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === telemetryMode) {
+export const interact = (telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
       options: getEventOptions(),
-      edata: { type: 'TOUCH', subtype: '', id, pageid: url },
+      edata: { type: 'TOUCH', subtype: '', pageid: url },
     });
   }
-  console.log('working');
 };
 
 export const search = id => {
@@ -124,7 +117,7 @@ export const search = id => {
 };
 
 export const impression = (currentPage, telemetryMode) => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === telemetryMode) {
+  if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseImpressionTelemetry({
       options: getEventOptions(),
       edata: { type: 'workflow', subtype: '', pageid: currentPage + '', uri: '' },
@@ -132,8 +125,8 @@ export const impression = (currentPage, telemetryMode) => {
   }
 };
 
-export const error = (error, data) => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+export const error = (error, data,telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
       edata: {
@@ -145,8 +138,8 @@ export const error = (error, data) => {
   }
 };
 
-export const feedback = (data, contentId) => {
-  if (process.env.REACT_APP_TELEMETRY_MODE === 'ET' || process.env.REACT_APP_TELEMETRY_MODE === 'NT' || process.env.REACT_APP_TELEMETRY_MODE === 'DT') {
+export const feedback = (data, contentId,telemetryMode) => {
+  if (checkTelemetryMode(telemetryMode)) {
       CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
         options: getEventOptions(),
         edata: {
@@ -157,6 +150,12 @@ export const feedback = (data, contentId) => {
       });
   }
 };
+
+function checkTelemetryMode(currentMode ){
+
+return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||(process.env.REACT_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) || (process.env.REACT_APP_TELEMETRY_MODE === 'DT' && (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'));
+
+}
 
 export const getEventOptions = () => {
   var emis_username = 'anonymous';
