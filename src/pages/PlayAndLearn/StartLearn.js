@@ -28,12 +28,12 @@ function StartLearn() {
   const location = useLocation();
 
   const playAudio = () => {
-    interactCall();
+    interactCall('DT');
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
 
   const pauseAudio = () => {
-    interactCall();
+    interactCall('DT');
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -55,7 +55,7 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall();
+    interactCall('DT');
     navigate(0);
   };
 

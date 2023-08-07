@@ -216,7 +216,8 @@ function Mic({
         }
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
-        response({ // Required
+        response(
+          { // Required
             "target": localStorage.getItem('contentText'), // Required. Target of the response
             //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
@@ -230,7 +231,9 @@ function Mic({
                 { "accuracy_percentage": result_per_words},
                 { "duration":  responseDuration}
              ]
-          })
+          },
+          'ET'
+        )
       })
       .catch(error => {
         clearTimeout(waitAlert);
