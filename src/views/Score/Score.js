@@ -18,15 +18,11 @@ import 'react-h5-audio-player/lib/styles.css';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
-
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
-
 import play from '../../assests/Images/play-img.png';
-
 import pause from '../../assests/Images/pause-img.png';
 import { feedback } from '../../services/telementryService';
 import next from '../../assests/Images/next.png';
-
 import { replaceAll } from '../../utils/helper';
 
 function Score() {
@@ -181,10 +177,6 @@ function Score() {
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
     tempteacherText = replaceAll(tempteacherText, '?', '');
-
-
-
-    
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
@@ -233,19 +225,14 @@ function Score() {
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
-      }
-
-      else if(teacherTextArray.includes(studentTextArray[i])){
+      } else if (teacherTextArray.includes(studentTextArray[i])) {
         student_text_result.push(
           <>
             {' '}
-            <font className="correct_seq_wrong" >{studentTextArray[i]}</font>
-          
+            <font className="correct_seq_wrong">{studentTextArray[i]}</font>
           </>
         );
-      } 
-      
-      else {
+      } else {
         wrong_words++;
         student_text_result.push(
           <>
@@ -318,13 +305,13 @@ function Score() {
           <div className="col s12 m8 l6 main_layout">
             {/*<AppNavbar navtitle="Result" />*/}
             <br />
-              <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' }}>
               <NewTopHomeNextBar
-                  nextlink={resultnext}
-                  resultnextlang={resultnextlang}
-                  ishomeback={true}
-                />
-             <div
+                nextlink={resultnext}
+                resultnextlang={resultnextlang}
+                ishomeback={true}
+              />
+              <div
                 style={{
                   position: 'absolute',
                   right: '30%',
