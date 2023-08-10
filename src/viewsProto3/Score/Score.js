@@ -324,7 +324,7 @@ function Score() {
                   cursor: 'pointer',
                 }}
               >
-                {isFeedbackDone === true ? (
+                {/* {isFeedbackDone === true ? (
                   <>
                   <img
                     style={{ marginRight: '15px' }}
@@ -357,7 +357,7 @@ function Score() {
                       alt="thumbs-down"
                     />
                   </>
-                )}
+                )} */}
               </div>
             </div>
             <div>

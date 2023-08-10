@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AudioRecorderCompairUI from '../AudioRecorderCompairUI/AudioRecorderCompairUI';
 import AudioRecorderTamil from '../AudioRecorderTamil/AudioRecorderTamil';
 import { response, interact } from '../../services/telementryService';
-
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { replaceAll, compareArrays } from '../../utils/helper';
-
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
     localStorage.getItem('apphomelang')
@@ -134,7 +132,7 @@ const VoiceCompair = props => {
       signal: abortController.signal
     };
 
-    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr/?serviceId=${asr_language_code}`;
+    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr?serviceId=${asr_language_code}`;
     const responseStartTime = new Date().getTime();
     fetch(apiURL, requestOptions)
       .then(response => response.text())

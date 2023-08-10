@@ -181,6 +181,10 @@ function Score() {
     tempteacherText = replaceAll(tempteacherText, '!', '');
     tempteacherText = replaceAll(tempteacherText, '|', '');
     tempteacherText = replaceAll(tempteacherText, '?', '');
+
+
+
+    
     setVoiceTextTeacher(tempteacherText);
     //alert(tempteacherText + "\n" + tempvoiceText);
     if (tempteacherText === tempvoiceText) {
@@ -329,7 +333,7 @@ function Score() {
                   cursor: 'pointer',
                 }}
               >
-                {isFeedbackDone === true ? (
+                {/* {isFeedbackDone === true ? (
                   <>
                   <img
                     style={{ marginRight: '15px' }}
@@ -362,7 +366,7 @@ function Score() {
                       alt="thumbs-down"
                     />
                   </>
-                )}
+                )} */}
               </div>
             </div>
 

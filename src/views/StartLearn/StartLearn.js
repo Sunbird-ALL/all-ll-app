@@ -11,6 +11,8 @@ import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { Box, HStack, VStack } from '@chakra-ui/react';
+import wordLists from '../../Badwords/badWords.json';
+import { replaceAll, compareArrays } from '../../utils/helper';
 
 function StartLearn() {
   const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
@@ -94,17 +96,49 @@ function StartLearn() {
     }
   }, [voiceText]);
 
+  const checkBadWord = userInput => {
+    const lang_code = localStorage.getItem('apphomelang');
+    const words = wordLists[lang_code];
+
+    if (!words || !Array.isArray(words)) {
+      return false;
+    }
+
+    const cleanedInput = userInput.trim().toLowerCase();
+    return words.includes(cleanedInput);
+  };
+
+  const filterBadWords = input => {
+    let texttemp = input;
+    texttemp = replaceAll(texttemp, '.', '');
+    texttemp = replaceAll(texttemp, "'", '');
+    texttemp = replaceAll(texttemp, ',', '');
+    texttemp = replaceAll(texttemp, '!', '');
+    texttemp = replaceAll(texttemp, '|', '');
+    texttemp = replaceAll(texttemp, '?', '');
+    const wordsToFilter = texttemp.toLowerCase().split(/\s+/); // Split the input into an array of words
+    const filteredWords = wordsToFilter.map(word => {
+      if (checkBadWord(word)) {
+        return '****'; // Replace bad words with ****
+      }
+      return word;
+    });
+
+    return filteredWords.join(' '); // Join the array back into a string
+  };
+
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang]);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
+    // localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
     document.getElementById('link_score').click();
   }
   function showStartLearn() {
-
     const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
     return (
       <VStack>
@@ -115,14 +149,18 @@ function StartLearn() {
             <VStack>
               <img className="image_class" src={content?.image} />
               {sel_lang !== myCurrectLanguage && (
-                <div className="content_text_div">{content[myCurrectLanguage]}</div>
+                <div className="content_text_div">
+                  {content[myCurrectLanguage]}
+                </div>
               )}
               <div className="content_text_div">{content[sel_lang]}</div>
             </VStack>
           ) : (
             <VStack>
               {sel_lang !== myCurrectLanguage && (
-                <div className="content_text_div_see">{content[myCurrectLanguage]}</div>
+                <div className="content_text_div_see">
+                  {content[myCurrectLanguage]}
+                </div>
               )}
               <div className="content_text_div_see">{content[sel_lang]}</div>
             </VStack>
@@ -139,45 +177,55 @@ function StartLearn() {
             mt={'20'}
           >
             <VStack gap={'10'} alignItems="center">
-              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
-
-              {isAudioPlay !== 'recording' && (
-                <VStack alignItems="center" gap="5">
-                  {flag ? (
-                    <img
-                    className="play_btn"
-                      src={play}
-                      style={{ height: '72px', width: '72px' }}
-                      onClick={() => playAudio()}
+              <HStack
+                display={'flex'}
+                gap={'40'}
+                justifyContent={'justify-between'}
+              >
+                {isAudioPlay !== 'recording' && (
+                  <VStack alignItems="center" gap="5">
+                    {flag ? (
+                      <img
+                        className="play_btn"
+                        src={play}
+                        style={{ height: '72px', width: '72px' }}
+                        onClick={() => playAudio()}
                       />
-                  ) : (
-                    <img
-                    className="play_btn"
-                      src={pause}
-                      style={{ height: '72px', width: '72px' }}
-                      onClick={() => pauseAudio()}
+                    ) : (
+                      <img
+                        className="play_btn"
+                        src={pause}
+                        style={{ height: '72px', width: '72px' }}
+                        onClick={() => pauseAudio()}
                       />
-                      )}
-                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
-                </VStack>
-              )}
-              <VStack>
-                <VoiceCompair
-                  setVoiceText={setVoiceText}
-                  setRecordedAudio={setRecordedAudio}
-                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                  flag={true}
-                  
-                  />
-                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
-                
+                    )}
+                    <h4
+                      className="text-play m-0 "
+                      style={{ position: 'relative' }}
+                    >
+                      Listen
+                    </h4>
                   </VStack>
+                )}
+                <VStack>
+                  <VoiceCompair
+                    setVoiceText={setVoiceText}
+                    setRecordedAudio={setRecordedAudio}
+                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                    flag={true}
+                  />
+                  {isAudioPlay === 'recording' ? (
+                    <h4 className="text-speak m-0">Stop</h4>
+                  ) : (
+                    <h4 className="text-speak m-0">Speak</h4>
+                  )}
+                </VStack>
               </HStack>
               {isAudioPlay !== 'recording' && (
                 <VStack>
                   <img
                     src={refresh}
-                    alt='refresh'
+                    alt="refresh"
                     className="home_icon"
                     style={{ height: '72px', width: '72px' }}
                     onClick={() => navigate(0)}

@@ -12,6 +12,9 @@ import refresh from '../../assests/Images/refresh.png';
 import { interactCall } from '../../services/callTelemetryIntract';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
+import wordLists from '../../Badwords/badWords.json';
+import { replaceAll, compareArrays } from '../../utils/helper';
+
 function StartLearn() {
   const myCurrectLanguage = process.env.REACT_APP_LANGUAGE;
   const navigate = useNavigate();
@@ -157,10 +160,44 @@ function StartLearn() {
       go_to_result(voiceText);
     }
   }, [voiceText]);
+
+
+  const checkBadWord = userInput => {
+    const lang_code = localStorage.getItem('apphomelang');
+    const words = wordLists[lang_code];
+
+    if (!words || !Array.isArray(words)) {
+      return false;
+    }
+
+    const cleanedInput = userInput.trim().toLowerCase();
+    return words.includes(cleanedInput);
+  };
+
+  const filterBadWords = input => {
+    let texttemp = input;
+    texttemp = replaceAll(texttemp, '.', '');
+    texttemp = replaceAll(texttemp, "'", '');
+    texttemp = replaceAll(texttemp, ',', '');
+    texttemp = replaceAll(texttemp, '!', '');
+    texttemp = replaceAll(texttemp, '|', '');
+    texttemp = replaceAll(texttemp, '?', '');
+    const wordsToFilter = texttemp.toLowerCase().split(/\s+/); // Split the input into an array of words
+    const filteredWords = wordsToFilter.map(word => {
+      if (checkBadWord(word)) {
+        return '****'; // Replace bad words with ****
+      }
+      return word;
+    });
+
+    return filteredWords.join(' '); // Join the array back into a string
+  };
+
+
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
