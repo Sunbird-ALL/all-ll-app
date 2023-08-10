@@ -42,7 +42,11 @@ function Start3() {
     setUrl(url ? url : '');
   }, []);
   useEffect(() => {
-    localStorage.setItem('apphomelang', sel_lang);
+    if (localStorage.getItem('apphomelang') === null) {
+      localStorage.setItem('apphomelang', sel_lang);
+    } else {
+      set_sel_lang(localStorage.getItem('apphomelang'));
+    }
   }, [sel_lang]);
 
   const getfromurl = () => {

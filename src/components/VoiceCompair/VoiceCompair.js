@@ -142,7 +142,7 @@ const VoiceCompair = props => {
       signal: abortController.signal
     };
 
-    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr/?serviceId=${asr_language_code}`;
+    const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr?serviceId=${asr_language_code}`;
     const responseStartTime = new Date().getTime();
     fetch(apiURL, requestOptions)
       .then(response => response.text())
