@@ -149,7 +149,7 @@ function Mic({
     };
 
     const ASR_REST_URL =
-      'https://api.dhruva.ai4bharat.org/services/inference/asr/?serviceId=ai4bharat/conformer-multilingual-dravidian-gpu--t4';
+      'https://api.dhruva.ai4bharat.org/services/inference/asr?serviceId=ai4bharat/conformer-multilingual-dravidian-gpu--t4';
     const responseStartTime = new Date().getTime();
 
     fetch(ASR_REST_URL, requestOptions)
