@@ -27,7 +27,7 @@ import pause from '../../assests/Images/pause-img.png';
 
 import next from '../../assests/Images/next.png';
 
-import { replaceAll } from '../../utils/helper';
+import { isProfanityWord, replaceAll } from '../../utils/helper';
 import NewTopHomeNextBar from '../../components2/NewTopHomeNextBar/NewTopHomeNextBar';
 import { feedback } from '../../services/telementryService';
 
@@ -130,6 +130,12 @@ function Score() {
       checkVoice(voiceText);
     }
   }, [voiceText]);
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   function handleScore() {
     let voiceTextNoSymbol = replaceAll(voiceText, '?', '');

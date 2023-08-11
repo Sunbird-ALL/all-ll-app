@@ -16,6 +16,7 @@ import {
   removeForbiddenCharacters,
   splitArray,
   findRegex,
+  isProfanityWord,
 } from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { interactCall } from '../../services/callTelemetryIntract';
@@ -144,6 +145,12 @@ function Score() {
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   function handleScore() {
     let voiceTextNoSymbol = replaceAll(voiceText, '?', '');

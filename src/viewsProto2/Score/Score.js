@@ -21,7 +21,7 @@ import Animation from '../../components/Animation/Animation';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
-
+import { isProfanityWord } from '../../utils/helper';
 import next from '../../assests/Images/next.png';
 
 /*chakra*/
@@ -86,6 +86,12 @@ function Score() {
       }
     };
   };
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   useEffect(() => {
     learnAudio();
