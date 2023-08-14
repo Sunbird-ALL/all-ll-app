@@ -6,6 +6,8 @@ import { response, interact } from '../../services/telementryService';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { replaceAll, compareArrays } from '../../utils/helper';
 
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
     localStorage.getItem('apphomelang')
@@ -146,7 +148,7 @@ const VoiceCompair = props => {
     const responseStartTime = new Date().getTime();
     fetch(apiURL, requestOptions)
       .then(response => response.text())
-      .then(result => {
+      .then(async result => {
         clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
@@ -211,8 +213,34 @@ const VoiceCompair = props => {
 
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
+        const client = new S3Client({
+          region: "ap-south-1",
+          credentials:{
+            accessKeyId:process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+            secretAccessKey:process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+          }
+        });
+
+        const audioFileName = `${process.env.REACT_APP_AWS_s3_BUCKET_FOLDER_NAME}/${localStorage.getItem('contentSessionId')}-${Date.now()}.wav`;
+
+        const command = new PutObjectCommand({
+          Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+          Key: audioFileName,
+          Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
+          ContentType: 'audio/wav'
+        });
+
+
+        try {
+          const response = await client.send(command);
+          console.log(response);
+          console.log(`${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`);
+        } catch (err) {
+          console.error(err);
+        }
+
         response({ // Required
-            "target": localStorage.getItem('contentText'), // Required. Target of the response
+            "target": `${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`, // Required. Target of the response
             //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [
