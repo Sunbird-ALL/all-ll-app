@@ -18,7 +18,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 
-import { getParameter } from '../../utils/helper';
+import { filterBadWords, getParameter, isProfanityWord } from '../../utils/helper';
 
 function StartLearn() {
   const navigate = useNavigate();
@@ -63,6 +63,12 @@ function StartLearn() {
     localStorage.setItem('apphomelang', 'en');
     learnAudio();
   }, [temp_audio]);
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   const [sel_lang, set_sel_lang] = useState('en');
   const [sel_level, set_sel_level] = useState('Sentence');
@@ -201,7 +207,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');

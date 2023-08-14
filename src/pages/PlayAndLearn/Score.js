@@ -11,7 +11,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
 import {
-  findRegex,
+  findRegex, isProfanityWord,
 } from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { interactCall } from '../../services/callTelemetryIntract';
@@ -111,6 +111,13 @@ function Score() {
       scroll_to_top('smooth');
     }
   }, [load_cnt]);
+
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   const [recordedAudio, setRecordedAudio] = useState(
     localStorage.getItem('recordedAudio')
