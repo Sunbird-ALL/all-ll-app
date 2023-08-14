@@ -95,7 +95,6 @@ function Score() {
     }
   }, [load_cnt]);
 
-
   const [recordedAudio, setRecordedAudio] = useState(
     localStorage.getItem('recordedAudio')
   );

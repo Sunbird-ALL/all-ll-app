@@ -162,7 +162,6 @@ function StartLearn() {
     }
   }, [voiceText]);
 
-
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);

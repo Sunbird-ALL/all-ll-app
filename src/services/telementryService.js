@@ -9,7 +9,6 @@ let url;
 let config;
 let isBuddyLogin = checkTokenInLocalStorage();
 
-
 if (localStorage.getItem('token') !== null) {
   let jwtToken = localStorage.getItem('token');
   var userDetails = jwt(jwtToken);
@@ -177,7 +176,7 @@ export const getEventOptions = () => {
     emis_username = userDetails.emis_username;
   }
 
-  if (localStorage.getItem('buddyToken') !== null) {
+  if (isBuddyLogin) {
     let jwtToken = localStorage.getItem('buddyToken');
     let buddyUserDetails = jwt(jwtToken);
     buddyUserId = buddyUserDetails.emis_username;

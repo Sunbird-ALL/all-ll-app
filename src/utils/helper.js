@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-
 let forbiddenChars = ['!', '?', '.'];
 export const blobToBase64 = (blob, callback) => {
   var reader = new FileReader();
