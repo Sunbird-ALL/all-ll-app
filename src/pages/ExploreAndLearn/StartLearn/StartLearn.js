@@ -10,7 +10,7 @@ import refresh from '../../../assests/Images/refresh.png';
 import { interactCall } from '../../../services/callTelemetryIntract';
 import { HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
-import { filterBadWords, getParameter } from '../../../utils/helper';
+import { getParameter } from '../../../utils/helper';
 import AppFooter from '../../../components/AppFooter/AppFooter';
 
 function StartLearn() {
@@ -166,7 +166,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', filterBadWords(voiceText));
+    localStorage.setItem('voiceText', voiceText);
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');

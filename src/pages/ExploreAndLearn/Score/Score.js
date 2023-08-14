@@ -13,7 +13,7 @@ import Animation from '../../../components/Animation/Animation';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
 import play from '../../../assests/Images/play-img.png';
 import pause from '../../../assests/Images/pause-img.png';
-import { isProfanityWord, replaceAll } from '../../../utils/helper';
+import {  replaceAll } from '../../../utils/helper';
 import NewTopHomeNextBar from '../../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import { feedback } from '../../../services/telementryService';
 
@@ -95,12 +95,6 @@ function Score() {
     }
   }, [load_cnt]);
 
-
-  useEffect(()=>{
-    if(isProfanityWord()){
-      alert('inappropriate word detected')
-    } 
-  },[])
 
   const [recordedAudio, setRecordedAudio] = useState(
     localStorage.getItem('recordedAudio')
