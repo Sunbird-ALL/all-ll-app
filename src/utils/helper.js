@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import wordLists from '../bad_words/badwords.json'
 
 let forbiddenChars = ['!', '?', '.'];
 export const blobToBase64 = (blob, callback) => {
