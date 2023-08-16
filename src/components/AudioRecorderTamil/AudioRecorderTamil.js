@@ -5,7 +5,8 @@ import mic from '../../assests/Images/mic.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { response,interact } from '../../services/telementryService';
 import { replaceAll, compareArrays } from '../../utils/helper';
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import S3Client from '../../config/awsS3';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -217,36 +218,31 @@ function Mic({
         }
         let word_result = (result_per_words == 100) ? "correct" : "incorrect";
 
+        if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
 
-        const client = new S3Client({
-          region: process.env.REACT_APP_AWS_s3_region,
-          credentials:{
-            accessKeyId:process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-            secretAccessKey:process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
+          var audioFileName = `${process.env.REACT_APP_AWS_s3_BUCKET_FOLDER_NAME}/${localStorage.getItem('contentSessionId')}-${Date.now()}.wav`;
+
+          const command = new PutObjectCommand({
+            Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+            Key: audioFileName,
+            Body: Uint8Array.from(window.atob(asrInput), (c) => c.charCodeAt(0)),
+            ContentType: 'audio/wav'
+          });
+
+
+          try {
+            const response = await S3Client.send(command);
+            console.log(`${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`);
+          } catch (err) {
+            console.error(err);
           }
-        });
 
-        const audioFileName = `${process.env.REACT_APP_AWS_s3_BUCKET_FOLDER_NAME}/${localStorage.getItem('contentSessionId')}-${Date.now()}.wav`;
-
-        const command = new PutObjectCommand({
-          Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
-          Key: audioFileName,
-          Body: Uint8Array.from(window.atob(asrInput), (c) => c.charCodeAt(0)),
-          ContentType: 'audio/wav'
-        });
-
-
-        try {
-          const response = await client.send(command);
-          console.log(`${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`);
-        } catch (err) {
-          console.error(err);
         }
 
 
         response(
           { // Required
-            "target": `${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`, // Required. Target of the response
+            "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}` : '', // Required. Target of the response
             //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
             "values": [
