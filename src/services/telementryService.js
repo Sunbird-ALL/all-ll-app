@@ -7,11 +7,20 @@ var contentSessionId;
 let playSessionId;
 let url;
 let config;
+let isBuddyLogin = checkTokenInLocalStorage();
+
 if (localStorage.getItem('token') !== null) {
   let jwtToken = localStorage.getItem('token');
   var userDetails = jwt(jwtToken);
   var emis_username = userDetails.emis_username;
 }
+
+
+function checkTokenInLocalStorage() {
+  const token = localStorage.getItem('buddyToken');
+  return !!token; // Returns true if token is present, false if token is null or undefined
+}
+
 
 if (localStorage.getItem('contentSessionId') !== null) {
   contentSessionId = localStorage.getItem('contentSessionId');
@@ -159,11 +168,20 @@ return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') |
 
 export const getEventOptions = () => {
   var emis_username = 'anonymous';
+  var buddyUserId = '';
+
   if (localStorage.getItem('token') !== null) {
     let jwtToken = localStorage.getItem('token');
     var userDetails = jwt(jwtToken);
     emis_username = userDetails.emis_username;
   }
+
+  if (isBuddyLogin) {
+    let jwtToken = localStorage.getItem('buddyToken');
+    let buddyUserDetails = jwt(jwtToken);
+    buddyUserId = buddyUserDetails.emis_username;
+  }
+
   return {
     object: {},
     context: {
@@ -174,7 +192,11 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_env,
-      uid: emis_username || 'anonymous',
+      uid: `${
+        isBuddyLogin
+          ? emis_username + ' / ' + buddyUserId
+          : emis_username || 'anonymous'
+      }`,
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
