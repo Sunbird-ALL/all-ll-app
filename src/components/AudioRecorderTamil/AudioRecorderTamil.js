@@ -219,7 +219,7 @@ function Mic({
 
 
         const client = new S3Client({
-          region: "ap-south-1",
+          region: process.env.REACT_APP_AWS_s3_region,
           credentials:{
             accessKeyId:process.env.REACT_APP_AWS_ACCESS_KEY_ID,
             secretAccessKey:process.env.REACT_APP_AWS_SECRET_ACCESS_KEY
