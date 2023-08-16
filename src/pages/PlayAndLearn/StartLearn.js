@@ -18,7 +18,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 
-import { getParameter } from '../../utils/helper';
+import {  getParameter } from '../../utils/helper';
 
 function StartLearn() {
   const navigate = useNavigate();

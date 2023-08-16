@@ -11,7 +11,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import refresh from '../../assests/Images/refresh.png';
 import Animation from '../../components/Animation/Animation';
 import {
-  findRegex,
+  findRegex, 
 } from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { interactCall } from '../../services/callTelemetryIntract';
