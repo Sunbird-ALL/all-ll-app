@@ -182,6 +182,10 @@ export const getEventOptions = () => {
     buddyUserId = buddyUserDetails.emis_username;
   }
 
+
+  const userType = isBuddyLogin ? 'Buddy User' : 'User';
+  const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'
+
   return {
     object: {},
     context: {
@@ -194,13 +198,13 @@ export const getEventOptions = () => {
       env: process.env.REACT_APP_env,
       uid: `${
         isBuddyLogin
-          ? emis_username + ' / ' + buddyUserId
+          ? emis_username + '/' + buddyUserId
           : emis_username || 'anonymous'
       }`,
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
-        { id: '2.0', type: 'PlayerVersion' },
+        { id: userId, type: userType }
       ],
       rollup: {},
     },
