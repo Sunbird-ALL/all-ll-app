@@ -26,7 +26,7 @@ if (localStorage.getItem('contentSessionId') !== null) {
   contentSessionId = localStorage.getItem('contentSessionId');
 } else {
   contentSessionId = uniqueId();
-  localStorage.setItem('contentSessionId', contentSessionId);
+  localStorage.setItem('contentSessionIdAll', contentSessionId);
 }
 
 let getUrl = window.location.href;

@@ -212,11 +212,11 @@ const VoiceCompair = props => {
             );
         }
 
-        let word_result = (result_per_words == 100) ? "correct" : "incorrect";
+        let word_result = (result_per_words === 100) ? "correct" : "incorrect";
 
         if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
           let getContentId = parseInt(localStorage.getItem('content_random_id')) + 1;
-          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
+          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('contentSessionIdAll'):localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
 
           const command = new PutObjectCommand({
             Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
@@ -229,7 +229,6 @@ const VoiceCompair = props => {
           try {
             const response = await S3Client.send(command);
             console.log(response);
-            console.log(`${process.env.REACT_APP_AWS_s3_BUCKET_URL}/${audioFileName}`);
           } catch (err) {
             console.error(err);
           }
