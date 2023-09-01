@@ -101,7 +101,6 @@ function StartLearn() {
   const [newTempContent, setNewTempContent] = useState([]); 
 
   const handleChangeWord = () => {
-    console.log("Try New");
     // Implement logic to select a new content
     let getitem = content_id;
       let old_getitem = getitem;

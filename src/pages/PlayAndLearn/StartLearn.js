@@ -56,7 +56,7 @@ function StartLearn() {
 
   const newSentence = () => {
     interactCall('DT');
-    navigate(0);
+    handleChangeWord()
   };
 
   useEffect(() => {
@@ -123,6 +123,7 @@ function StartLearn() {
             localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
           }
           scroll_to_top('smooth');
+            setNewTempContent(tempContent)
           set_load_cnt(load_cnt => Number(load_cnt + 1));
         }
       })
@@ -169,6 +170,7 @@ function StartLearn() {
             localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
           }
           scroll_to_top('smooth');
+          setNewTempContent(tempContent)
           set_load_cnt(load_cnt => Number(load_cnt + 1));
         }
       })
@@ -176,6 +178,26 @@ function StartLearn() {
     }
 
   };
+  const [newTempContent, setNewTempContent] = useState([]); 
+
+  const handleChangeWord = () => {
+    console.log("Try New");
+    // Implement logic to select a new content
+    let getitem = content_id;
+      let old_getitem = getitem;
+      while (old_getitem === getitem) {
+        getitem = randomIntFromInterval(0, Number(newTempContent.length - 1));
+      }
+    localStorage.setItem('trysame', 'no');
+    localStorage.setItem('content_random_id', getitem);
+    set_content(newTempContent[getitem].content);
+    set_content_id(getitem);
+    localStorage.setItem(
+        'contentText',
+        newTempContent[getitem].content[localStorage.getItem('apphomelang')].text
+      );
+  };
+
 
   useEffect(() => {
     const showNavigationFooter = getParameter('hideNavigation', location.search);
