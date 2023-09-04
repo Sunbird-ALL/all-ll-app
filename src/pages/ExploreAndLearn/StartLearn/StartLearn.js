@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NewTopHomeNextBar from '../../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import NewBottomHomeNextBar from '../../../components/NewBottomHomeNextBar/NewBottomHomeNextBar';
 import { getContentList } from '../../../utils/Const/Const';
@@ -50,8 +50,7 @@ function StartLearn() {
 
   const newSentence = () => {
     interactCall('DT');
-
-    navigate(0);
+    handleChangeWord()
   };
   useEffect(() => {
     learnAudio();
@@ -85,7 +84,6 @@ function StartLearn() {
     localStorage.getItem('resultnext') ? localStorage.getItem('resultnext') : ''
   );
 
-
   const [sel_cource, set_sel_cource] = useState(
     localStorage.getItem('apphomecource')
       ? localStorage.getItem('apphomecource')
@@ -100,9 +98,27 @@ function StartLearn() {
   const [hide_navFooter, set_hide_navFooter] = useState('false');
   const [load_cnt, set_load_cnt] = useState(0);
   // const [content_list, setContent_list] = useState(null);
+  const [newTempContent, setNewTempContent] = useState([]); 
+
+  const handleChangeWord = () => {
+    // Implement logic to select a new content
+    let getitem = content_id;
+      let old_getitem = getitem;
+      while (old_getitem === getitem) {
+        getitem = randomIntFromInterval(0, Number(newTempContent.length - 1));
+      }
+    localStorage.setItem('trysame', 'no');
+    localStorage.setItem('content_random_id', getitem);
+    set_content(newTempContent[getitem].content);
+    set_content_id(getitem);
+    localStorage.setItem(
+        'contentText',
+        newTempContent[getitem].content[localStorage.getItem('apphomelang')].text
+      );
+  };
 
   useEffect(() => {
-    const showNavigationFooter = getParameter('hideNavigation', location.search);
+    const showNavigationFooter = getParameter('hideNavigation',location.search);
     set_hide_navFooter(showNavigationFooter);
 
     if (load_cnt == 0) {
@@ -143,9 +159,11 @@ function StartLearn() {
         );
       }
       scroll_to_top('smooth');
+      setNewTempContent(tempContent)
       set_load_cnt(load_cnt => Number(load_cnt + 1));
     }
   }, [load_cnt]);
+
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -219,59 +237,66 @@ function StartLearn() {
                 )}
                 <br />
 
-                  <VStack gap={'10'} alignItems="center">
-              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
-
-              {isAudioPlay !== 'recording' && (
-                <VStack alignItems="center" gap="5">
-                  {flag ? (
-                    <img
-                    className="play_btn"
-                      src={play}
-                      style={{ height: '72px', width: '72px' }}
-                      onClick={() => playAudio()}
-                      alt='play_audio'
+                <VStack gap={'10'} alignItems="center">
+                  <HStack
+                    display={'flex'}
+                    gap={'40'}
+                    justifyContent={'justify-between'}
+                  >
+                    {isAudioPlay !== 'recording' && (
+                      <VStack alignItems="center" gap="5">
+                        {flag ? (
+                          <img
+                            className="play_btn"
+                            src={play}
+                            style={{ height: '72px', width: '72px' }}
+                            onClick={() => playAudio()}
+                            alt="play_audio"
+                          />
+                        ) : (
+                          <img
+                            className="play_btn"
+                            src={pause}
+                            style={{ height: '72px', width: '72px' }}
+                            onClick={() => pauseAudio()}
+                            alt="pause_audio"
+                          />
+                        )}
+                        <h4
+                          className="text-play m-0 "
+                          style={{ position: 'relative' }}
+                        >
+                          Listen
+                        </h4>
+                      </VStack>
+                    )}
+                    <VStack>
+                      <VoiceCompair
+                        setVoiceText={setVoiceText}
+                        setRecordedAudio={setRecordedAudio}
+                        _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                        flag={true}
                       />
-                  ) : (
-                    <img
-                    className="play_btn"
-                      src={pause}
-                      style={{ height: '72px', width: '72px' }}
-                      onClick={() => pauseAudio()}
-                      alt='pause_audio'
-                      />
+                      {isAudioPlay === 'recording' ? (
+                        <h4 className="text-speak m-0">Stop</h4>
+                      ) : (
+                        <h4 className="text-speak m-0">Speak</h4>
                       )}
-                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
+                    </VStack>
+                  </HStack>
+                  {isAudioPlay !== 'recording' && (
+                    <VStack>
+                      <img
+                        src={refresh}
+                        className="home_icon"
+                        style={{ height: '72px', width: '72px' }}
+                        alt="try_new_btn"
+                        onClick={newSentence}
+                      />
+                      <h4 className="text-speak m-0">Try new</h4>
+                    </VStack>
+                  )}
                 </VStack>
-              )}
-              <VStack>
-                <VoiceCompair
-                  setVoiceText={setVoiceText}
-                  setRecordedAudio={setRecordedAudio}
-                  _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                  flag={true}
-
-                  />
-                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
-
-                  </VStack>
-              </HStack>
-              {isAudioPlay !== 'recording' && (
-                <VStack>
-                  <img
-                    src={refresh}
-                    className="home_icon"
-                    style={{ height: '72px', width: '72px' }}
-
-                    alt='try_new_btn'
-
-                    onClick={newSentence}
-                  />
-                  <h4 className="text-speak m-0">Try new</h4>
-
-                </VStack>
-              )}
-            </VStack>
                 <NewBottomHomeNextBar nextlink={''} ishomeback={true} />
               </div>
               <div className="cols s12 m2 l3"></div>
@@ -290,7 +315,11 @@ function StartLearn() {
           </>
         )}
         {hide_navFooter === 'false' ? (
-          <AppFooter hideNavigation={getParameter('hideNavigation', location.search)} selectedLanguage={getParameter('language', location.search)} source={getParameter('source', location.search)}/>
+          <AppFooter
+            hideNavigation={getParameter('hideNavigation', location.search)}
+            selectedLanguage={getParameter('language', location.search)}
+            source={getParameter('source', location.search)}
+          />
         ) : (
           <></>
         )}
