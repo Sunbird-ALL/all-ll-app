@@ -285,6 +285,20 @@ function Score() {
     );
   }
 
+  const send = (score) => {
+    const currentScore = (score/100).toPrecision(2);
+    if (window && window.parent) {
+      window.parent.postMessage( {
+        score: currentScore,
+        message: 'all-app-score'
+      })
+    }
+}
+
+useEffect(()=>{
+ send(handleScore())
+},[])
+
   // function showScore() {
   // const [isAudioPlay , setIsAudioPlay] = React.useState(true);
   return (
