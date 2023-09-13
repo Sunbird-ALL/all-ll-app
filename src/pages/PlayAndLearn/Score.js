@@ -243,17 +243,14 @@ function Score() {
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
-      }
-      else if(teacherTextArray.includes(studentTextArray[i])){
+      } else if (teacherTextArray.includes(studentTextArray[i])) {
         student_text_result.push(
           <>
             {' '}
-            <font className="correct_seq_wrong" >{studentTextArray[i]}</font>
-
+            <font className="correct_seq_wrong">{studentTextArray[i]}</font>
           </>
         );
-      }
-       else {
+      } else {
         wrong_words++;
         student_text_result.push(
           <>
@@ -340,6 +337,21 @@ function Score() {
       </>
     );
   }
+
+  const send = score => {
+    const currentScore = (score / 100).toPrecision(2);
+    if (window && window.parent) {
+      window.parent.postMessage({
+        score: currentScore,
+        message: 'all-app-score',
+      });
+    }
+  };
+
+  useEffect(() => {
+    send(handleScore());
+  }, []);
+
   function showScore() {
     return (
       <Animation size={15} isStart={isStart} numberOfPieces={numberOfPieces}>
@@ -360,50 +372,6 @@ function Score() {
                   ) : (
                     ''
                   )} */}
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '30%',
-                  marginTop: '10px',
-                  padding: '5px',
-                  cursor: 'pointer',
-                }}
-              >
-                {isFeedbackDone === true ? (
-                  <>
-                  <img
-                    style={{ marginRight: '15px' }}
-
-                    src={Thumbs_up_dis}
-                    alt="thumbs-up-dis"
-                  />
-                  <img
-
-                    src={Thumbs_down_dis}
-                    alt="thumbs-down-dis"
-                  />
-                </> ):
-                  (<>
-                    <img
-                      style={{ marginRight: '15px' }}
-                      onClick={() => {
-                        feedback(1, teacherText,'ET');
-                        setIsFeedbackDone(true);
-                      }}
-                      src={Thumbs_up}
-                      alt="thumbs-up"
-                    />
-                    <img
-                      onClick={() => {
-                        feedback(-1, teacherText,'ET');
-                        setIsFeedbackDone(true);
-                      }}
-                      src={Thumbs_Down}
-                      alt="thumbs-down"
-                    />
-                  </>
-                )}
-              </div>
                   <div className="res_txt">{handleScore()}/100</div>
 
                   <br />
@@ -608,6 +576,44 @@ function Score() {
                     </>
                   )}
                 </div>
+              </div>
+              <div
+                style={{
+                  marginTop: '30px',
+                  padding: '5px',
+                  cursor: 'pointer',
+                }}
+              >
+                {isFeedbackDone === true ? (
+                  <>
+                    {/* <img
+                      style={{ marginRight: '40px' }}
+                      src={Thumbs_up}
+                      alt="thumbs-up-dis"
+                    />
+                    <img src={Thumbs_Down} alt="thumbs-down-dis" /> */}
+                  </>
+                ) : (
+                  <>
+                    <img
+                      style={{ marginRight: '40px' }}
+                      onClick={() => {
+                        feedback(1, teacherText, 'ET');
+                        setIsFeedbackDone(true);
+                      }}
+                      src={Thumbs_up}
+                      alt="thumbs-up"
+                    />
+                    <img
+                      onClick={() => {
+                        feedback(-1, teacherText, 'ET');
+                        setIsFeedbackDone(true);
+                      }}
+                      src={Thumbs_Down}
+                      alt="thumbs-down"
+                    />
+                  </>
+                )}
               </div>
             </div>
             <div className="cols s12 m2 l3"></div>

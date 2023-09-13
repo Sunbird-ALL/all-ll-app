@@ -13,7 +13,7 @@ import Animation from '../../../components/Animation/Animation';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
 import play from '../../../assests/Images/play-img.png';
 import pause from '../../../assests/Images/pause-img.png';
-import { replaceAll } from '../../../utils/helper';
+import {  replaceAll } from '../../../utils/helper';
 import NewTopHomeNextBar from '../../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import { feedback } from '../../../services/telementryService';
 import avatar from '../../../assests/Images/profile.jpeg';
@@ -313,11 +313,11 @@ function Score() {
       </>
     );
   }
+  
   const characterImprove = () => {
     const charactersToImprove = getGap
       ?.filter(item => item.score < 0.9)
       .map(item => item.character);
-
     const uniqueChars = [];
     charactersToImprove?.forEach(char => {
       if (!uniqueChars?.includes(char)) {
@@ -342,50 +342,7 @@ function Score() {
                 ishomeback={false}
                 isHideNavigation={true}
               />
-              {localStorage.getItem('apphomelevel') === 'Paragraph' ? (
-                ''
-              ) : (
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: '30%',
-                    marginTop: '10px',
-                    padding: '5px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {isFeedbackDone === true ? (
-                    <>
-                      {/* <img
-                        style={{ marginRight: '15px' }}
-                        src={Thumbs_up_dis}
-                        alt="thumbs-up-dis"
-                      />
-                      <img src={Thumbs_down_dis} alt="thumbs-down-dis" /> */}
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        style={{ marginRight: '15px' }}
-                        onClick={() => {
-                          feedback(1, teacherText, 'ET');
-                          setIsFeedbackDone(true);
-                        }}
-                        src={Thumbs_up}
-                        alt="thumbs-up"
-                      />
-                      <img
-                        onClick={() => {
-                          feedback(-1, teacherText, 'ET');
-                          setIsFeedbackDone(true);
-                        }}
-                        src={Thumbs_Down}
-                        alt="thumbs-down"
-                      />
-                    </>
-                  )}
-                </div>
-              )}
+  
             </div>
             <div>
               <center>
@@ -674,6 +631,45 @@ function Score() {
                 )}
               </div>
             </div>
+            {localStorage.getItem('apphomelevel') === 'Paragraph'?"":    <div
+              style={{
+                marginTop: '30px',
+                padding: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              {isFeedbackDone === true ? (
+                <>
+                  {/* <img
+                    style={{ marginRight: '40px' }}
+                    src={Thumbs_up}
+                    alt="thumbs-up-dis"
+                  />
+                  <img src={Thumbs_Down} alt="thumbs-down-dis" /> */}
+                </>
+              ) : (
+                <>
+                  <img
+                    style={{ marginRight: '40px' }}
+                    onClick={() => {
+                      feedback(1, teacherText, 'ET');
+                      setIsFeedbackDone(true);
+                    }}
+                    src={Thumbs_up}
+                    alt="thumbs-up"
+                  />
+                  <img
+                    onClick={() => {
+                      feedback(-1, teacherText, 'ET');
+                      setIsFeedbackDone(true);
+                    }}
+                    src={Thumbs_Down}
+                    alt="thumbs-down"
+                  />
+                </>
+              )}
+            </div>}
+        
           </div>
           <div className="cols s12 m2 l3"></div>
         </div>
