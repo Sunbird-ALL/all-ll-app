@@ -11,7 +11,7 @@ const NewTopHomeNextBar = props => {
   const { trylink, nextlink, ishomeback, resultnextlang } = props;
   const navigate = useNavigate();
   return (
-    <div className="app_footbar_remove">
+    <div className="app_footbar_remove" style={{ zIndex: 999 }}>
       <div className="row">
         {ishomeback ? (
           <>
