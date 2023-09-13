@@ -13,9 +13,10 @@ import Animation from '../../../components/Animation/Animation';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
 import play from '../../../assests/Images/play-img.png';
 import pause from '../../../assests/Images/pause-img.png';
-import {  replaceAll } from '../../../utils/helper';
+import { replaceAll } from '../../../utils/helper';
 import NewTopHomeNextBar from '../../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import { feedback } from '../../../services/telementryService';
+import avatar from '../../../assests/Images/profile.jpeg';
 
 function Score() {
   const navigate = useNavigate();
@@ -110,6 +111,7 @@ function Score() {
   const [fluencyresult, setfluencyresult] = useState('');
   const [percentages, setpercentages] = useState(0);
   const [isFeedbackDone, setIsFeedbackDone] = useState(false);
+  const [getGap, setGetGap] = useState(null);
 
   useEffect(() => {
     if (voiceText && voiceText !== '') {
@@ -117,7 +119,19 @@ function Score() {
     }
   }, [voiceText]);
 
+  useEffect(() => {
+    fetch(
+      `https://telemetry-dev.theall.ai/learner/scores/GetGaps/user/55473503971256`
+    )
+      .then(response => response.text())
+      .then(async result => {
+        var apiResponse = JSON.parse(result);
+        setGetGap(apiResponse);
+      });
+  }, []);
+  // console.log(getGap);
   function handleScore() {
+    // saveIndb()
     let voiceTextNoSymbol = replaceAll(voiceText, '?', '');
     voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, "'", '');
     voiceTextNoSymbol = replaceAll(voiceTextNoSymbol, '.', '');
@@ -175,20 +189,32 @@ function Score() {
     if (tempteacherText === tempvoiceText) {
       setTestResult(
         <font style={{ fontSize: '20px', color: 'green' }}>
-          Teacher and Student audio match
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : ' Teacher and Student audio match'}
         </font>
       );
       setnewtextresult(
-        <font className="result_correct">Yay ! You got it right !</font>
+        <font className="result_correct">
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : ' Yay ! You got it right !'}
+        </font>
       );
     } else {
       setTestResult(
         <font style={{ fontSize: '20px', color: 'red' }}>
-          Teacher and Student audio does not match
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : 'Teacher and Student audio does not match'}
         </font>
       );
       setnewtextresult(
-        <font className="result_incorrect">Oops.. but you tried well!</font>
+        <font className="result_incorrect">
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : 'Oops.. but you tried well!'}
+        </font>
       );
     }
     //set text highlight
@@ -211,17 +237,14 @@ function Score() {
             <font className="correct_text_remove">{studentTextArray[i]}</font>
           </>
         );
-      }
-      else if(teacherTextArray.includes(studentTextArray[i])){
+      } else if (teacherTextArray.includes(studentTextArray[i])) {
         student_text_result.push(
           <>
             {' '}
-            <font className="correct_seq_wrong" >{studentTextArray[i]}</font>
-
+            <font className="correct_seq_wrong">{studentTextArray[i]}</font>
           </>
         );
-      }
-       else {
+      } else {
         wrong_words++;
         student_text_result.push(
           <>
@@ -258,19 +281,25 @@ function Score() {
     if (result_per_words < 45) {
       setfluencyresult(
         <font className="result_incorrect">
-          Needs to work on language skills
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : 'Needs to work on language skills'}
         </font>
       );
     } else if (result_per_words >= 45 && result_per_words <= 75) {
       setfluencyresult(
         <font className="result_incorrect">
-          Good scope to improve language skills
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : 'Good scope to improve language skills'}
         </font>
       );
     } else {
       setfluencyresult(
         <font className="result_incorrect">
-          You have good level of language skills
+          {localStorage.getItem('apphomelevel') === 'Paragraph'
+            ? ''
+            : ' You have good level of language skills'}
         </font>
       );
     }
@@ -284,7 +313,19 @@ function Score() {
       </>
     );
   }
+  const characterImprove = () => {
+    const charactersToImprove = getGap
+      ?.filter(item => item.score < 0.9)
+      .map(item => item.character);
 
+    const uniqueChars = [];
+    charactersToImprove?.forEach(char => {
+      if (!uniqueChars?.includes(char)) {
+        uniqueChars?.push(char);
+      }
+    });
+    return uniqueChars?.join(',');
+  };
   // function showScore() {
   // const [isAudioPlay , setIsAudioPlay] = React.useState(true);
   return (
@@ -301,67 +342,136 @@ function Score() {
                 ishomeback={false}
                 isHideNavigation={true}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '30%',
-                  marginTop: '10px',
-                  padding: '5px',
-                  cursor: 'pointer',
-                }}
-              >
-                {isFeedbackDone === true ? (
-                  <>
-                  <img
-                    style={{ marginRight: '15px' }}
-
-                    src={Thumbs_up_dis}
-                    alt="thumbs-up-dis"
-                  />
-                  <img
-
-                    src={Thumbs_down_dis}
-                    alt="thumbs-down-dis"
-                  />
-                </> ):
-                  (<>
-                    <img
-                      style={{ marginRight: '15px' }}
-                      onClick={() => {
-                        feedback(1, teacherText,'ET');
-                        setIsFeedbackDone(true);
-                      }}
-                      src={Thumbs_up}
-                      alt="thumbs-up"
-                    />
-                    <img
-                      onClick={() => {
-                        feedback(-1, teacherText,'ET');
-                        setIsFeedbackDone(true);
-                      }}
-                      src={Thumbs_Down}
-                      alt="thumbs-down"
-                    />
-                  </>
-                )}
-              </div>
+              {localStorage.getItem('apphomelevel') === 'Paragraph' ? (
+                ''
+              ) : (
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: '30%',
+                    marginTop: '10px',
+                    padding: '5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {isFeedbackDone === true ? (
+                    <>
+                      {/* <img
+                        style={{ marginRight: '15px' }}
+                        src={Thumbs_up_dis}
+                        alt="thumbs-up-dis"
+                      />
+                      <img src={Thumbs_down_dis} alt="thumbs-down-dis" /> */}
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        style={{ marginRight: '15px' }}
+                        onClick={() => {
+                          feedback(1, teacherText, 'ET');
+                          setIsFeedbackDone(true);
+                        }}
+                        src={Thumbs_up}
+                        alt="thumbs-up"
+                      />
+                      <img
+                        onClick={() => {
+                          feedback(-1, teacherText, 'ET');
+                          setIsFeedbackDone(true);
+                        }}
+                        src={Thumbs_Down}
+                        alt="thumbs-down"
+                      />
+                    </>
+                  )}
+                </div>
+              )}
             </div>
             <div>
               <center>
-                {testResult}
+                {/* {localStorage.getItem('apphomelevel') === 'Paragraph'
+                  ? ''
+                  : { testResult }} */}
+
                 {/* <br />
                   <br /> */}
                 {newtextresult}
+                {localStorage.getItem('apphomelevel') === 'Paragraph'?
+                <div className="">
+                  <div className="row d-flex align-items-center justify-content-center">
+                    <div className="col-md-6 text-center mb-4 border-bottom pb-4">
+                      <img
+                        src={avatar}
+                        className="rounded-circle"
+                        style={{
+                          width: '140px',
+                          height: '140px',
+                        }}
+                        alt="Avatar"
+                        />
+                      {/* <h6 style={{ marginTop: '100px' }}>
+                        {' '} */}
+                        {/* User Id - 5979627625 */}
+                      {/* </h6> */}
+                    </div>
+                  </div>
+                  <br />
+                  {/* <div className="row d-flex justify-content-center align-items-center">
+                    <div className="col-md-6 text-center mb-4 ">
+                      {<h6 className="pt-2">Your Score</h6>}
+                      {<button type="button" className="btn btn-primary">80 / 100</button>}
+                    </div>
+                  </div> */}
+
+                  <div className="row d-flex justify-content-center align-items-center">
+                    <Link
+                      to={
+                        'https://www.telemetry-dev.theall.ai/mongodb-dashboard/public/dashboard/6d66ef78-b0d4-40cc-a261-caaf136bd9c5?search_by_userid=55473503971256'
+                      }
+                    >
+                      See Details
+                    </Link>
+                    <div className="col-md-6">
+                      <div className="alert alert-danger" role="alert">
+                        <h4 className="text-center pb-4 mt-2">
+                          Characters to improve {characterImprove()}
+                        </h4>
+                        {getGap
+                          ?.filter(item => item.score < 0.9)
+                          .map(data => {
+                            return (
+                              <>
+                                <div className="card">
+                                  <div className="card-body">
+                                    This character {data.character} need
+                                    improvement score {data.score}
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  </div>
+                </div> :""
+              }
                 <br />
                 <br />
                 {fluencyresult}
                 <br />
                 <br />
                 <div className="content_text_div_see">
-                  {handleScore() === 100 ? teacherText : voiceTextHighlight}
+                  {localStorage.getItem('apphomelevel') === 'Paragraph'
+                    ? ''
+                    : handleScore() === 100
+                    ? teacherText
+                    : voiceTextHighlight}
                 </div>
                 <br />
-                {flag ? (
+
+                {localStorage.getItem('apphomelevel') === 'Paragraph' ? (
+                  ''
+                ) : flag ? (
                   <div style={{ marginBottom: '-30px' }}>
                     <img
                       style={{
@@ -464,7 +574,7 @@ function Score() {
               <div className="row" style={{ padding: '5px' }}>
                 {resultnext === 'as' || apphomelevel === 'Paragraph' ? (
                   <>
-                    <div onClick={() => navigate(-1)}>
+                    {/* <div onClick={() => navigate(-1)}>
                       <img src={refresh} className="home_icon"></img>
                       <p
                         style={{
@@ -477,7 +587,7 @@ function Score() {
                       >
                         Try New
                       </p>
-                    </div>
+                    </div> */}
                   </>
                 ) : (
                   <>
