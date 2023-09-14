@@ -21,13 +21,13 @@ function StartLearn() {
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
-    interactCall('DT');
+    interactCall("playAudio", "startlearn","DT", "");
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   // console.log(isAudioPlay);
 
   const pauseAudio = () => {
-    interactCall('DT');
+    interactCall("pauseAudio", "startlearn","DT", "");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -37,7 +37,7 @@ function StartLearn() {
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
-      interactCall('DT');
+      interactCall("learnAudio", "startlearn","DT", "");
       setFlag(!flag);
       temp_audio.addEventListener('ended', () => setFlag(true));
     }
@@ -49,7 +49,7 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall('DT');
+    interactCall("newSentence", "startlearn","DT", "");
     handleChangeWord()
   };
   useEffect(() => {

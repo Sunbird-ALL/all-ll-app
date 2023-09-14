@@ -101,11 +101,12 @@ export const end = () => {
     });
 };
 
-export const interact = (telemetryMode) => {
+
+export const interact = (id, url, telemetryMode, currentPage) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
       options: getEventOptions(),
-      edata: { type: 'TOUCH', subtype: '', pageid: url },
+      edata: { type: "TOUCH", id: id, pageid: url, subtype: currentPage || "" },
     });
   }
 };
