@@ -27,8 +27,6 @@ function App() {
   const location = useLocation();
   let ranonce = false;
 
-
-
   useEffect(() => {
     const setFp = async () => {
       const fp = await FingerprintJS.load();
@@ -38,9 +36,7 @@ function App() {
       localStorage.setItem('did', visitorId);
       initService();
     };
-
-    setFp();
-
+    setFp();  
 
     const initService = () => {
       if (localStorage.getItem('fpDetails_v2') !== null) {
@@ -87,9 +83,8 @@ function App() {
         ranonce = true;
       }
     };
-   
-
   }, []);
+  
   useEffect(() => {
     const cleanup = () => {
       if (localStorage.getItem('contentSessionId') === null) {
