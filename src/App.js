@@ -5,6 +5,7 @@ import {
   Routes,
   Route,
   Link,
+  useLocation,
 } from 'react-router-dom';
 import { initialize, end } from './services/telementryService';
 import '@project-sunbird/telemetry-sdk/index.js';
@@ -23,6 +24,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import StartLearn4 from './pages/PlayAndLearn/StartLearn';
 
 function App() {
+  const location = useLocation();
   let ranonce = false;
 
   useEffect(() => {
@@ -32,12 +34,11 @@ function App() {
       const { visitorId } = await fp.get();
 
       localStorage.setItem('did', visitorId);
+      initService();
     };
+    setFp();  
 
-    setFp();
     const initService = () => {
-
-
       if (localStorage.getItem('fpDetails_v2') !== null) {
         let fpDetails_v2 = localStorage.getItem('fpDetails_v2');
         var did = fpDetails_v2.result;
@@ -73,21 +74,21 @@ function App() {
         // tslint:disable-next-line:max-line-length
         metadata: {},
       });
-    };
-    initService();
-    if (!ranonce) {
 
-      if (localStorage.getItem('contentSessionId') === null) {
-        startEvent();
+      if (!ranonce) {
+
+        if (localStorage.getItem('contentSessionId') === null) {
+          startEvent(location.pathname);
+        }
+        ranonce = true;
       }
-
-      ranonce = true;
-    }
+    };
   }, []);
+  
   useEffect(() => {
     const cleanup = () => {
       if (localStorage.getItem('contentSessionId') === null) {
-        end();
+        end(location.pathname);
       }
     };
 
@@ -98,9 +99,9 @@ function App() {
     };
   }, []);
 
-  return (
-    <HashRouter>
 
+  return (
+    <>
       <Link to={'/exploreandlearn/score'} id="link_score_proto3" className="hide">
         score
       </Link>
@@ -125,7 +126,7 @@ function App() {
         <Route path={'/playandlearn/startlearn'} element={<StartLearn4/>} />
       </Routes>
       <Dots />
-    </HashRouter>
+    </>
   );
 }
 

@@ -540,12 +540,12 @@ function Score() {
             >
               {isFeedbackDone === true ? (
                 <>
-                  <img
+                  {/* <img
                     style={{ marginRight: '40px' }}
                     src={Thumbs_up}
                     alt="thumbs-up-dis"
                   />
-                  <img src={Thumbs_Down} alt="thumbs-down-dis" />
+                  <img src={Thumbs_Down} alt="thumbs-down-dis" /> */}
                 </>
               ) : (
                 <>
