@@ -29,8 +29,6 @@ if (localStorage.getItem('contentSessionId') !== null) {
   localStorage.setItem('allAppContentSessionId', contentSessionId);
 }
 
-let getUrl = window.location.href;
-url = getUrl && getUrl.includes('#') && getUrl.split('#')[1].split('/')[1];
 
 export const initialize = ({ context, config, metadata }) => {
   context = context;
@@ -65,13 +63,13 @@ export const initialize = ({ context, config, metadata }) => {
   }
 };
 
-export const start = duration => {
+export const start = (duration, stageId) => {
     CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
       options: getEventOptions(),
       edata: {
         type: 'content',
         mode: 'play',
-        stageid: url,
+        pageid: stageId,
         duration: Number((duration / 1e3).toFixed(2)),
       },
     });
@@ -89,12 +87,12 @@ export const response = (context, telemetryMode) => {
 
 };
 
-export const end = () => {
+export const end = (pageUrl) => {
     CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
       edata: {
         type: 'content',
         mode: 'play',
-        pageid: url,
+        pageid: pageUrl,
         summary: [],
         duration: '000',
       },

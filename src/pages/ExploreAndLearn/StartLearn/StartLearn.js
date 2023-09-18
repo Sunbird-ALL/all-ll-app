@@ -21,13 +21,13 @@ function StartLearn() {
   const [temp_audio, set_temp_audio] = useState(null);
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
-    interactCall("playAudio", "startlearn","DT", "");
+    interactCall("playAudio", "startlearn","DT", "play");
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
   // console.log(isAudioPlay);
 
   const pauseAudio = () => {
-    interactCall("pauseAudio", "startlearn","DT", "");
+    interactCall("pauseAudio", "startlearn","DT", "pause");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -37,7 +37,7 @@ function StartLearn() {
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
-      interactCall("learnAudio", "startlearn","DT", "");
+      interactCall("learnAudio", "startlearn","DT", "learn");
       setFlag(!flag);
       temp_audio.addEventListener('ended', () => setFlag(true));
     }

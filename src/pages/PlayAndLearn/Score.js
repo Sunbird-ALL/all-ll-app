@@ -57,11 +57,11 @@ function Score() {
 
   const [temp_audio, set_temp_audio] = useState(null);
   const playAudio = () => {
-    interactCall("playAudio", "score","DT", "");
+    interactCall("playAudio", "score","DT", "play");
     set_temp_audio(new Audio(recordedAudio));
   };
   const pauseAudio = () => {
-    interactCall("pauseAudio", "startlearn","DT", "");
+    interactCall("pauseAudio", "startlearn","DT", "pause");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -584,12 +584,12 @@ function Score() {
               >
                 {isFeedbackDone === true ? (
                   <>
-                    <img
+                    {/* <img
                       style={{ marginRight: '40px' }}
                       src={Thumbs_up}
                       alt="thumbs-up-dis"
                     />
-                    <img src={Thumbs_Down} alt="thumbs-down-dis" />
+                    <img src={Thumbs_Down} alt="thumbs-down-dis" /> */}
                   </>
                 ) : (
                   <>

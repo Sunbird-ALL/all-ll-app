@@ -6,8 +6,9 @@ export const interactCall = (id, uri, telemetryMode, currentPage, ) => {
   interact(id, uri, telemetryMode, currentPage)
 };
 
-export const  startEvent=()=>{
+export const  startEvent=(pageUrl)=>{
  start(
-    duration
+    duration,
+    pageUrl
   );
 }

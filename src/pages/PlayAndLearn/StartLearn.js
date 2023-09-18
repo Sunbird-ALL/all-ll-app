@@ -28,12 +28,12 @@ function StartLearn() {
   const location = useLocation();
 
   const playAudio = () => {
-    interactCall("playAudio", "score","DT", "");
+    interactCall("playAudio", "score","DT", "play");
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
 
   const pauseAudio = () => {
-    interactCall("pauseAudio", "score","DT", "");
+    interactCall("pauseAudio", "score","DT", "pause");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
