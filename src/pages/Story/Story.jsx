@@ -292,6 +292,7 @@ const Story = () => {
                   <Box p="4">
                     <h1>{post?.data[0]?.hi?.text}</h1>
                     {localStorage.setItem("contentText", post?.data[0]?.hi?.text)}
+                    {localStorage.setItem("storyTitle", post?.title)}
                   </Box>
                 </Box>
               </Flex>

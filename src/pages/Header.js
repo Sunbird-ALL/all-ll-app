@@ -51,7 +51,7 @@ export default function Header() {
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
     
           <HStack spacing={8} alignItems={'center'}>
-            <Box style={{color:"#000",fontSize: "20px" }}>Ramayana</Box>
+            <Box style={{color:"#000",fontSize: "20px" }}>{localStorage.getItem('storyTitle')}</Box>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
