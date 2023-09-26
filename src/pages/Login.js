@@ -26,14 +26,16 @@ export default function Login() {
     boxShadow: '-4px 8px 19px -1px',
   };
   const [virtualID, setVirtualID] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (username,password) => {
     try {
       const response = await fetch(
-        `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=1005370514&password=0514@2010`
+        `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
 
       if (response.ok) {
@@ -83,12 +85,28 @@ export default function Login() {
             
             <FormControl id="uername" isRequired>
               <FormLabel>Username</FormLabel>
-              <Input className='form-control' type="username" />
+              <input
+              className='form-control'
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e)=> setUsername(e.target.value)}
+          />
+              {/* <Input  type="username" /> */}
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input className='form-control' type={showPassword ? 'text' : 'password'} />
+              <input
+               className='form-control'
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e)=> setPassword(e.target.value)}
+          />
+                {/* <Input className='form-control' type={showPassword ? 'text' : 'password'} /> */}
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
@@ -101,7 +119,7 @@ export default function Login() {
             <Stack spacing={10} pt={2}>
               <Button
                 className='btn btn-primary'
-                onClick={handleSubmit}>
+                onClick={()=> handleSubmit(username,password)}>
                 Login 
               </Button>
             </Stack>
