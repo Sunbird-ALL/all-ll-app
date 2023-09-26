@@ -289,6 +289,41 @@ function Start3() {
                       </div>
                     </Link>
                   )}
+                   <br />
+
+                    <Link
+                      to={'/storyList'}
+                      onClick={() => {
+                        set_sel_level('Word');
+                        localStorage.setItem('apphomelevel', 'Sentence');
+                      }}
+                    >
+                      <div className="learn_level_div">
+                        <div className="col s2">
+                          <div className="learn_level_div_start">
+                            <img
+                              src={new2sentence}
+                              className="learn_level_img"
+                              alt="Sentence"
+                            />
+                          </div>
+                        </div>
+                        <div className="col s8">
+                          <div className="learn_level_div_middle">
+                            <font className="learn_title">
+                            Stories
+                            </font>
+                            <br />
+                            <font className="learn_sub_title">
+                              Enjoy Stories
+                            </font>
+                          </div>
+                        </div>
+                        <div className="col s2">
+                          <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
+                        </div>
+                      </div>
+                    </Link>
                 </div>
               </div>
               <br />

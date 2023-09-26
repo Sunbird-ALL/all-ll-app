@@ -22,6 +22,9 @@ import Score4 from './pages/PlayAndLearn/Score';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import StartLearn4 from './pages/PlayAndLearn/StartLearn';
 
+import Storylist from '../src/pages/Story/StoryList'
+import Story from '../src/pages/Story/Story'
+
 function App() {
   let ranonce = false;
 
@@ -123,6 +126,10 @@ function App() {
         <Route path={'/playandlearn/score'} element={<Score4/>} />
         <Route path="/playandlearn" element={<StartLearn4/>} />
         <Route path={'/playandlearn/startlearn'} element={<StartLearn4/>} />
+
+                {/* Story Section */}
+        <Route path={'/storylist'} element={<Storylist/>} />
+        <Route path={'storylist/story/:slug'} element={<Story/>} />
       </Routes>
       <Dots />
     </HashRouter>
