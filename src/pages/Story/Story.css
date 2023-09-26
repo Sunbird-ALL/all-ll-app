@@ -61,8 +61,8 @@ display: flex;
     padding: 20px;
 }
 .story-image {
-  height: 25vh;
-  width: 350px;
+  height: 50vh;
+  width: 50%;
   border: 5px solid black;
   border-radius: 25px;
   position: relative;
@@ -82,4 +82,28 @@ display: flex;
 }
 .next-btn-hidden {
   display: none;
+}
+.css-1jc7f17 {
+  -webkit-justify-content: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: gray.50;
+  background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');
+  background-color: #cccccc;
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.bg{
+  -webkit-justify-content: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: gray.50;
+  background-image: url('../../assests/Images/hackthon-images/images.jpeg');
+  background-color: #cccccc;
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
