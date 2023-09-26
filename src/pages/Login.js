@@ -1,5 +1,4 @@
 'use client'
-
 import {
   Flex,
   Box,
@@ -19,31 +18,25 @@ import {
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
-
-
 export default function Login() {
   const boxShadowStyle = {
     boxShadow: '-4px 8px 19px -1px',
   };
   const [virtualID, setVirtualID] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (username,password) => {
     try {
       const response = await fetch(
-        `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=1005370514&password=0514@2010`
+        `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
-
       if (response.ok) {
-        
         const data = await response.json();
         const virtualID = data.virtualID;
         console.log('virtual Id' ,virtualID)
-
         localStorage.setItem('virtualID', virtualID);
-
         setVirtualID(virtualID);
         navigate('/Storylist')
         alert("Successfully Login");
@@ -55,7 +48,6 @@ export default function Login() {
       console.error('Error:', error);
     }
   };
-
   return (
     <Flex
       minH={'100vh'}
@@ -64,7 +56,6 @@ export default function Login() {
       bg={useColorModeValue('gray.50', 'gray.800')}
       >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}  width={'600px'}>
-        
         <Box
           rounded={'lg'}
           bg={useColorModeValue('white', 'gray.700')}
@@ -72,23 +63,36 @@ export default function Login() {
           p={8}>
             <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            
           </Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
             Login
-            
           </Text>
         </Stack>
           <Stack spacing={4}>
-            
             <FormControl id="uername" isRequired>
               <FormLabel>Username</FormLabel>
-              <Input className='form-control' type="username" />
+              <input
+              className='form-control'
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e)=> setUsername(e.target.value)}
+          />
+              {/* <Input  type="username" /> */}
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input className='form-control' type={showPassword ? 'text' : 'password'} />
+              <input
+               className='form-control'
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e)=> setPassword(e.target.value)}
+          />
+                {/* <Input className='form-control' type={showPassword ? 'text' : 'password'} /> */}
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
@@ -101,8 +105,8 @@ export default function Login() {
             <Stack spacing={10} pt={2}>
               <Button
                 className='btn btn-primary'
-                onClick={handleSubmit}>
-                Login 
+                onClick={()=> handleSubmit(username,password)}>
+                Login
               </Button>
             </Stack>
           </Stack>
