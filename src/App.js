@@ -26,6 +26,7 @@ import Storylist from '../src/pages/Story/StoryList'
 import Story from '../src/pages/Story/Story';
 import Login from '../src/pages/Login';
 import Header from './pages/Header';
+import Results from './pages/Results';
 
 function App() {
   let ranonce = false;
@@ -134,6 +135,7 @@ function App() {
         <Route path={'storylist/story/:slug'} element={<Story/>} />
         <Route path={'Login'} element={<Login/>} />
         <Route path={'Header'} element={<Header/>}/>
+        <Route path={'Results'} element={<Results/>}/>
         
       </Routes>
       <Dots />
