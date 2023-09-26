@@ -8,7 +8,7 @@ export default function Results() {
 
   useEffect(() => {
     fetch(
-      `https://telemetry-dev.theall.ai/learner/scores/GetGaps/user/8923471085`
+      `https://telemetry-dev.theall.ai/learner/scores/GetGaps/session/${localStorage.getItem("virtualStorySessionID")}`
     )
       .then((response) => response.text())
       .then(async (result) => {
