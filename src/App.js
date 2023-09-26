@@ -23,7 +23,9 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import StartLearn4 from './pages/PlayAndLearn/StartLearn';
 
 import Storylist from '../src/pages/Story/StoryList'
-import Story from '../src/pages/Story/Story'
+import Story from '../src/pages/Story/Story';
+import Login from '../src/pages/Login';
+import Header from './pages/Header';
 
 function App() {
   let ranonce = false;
@@ -130,6 +132,9 @@ function App() {
                 {/* Story Section */}
         <Route path={'/storylist'} element={<Storylist/>} />
         <Route path={'storylist/story/:slug'} element={<Story/>} />
+        <Route path={'Login'} element={<Login/>} />
+        <Route path={'Header'} element={<Header/>}/>
+        
       </Routes>
       <Dots />
     </HashRouter>
