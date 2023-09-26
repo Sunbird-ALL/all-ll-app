@@ -65,7 +65,6 @@ const VoiceCompair = props => {
 		break;
 	}
   }, []);
-
   useEffect(() => {
     props.setVoiceText(tamilRecordedText);
     props.setRecordedAudio(tamilRecordedAudio);
@@ -156,7 +155,7 @@ const VoiceCompair = props => {
           (responseEndTime - responseStartTime) / 1000
         );
         var apiResponse = JSON.parse(result);
-
+        props?.setCurrentLine((oldData)=> oldData+1)
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();
         texttemp = replaceAll(texttemp, '.', '');
