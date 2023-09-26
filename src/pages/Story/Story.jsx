@@ -9,6 +9,7 @@ import Next from '../../assests/Images/next.png';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
+import Header from '../Header';
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -40,6 +41,7 @@ const Story = () => {
   }, []);
 
   const fetchApi = async () => {
+    localStorage.setItem("virtualStorySessionID",localStorage.getItem("virtualID")+""+Date.now())
     try {
       const response = await fetch(
         `https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Sentence&collectionId=${slug}`
@@ -105,8 +107,8 @@ const Story = () => {
       taskType: 'asr',
       output: output.output,
       config: null,
-      user_id: 8923471085,
-      session_id: '8923471085' + Date.now(),
+      user_id: localStorage.getItem("virtualID"),
+      session_id: localStorage.getItem('virtualStorySessionID'),
       date: utcDate,
       original_text: localStorage.getItem('contentText'),
       response_text: output.output[0].source,
@@ -122,16 +124,16 @@ const Story = () => {
   
   // console.log(posts?.data[currentLine]?.data[0]?.hi?.audio);
   return (
-    <div className="story-container">
+   <div className="story-container">
+ <Header />
       <Flex gap={14}>
-        <Image
+        {/* <Image
           transform={'scaleX(-1)'}
-          h={'32'}Result
+          h={'32'} Result
           src={Next}
           onClick={prevLine}
-          alt="next"
-        />
-        <Image h={'32'} src={Next} onClick={nextLine} alt="next" />
+          alt="next" />
+        <Image h={'32'} src={Next} onClick={nextLine} alt="next" /> */}
       </Flex>
       <div className="story-item">
         <div className="row">
@@ -139,24 +141,22 @@ const Story = () => {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            posts?.data?.map((post, ind) =>
-              currentLine === ind ? (
-                <Flex key={ind}>
-                  <Image
-                    className="story-image"
-                    src={post?.image}
-                    alt={post?.title}
-                  />
-                  <Box key={ind}>
-                    <Box p="4">
-                      <h1>{post?.data[0]?.hi?.text}</h1>
+            posts?.data?.map((post, ind) => currentLine === ind ? (
+              <Flex key={ind}>
+                <Image
+                  className="story-image"
+                  src={post?.image}
+                  alt={post?.title} />
+                <Box key={ind}>
+                  <Box p="4">
+                    <h1>{post?.data[0]?.hi?.text}</h1>
                     {localStorage.setItem("contentText", post?.data[0]?.hi?.text)}
-                    </Box>
                   </Box>
-                </Flex>
-              ) : (
-                ''
-              )
+                </Box>
+              </Flex>
+            ) : (
+              ''
+            )
             )
           )}
         </div>
@@ -168,16 +168,14 @@ const Story = () => {
                 src={play}
                 style={{ height: '72px', width: '72px' }}
                 onClick={() => playAudio()}
-                alt="play_audio"
-              />
+                alt="play_audio" />
             ) : (
               <img
                 className="play_btn"
                 src={pause}
                 style={{ height: '72px', width: '72px' }}
                 onClick={() => pauseAudio()}
-                alt="pause_audio"
-              />
+                alt="pause_audio" />
             )}
             <h4 className="text-play m-0 " style={{ position: 'relative' }}>
               Listen
@@ -185,7 +183,7 @@ const Story = () => {
           </VStack>
         )}
         <VStack>
-          
+
           <VoiceCompair
             setVoiceText={setVoiceText}
             setRecordedAudio={setRecordedAudio}
