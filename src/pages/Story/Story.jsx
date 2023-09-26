@@ -34,14 +34,15 @@ const Story = () => {
     //   go_to_result(voiceText);
     // }
   }, [voiceText]);
- 
-
   React.useEffect(() => {
     fetchApi();
   }, []);
 
   const fetchApi = async () => {
-    localStorage.setItem("virtualStorySessionID",localStorage.getItem("virtualID")+""+Date.now())
+    localStorage.setItem(
+      'virtualStorySessionID',
+      localStorage.getItem('virtualID') + '' + Date.now()
+    );
     try {
       const response = await fetch(
         `https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Sentence&collectionId=${slug}`
@@ -103,106 +104,115 @@ const Story = () => {
 
   function saveIndb(output) {
     const utcDate = new Date().toISOString().split('T')[0];
-    axios.post(`https://telemetry-dev.theall.ai/learner/scores`, {
-      taskType: 'asr',
-      output: output.output,
-      config: null,
-      user_id: localStorage.getItem("virtualID"),
-      session_id: localStorage.getItem('virtualStorySessionID'),
-      date: utcDate,
-      original_text: localStorage.getItem('contentText'),
-      response_text: output.output[0].source,
-      language: 'hi',
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    axios
+      .post(`https://telemetry-dev.theall.ai/learner/scores`, {
+        taskType: 'asr',
+        output: output.output,
+        config: null,
+        user_id: localStorage.getItem('virtualID'),
+        session_id: localStorage.getItem('virtualStorySessionID'),
+        date: utcDate,
+        original_text: localStorage.getItem('contentText'),
+        response_text: output.output[0].source,
+        language: 'hi',
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
-  
+
   // console.log(posts?.data[currentLine]?.data[0]?.hi?.audio);
   return (
-   <div className="story-container">
- <Header />
-      <Flex gap={14}>
-        {/* <Image
+    <>
+      <Header />
+      <div style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",}} className="story-container">
+        <Flex gap={14}>
+          {/* <Image
           transform={'scaleX(-1)'}
           h={'32'} Result
           src={Next}
           onClick={prevLine}
           alt="next" />
         <Image h={'32'} src={Next} onClick={nextLine} alt="next" /> */}
-      </Flex>
-      <div className="story-item">
-        <div className="row">
-          {/* <h1 style={{position:'relative', left:'-100px'}}>{posts?.data[0]?.title}</h1> */}
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            posts?.data?.map((post, ind) => currentLine === ind ? (
-              <Flex key={ind}>
-                <Image
-                  className="story-image"
-                  src={post?.image}
-                  alt={post?.title} />
-                <Box key={ind}>
-                  <Box p="4">
-                    <h1>{post?.data[0]?.hi?.text}</h1>
-                    {localStorage.setItem("contentText", post?.data[0]?.hi?.text)}
-                  </Box>
-                </Box>
-              </Flex>
+        
+        </Flex>
+        <div className="story-item">
+          <div className="row">
+            {/* <h1 style={{position:'relative', left:'-100px'}}>{posts?.data[0]?.title}</h1> */}
+            {loading ? (
+              <div>Loading...</div>
             ) : (
-              ''
-            )
-            )
-          )}
-        </div>
-        {isAudioPlay !== 'recording' && (
-          <VStack alignItems="center" gap="5">
-            {flag ? (
-              <img
-                className="play_btn"
-                src={play}
-                style={{ height: '72px', width: '72px' }}
-                onClick={() => playAudio()}
-                alt="play_audio" />
-            ) : (
-              <img
-                className="play_btn"
-                src={pause}
-                style={{ height: '72px', width: '72px' }}
-                onClick={() => pauseAudio()}
-                alt="pause_audio" />
+              posts?.data?.map((post, ind) =>
+                currentLine === ind ? (
+                  <Flex key={ind}>
+                    <Image
+                      className="story-image"
+                      src={post?.image}
+                      alt={post?.title}
+                    />
+                    <Box key={ind}>
+                      <Box p="4">
+                        <h1>{post?.data[0]?.hi?.text}</h1>
+                        {localStorage.setItem(
+                          'contentText',
+                          post?.data[0]?.hi?.text
+                        )}
+                      </Box>
+                    </Box>
+                  </Flex>
+                ) : (
+                  ''
+                )
+              )
             )}
-            <h4 className="text-play m-0 " style={{ position: 'relative' }}>
-              Listen
-            </h4>
-          </VStack>
-        )}
-        <VStack>
-
-          <VoiceCompair
-            setVoiceText={setVoiceText}
-            setRecordedAudio={setRecordedAudio}
-            _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-            flag={true}
-            setCurrentLine={setCurrentLine}
-            setStoryBase64Data={setStoryBase64Data}
-            saveIndb={saveIndb}
-          />
-          {isAudioPlay === 'recording' ? (
-            <h4 className="text-speak m-0">Stop</h4>
-          ) : (
-            <h4 className="text-speak m-0">Speak</h4>
+          </div>
+          {isAudioPlay !== 'recording' && (
+            <VStack alignItems="center" gap="5">
+              {flag ? (
+                <img
+                  className="play_btn"
+                  src={play}
+                  style={{ height: '72px', width: '72px' }}
+                  onClick={() => playAudio()}
+                  alt="play_audio"
+                />
+              ) : (
+                <img
+                  className="play_btn"
+                  src={pause}
+                  style={{ height: '72px', width: '72px' }}
+                  onClick={() => pauseAudio()}
+                  alt="pause_audio"
+                />
+              )}
+              <h4 className="text-play m-0 " style={{ position: 'relative' }}>
+                Listen
+              </h4>
+            </VStack>
           )}
-        </VStack>
-      </div>
-      {currentLine === posts?.data?.length-1? 
+          <VStack>
+            <VoiceCompair
+              setVoiceText={setVoiceText}
+              setRecordedAudio={setRecordedAudio}
+              _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+              flag={true}
+              setCurrentLine={setCurrentLine}
+              setStoryBase64Data={setStoryBase64Data}
+              saveIndb={saveIndb}
+            />
+            {isAudioPlay === 'recording' ? (
+              <h4 className="text-speak m-0">Stop</h4>
+            ) : (
+              <h4 className="text-speak m-0">Speak</h4>
+            )}
+          </VStack>
+        </div>
+        {currentLine === posts?.data?.length? 
         <div className="button-container">
-      <Link to={'/result'}>
+      <Link to={'/Results'}>
       <button className="custom-button">View Result</button>
       </Link>
       <Link to={'/storyList'}>
@@ -210,7 +220,8 @@ const Story = () => {
       </Link>
       </div>:""
       }
-    </div>
+      </div>
+    </>
   );
 };
 

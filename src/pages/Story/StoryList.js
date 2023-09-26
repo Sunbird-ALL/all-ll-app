@@ -23,20 +23,16 @@ const StoryList = () => {
     }
   }
   
-      const myStyle = { 
-        // marginTop: '5%',
-      };
-
-      
+  const selectStoryTitle = (storyTitle,index) =>{
+    localStorage.setItem('storyTitle', storyTitle)
+  }
       return (
-        
-      <div className="container" style={myStyle}>
+        <div className="container" >
         <div className="row">
           <h1>My Stories</h1>
           {posts?.data?.map((post,ind) => (
-            <Link  key={ind} to={`story/${post.collectionId}`}>
+            <Link to={`story/${post.collectionId}`} key={ind} >
              <Box
-            
              borderWidth="1px"
              borderRadius="10px"
              overflow="hidden"
@@ -46,6 +42,7 @@ const StoryList = () => {
              display={"inline-block"}
              boxShadow="md"
              _hover={{ boxShadow: "lg" }}
+             onClick={()=> selectStoryTitle(post.title)}
              >
              <Image src={post.image} alt={post.title} width="100%" height="auto" />
              <Box p="4">

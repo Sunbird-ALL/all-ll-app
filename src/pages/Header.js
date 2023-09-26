@@ -17,6 +17,7 @@ import {
   useColorModeValue,
   Stack,
 } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
 
 // interface Props {
@@ -45,19 +46,35 @@ const NavLink = () => {
 export default function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const buttonStyle = {
+    backgroundColor: '#007bff', // Blue background color
+    color: '#fff',              // White text color
+    padding: '10px 20px',       // Padding for the button
+    border: 'none',             // Remove button border
+    borderRadius: '5px',        // Rounded corners
+    cursor: 'pointer',          // Show pointer cursor on hover
+    fontSize: '16px',           // Font size
+  };
+  
+
   return (
     <>
-      <Box w="100%" style={{ background: "#fff", padding: "4px" }}>
+      <Box w="100%" style={{ background: "#fff", padding: "4px",  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
     
           <HStack spacing={8} alignItems={'center'}>
-            <Box style={{color:"#000",fontSize: "20px" }}>Ramayana</Box>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
+              <Link to={'/storylist'}>
+              <button
+             style={buttonStyle}
+              >Home</button>
+              </Link>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
-              ))}
+                ))}
             </HStack>
           </HStack>
+                <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle')}</Box>
           <Flex alignItems={'center'}>
             <Button className='btn btn-success'
               variant={'solid'}
