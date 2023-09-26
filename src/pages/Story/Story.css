@@ -83,3 +83,25 @@ display: flex;
 .next-btn-hidden {
   display: none;
 }
+
+/* Add this CSS in your component or a separate CSS file */
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.custom-button {
+  padding: 10px 20px;
+  background-color: #007BFF; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.custom-button:hover {
+  background-color: #0056b3; /* Hover background color */
+}

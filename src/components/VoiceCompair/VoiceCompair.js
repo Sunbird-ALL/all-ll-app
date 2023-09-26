@@ -124,6 +124,7 @@ const VoiceCompair = props => {
         transcriptionFormat: {
           value: 'transcript',
         },
+        bestTokenCount: 2,
         audioFormat: 'wav',
         samplingRate: samplingrate,
         postProcessors: null,
@@ -134,7 +135,7 @@ const VoiceCompair = props => {
         },
       ],
     });
-
+    props.setStoryBase64Data(base64Data)
     const abortController = new AbortController();
     var requestOptions = {
       method: 'POST',
@@ -149,12 +150,15 @@ const VoiceCompair = props => {
     fetch(apiURL, requestOptions)
       .then(response => response.text())
       .then(async result => {
-        clearTimeout(waitAlert);
+        // clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
           (responseEndTime - responseStartTime) / 1000
         );
         var apiResponse = JSON.parse(result);
+        // props.handleSubmit()
+        props.saveIndb(apiResponse)
+        // props.setBase64Data(base64Data)
         props?.setCurrentLine((oldData)=> oldData+1)
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();
@@ -258,17 +262,17 @@ const VoiceCompair = props => {
         );
         stopLoading();
       }).catch(error => {
-        clearTimeout(waitAlert);
+        // clearTimeout(waitAlert);
         stopLoading();
-        if (error.name !== 'AbortError') {
-          alert('Unable to process your request at the moment.Please try again later.');
+        // if (error.name !== 'AbortError') {
+          // alert('Unable to procedsadasdas later.');
           console.log('error', error);
-        }
+        // }
       });
-      const waitAlert = setTimeout(() => {
-      abortController.abort();
-      alert('Server response is slow at this time. Please explore other lessons');
-    }, 10000);
+    //   const waitAlert = setTimeout(() => {
+    //   abortController.abort();
+    //   alert('Server response is slow at this time. Please explore other lessons');
+    // }, 10000);
   };
 
   //get permission

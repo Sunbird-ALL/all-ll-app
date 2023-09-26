@@ -24,6 +24,7 @@ import StartLearn4 from './pages/PlayAndLearn/StartLearn';
 
 import Storylist from '../src/pages/Story/StoryList'
 import Story from '../src/pages/Story/Story'
+import Result from './pages/Story/Result';
 
 function App() {
   let ranonce = false;
@@ -130,6 +131,7 @@ function App() {
                 {/* Story Section */}
         <Route path={'/storylist'} element={<Storylist/>} />
         <Route path={'storylist/story/:slug'} element={<Story/>} />
+        <Route path={'/result'} element={<Result/>} />
       </Routes>
       <Dots />
     </HashRouter>
