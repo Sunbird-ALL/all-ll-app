@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import './result.css';
-import axios from 'axios';
 import startIMg from '../assests/Images/hackthon-images/Star.svg';
-import childrens from '../assests/Images/hackthon-images/childrens.avif'
 import Modal from './Modal';
-import './modal.css';
+import axios from 'axios';
+import Header from './Header';
 
 
 export default function Results() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [stars, setStars] = useState(0);
+ const [isCalled,setIsCalled] = useState(0)
+ const [wordSentence, setWordSentence] = useState([]);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
+  
+  const handlePrint = () =>{
+    window.print();
+  }
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
   const [getGap, setGetGap] = useState(null);
-  const [wordSentence, setWordSentence] = useState([]);
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   useEffect(() => {
     fetch(
@@ -37,72 +38,10 @@ export default function Results() {
         var apiResponse = JSON.parse(result);
         setGetGap(apiResponse);
 
+      
       });
     GetRecommendedWordsAPI();
   }, []);
-
-  // console.log(getGap);
-  const charactersArray = getGap?.map(item => item.character);
-  console.log(getGap);
-
-  useEffect(() => {
-    if (charactersArray?.length > 0) {
-      handleWordSentence();
-    }
-  }, [charactersArray])
-
-  const handleWordSentence = () => {
-    // const replaceSymbols = charactersArray.
-    axios
-      .post(
-        'https://all-content-respository-backend.onrender.com/v1/WordSentence/search',
-        {
-          tokenArr: charactersArray,
-        }
-      )
-      .then(res => {
-        // console.log(res.data);
-        setWordSentence(res.data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  // const characterImprove = () => {
-  //   const charactersToImprove = getGap
-  //     ?.filter(item => item.score < 0.9)
-  //     .map(item => item.character);
-  //   const uniqueChars = [];
-  //   charactersToImprove?.forEach(char => {
-  //     if (!uniqueChars?.includes(char)) {
-  //       uniqueChars?.push(char);
-  //     }
-  //   });
-  //   return uniqueChars?.join(',');
-  // };
-  const characterImprove = () => {
-    const charactersToImprove = getGap
-      ?.filter(item => item.score < 0.9)
-      .map(item => item.character);
-    const uniqueChars = [];
-
-    charactersToImprove?.forEach(char => {
-      if (!uniqueChars?.includes(char)) {
-        uniqueChars?.push(char);
-      }
-    });
-
-    const sixWordGroups = [];
-    for (let i = 0; i < uniqueChars.length; i += 6) {
-      sixWordGroups.push(uniqueChars.slice(i, i + 6).join(','));
-    }
-
-    return sixWordGroups.join('\n');
-  };
-
-  const [stars, setStars] = useState(0);
-
   const GetRecommendedWordsAPI = () => {
     // const currentSentence = localStorage.getItem('contentText');
     // const splitSentence = currentSentence.split('');
@@ -122,14 +61,85 @@ export default function Results() {
       });
   };
 
+  // console.log(getGap);
+  const charactersArray = getGap?.map(item => item.character);
+  // console.log(getGap);
+
+  useEffect(()=>{
+    if (charactersArray?.length>0 && isCalled === 0){
+      handleWordSentence();
+      setIsCalled(isCalled+1)
+    }
+  },[charactersArray])
+
+  const handleWordSentence = () => {
+    // const replaceSymbols = charactersArray.
+    axios
+      .post(
+        'https://telemetry-dev.theall.ai/content-service/v1/WordSentence/search',
+        {
+          tokenArr: charactersArray,
+        }
+      )
+      .then(res => {
+
+        setWordSentence(res.data);
+
+        localStorage.removeItem('content_random_id');
+        localStorage.setItem('content_random_id', -1);
+        localStorage.setItem('pageno',1);
+        let contentdata = []
+         res.data.data.forEach((element, index) => {
+           let contentObj = {};
+           contentObj.title = element.title
+           contentObj.type = element.type
+           contentObj.hi = element.data[0].hi
+           // contentObj.en = element.data[0]
+           contentObj.image = element.image
+           contentdata[index] = contentObj;
+          });
+          
+          
+          localStorage.setItem('apphomelevel','Word');
+          localStorage.setItem('contents', JSON.stringify(contentdata));
+          
+        // let data = null;
+        // data = JSON.parse(JSON.stringify(contentdata));
+        // console.log(data);
+        // console.log(res.data.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+  // console.log(wordSentence)
+  const characterImprove = () => {
+    const charactersToImprove = getGap
+      ?.filter((item) => item.score < 0.9)
+      .map((item) => item.character);
+    const uniqueChars = [];
+    charactersToImprove?.forEach((char) => {
+      if (!uniqueChars?.includes(char)) {
+        uniqueChars?.push(char);
+      }
+    });
+    return uniqueChars?.join(',');
+  };
+
   return (
     <>
+    <Header/>
       <div className="main-bg">
         <section class="c-section">
           <div class="container1">
             <div class="row">
-
               <div className='col s8'>
+              {/* <Link to={'/storylist'}>
+  <button className='btn btn-info'>
+
+  Practice another Story
+  </button>
+</Link> */}
                 <div class="bg-image">
                   <div class="content">
                     <h1>Congratulations...</h1>
@@ -138,9 +148,12 @@ export default function Results() {
                     <br />
                     <button className='btn btn-success' onClick={openModal}>Share With Teachers</button>
                     <br />
+                    <Link to={'/exploreandlearn/startlearn'}>
                     <button className='btn btn-info'>
                       Improve Further
                     </button>
+                    </Link>
+
                   </div>
                 </div>
               </div>
