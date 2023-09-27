@@ -133,6 +133,7 @@ function App() {
                 {/* Story Section */}
         <Route path={'/storylist'} element={<Storylist/>} />
         <Route path={'storylist/story/:slug'} element={<Story/>} />
+        {/* <Route path={'/result'} element={<Result/>} /> */}
         <Route path={'Login'} element={<Login/>} />
         <Route path={'Header'} element={<Header/>}/>
         <Route path={'Results'} element={<Results/>}/>

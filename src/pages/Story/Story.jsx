@@ -92,7 +92,7 @@ const Story = () => {
   const [currentLine, setCurrentLine] = useState(0);
 
   const nextLine = count => {
-    if (currentLine < posts?.data.length - 1) {
+    if (currentLine < posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
   };

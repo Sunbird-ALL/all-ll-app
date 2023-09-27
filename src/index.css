@@ -1738,8 +1738,10 @@ nav .brand-logo.center {
     color: #fff;
     background-color: #198754;
     border-color: #198754;
-    padding: 13px;
+    padding: 11px;
     border-radius: 5px;
+    font-size: 14px;
+    margin: 5px;
 }
 .css-1tff5vg {
   width: 45px !important;
@@ -1760,4 +1762,8 @@ p.chakra-text.css-1r7spse {
   font-weight: 500;
   margin-bottom: -10px;
   margin-top: 15px;
+}
+.css-ducv57 {
+  width: 100%;
+  height: 220px!important;
 }
