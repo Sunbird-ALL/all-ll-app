@@ -5,14 +5,8 @@ import {
   Flex,
   Avatar,
   HStack,
-  Text,
-  IconButton,
   Button,
   Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   useDisclosure,
   useColorModeValue,
   Stack,
@@ -47,13 +41,13 @@ export default function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const buttonStyle = {
-    backgroundColor: '#007bff', // Blue background color
-    color: '#fff',              // White text color
-    padding: '10px 20px',       // Padding for the button
-    border: 'none',             // Remove button border
-    borderRadius: '5px',        // Rounded corners
-    cursor: 'pointer',          // Show pointer cursor on hover
-    fontSize: '16px',           // Font size
+    backgroundColor: '#007bff',
+    color: '#fff',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
   };
   
 

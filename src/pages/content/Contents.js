@@ -50,7 +50,7 @@ export default function Contents() {
               rounded="3xl"
               px="6"
               onClick={() => {
-                localStorage.setItem('contents', JSON.stringify(SampleContent));
+                // localStorage.setItem('contents', JSON.stringify(SampleContent));
                 window.location.reload();
               }}
             >

@@ -138,6 +138,7 @@ function StartLearn() {
       let count_array = 0;
       const content_list = getContentList();
 
+      
       let tempContent = [];
       const content_count = Object.keys(content_list).length;
       const content_keys = Object.keys(content_list);
@@ -164,7 +165,7 @@ function StartLearn() {
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
-
+        console.log(tempContent);
         set_content_id(getitem);
         localStorage.setItem(
           'contentText',
@@ -448,6 +449,7 @@ function StartLearn() {
   };
   function showStartLearn() {
     const myCurrectLanguage = getParameter('language', location.search);
+    console.log(content);
     return (
       <>
         {content != null && content[sel_lang] ? (
