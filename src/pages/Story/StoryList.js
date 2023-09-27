@@ -27,9 +27,9 @@ const StoryList = () => {
     localStorage.setItem('storyTitle', storyTitle)
   }
       return (
-        <div className="container" >
+        <div className="container">
         <div className="row">
-          <h1>My Stories</h1>
+          <h1 style={{textAlign:'center'}}>My Stories</h1>
           {posts?.data?.map((post,ind) => (
             <Link to={`story/${post.collectionId}`} key={ind} >
              <Box
@@ -45,7 +45,7 @@ const StoryList = () => {
              onClick={()=> selectStoryTitle(post.title)}
              >
              <Image src={post.image} alt={post.title} width="100%" height="auto" />
-             <Box p="4">
+             <Box textAlign={'center'} p="4">
                  <Text fontSize="xl" fontWeight="bold" lineHeight="1.1" mb="2">
                    {post.title}
                  </Text>
