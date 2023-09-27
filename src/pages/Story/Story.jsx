@@ -10,7 +10,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
-import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
+// import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -101,7 +101,7 @@ const Story = () => {
 
 
   const nextLine = count => {
-    if (currentLine < posts?.data?.length ) {
+    if (currentLine < posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
   };

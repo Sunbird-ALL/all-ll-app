@@ -105,3 +105,27 @@ display: flex;
 .custom-button:hover {
   background-color: #0056b3; /* Hover background color */
 }
+.css-1jc7f17 {	
+  -webkit-justify-content: center;	
+  justify-content: center;	
+  min-height: 100vh;	
+  background: gray.50;	
+  background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
+  background-color: #cccccc;	
+  height: 500px;	
+  background-position: center;	
+  background-repeat: no-repeat;	
+  background-size: cover;	
+}	
+.bg{	
+  -webkit-justify-content: center;	
+  justify-content: center;	
+  min-height: 100vh;	
+  background: gray.50;	
+  background-image: url('../../assests/Images/hackthon-images/images.jpeg');	
+  background-color: #cccccc;	
+  height: 500px;	
+  background-position: center;	
+  background-repeat: no-repeat;	
+  background-size: cover;	
+}

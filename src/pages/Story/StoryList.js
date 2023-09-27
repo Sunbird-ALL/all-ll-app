@@ -18,6 +18,9 @@ const StoryList = () => {
       }
       const data = await response.json();
       setPosts(data);
+      localStorage.setItem('selectedStoryTitle', data.title);
+      localStorage.setItem('sentenceCounter',0)
+      // console.log(data.title);
     } catch (error) {
       console.error(error.message);
     }
@@ -27,12 +30,15 @@ const StoryList = () => {
     localStorage.setItem('storyTitle', storyTitle)
   }
       return (
-        <div className="container">
+        
+        <section className='bg'>
+      <div className="container">
         <div className="row">
           <h1 style={{textAlign:'center'}}>My Stories</h1>
           {posts?.data?.map((post,ind) => (
             <Link to={`story/${post.collectionId}`} key={ind} >
              <Box
+            onClick={()=> selectStoryTitle(post.title)}
              borderWidth="1px"
              borderRadius="10px"
              overflow="hidden"
@@ -42,7 +48,6 @@ const StoryList = () => {
              display={"inline-block"}
              boxShadow="md"
              _hover={{ boxShadow: "lg" }}
-             onClick={()=> selectStoryTitle(post.title)}
              >
              <Image src={post.image} alt={post.title} width="100%" height="auto" />
              <Box textAlign={'center'} p="4">
@@ -55,6 +60,7 @@ const StoryList = () => {
           ))}
         </div>
       </div>
+      </section>
   )
 }
 

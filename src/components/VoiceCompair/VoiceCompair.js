@@ -159,7 +159,14 @@ const VoiceCompair = props => {
           (responseEndTime - responseStartTime) / 1000
         );
         var apiResponse = JSON.parse(result);
-        // props.handleSubmit()
+        if (localStorage.getItem("voiceText") !== 0) {
+          let sentenceCounter = parseInt(localStorage.getItem("sentenceCounter"), 10) || 0;
+        
+          sentenceCounter++;
+          localStorage.setItem("sentenceCounter", sentenceCounter);
+        }
+        
+   
         if(props.hasOwnProperty("saveIndb")){
           props.saveIndb(apiResponse)
         }
