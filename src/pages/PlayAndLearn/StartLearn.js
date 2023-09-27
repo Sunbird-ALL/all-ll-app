@@ -85,7 +85,7 @@ function StartLearn() {
     axios
       .get(filePath)
       .then(res => {
-        localStorage.setItem('contents', JSON.stringify(res.data));
+        // localStorage.setItem('contents', JSON.stringify(res.data));
 
         if (load_cnt === 0) {
           const content_list = getContentList();
@@ -132,7 +132,7 @@ function StartLearn() {
       axios
       .get(window.location.origin + '/db/playAndLearn/proto4.json')
       .then(res => {
-        localStorage.setItem('contents', JSON.stringify(res.data));
+        // localStorage.setItem('contents', JSON.stringify(res.data));
 
         if (load_cnt === 0) {
           const content_list = getContentList();

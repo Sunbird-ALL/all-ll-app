@@ -56,7 +56,7 @@ function Start3() {
       axios
         .get(filePath)
         .then(res => {
-          localStorage.setItem('contents', JSON.stringify(res.data));
+          // localStorage.setItem('contents', JSON.stringify(res.data));
 
           let data = JSON.parse(JSON.stringify(res.data));
           let val =
@@ -81,7 +81,7 @@ function Start3() {
       axios
         .get(window.location.origin + '/db/' + myCurrectLanguage + '/proto3.json')
         .then(res => {
-          localStorage.setItem('contents', JSON.stringify(res.data));
+          // localStorage.setItem('contents', JSON.stringify(res.data));
 
           let data = JSON.parse(JSON.stringify(res.data));
           let val =

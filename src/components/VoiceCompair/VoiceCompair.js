@@ -61,7 +61,7 @@ const VoiceCompair = props => {
     set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
     break;
 	default:
-		set_asr_language_code(DEFAULT_ASR_LANGUAGE_CODE);
+		set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
 		break;
 	}
   }, []);
@@ -135,7 +135,10 @@ const VoiceCompair = props => {
         },
       ],
     });
-    props.setStoryBase64Data(base64Data)
+    if(props.hasOwnProperty("setStoryBase64Data")){
+      props?.setStoryBase64Data(base64Data)
+    }
+    
     const abortController = new AbortController();
     var requestOptions = {
       method: 'POST',
@@ -157,9 +160,14 @@ const VoiceCompair = props => {
         );
         var apiResponse = JSON.parse(result);
         // props.handleSubmit()
-        props.saveIndb(apiResponse)
+        if(props.hasOwnProperty("saveIndb")){
+          props.saveIndb(apiResponse)
+        }
+        
         // props.setBase64Data(base64Data)
-        props?.setCurrentLine((oldData)=> oldData+1)
+        if(props.hasOwnProperty("setCurrentLine")){
+          props?.setCurrentLine((oldData)=> oldData+1)
+        }
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();
         texttemp = replaceAll(texttemp, '.', '');
@@ -231,7 +239,7 @@ const VoiceCompair = props => {
 
           try {
             const response = await S3Client.send(command);
-            console.log(response);
+            // console.log(response);
           } catch (err) {
             console.error(err);
           }

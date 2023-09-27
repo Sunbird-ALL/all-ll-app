@@ -12,7 +12,7 @@ const StoryList = () => {
   
   const fetchApi = async () => {
     try {
-      const response = await fetch('https://all-content-respository-backend.onrender.com/v1/collection');
+      const response = await fetch('https://telemetry-dev.theall.ai/content-service/v1/collection');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

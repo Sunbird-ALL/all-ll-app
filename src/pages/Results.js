@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useNavigate } from 'react-router-dom';
+import { Link, json, useNavigate } from 'react-router-dom';
 import './result.css';
 import axios from 'axios';
 import StartPng from '../assests/Images/Star.svg'
@@ -40,21 +40,43 @@ export default function Results() {
     // const replaceSymbols = charactersArray.
     axios
       .post(
-        'https://all-content-respository-backend.onrender.com/v1/WordSentence/search',
+        'https://telemetry-dev.theall.ai/content-service/v1/WordSentence/search',
         {
           tokenArr: charactersArray,
         }
       )
       .then(res => {
-        // console.log(res.data);
+
         setWordSentence(res.data);
+
+        localStorage.removeItem('content_random_id');
+        localStorage.setItem('content_random_id', -1);
+        localStorage.setItem('pageno',1);
+        let contentdata = []
+         res.data.data.forEach((element, index) => {
+           let contentObj = {};
+           contentObj.title = element.title
+           contentObj.type = element.type
+           contentObj.hi = element.data[0].hi
+           // contentObj.en = element.data[0]
+           contentObj.image = element.image
+           contentdata[index] = contentObj;
+          });
+          
+          
+          localStorage.setItem('apphomelevel','Word');
+          localStorage.setItem('contents', JSON.stringify(contentdata));
+          
+        // let data = null;
+        // data = JSON.parse(JSON.stringify(contentdata));
+        // console.log(data);
+        // console.log(res.data.data);
       })
       .catch(error => {
         console.error(error);
       });
-    console.log('Data Ala');
   };
-
+  // console.log(wordSentence)
   const characterImprove = () => {
     const charactersToImprove = getGap
       ?.filter(item => item.score < 0.9)
@@ -110,6 +132,7 @@ useEffect(() => {
     clearInterval(intervalId);
   };
 }, [visitorCount, targetCount]);
+
   return (
     <>
       <section class="c-section">
@@ -120,7 +143,10 @@ useEffect(() => {
         </h2>
         <ul class="c-services">
           <li class="c-services__item">
-        <h1>Recommended Sentece</h1>
+        <h1>Recommended Words and Senteces</h1>
+        <Link to={'/exploreandlearn/startlearn'}>
+         <button>Let's Improve</button>
+        </Link>
               {wordSentence.data?.length>0 &&  wordSentence?.data.map((item, ind) => {
                 // console.log(item?.data[0]?.hi?.text);
                 return (

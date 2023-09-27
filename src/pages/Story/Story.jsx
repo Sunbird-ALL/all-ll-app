@@ -10,6 +10,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
+import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -47,13 +48,20 @@ const Story = () => {
     );
     try {
       const response = await fetch(
-        `https://all-content-respository-backend.onrender.com/v1/WordSentence/pagination?type=Sentence&collectionId=${slug}`
+        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?type=Sentence&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
         })
         .then(data => {
-          setPosts(data);
+          // if(!!localStorage.getItem('contents')){
+          //   setPosts(JSON.parse(localStorage.getItem('contents')));
+          // }
+          // else{
+            setPosts(data);
+          // }
+          // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
+          // console.log("api:-" ,data);
           setLoading(false);
         });
       if (!response.ok) {
@@ -129,7 +137,7 @@ const Story = () => {
         language: 'hi',
       })
       .then(res => {
-        console.log(res);
+        // console.log(res);
       })
       .catch(error => {
         console.error(error);
@@ -157,7 +165,7 @@ const Story = () => {
           onClick={prevLine}
           alt="next" />
         <Image h={'32'} src={Next} onClick={nextLine} alt="next" /> */}
-          <Image h={'32'} src={Next} onClick={nextLine} alt="next" /> 
+          {/* <Image h={'32'} src={Next} onClick={nextLine} alt="next" />  */}
         </Flex>
         <div style={{ boxShadow: "2px 2px 15px 5px grey",border:'2px solid white', borderRadius:"30px"}} className="story-item">
           <div className="row">
@@ -168,6 +176,7 @@ const Story = () => {
               posts?.data?.map((post, ind) =>
                 currentLine === ind ? (
                   <Flex key={ind}>
+                    {/* {console.log(post.image)} */}
                     <Image
                       className="story-image"
                       src={post?.image}
@@ -175,11 +184,11 @@ const Story = () => {
                     />
                     <Box key={ind}>
                       <Box p="4">
-                        <h1 style={{fontSize:'55px'}}>{post?.data[0]?.hi?.text}</h1>
+                        <h1 style={{fontSize:'55px', marginTop:'40px'}}>{post?.data[0]?.hi?.text}</h1>
                         {localStorage.setItem(
                           'contentText',
                           post?.data[0]?.hi?.text
-                        )}
+                        )} 
                       </Box>
                     </Box>
                   </Flex>
@@ -189,7 +198,7 @@ const Story = () => {
               )
             )}
           </div>
-          <div style={{display:'flex', gap:"20px", position:'relative', bottom:'-200px', left:'-40%'}}>
+          <div style={{display:'flex', gap:"20px", position:'relative', bottom:'-220px', left:'-40%'}}>
 {
   currentLine === posts?.data?.length? "":
 <>
