@@ -58,3 +58,8 @@
     background-color: #04AA6D;
     color: white;
   }
+
+  #customers h3 {
+    overflow-wrap: break-word;
+    width: 200px;
+}
