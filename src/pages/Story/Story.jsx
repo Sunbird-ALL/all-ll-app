@@ -179,18 +179,19 @@ const Story = () => {
                     {/* {console.log(post.image)} */}
                     <Image
                       className="story-image"
-                      src={post?.image}
+                      // src={post?.image}
+                      src={"data:image/jpeg;base64," + post.image.replace("data:image/jpeg;base64,","")}
                       alt={post?.title}
                     />
-                    <Box key={ind}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40vh' }}>
                       <Box p="4">
-                        <h1 style={{fontSize:'55px', marginTop:'40px'}}>{post?.data[0]?.hi?.text}</h1>
+                        <h1 style={{ fontSize: '55px', marginTop: '40px' }}>{post?.data[0]?.hi?.text}</h1>
                         {localStorage.setItem(
                           'contentText',
                           post?.data[0]?.hi?.text
-                        )} 
+                        )}
                       </Box>
-                    </Box>
+                    </div>
                   </Flex>
                 ) : (
                   ''
