@@ -1,14 +1,12 @@
 import React from 'react';
-
-// import * as Recorder from './recorder';
 import Recorder from './Recorder';
-
-// import mic from '../../assests/Images/mic.png';
-import mic_on from '../../assests/Images/mic_on.png';
+import mic_play from '../../assests/Images/mic_play.svg'
 import mic from '../../assests/Images/mic.png';
-import stop from '../../assests/Images/stop.png';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { response,interact } from '../../services/telementryService';
+import { replaceAll, compareArrays } from '../../utils/helper';
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import S3Client from '../../config/awsS3';
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -38,6 +36,7 @@ function Mic({
   flag,
   setTamilRecordedAudio,
   setTamilRecordedText,
+  isAudioPlay,
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
@@ -47,8 +46,10 @@ function Mic({
     setUrl(value);
   }, [value]);
 
+
   const startRecording = () => {
     setRecord(true);
+    isAudioPlay('recording');
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
@@ -77,6 +78,7 @@ function Mic({
   const stopRecording = () => {
     showLoading();
     setRecord(false);
+    isAudioPlay('inactive');
     rec.stop(); //stop microphone access
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
@@ -110,8 +112,10 @@ function Mic({
   };
 
   const getASROutput = async (asrInput, blob) => {
+    const asr_api_key = process.env.REACT_APP_ASR_API_KEY;
     var myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', asr_api_key);
 
     var payload = JSON.stringify({
       config: {
@@ -131,22 +135,28 @@ function Mic({
       ],
     });
 
+    const abortController = new AbortController();
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
+      signal: abortController.signal
     };
 
     const ASR_REST_URL =
-      'https://asr-api.ai4bharat.org/asr/v1/recognize/' + MODEL_LANGUAGE;
+      'https://api.dhruva.ai4bharat.org/services/inference/asr?serviceId=ai4bharat/conformer-multilingual-dravidian-gpu--t4';
     const responseStartTime = new Date().getTime();
 
-    await fetch(ASR_REST_URL, requestOptions)
+    fetch(ASR_REST_URL, requestOptions)
       .then(response => response.text())
-      .then(result => {
+      .then( async (result) => {
+        clearTimeout(waitAlert);
         const responseEndTime = new Date().getTime();
-        const responseDuration = Math.round((responseEndTime - responseStartTime) / 1000);
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
 
         var apiResponse = JSON.parse(result);
 
@@ -156,35 +166,119 @@ function Mic({
         setTamiltext(apiResponse['output'][0]['source']);
         createDownloadLink(blob, apiResponse['output'][0]['source']);
         stopLoading();
+        setTamilRecordedText(apiResponse['output'][0]['source']);
 
-        response({ // Required
-            "target": localStorage.getItem('contentText'), // Required. Target of the response
-            "qid": "", // Required. Unique assessment/question id
+        // Data Manipulation on result capturing for telemetry log
+        let texttemp = apiResponse['output'][0]['source'].toLowerCase();
+        const studentTextArray = texttemp.split(' ');
+
+        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        tempteacherText = replaceAll(tempteacherText, '.', '');
+        tempteacherText = replaceAll(tempteacherText, "'", '');
+        tempteacherText = replaceAll(tempteacherText, ',', '');
+        tempteacherText = replaceAll(tempteacherText, '!', '');
+        tempteacherText = replaceAll(tempteacherText, '|', '');
+        tempteacherText = replaceAll(tempteacherText, '?', '');
+        const teacherTextArray = tempteacherText.split(' ');;
+
+        let student_correct_words_result = [];
+        let student_incorrect_words_result = [];
+        let originalwords = teacherTextArray.length;
+        let studentswords = studentTextArray.length;
+        let wrong_words = 0;
+        let correct_words = 0;
+        let result_per_words = 0;
+        let result_per_words1 = 0;
+        let occuracy_percentage = 0;
+
+        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+
+        for (let i = 0; i < studentTextArray.length; i++) {
+            if (teacherTextArray.includes(studentTextArray[i])) {
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
+            } else {
+                wrong_words++;
+                student_incorrect_words_result.push(
+                   studentTextArray[i]
+                );
+            }
+        }
+        //calculation method
+        if (originalwords >= studentswords) {
+           result_per_words = Math.round(
+                 Number((correct_words / originalwords) * 100)
+           );
+        } else {
+            result_per_words = Math.round(
+              Number((correct_words / studentswords) * 100)
+            );
+        }
+        let word_result = (result_per_words == 100) ? "correct" : "incorrect";
+
+        if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
+          let getContentId = parseInt(localStorage.getItem('content_random_id')) + 1;
+          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
+
+          const command = new PutObjectCommand({
+            Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+            Key: audioFileName,
+            Body: Uint8Array.from(window.atob(asrInput), (c) => c.charCodeAt(0)),
+            ContentType: 'audio/wav'
+          });
+
+
+          try {
+            const response = await S3Client.send(command);
+          } catch (err) {
+            console.error(err);
+          }
+
+        }
+
+
+        response(
+          { // Required
+            "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
+            //"qid": "", // Required. Unique assessment/question id
             "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [{ "original_text": localStorage.getItem('contentText') },{ "response_text": apiResponse['output'][0]['source']}, { "duration":  responseDuration}] // Required. Array of response tuples. For ex: if lhs option1 is matched with rhs optionN - [{"lhs":"option1"}, {"rhs":"optionN"}]
-          })
+            "values": [
+                { "original_text": localStorage.getItem('contentText') },
+                { "response_text": apiResponse['output'][0]['source']},
+                { "response_correct_words_array": student_correct_words_result},
+                { "response_incorrect_words_array": student_incorrect_words_result},
+                { "response_word_array_result": word_result_array},
+                { "response_word_result": word_result},
+                { "accuracy_percentage": result_per_words},
+                { "duration":  responseDuration}
+             ]
+          },
+          'ET'
+        )
       })
       .catch(error => {
-        console.log('error', error);
+        clearTimeout(waitAlert);
         stopLoading();
+        if (error.name !== 'AbortError') {
+          alert('Unable to process your request at the moment.Please try again later.');
+          console.log('error', error);
+        }
       });
+    const waitAlert = setTimeout(() => {
+      abortController.abort();
+      alert('Server response is slow at this time. Please explore other lessons');
+    }, 10000);
   };
 
-  const IconMic = () => {
-    if (record) {
-      return (
-        <>
-          {flag ? (
-            <img src={stop} className="micimg mic_record"></img>
-          ) : (
-            <img src={mic_on} className="micimg mic_stop_record"></img>
-          )}
-        </>
-      );
-    } else {
-      return <img src={mic} className={'micimg mic_record'}></img>;
-    }
-  };
+    const IconMic = () => {
+      if (record) {
+        return <img alt='mic_play' src={mic_play} className="micimg mic_stop_record"></img>;
+      } else {
+        return <img alt='mic' src={mic} className={'micimg mic_record'}></img>;
+      }
+    };
 
   return (
     <div spacing={4} overflow="hidden">
