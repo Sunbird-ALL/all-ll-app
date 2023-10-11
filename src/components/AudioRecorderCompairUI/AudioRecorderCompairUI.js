@@ -31,6 +31,19 @@ export default class AudioRecorderCompair extends Component {
     });
   }
 
+  handleMic(){
+    navigator.mediaDevices.getUserMedia({audio: true})
+    .then(stream => {
+      if(stream.getAudioTracks()[0].muted){
+        alert("please turn your mic on")
+      }
+      else{
+        document.getElementById('startaudio_compair').click()
+      }
+    })
+    .catch(err => console.log(err));
+  }
+
   render() {
     const { status, audioSrc, audioType } = this.state;
     const lang_code = localStorage.getItem('apphomelang');
@@ -141,7 +154,9 @@ export default class AudioRecorderCompair extends Component {
                     style={{ height: '72px', width: '72px' }}
                     className={'micimg mic_record'}
                     onClick={() =>
-                      document.getElementById('startaudio_compair').click()
+                      {
+                        this.handleMic()
+                      }
                     }
                   ></img>
 
