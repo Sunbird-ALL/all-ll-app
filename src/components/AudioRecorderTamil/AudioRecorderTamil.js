@@ -46,6 +46,20 @@ function Mic({
     setUrl(value);
   }, [value]);
 
+  function handleMic(){
+    navigator.mediaDevices.getUserMedia({audio: true})
+    .then(stream => {
+      if(stream.getAudioTracks()[0].muted){
+        alert("please turn your mic on")
+      }
+      else{
+        startRecording();
+      }
+    })
+    .catch(err => console.log(err));
+  }
+
+
 
   const startRecording = () => {
     setRecord(true);
@@ -293,7 +307,7 @@ function Mic({
           <audio controls="controls" src={url} type="audio/webm" />
         </div>
       )*/}
-      <div onClick={record ? stopRecording : startRecording}>
+      <div onClick={record ? stopRecording : handleMic}>
         <IconMic />
       </div>
     </div>
