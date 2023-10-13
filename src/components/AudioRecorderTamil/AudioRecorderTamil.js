@@ -37,6 +37,9 @@ function Mic({
   setTamilRecordedAudio,
   setTamilRecordedText,
   isAudioPlay,
+  saveIndb,
+  setUserSpeak,
+  setCurrentLine
 }) {
   const [record, setRecord] = React.useState(false);
   const [url, setUrl] = React.useState();
@@ -76,6 +79,7 @@ function Mic({
   };
 
   const stopRecording = () => {
+
     showLoading();
     setRecord(false);
     isAudioPlay('inactive');
@@ -83,6 +87,7 @@ function Mic({
     gumStream.getAudioTracks()[0].stop();
     //create the wav blob and pass it on to createDownloadLink
     rec.exportWAV(handleRecording, 'audio/wav', MODEL_SAMPLING_RATE);
+  
   };
 
   const pauseRecording = () => {
@@ -99,7 +104,11 @@ function Mic({
     reader.readAsDataURL(blob);
     reader.onloadend = () => {
       var base64Data = reader.result.split(',')[1];
-      getASROutput(base64Data, blob);
+      // getASROutput(base64Data, blob);
+      saveIndb(base64Data)
+      setUserSpeak(true)
+      // setCurrentLine((oldData)=> oldData+1)
+      stopLoading();
     };
   };
 

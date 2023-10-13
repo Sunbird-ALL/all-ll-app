@@ -8,6 +8,7 @@ import { replaceAll, compareArrays } from '../../utils/helper';
 
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3';
+import axios from 'axios';
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -72,7 +73,7 @@ const VoiceCompair = props => {
 
   useEffect(() => {
     if (recordedAudio !== '') {
-      showLoading();
+      // showLoading();
       let uri = recordedAudio;
       var request = new XMLHttpRequest();
       request.open('GET', uri, true);
@@ -82,6 +83,7 @@ const VoiceCompair = props => {
         reader.readAsDataURL(request.response);
         reader.onload = function (e) {
           var base64Data = e.target.result.split(',')[1];
+         
           setRecordedAudioBase64(base64Data);
         };
       };
@@ -97,13 +99,34 @@ const VoiceCompair = props => {
   const [ai4bharat, setAi4bharat] = useState('');
   useEffect(() => {
     if (recordedAudioBase64 !== '') {
-      fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
+      if(props.hasOwnProperty("setStoryBase64Data")){
+        props?.setStoryBase64Data(recordedAudioBase64)
+      }
+      // fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
+      // fetchLearnerAI(recordedAudioBase64)
     }
   }, [recordedAudioBase64]);
   useEffect(() => {
     props.setVoiceText(ai4bharat);
     props.setRecordedAudio(recordedAudio);
   }, [ai4bharat]);
+
+  // const [data, setData] = useState([]);
+  // console.log(data);
+
+  // const fetchLearnerAI = async (base64Data) => {
+
+    
+  //   try {
+  //     const response = await axios.get();
+  //     setData(response.data);
+  //     stopLoading();
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
+
 
   //call api
   const fetchASROutput = async (sourceLanguage, base64Data) => {
@@ -172,9 +195,9 @@ const VoiceCompair = props => {
         }
         
         // props.setBase64Data(base64Data)
-        if(props.hasOwnProperty("setCurrentLine")){
-          props?.setCurrentLine((oldData)=> oldData+1)
-        }
+        // if(props.hasOwnProperty("setCurrentLine")){
+        //   props?.setCurrentLine((oldData)=> oldData+1)
+        // }
 
         if(props.hasOwnProperty("setUserSpeak")){
           props?.setUserSpeak(true);
@@ -327,6 +350,7 @@ const VoiceCompair = props => {
     );
   };
 
+  
   return (
     <center>
       {(() => {
@@ -339,13 +363,16 @@ const VoiceCompair = props => {
                     setTamilRecordedAudio={setTamilRecordedAudio}
                     setTamilRecordedText={setTamilRecordedText}
                     flag={props.flag}
+                    saveIndb={props.saveIndb}
+                    setUserSpeak = {props.setUserSpeak}
+                    setCurrentLine = {props.setCurrentLine}
                     {...(props?._audio ? props?._audio : {})}
                   />
                 ) : (
                   <AudioRecorderCompairUI
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
-
+                    saveIndb={props.saveIndb}
                     {...(props?._audio ? props?._audio : {})}
                   />
                 )}
