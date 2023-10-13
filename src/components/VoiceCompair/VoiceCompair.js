@@ -175,6 +175,12 @@ const VoiceCompair = props => {
         if(props.hasOwnProperty("setCurrentLine")){
           props?.setCurrentLine((oldData)=> oldData+1)
         }
+
+        if(props.hasOwnProperty("setUserSpeak")){
+          props?.setUserSpeak(true);
+        }
+        
+
         // Data Manipulation on result capturing for telemetry log
         let texttemp = apiResponse['output'][0]['source'].toLowerCase();
         texttemp = replaceAll(texttemp, '.', '');
