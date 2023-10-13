@@ -145,7 +145,6 @@ export default function Results() {
     setCharacter(uniqueChars)
     return uniqueChars?.join(',');
   };
-
 const [isCurrentCharModalOpen,SetCurrentCharModalOpen] = useState(false);
 
 const handleCharMopdal=()=>{
@@ -224,8 +223,8 @@ function handelFeedBack(feedback) {
                   })}
                 </div>
                 <div style={{textAlign:'center'}}>
-                  <img onClick={()=> handelFeedBack(1)} style={{marginLeft:'10px'}} src={thumbsup} alt='thumbs-up'/>
-                  <img onClick={()=> handelFeedBack(0)} style={{marginLeft:'10px'}}  src={thumbsdown} alt='thumbs-down'/>
+                  <img onClick={()=> {handelFeedBack(1); handleCharMopdal()}} style={{marginLeft:'10px', cursor:'pointer'}} src={thumbsup} alt='thumbs-up'/>
+                  <img onClick={()=> {handelFeedBack(0); handleCharMopdal()}} style={{marginLeft:'10px', cursor:'pointer'}}  src={thumbsdown} alt='thumbs-down'/>
                 </div>
                 </Modal>
 
