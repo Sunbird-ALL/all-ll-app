@@ -6,6 +6,8 @@ import startIMg from '../assests/Images/hackthon-images/Star.svg';
 import Modal from './Modal';
 import axios from 'axios';
 import Header from './Header';
+import thumbsup from '../assests/Images/Thumbs_up.svg'
+import thumbsdown from '../assests/Images/Thumbs_Down.svg'
 
 
 export default function Results() {
@@ -29,7 +31,7 @@ export default function Results() {
 
   useEffect(() => {
     fetch(
-      `https://telemetry-dev.theall.ai/learner/scores/GetGaps/session/${localStorage.getItem(
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${localStorage.getItem(
         'virtualStorySessionID'
       )}`
     )
@@ -37,8 +39,10 @@ export default function Results() {
       .then(async result => {
         var apiResponse = JSON.parse(result);
         setGetGap(apiResponse);
+        console.log(apiResponse);
+        characterImprove();
+        // handleWordSentence()
 
-      
       });
     GetRecommendedWordsAPI();
   }, []);
@@ -48,7 +52,7 @@ export default function Results() {
     // console.log(splitSentence.length);
 
     fetch(
-      `https://telemetry-dev.theall.ai/learner/scores/GetRecommendedWords/session/${localStorage.getItem(
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetFamiliarity/session/${localStorage.getItem(
         'virtualStorySessionID'
       )}`
     )
@@ -56,12 +60,12 @@ export default function Results() {
         return res.json();
       })
       .then(data => {
-        // console.log(data);
+        console.log(data);
         setStars(data.length);
       });
   };
 
-  // console.log(getGap);
+
   const charactersArray = getGap?.map(item => item.character);
   // console.log(getGap);
 
@@ -72,19 +76,23 @@ export default function Results() {
     }
   },[charactersArray])
 
+  const [recommededWords,setRecommendedWords] = useState("")
+  // console.log(recommededWords);
+
   const handleWordSentence = () => {
     // const replaceSymbols = charactersArray.
     axios
       .post(
         'https://telemetry-dev.theall.ai/content-service/v1/WordSentence/search',
         {
-          tokenArr: charactersArray,
+          tokenArr: ["न"],
         }
       )
       .then(res => {
 
         setWordSentence(res.data);
-
+        // console.log(res.data.data[0].data[0].hi.text);
+        setRecommendedWords(res.data.data)
         localStorage.removeItem('content_random_id');
         localStorage.setItem('content_random_id', -1);
         localStorage.setItem('pageno',1);
@@ -94,6 +102,7 @@ export default function Results() {
            contentObj.title = element.title
            contentObj.type = element.type
            contentObj.hi = element.data[0].hi
+           contentObj.ta = element.data[0].ta
            // contentObj.en = element.data[0]
            contentObj.image = element.image
            contentdata[index] = contentObj;
@@ -113,38 +122,67 @@ export default function Results() {
       });
   };
   // console.log(wordSentence)
+
+  const[character,setCharacter] = useState([])
+
   const characterImprove = () => {
+    
     const charactersToImprove = getGap
-      ?.filter((item) => item.score < 0.9)
-      .map((item) => item.character);
+    ?.filter((item) => item.score < 0.9)
+    .map((item) => item.character);
     const uniqueChars = [];
+    
     charactersToImprove?.forEach((char) => {
       if (!uniqueChars?.includes(char)) {
         uniqueChars?.push(char);
       }
     });
+    console.log("charactersToImprove",uniqueChars?.join(','));
+    setCharacter(uniqueChars)
     return uniqueChars?.join(',');
   };
+const[myCurrectChar,setMyCurrentChar] = useState('')
+const [isCurrentCharModalOpen,SetCurrentCharModalOpen] = useState(false);
+
+const handleCharMopdal=()=>{
+  SetCurrentCharModalOpen(false)
+}
+
+// console.log(myCurrectChar);
+
+function handelFeedBack(feedback) {
+
+  const utcDate = new Date().toISOString().split('T')[0];
+  axios
+    .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
+      user_id: localStorage.getItem('virtualID'),
+      session_id: localStorage.getItem('virtualStorySessionID'),
+      token: myCurrectChar,
+      feedback: feedback,
+    })
+    .then(res => {
+      // console.log(res);
+
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
 
   return (
     <>
     <Header/>
+    <button onClick={characterImprove}>click me</button>
       <div className="main-bg">
         <section class="c-section">
           <div class="container1">
             <div class="row">
               <div className='col s8'>
-              {/* <Link to={'/storylist'}>
-  <button className='btn btn-info'>
-
-  Practice another Story
-  </button>
-</Link> */}
                 <div class="bg-image">
                   <div class="content">
                     <h1>Congratulations...</h1>
                     <br />
-                    <h4>Coins earned : {stars} <img src={startIMg} /> </h4>
+                    <h4>Coins earned : {stars} <img src={startIMg} alt='start-image' /> </h4>
                     <br />
                     <button className='btn btn-success' onClick={openModal}>Share With Teachers</button>
                     <br />
@@ -162,11 +200,36 @@ export default function Results() {
             <div class="row">
               <div className='col s6'>
 
-                <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <Modal zIndex={1}  isOpen={isCurrentCharModalOpen} onClose={handleCharMopdal}>
+                <h1 style={{textAlign:'center'}}>Do You Know This Character</h1>
+                <div style={{textAlign:'center'}}>
+
+                 <h1 style={{fontSize:'100px'}}>
+                 {myCurrectChar}
+                 </h1>
+                </div>
+                <div style={{textAlign:'center', paddingBottom:'10px'}}>
+                  {recommededWords?.map((item,ind)=>{
+                    return <>
+                      <span style={{fontSize:'25px', margin:'10px',}}>
+                   {   item?.data[0]?.hi?.text}{", "}
+                      </span>
+             
+                    </>
+                  })}
+                </div>
+                <div style={{textAlign:'center'}}>
+                  <img onClick={()=> handelFeedBack(1)} style={{marginLeft:'10px'}} src={thumbsup} alt='thumbs-up'/>
+                  <img onClick={()=> handelFeedBack(0)} style={{marginLeft:'10px'}}  src={thumbsdown} alt='thumbs-down'/>
+                </div>
+                </Modal>
+
+                <Modal zIndex={0} isOpen={isModalOpen} onClose={closeModal}>
                   <table id="customers">
                     <tr>
                       <th><h4>Coins earned  </h4></th>
-                      <th>{stars} <img src={startIMg} /> </th>
+                      <th>{stars} <img src={startIMg} /> 
+                      </th>
                     </tr>
                     {/* <tr>
                       <td>Recommended Sentece </td>
@@ -186,7 +249,14 @@ export default function Results() {
                     <tr>
                       <td>Characters To Improve </td>
                       <td>
-                        <h3> {characterImprove()}</h3></td>
+                    
+                        <h3> {character?.map((item,ind)=>{
+                        return  <>
+                        <span onClick={()=> {setMyCurrentChar(item); SetCurrentCharModalOpen(true);}}>
+                          {item}
+                          </span>{" "}
+                          </>
+                        })}</h3></td>
                     </tr>
 
                   </table>
