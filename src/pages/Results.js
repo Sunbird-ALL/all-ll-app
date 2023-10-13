@@ -17,6 +17,7 @@ export default function Results() {
  const [wordSentence, setWordSentence] = useState([]);
 
   const openModal = () => {
+    characterImprove();
     setIsModalOpen(true);
   };
   
@@ -77,6 +78,7 @@ export default function Results() {
   },[charactersArray])
 
   const [recommededWords,setRecommendedWords] = useState("")
+  const [loding,setLoading] = useState(false);
   // console.log(recommededWords);
 
   const handleWordSentence = () => {
@@ -86,12 +88,14 @@ export default function Results() {
         'https://telemetry-dev.theall.ai/content-service/v1/WordSentence/search',
         {
           tokenArr: ["न"],
+          // tokenArr: ["न"],
         }
       )
       .then(res => {
 
         setWordSentence(res.data);
         // console.log(res.data.data[0].data[0].hi.text);
+        setLoading(true)
         setRecommendedWords(res.data.data)
         localStorage.removeItem('content_random_id');
         localStorage.setItem('content_random_id', -1);
@@ -137,7 +141,7 @@ export default function Results() {
         uniqueChars?.push(char);
       }
     });
-    console.log("charactersToImprove",uniqueChars?.join(','));
+    // console.log("charactersToImprove",uniqueChars?.join(','));
     setCharacter(uniqueChars)
     return uniqueChars?.join(',');
   };
@@ -152,7 +156,7 @@ const handleCharMopdal=()=>{
 
 function handelFeedBack(feedback) {
 
-  const utcDate = new Date().toISOString().split('T')[0];
+
   axios
     .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
       user_id: localStorage.getItem('virtualID'),
@@ -172,7 +176,7 @@ function handelFeedBack(feedback) {
   return (
     <>
     <Header/>
-    <button onClick={characterImprove}>click me</button>
+    {/* <button >click me</button> */}
       <div className="main-bg">
         <section class="c-section">
           <div class="container1">
@@ -209,7 +213,8 @@ function handelFeedBack(feedback) {
                  </h1>
                 </div>
                 <div style={{textAlign:'center', paddingBottom:'10px'}}>
-                  {recommededWords?.map((item,ind)=>{
+                  
+                  {loding && recommededWords?.map((item,ind)=>{
                     return <>
                       <span style={{fontSize:'25px', margin:'10px',}}>
                    {   item?.data[0]?.hi?.text}{", "}
