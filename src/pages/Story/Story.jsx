@@ -10,13 +10,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
+import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
 // import Modal from '../../components/Modal/Modal';
 import Animation from '../../components/Animation/Animation'
+import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 // import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
+  console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
   localStorage.setItem('recordedAudio', recordedAudio);
@@ -26,10 +29,13 @@ const Story = () => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak,setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
+  console.log(currentLine);
   const navigate = useNavigate()
-  localStorage.setItem('apphomelang','hi')
+  localStorage.setItem('apphomelang','ta')
+  const[pageno,setPageNo] = useState(1);
 
   React.useEffect(() => {
     if (voiceText == '-') {
@@ -51,7 +57,7 @@ const Story = () => {
     );
     try {
       const response = await fetch(
-        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?type=Sentence&collectionId=${slug}`
+        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -62,6 +68,7 @@ const Story = () => {
           // }
           // else{
             setPosts(data);
+            console.log(data);
           // }
           // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
           // console.log("api:-" ,data);
@@ -84,7 +91,7 @@ const Story = () => {
   }, [temp_audio]);
 
   const playAudio = () => {
-    set_temp_audio(new Audio(posts?.data[currentLine].data[0].hi.audio));
+    set_temp_audio(new Audio(posts?.data[currentLine].data[0].ta.audio));
   };
 
   const pauseAudio = () => {
@@ -105,10 +112,11 @@ const Story = () => {
 
   const nextLine = count => {
     setUserSpeak(!isUserSpeak)
-    if (currentLine < posts?.data?.length - 1) {
+    if (currentLine <= posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
   };
+
   const prevLine = count => {
     if (currentLine > 0) {
       setCurrentLine(currentLine - 1);
@@ -124,24 +132,22 @@ const Story = () => {
 
 
 
-  function saveIndb(output) {
+  function saveIndb(base64Data) {
+    showLoading();
     // .replace(/[.',|!|?-']/g, '')
-    // console.log(output.output);
     const utcDate = new Date().toISOString().split('T')[0];
     axios
-      .post(`https://telemetry-dev.theall.ai/learner/scores`, {
-        taskType: 'asr',
-        output: output.output,
-        config: null,
+      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/ta`, {
+        audio:base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
         original_text: findRegex(localStorage.getItem('contentText')),
-        response_text: findRegex(output.output[0].source),
-        language: 'hi',
+        language: 'ta',
       })
       .then(res => {
         // console.log(res);
+        stopLoading();
       })
       .catch(error => {
         console.error(error);
@@ -149,8 +155,10 @@ const Story = () => {
   }
 
   useEffect(()=>{
+
     if(currentLine === posts?.data?.length){
       navigate('/Results')
+      setPageNo(pageno+1)
     }
   },[currentLine])
 
@@ -213,12 +221,13 @@ const Story = () => {
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
                     <Flex key={ind}>
+                      {console.log(post?.data[0]?.ta?.text)}
                       <Image
                         className="story-image"
                         // src={post?.image}
-                        src={
-                          'data:image/jpeg;base64,' +
-                          post.image.replace('data:image/jpeg;base64,', '')
+                        src={PlaceHolder
+                          // 'data:image/jpeg;base64,' +
+                          // post.image.replace('data:image/jpeg;base64,', '')
                         }
                         alt={post?.title}
                       />
@@ -232,11 +241,11 @@ const Story = () => {
                       >
                         <Box p="4">
                           <h1 style={{ fontSize: '55px', marginTop: '40px' }}>
-                            {post?.data[0]?.hi?.text}
+                            {post?.data[0]?.ta?.text}
                           </h1>
                           {localStorage.setItem(
                             'contentText',
-                            post?.data[0]?.hi?.text
+                            post?.data[0]?.ta?.text
                           )}
                         </Box>
                       </div>
@@ -263,31 +272,33 @@ const Story = () => {
             ) : (
               <>
                 {isAudioPlay !== 'recording' && (
-                  <VStack alignItems="center" gap="5">
-                    {flag ? (
-                      <img
-                        className="play_btn"
-                        src={play}
-                        style={{ height: '72px', width: '72px' }}
-                        onClick={() => playAudio()}
-                        alt="play_audio"
-                      />
-                    ) : (
-                      <img
-                        className="play_btn"
-                        src={pause}
-                        style={{ height: '72px', width: '72px' }}
-                        onClick={() => pauseAudio()}
-                        alt="pause_audio"
-                      />
-                    )}
-                    <h4
-                      className="text-play m-0 "
-                      style={{ position: 'relative' }}
-                    >
-                      Listen
-                    </h4>
-                  </VStack>
+                  <>
+                  </>
+                  // <VStack alignItems="center" gap="5">
+                  //   {flag ? (
+                  //     <img
+                  //       className="play_btn"
+                  //       src={play}
+                  //       style={{ height: '72px', width: '72px' }}
+                  //       onClick={() => playAudio()}
+                  //       alt="play_audio"
+                  //     />
+                  //   ) : (
+                  //     <img
+                  //       className="play_btn"
+                  //       src={pause}
+                  //       style={{ height: '72px', width: '72px' }}
+                  //       onClick={() => pauseAudio()}
+                  //       alt="pause_audio"
+                  //     />
+                  //   )}
+                  //   <h4
+                  //     className="text-play m-0 "
+                  //     style={{ position: 'relative' }}
+                  //   >
+                  //     Listen
+                  //   </h4>
+                  // </VStack>
                 )}
                 <VStack>
                   <VoiceCompair

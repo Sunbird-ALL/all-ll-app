@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
+import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
 
 const StoryList = () => {
   const [posts, setPosts] = useState([]);
@@ -49,7 +50,8 @@ const StoryList = () => {
              boxShadow="md"
              _hover={{ boxShadow: "lg" }}
              >
-             <Image src={post.image} alt={post.title} width="100%" height="auto" />
+             
+             <Image src={post.image == " "? PlaceHolder:post.image} alt={post.title} width="100%" height="auto" />
              <Box textAlign={'center'} p="4">
                  <Text fontSize="xl" fontWeight="bold" lineHeight="1.1" mb="2">
                    {post.title}
