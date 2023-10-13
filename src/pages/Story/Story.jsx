@@ -10,6 +10,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
+// import Modal from '../../components/Modal/Modal';
+import Animation from '../../components/Animation/Animation'
 // import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
 
 const Story = () => {
@@ -22,6 +24,7 @@ const Story = () => {
   const [flag, setFlag] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
   const [loading, setLoading] = useState(true);
+  const [isUserSpeak,setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
@@ -101,6 +104,7 @@ const Story = () => {
 
 
   const nextLine = count => {
+    setUserSpeak(!isUserSpeak)
     if (currentLine < posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
@@ -155,109 +159,183 @@ const Story = () => {
     <>
       <Header />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
-      <div style={{ boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} className="story-container">
-        <Flex gap={14}
-        >
-          {/* <Image
-          transform={'scaleX(-1)'}
-          h={'32'} Result
-          src={Next}
-          onClick={prevLine}
-          alt="next" />
-        <Image h={'32'} src={Next} onClick={nextLine} alt="next" /> */}
-          {/* <Image h={'32'} src={Next} onClick={nextLine} alt="next" />  */}
+      <Animation size={15} isStart={isUserSpeak} numberOfPieces={100}>
+      <div
+        style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+        className="story-container"
+      >
+        <Flex gap={14}>
+  
         </Flex>
-        <div style={{ boxShadow: "2px 2px 15px 5px grey",border:'2px solid white', borderRadius:"30px"}} className="story-item">
+        <div
+          style={{
+            boxShadow: '2px 2px 15px 5px grey',
+            border: '2px solid white',
+            borderRadius: '30px',
+          }}
+          className="story-item"
+        >
           <div className="row">
             {/* <h1 style={{position:'relative', left:'-100px'}}>{posts?.data[0]?.title}</h1> */}
+            {/* <Modal /> */}
+            {/* <button onClick={()=> setUserSpeak(!isUserSpeak)}>see Score</button> */}
             {loading ? (
               <div>Loading...</div>
+            ) : isUserSpeak ? (
+              <>
+            
+              <Flex>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: '40vh',
+                      position:'relative',
+                      left:'-40px'
+                    }}
+                  >
+                    <Box  p="4">
+                      <h1 style={{fontSize: '55px', marginTop: '40px' }}>Very Good</h1>
+                      <div style={{ margin:'20px', textAlign:"center"}}>
+                      <img style={{height:'40px', cursor:'pointer',}} onClick={nextLine} src={Next} alt='next-button'/>
+                      <p >Try Next</p>
+                      </div>
+                    </Box>
+                  </div>
+                </Flex>
+        
+         
+              </>
             ) : (
-              posts?.data?.map((post, ind) =>
-                currentLine === ind ? (
-                  <Flex key={ind}>
-                    {/* {console.log(post.image)} */}
-                    <Image
-                      className="story-image"
-                      // src={post?.image}
-                      src={"data:image/jpeg;base64," + post.image.replace("data:image/jpeg;base64,","")}
-                      alt={post?.title}
-                    />
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40vh' }}>
-                      <Box p="4">
-                        <h1 style={{ fontSize: '55px', marginTop: '40px' }}>{post?.data[0]?.hi?.text}</h1>
-                        {localStorage.setItem(
-                          'contentText',
-                          post?.data[0]?.hi?.text
-                        )}
-                      </Box>
-                    </div>
-                  </Flex>
-                ) : (
-                  ''
-                )
-              )
+              <>
+                       {posts?.data?.map((post, ind) =>
+                  currentLine === ind ? (
+                    <Flex key={ind}>
+                      <Image
+                        className="story-image"
+                        // src={post?.image}
+                        src={
+                          'data:image/jpeg;base64,' +
+                          post.image.replace('data:image/jpeg;base64,', '')
+                        }
+                        alt={post?.title}
+                      />
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          height: '40vh',
+                        }}
+                      >
+                        <Box p="4">
+                          <h1 style={{ fontSize: '55px', marginTop: '40px' }}>
+                            {post?.data[0]?.hi?.text}
+                          </h1>
+                          {localStorage.setItem(
+                            'contentText',
+                            post?.data[0]?.hi?.text
+                          )}
+                        </Box>
+                      </div>
+                    </Flex>
+                  ) : (
+                    ''
+                  )
+                )}
+              </>
             )}
           </div>
-          <div style={{display:'flex', gap:"20px", position:'relative', bottom:'-220px', left:'-40%'}}>
-{
-  currentLine === posts?.data?.length? "":
-<>
-          {isAudioPlay !== 'recording' && (
-            <VStack alignItems="center" gap="5">
-              {flag ? (
-                <img
-                  className="play_btn"
-                  src={play}
-                  style={{ height: '72px', width: '72px' }}
-                  onClick={() => playAudio()}
-                  alt="play_audio"
-                  />
-                  ) : (
-                    <img
-                    className="play_btn"
-                    src={pause}
-                    style={{ height: '72px', width: '72px' }}
-                    onClick={() => pauseAudio()}
-                    alt="pause_audio"
-                    />
+          {
+            isUserSpeak? <></> : <div
+            style={{
+              display: 'flex',
+              gap: '20px',
+              position: 'relative',
+              bottom: '-220px',
+              left: '-40%',
+            }}
+          >
+            {currentLine === posts?.data?.length ? (
+              ''
+            ) : (
+              <>
+                {isAudioPlay !== 'recording' && (
+                  <VStack alignItems="center" gap="5">
+                    {flag ? (
+                      <img
+                        className="play_btn"
+                        src={play}
+                        style={{ height: '72px', width: '72px' }}
+                        onClick={() => playAudio()}
+                        alt="play_audio"
+                      />
+                    ) : (
+                      <img
+                        className="play_btn"
+                        src={pause}
+                        style={{ height: '72px', width: '72px' }}
+                        onClick={() => pauseAudio()}
+                        alt="pause_audio"
+                      />
                     )}
-              <h4 className="text-play m-0 " style={{ position: 'relative' }}>
-                Listen
-              </h4>
-            </VStack>
-          )}
-          <VStack>
-            <VoiceCompair
-              setVoiceText={setVoiceText}
-              setRecordedAudio={setRecordedAudio}
-              _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-              flag={true}
-              setCurrentLine={setCurrentLine}
-              setStoryBase64Data={setStoryBase64Data}
-              saveIndb={saveIndb}
-              />
-            {isAudioPlay === 'recording' ? (
-              <h4 style={{position:'relative', top:'-12px'}} className="text-speak m-0">Stop</h4>
-              ) : (
-                <h4 style={{position:'relative', top:'-12px'}} className="text-speak m-0">Speak</h4>
+                    <h4
+                      className="text-play m-0 "
+                      style={{ position: 'relative' }}
+                    >
+                      Listen
+                    </h4>
+                  </VStack>
                 )}
-          </VStack>
-          </>
-        }
-                </div>
+                <VStack>
+                  <VoiceCompair
+                    setVoiceText={setVoiceText}
+                    setRecordedAudio={setRecordedAudio}
+                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                    flag={true}
+                    setCurrentLine={setCurrentLine}
+                    setStoryBase64Data={setStoryBase64Data}
+                    saveIndb={saveIndb}
+                    setUserSpeak={setUserSpeak}
+                  />
+                  {isAudioPlay === 'recording' ? (
+                    <h4
+                      style={{ position: 'relative', top: '-12px' }}
+                      className="text-speak m-0"
+                    >
+                      Stop
+                    </h4>
+                  ) : (
+                    <h4
+                      style={{ position: 'relative', top: '-12px' }}
+                      className="text-speak m-0"
+                    >
+                      Speak
+                    </h4>
+                  )}
+                </VStack>
+              </>
+            )}
+          </div>
+          }
+         
         </div>
-        {currentLine === posts?.data?.length? 
-        <div className="button-container">
-      <Link to={'/Results'}>
-      <button className="custom-button">View Result</button>
-      </Link>
-      <Link to={'/storyList'}>
-      <button className="custom-button">Back To StoryList</button>
-      </Link>
-      </div>:""
-      }
+        {currentLine === posts?.data?.length ? (
+          <div className="button-container">
+            <Link to={'/Results'}>
+              <button className="custom-button">View Result</button>
+            </Link>
+            <Link to={'/storyList'}>
+              <button className="custom-button">Back To StoryList</button>
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
+      </Animation>
     </>
   );
 };
