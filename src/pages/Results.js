@@ -72,7 +72,7 @@ export default function Results() {
 
   useEffect(()=>{
     if (charactersArray?.length>0 && isCalled === 0){
-      handleWordSentence();
+      
       setIsCalled(isCalled+1)
     }
   },[charactersArray])
@@ -80,14 +80,14 @@ export default function Results() {
   const [recommededWords,setRecommendedWords] = useState("")
   const [loding,setLoading] = useState(false);
   // console.log(recommededWords);
-
-  const handleWordSentence = () => {
+  const[myCurrectChar,setMyCurrentChar] = useState('')
+  const handleWordSentence = (char) => {
     // const replaceSymbols = charactersArray.
     axios
       .post(
         'https://telemetry-dev.theall.ai/content-service/v1/WordSentence/search',
         {
-          tokenArr: ["न"],
+          tokenArr: [char],
           // tokenArr: ["न"],
         }
       )
@@ -145,7 +145,7 @@ export default function Results() {
     setCharacter(uniqueChars)
     return uniqueChars?.join(',');
   };
-const[myCurrectChar,setMyCurrentChar] = useState('')
+
 const [isCurrentCharModalOpen,SetCurrentCharModalOpen] = useState(false);
 
 const handleCharMopdal=()=>{
@@ -217,7 +217,7 @@ function handelFeedBack(feedback) {
                   {loding && recommededWords?.map((item,ind)=>{
                     return <>
                       <span style={{fontSize:'25px', margin:'10px',}}>
-                   {   item?.data[0]?.hi?.text}{", "}
+                   {   item?.data[0]?.ta?.text}{", "}
                       </span>
              
                     </>
@@ -257,7 +257,7 @@ function handelFeedBack(feedback) {
                     
                         <h3> {character?.map((item,ind)=>{
                         return  <>
-                        <span onClick={()=> {setMyCurrentChar(item); SetCurrentCharModalOpen(true);}}>
+                        <span onClick={()=> {closeModal(); setMyCurrentChar(item); SetCurrentCharModalOpen(true); handleWordSentence(item)}}>
                           {item}
                           </span>{" "}
                           </>
