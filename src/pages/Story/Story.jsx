@@ -205,8 +205,7 @@ const Story = () => {
                     }}
                   >
                     <Box  p="4">
-                      {currentLine === 1? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '55px', marginTop: '40px' }}>WoW</h1>:<h1 style={{fontSize: '55px', marginTop: '40px' }}>Well Done</h1>}
-                      
+                      {currentLine === 1? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '55px', marginTop: '40px' }}>WoW</h1>:<h1 style={{fontSize: '55px', marginTop: '40px' }}>Well Done</h1>}           
                       <div style={{ margin:'20px', textAlign:"center"}}>
                       <img style={{height:'40px', cursor:'pointer',}} onClick={nextLine} src={Next} alt='next-button'/>
                       <p >Try Next</p>
@@ -222,7 +221,6 @@ const Story = () => {
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
                     <Flex key={ind}>
-                      {console.log(post?.data[0]?.ta?.text)}
                       <Image
                         className="story-image"
                         // src={post?.image}

@@ -154,8 +154,13 @@ const handleCharMopdal=()=>{
 // console.log(myCurrectChar);
 
 function handelFeedBack(feedback) {
-
-
+  handleCharMopdal()
+if(feedback === 1){
+  alert("Bingo! Your letter recognition skills are on point. Way to go!")
+}
+else{
+  alert(`No problem at all. Letter recognition can be tricky, but you're learning!.`)
+}
   axios
     .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
       user_id: localStorage.getItem('virtualID'),
@@ -177,12 +182,12 @@ function handelFeedBack(feedback) {
     <Header/>
     {/* <button >click me</button> */}
       <div className="main-bg">
-        <section class="c-section">
-          <div class="container1">
-            <div class="row">
-              <div className='col s8'>
-                <div class="bg-image">
-                  <div class="content">
+        <section className="c-section">
+          <div className="container1">
+            <div className="row">
+              <div classNameName='col s8'>
+                <div className="bg-image">
+                  <div className="content">
                     <h1>Congratulations...</h1>
                     <br />
                     <h4>Coins earned : {stars} <img src={startIMg} alt='start-image' /> </h4>
@@ -200,7 +205,7 @@ function handelFeedBack(feedback) {
               </div>
             </div>
 
-            <div class="row">
+            <div className="row">
               <div className='col s6'>
 
               <Modal zIndex={1}  isOpen={isCurrentCharModalOpen} onClose={handleCharMopdal}>
@@ -223,8 +228,8 @@ function handelFeedBack(feedback) {
                   })}
                 </div>
                 <div style={{textAlign:'center'}}>
-                  <img onClick={()=> {handelFeedBack(1); handleCharMopdal()}} style={{marginLeft:'10px', cursor:'pointer'}} src={thumbsup} alt='thumbs-up'/>
-                  <img onClick={()=> {handelFeedBack(0); handleCharMopdal()}} style={{marginLeft:'10px', cursor:'pointer'}}  src={thumbsdown} alt='thumbs-down'/>
+                  <img onClick={()=> {handelFeedBack(1)}} style={{marginLeft:'10px', cursor:'pointer'}} src={thumbsup} alt='thumbs-up'/>
+                  <img onClick={()=> {handelFeedBack(0)}} style={{marginLeft:'10px', cursor:'pointer'}}  src={thumbsdown} alt='thumbs-down'/>
                 </div>
                 </Modal>
 
