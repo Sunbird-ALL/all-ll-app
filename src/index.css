@@ -1696,6 +1696,7 @@ nav .brand-logo.center {
 }
 .form-control{
   display: block;
+  text-transform: none;
   width: 100%;
   padding: 0.375rem 0.75rem;
   font-size: 16px;

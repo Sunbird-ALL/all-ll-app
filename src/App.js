@@ -38,6 +38,7 @@ function App() {
       const { visitorId } = await fp.get();
 
       localStorage.setItem('did', visitorId);
+      initService();
     };
 
     setFp();
@@ -79,16 +80,16 @@ function App() {
         // tslint:disable-next-line:max-line-length
         metadata: {},
       });
-    };
-    initService();
-    if (!ranonce) {
-
-      if (localStorage.getItem('contentSessionId') === null) {
-        startEvent();
+      if (!ranonce) {
+  
+        if (localStorage.getItem('contentSessionId') === null) {
+          startEvent();
+        }
+  
+        ranonce = true;
       }
-
-      ranonce = true;
-    }
+    };
+    
   }, []);
   useEffect(() => {
     const cleanup = () => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Recorder from './Recorder';
 import mic_play from '../../assests/Images/mic_play.svg'
 import mic from '../../assests/Images/mic.png';
@@ -49,6 +49,19 @@ function Mic({
     setUrl(value);
   }, [value]);
 
+  const handleMicOn = ()=>{
+    navigator.mediaDevices.getUserMedia({audio: true})
+    .then(stream => {
+    if(stream.getAudioTracks()[0].muted){
+      alert("Please Turn On Your Mic")
+      return;
+    }
+    else{
+      startRecording();
+    }
+    })
+    .catch(err => console.log(err));
+  }
 
   const startRecording = () => {
     setRecord(true);
@@ -302,7 +315,7 @@ function Mic({
           <audio controls="controls" src={url} type="audio/webm" />
         </div>
       )*/}
-      <div onClick={record ? stopRecording : startRecording}>
+      <div onClick={record ? stopRecording : handleMicOn}>
         <IconMic />
       </div>
     </div>

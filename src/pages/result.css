@@ -1,7 +1,7 @@
 .main-bg {	
     -webkit-justify-content: center;	
     justify-content: center;	
-    min-height: 100vh;	
+    min-height: 97vh;	
     background: gray.50;	
     background-image: url('../../src/assests/Images/hackthon-images/story.webp');	
     background-color: #cccccc;	
