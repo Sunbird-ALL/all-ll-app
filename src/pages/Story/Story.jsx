@@ -14,12 +14,15 @@ import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
 // import Modal from '../../components/Modal/Modal';
 import Animation from '../../components/Animation/Animation'
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import S3Client from '../../config/awsS3'
+import { response } from '../../services/telementryService';
 // import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
-  console.log(voiceText);
+  // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
   localStorage.setItem('recordedAudio', recordedAudio);
@@ -132,10 +135,12 @@ const Story = () => {
 
 
 
-  function saveIndb(base64Data) {
+  async function  saveIndb(base64Data) {
     showLoading();
     // .replace(/[.',|!|?-']/g, '')
+    let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
+    const responseStartTime = new Date().getTime();
     axios
       .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/ta`, {
         audio:base64Data,
@@ -145,8 +150,105 @@ const Story = () => {
         original_text: findRegex(localStorage.getItem('contentText')),
         language: 'ta',
       })
-      .then(res => {
-        // console.log(res);
+      .then( async res => {
+        console.log(res);
+        responseText = res.data.responseText
+        const responseEndTime = new Date().getTime();
+        const responseDuration = Math.round(
+          (responseEndTime - responseStartTime) / 1000
+        );
+
+
+        let texttemp = responseText.toLowerCase();
+        texttemp = replaceAll(texttemp, '.', '');
+        texttemp = replaceAll(texttemp, "'", '');
+        texttemp = replaceAll(texttemp, ',', '');
+        texttemp = replaceAll(texttemp, '!', '');
+        texttemp = replaceAll(texttemp, '|', '');
+        texttemp = replaceAll(texttemp, '?', '');
+        const studentTextArray = texttemp.split(' ');
+
+        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        tempteacherText = replaceAll(tempteacherText, '.', '');
+        tempteacherText = replaceAll(tempteacherText, "'", '');
+        tempteacherText = replaceAll(tempteacherText, ',', '');
+        tempteacherText = replaceAll(tempteacherText, '!', '');
+        tempteacherText = replaceAll(tempteacherText, '|', '');
+        tempteacherText = replaceAll(tempteacherText, '?', '');
+        const teacherTextArray = tempteacherText.split(' ');;
+
+        let student_correct_words_result = [];
+        let student_incorrect_words_result = [];
+        let originalwords = teacherTextArray.length;
+        let studentswords = studentTextArray.length;
+        let wrong_words = 0;
+        let correct_words = 0;
+        let result_per_words = 0;
+        let result_per_words1 = 0;
+        let occuracy_percentage = 0;
+
+        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+
+        for (let i = 0; i < studentTextArray.length; i++) {
+            if (teacherTextArray.includes(studentTextArray[i])) {
+               correct_words++;
+               student_correct_words_result.push(
+                  studentTextArray[i]
+               );
+            } else {
+                wrong_words++;
+                student_incorrect_words_result.push(
+                   studentTextArray[i]
+                );
+            }
+        }
+        //calculation method
+        if (originalwords >= studentswords) {
+           result_per_words = Math.round(
+                 Number((correct_words / originalwords) * 100)
+           );
+        } else {
+            result_per_words = Math.round(
+              Number((correct_words / studentswords) * 100)
+            );
+        }
+
+        let word_result = (result_per_words === 100) ? "correct" : "incorrect";  
+
+        if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
+          let getContentId = currentLine;
+          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('virtualStorySessionID')}-${Date.now()}-${getContentId}.wav`;
+  
+          const command = new PutObjectCommand({
+            Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+            Key: audioFileName,
+            Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
+            ContentType: 'audio/wav'
+          });
+          try {
+            const response = await S3Client.send(command);
+            console.log("Data Ala",response);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        response({ // Required
+          "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
+          //"qid": "", // Required. Unique assessment/question id
+          "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+          "values": [
+              { "original_text": localStorage.getItem('contentText') },
+              { "response_text": responseText},
+              { "response_correct_words_array": student_correct_words_result},
+              { "response_incorrect_words_array": student_incorrect_words_result},
+              { "response_word_array_result": word_result_array},
+              { "response_word_result": word_result},
+              { "accuracy_percentage": result_per_words},
+              { "duration":  responseDuration}
+           ]
+      },
+        'ET'
+      )
         stopLoading();
       })
       .catch(error => {
@@ -164,12 +266,12 @@ const Story = () => {
 
   // console.log(posts?.data[currentLine]?.data[0]?.hi?.audio);
   return (
-    <>
+    <div style={{height:'97vh'}}>
       <Header />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
       <Animation size={15} isStart={isUserSpeak} numberOfPieces={100}>
       <div
-        style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}
+        style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',height:'97vh' }}
         className="story-container"
       >
         <Flex gap={14}>
@@ -346,7 +448,9 @@ const Story = () => {
         )}
       </div>
       </Animation>
-    </>
+      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+          
+    </div>
   );
 };
 

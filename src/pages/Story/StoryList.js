@@ -31,7 +31,7 @@ const StoryList = () => {
     localStorage.setItem('storyTitle', storyTitle)
   }
       return (
-        
+        <>
         <section className='bg'>
       <div className="container">
         <div className="row">
@@ -40,13 +40,13 @@ const StoryList = () => {
             <Link to={`story/${post.collectionId}`} key={ind} >
              <Box
             onClick={()=> selectStoryTitle(post.title)}
-             borderWidth="1px"
-             borderRadius="10px"
-             overflow="hidden"
-             width="350px"
-             backgroundColor="white"
-             margin= "2% 5% 0% 0%"
-             display={"inline-block"}
+            borderWidth="1px"
+            borderRadius="10px"
+            overflow="hidden"
+            width="350px"
+            backgroundColor="white"
+            margin= "2% 5% 0% 0%"
+            display={"inline-block"}
              boxShadow="md"
              _hover={{ boxShadow: "lg" }}
              >
@@ -63,6 +63,8 @@ const StoryList = () => {
         </div>
       </div>
       </section>
+      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+            </>
   )
 }
 

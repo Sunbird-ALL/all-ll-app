@@ -54,8 +54,8 @@ export default function Header() {
 
   return (
     <>
-      <Box w="100%" style={{ background: "#fff", padding: "4px",  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+      <Box pos={'absolute'} p={'20px'} h={'50px'} top={'0'} w="100%" style={{ background: "#fff", padding: "4px",  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
+        <Flex mt={'10px'} h={20} alignItems={'center'} justifyContent={'space-between'}>
     
           <HStack spacing={8} alignItems={'center'}>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
@@ -74,6 +74,7 @@ export default function Header() {
             <Button className='btn btn-success'
               variant={'solid'}
               colorScheme={'teal'}
+              onClick={onOpen}
               size={'sm'}
               mr={4}>
               My Profile : {localStorage.getItem('virtualID')}
@@ -90,7 +91,7 @@ export default function Header() {
         </Flex>
 
         {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
+          <Box pb={4}>
             <Stack as={'nav'} spacing={4}>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>

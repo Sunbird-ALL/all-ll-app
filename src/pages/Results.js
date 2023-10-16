@@ -8,6 +8,7 @@ import axios from 'axios';
 import Header from './Header';
 import thumbsup from '../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../assests/Images/Thumbs_Down.svg'
+import { Text } from '@chakra-ui/react';
 
 
 export default function Results() {
@@ -237,7 +238,7 @@ else{
                   <table id="customers">
                     <tr>
                       <th><h4>Coins earned  </h4></th>
-                      <th>{stars} <img src={startIMg} /> 
+                      <th>{stars} <img src={startIMg} alt='start' /> 
                       </th>
                     </tr>
                     {/* <tr>
@@ -286,6 +287,8 @@ else{
         <div>
         </div>
       </div>
+      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+            
     </>
   );
 }
