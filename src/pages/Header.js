@@ -57,7 +57,7 @@ export default function Header() {
       <Box pos={'absolute'} p={'20px'} h={'50px'} top={'0'} w="100%" style={{ background: "#fff", padding: "4px",  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
         <Flex mt={'10px'} h={20} alignItems={'center'} justifyContent={'space-between'}>
     
-          <HStack spacing={8} alignItems={'center'}>
+          <HStack spacing={8} alignItems={'center'} >
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
               <Link to={'/storylist'}>
               <button

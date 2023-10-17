@@ -157,11 +157,12 @@ const handleCharMopdal=()=>{
 function handelFeedBack(feedback) {
   handleCharMopdal()
 if(feedback === 1){
-  alert("Bingo! Your letter recognition skills are on point. Way to go!")
+  alert("Bingo! Your Character recognition skills are on point. Way to go!")
 }
 else{
-  alert(`No problem at all. Letter recognition can be tricky, but you're learning!.`)
+  alert(`No problem at all. Character recognition can be tricky, but you're learning!.`)
 }
+setIsModalOpen(true);
   axios
     .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
       user_id: localStorage.getItem('virtualID'),
@@ -185,16 +186,16 @@ else{
       <div className="main-bg">
         <section className="c-section">
           <div className="container1">
-            <div className="row">
-              <div classNameName='col s8'>
-                <div className="bg-image">
-                  <div className="content">
-                    <h1>Congratulations...</h1>
+            <div className="">
+              <div classNameName='' >
+                <div className="">
+                  <div className="content" >
+                    <h1 style={{ position:'relative', top:'-250px'}}>Congratulations...</h1>
                     <br />
-                    <h4>Coins earned : {stars} <img src={startIMg} alt='start-image' /> </h4>
+                    <h2 style={{fontSize:'50px', position:'relative', top:'-100px', left:'10px'}}>Coins earned : {stars} <img src={startIMg} alt='start-image' /> </h2>
                     <br />
                     <button className='btn btn-success' onClick={openModal}>Share With Teachers</button>
-                    <br />
+                    {/* <br /> */}
                     <Link to={'/exploreandlearn/startlearn'}>
                     <button className='btn btn-info'>
                       Improve Further
@@ -209,7 +210,7 @@ else{
             <div className="row">
               <div className='col s6'>
 
-              <Modal zIndex={1}  isOpen={isCurrentCharModalOpen} onClose={handleCharMopdal}>
+              <Modal zIndex={5}  isOpen={isCurrentCharModalOpen} onClose={handleCharMopdal}>
                 <h1 style={{textAlign:'center'}}>Do You Know This Character</h1>
                 <div style={{textAlign:'center'}}>
 
@@ -234,7 +235,7 @@ else{
                 </div>
                 </Modal>
 
-                <Modal zIndex={0} isOpen={isModalOpen} onClose={closeModal}>
+                <Modal zIndex={1} isOpen={isModalOpen} onClose={closeModal}>
                   <table id="customers">
                     <tr>
                       <th><h4>Coins earned  </h4></th>

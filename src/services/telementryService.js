@@ -25,7 +25,7 @@ function checkTokenInLocalStorage() {
 if (localStorage.getItem('contentSessionId') !== null) {
   contentSessionId = localStorage.getItem('contentSessionId');
 } else {
-  contentSessionId = uniqueId();
+  contentSessionId = localStorage.getItem('virtualStorySessionID') || uniqueId();
   localStorage.setItem('allAppContentSessionId', contentSessionId);
 }
 
@@ -203,7 +203,7 @@ export const getEventOptions = () => {
           : emis_username || 'anonymous'
       }`,
       cdata: [
-        { id: contentSessionId, type: 'ContentSession' },
+        { id: localStorage.getItem('virtualStorySessionID')|| contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
         { id: userId, type: userType }
       ],

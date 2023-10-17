@@ -162,11 +162,13 @@
   .content{
     position: absolute;
     top: 20rem;
-    left: 23rem;
+    text-align: center;
+    /* left: 23rem; */
 }
 .content h1{
-  font-size: 60px;
+  font-size: 100px;
   color: blueviolet;
+  text-align: center;
 }
 .content img{
   width: 25px;
