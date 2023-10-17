@@ -37,7 +37,8 @@ const Story = () => {
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
-  localStorage.setItem('apphomelang','ta')
+  localStorage.setItem('apphomelang'
+  ,'ta')
   const[pageno,setPageNo] = useState(1);
 
   React.useEffect(() => {
@@ -54,10 +55,7 @@ const Story = () => {
   }, []);
 
   const fetchApi = async () => {
-    localStorage.setItem(
-      'virtualStorySessionID',
-      localStorage.getItem('virtualID') + '' + Date.now()
-    );
+   
     try {
       const response = await fetch(
         `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
@@ -151,7 +149,7 @@ const Story = () => {
         language: 'ta',
       })
       .then( async res => {
-        console.log(res);
+        // console.log(res);
         responseText = res.data.responseText
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
@@ -269,7 +267,6 @@ const Story = () => {
     <div style={{height:'97vh'}}>
       <Header />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
-      <Animation size={15} isStart={isUserSpeak} numberOfPieces={100}>
       <div
         style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',height:'97vh' }}
         className="story-container"
@@ -322,7 +319,7 @@ const Story = () => {
               <>
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                    <Flex key={ind}>
+                <Flex key={ind}>
                       <Image
                         className="story-image"
                         // src={post?.image}
@@ -447,7 +444,6 @@ const Story = () => {
           ''
         )}
       </div>
-      </Animation>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
           
     </div>

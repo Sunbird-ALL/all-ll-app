@@ -38,6 +38,10 @@ export default function Login() {
         console.log('virtual Id' ,virtualID)
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
+        localStorage.setItem(
+          'virtualStorySessionID',
+          virtualID + '' + Date.now()
+        );
         navigate('/Storylist')
         alert("Successfully Login");
        //history.push('Story');
