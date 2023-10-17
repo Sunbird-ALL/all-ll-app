@@ -69,7 +69,7 @@ const Story = () => {
           // }
           // else{
             setPosts(data);
-            console.log(data);
+            // console.log(data);
           // }
           // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
           // console.log("api:-" ,data);
@@ -145,7 +145,7 @@ const Story = () => {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
-        original_text: findRegex(localStorage.getItem('contentText')),
+        original_text: findRegex(posts?.data[currentLine]?.data[0]?.ta?.text),
         language: 'ta',
       })
       .then( async res => {
@@ -166,7 +166,7 @@ const Story = () => {
         texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
 
-        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        let tempteacherText = posts?.data[currentLine]?.data[0]?.ta?.text.toLowerCase();
         tempteacherText = replaceAll(tempteacherText, '.', '');
         tempteacherText = replaceAll(tempteacherText, "'", '');
         tempteacherText = replaceAll(tempteacherText, ',', '');
@@ -225,7 +225,7 @@ const Story = () => {
           });
           try {
             const response = await S3Client.send(command);
-            console.log("Data Ala",response);
+            // console.log("Data Ala",response);
           } catch (err) {
             console.error(err);
           }
@@ -235,7 +235,7 @@ const Story = () => {
           //"qid": "", // Required. Unique assessment/question id
           "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
           "values": [
-              { "original_text": localStorage.getItem('contentText') },
+              { "original_text": posts?.data[currentLine]?.data[0]?.ta?.text },
               { "response_text": responseText},
               { "response_correct_words_array": student_correct_words_result},
               { "response_incorrect_words_array": student_incorrect_words_result},
@@ -339,7 +339,8 @@ const Story = () => {
                       >
                         <Box p="4">
                           <h1 style={{ fontSize: '55px', marginTop: '40px' }}>
-                            {post?.data[0]?.ta?.text}
+                            {/* {post?.data[0]?.ta?.text} */}
+                            {posts?.data[currentLine]?.data[0]?.ta?.text }
                           </h1>
                           {localStorage.setItem(
                             'contentText',
