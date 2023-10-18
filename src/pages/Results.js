@@ -41,7 +41,6 @@ export default function Results() {
       .then(async result => {
         var apiResponse = JSON.parse(result);
         setGetGap(apiResponse);
-        console.log(apiResponse);
         characterImprove();
         // handleWordSentence()
 
@@ -62,7 +61,6 @@ export default function Results() {
         return res.json();
       })
       .then(data => {
-        console.log(data);
         setStars(data.length);
       });
   };

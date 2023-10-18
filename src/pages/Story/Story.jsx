@@ -17,7 +17,9 @@ import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3'
 import { response } from '../../services/telementryService';
+import JSConfetti from 'js-confetti'
 // import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
+const jsConfetti = new JSConfetti();
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -148,8 +150,7 @@ const Story = () => {
         original_text: findRegex(posts?.data[currentLine]?.data[0]?.ta?.text),
         language: 'ta',
       })
-      .then( async res => {
-        // console.log(res);
+      .then( async res => {  
         responseText = res.data.responseText
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
@@ -248,10 +249,27 @@ const Story = () => {
         'ET'
       )
         stopLoading();
+        setUserSpeak(true)
+        handleStarAnimation();
+        
       })
       .catch(error => {
         console.error(error);
+        stopLoading();
       });
+  }
+
+  const handleStarAnimation=()=>{
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
+    })
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
+    })
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟','⭐', '✨', '🌟',],
+    })
+
   }
 
   useEffect(()=>{
