@@ -10,7 +10,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
-import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
+import PlaceHolder from '../../assests/Images/hackthon-images/collections.png'
 // import Modal from '../../components/Modal/Modal';
 import Animation from '../../components/Animation/Animation'
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
@@ -277,7 +277,7 @@ const Story = () => {
         <div
           style={{
             boxShadow: '2px 2px 15px 5px grey',
-            border: '2px solid white',
+            // border: '2px solid white',
             borderRadius: '30px',
           }}
           className="story-item"
@@ -319,8 +319,8 @@ const Story = () => {
               <>
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                <Flex key={ind}>
-                      <Image
+                <Flex className='story-box-container' key={ind}>
+                      <img
                         className="story-image"
                         // src={post?.image}
                         src={PlaceHolder
@@ -338,7 +338,7 @@ const Story = () => {
                         }}
                       >
                         <Box p="4">
-                          <h1 style={{ fontSize: '55px', marginTop: '40px' }}>
+                          <h1 className='story-line'>
                             {post?.data[0]?.ta?.text}
                           </h1>
                           {localStorage.setItem(
@@ -398,6 +398,7 @@ const Story = () => {
                   //   </h4>
                   // </VStack>
                 )}
+                <div className='voice-recorder'>
                 <VStack>
                   <VoiceCompair
                     setVoiceText={setVoiceText}
@@ -408,7 +409,7 @@ const Story = () => {
                     setStoryBase64Data={setStoryBase64Data}
                     saveIndb={saveIndb}
                     setUserSpeak={setUserSpeak}
-                  />
+                    />
                   {isAudioPlay === 'recording' ? (
                     <h4
                       style={{ position: 'relative', top: '-12px' }}
@@ -425,6 +426,7 @@ const Story = () => {
                     </h4>
                   )}
                 </VStack>
+                  </div>
               </>
             )}
           </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
-import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
+import PlaceHolder from '../../assests/Images/hackthon-images/sets.png'
 
 const StoryList = () => {
   const [posts, setPosts] = useState([]);

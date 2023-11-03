@@ -1,10 +1,4 @@
 /* Story.css */
-.story-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
 
 .story-item {
   display: flex;
@@ -17,6 +11,118 @@
   border: 3px solid black;
   width: 80%;
 }
+
+.story-line{
+  font-size: 50px;
+  margin-top: 40px; 
+}
+
+@media screen and (max-width: 580px) {
+  .story-line{
+    font-size: 30px;
+    margin-top: -30px;
+    width: 120%;
+  }
+
+
+  .story-box-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+  }
+
+  .story-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    height:100vh;
+  }
+  .story-item {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      border: 3px solid #d9d2d2;
+      width: 120%;
+      padding: 20px;
+      border: 4px solid black;
+  }
+
+  .story-image {
+    height: 30vh !important;
+    width: 120% !important;
+    border: 5px solid black;
+    border-radius: 25px;
+    position: relative;
+    right : 10px;
+  }
+
+  .voice-recorder{
+    position: absolute;
+    bottom: -150px;
+    left: -80px;
+  }
+}
+
+
+@media screen and (min-width: 580px) and (max-width: 700px) {
+  .story-line{
+    font-size: 35px;
+    margin-top: -45px;
+    width: 100%;
+  }
+
+
+  .story-box-container{
+    display: flex;
+    flex-direction: column;
+    width: 110%;
+  }
+
+  .story-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    height:100vh;
+  }
+  .story-item {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      padding: 10px;
+      border: 10px solid #331f1f;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      width: 100%;
+      padding: 20px;
+  }
+
+  .story-image {
+    height: 30vh !important;
+    width: 100% !important;
+    border: 5px solid black;
+    border-radius: 25px;
+    position: relative;
+    right : 10px;
+  }
+
+  .voice-recorder{
+    position: absolute;
+    bottom: -140px;
+    left: -80px;
+  }
+}
+
+
+
 
 .story {
   font-size: 16px;
@@ -44,7 +150,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  /* gap: 20px; */
   justify-content: center;
   height:100vh;
 }
@@ -57,7 +163,7 @@
     border-radius: 5px;
     background-color: #f9f9f9;
     border: 3px solid #d9d2d2;
-    width: 80%;
+    width: 90%;
     padding: 20px;
 }
 .story-image {
@@ -122,7 +228,7 @@
   justify-content: center;	
   min-height: 97vh;	
   background: gray.50;	
-  background-image: url('../../assests/Images/hackthon-images/images.jpeg');	
+  background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
   background-color: #cccccc;	
   height: 500px;	
   background-position: center;	
