@@ -10,7 +10,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
-import PlaceHolder from '../../assests/Images/hackthon-images/images.jpeg'
+import PlaceHolder from '../../assests/Images/hackthon-images/collections.png'
+import KnPlaceHolder from '../../assests/Images/hackthon-images/fox.png'
 // import Modal from '../../components/Modal/Modal';
 import Animation from '../../components/Animation/Animation'
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
@@ -37,8 +38,6 @@ const Story = () => {
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
-  localStorage.setItem('apphomelang'
-  ,'ta')
   const[pageno,setPageNo] = useState(1);
 
   React.useEffect(() => {
@@ -134,19 +133,20 @@ const Story = () => {
 
 
   async function  saveIndb(base64Data) {
+    let lang = localStorage.getItem('apphomelang');
     showLoading();
     // .replace(/[.',|!|?-']/g, '')
     let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
     axios
-      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/ta`, {
+      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio:base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
         original_text: findRegex(localStorage.getItem('contentText')),
-        language: 'ta',
+        language: lang,
       })
       .then( async res => {
         // console.log(res);
@@ -251,6 +251,7 @@ const Story = () => {
       })
       .catch(error => {
         console.error(error);
+        stopLoading();
       });
   }
 
@@ -277,7 +278,7 @@ const Story = () => {
         <div
           style={{
             boxShadow: '2px 2px 15px 5px grey',
-            border: '2px solid white',
+            // border: '2px solid white',
             borderRadius: '30px',
           }}
           className="story-item"
@@ -319,11 +320,11 @@ const Story = () => {
               <>
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                <Flex key={ind}>
-                      <Image
+                <Flex className='story-box-container' key={ind}>
+                      <img
                         className="story-image"
                         // src={post?.image}
-                        src={PlaceHolder
+                        src={localStorage.getItem('apphomelang') === 'kn'?KnPlaceHolder:PlaceHolder
                           // 'data:image/jpeg;base64,' +
                           // post.image.replace('data:image/jpeg;base64,', '')
                         }
@@ -338,12 +339,12 @@ const Story = () => {
                         }}
                       >
                         <Box p="4">
-                          <h1 style={{ fontSize: '55px', marginTop: '40px' }}>
-                            {post?.data[0]?.ta?.text}
+                          <h1 className='story-line'>
+                            {post?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
                           </h1>
                           {localStorage.setItem(
                             'contentText',
-                            post?.data[0]?.ta?.text
+                            post?.data[0]?.[localStorage.getItem('apphomelang')]?.text
                           )}
                         </Box>
                       </div>
@@ -398,6 +399,7 @@ const Story = () => {
                   //   </h4>
                   // </VStack>
                 )}
+                <div className='voice-recorder'>
                 <VStack>
                   <VoiceCompair
                     setVoiceText={setVoiceText}
@@ -408,7 +410,7 @@ const Story = () => {
                     setStoryBase64Data={setStoryBase64Data}
                     saveIndb={saveIndb}
                     setUserSpeak={setUserSpeak}
-                  />
+                    />
                   {isAudioPlay === 'recording' ? (
                     <h4
                       style={{ position: 'relative', top: '-12px' }}
@@ -425,6 +427,7 @@ const Story = () => {
                     </h4>
                   )}
                 </VStack>
+                  </div>
               </>
             )}
           </div>
