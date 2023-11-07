@@ -18,7 +18,7 @@ import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3'
 import { response } from '../../services/telementryService';
-// import MyStoryimg from '../../assests/Images/DefaultStoryImg.png'
+import retry from '../../assests/Images/retry.svg'
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -118,6 +118,7 @@ const Story = () => {
   };
 
   const prevLine = count => {
+    setUserSpeak(!isUserSpeak)
     if (currentLine > 0) {
       setCurrentLine(currentLine - 1);
     }
@@ -305,10 +306,17 @@ const Story = () => {
                     }}
                   >
                     <Box  p="4">
-                      {currentLine === 1? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '55px', marginTop: '40px' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '55px', marginTop: '40px' }}>WoW</h1>:<h1 style={{fontSize: '55px', marginTop: '40px' }}>Well Done</h1>}           
+                      {currentLine === 1? <h1 style={{fontSize: '60px', marginTop: '40px' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '60px', marginTop: '40px' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '60px', marginTop: '40px' }}>WoW</h1>:<h1 style={{fontSize: '60px', marginTop: '60px' }}>Well Done</h1>}           
+                      <div style={{display:'flex', margin:'20px', }}>
+
                       <div style={{ margin:'20px', textAlign:"center"}}>
                       <img style={{height:'40px', cursor:'pointer',}} onClick={nextLine} src={Next} alt='next-button'/>
-                      <p >Try Next</p>
+                      <p style={{fontSize:'18px'}}>Try Next</p>
+                      </div>
+                      <div style={{ margin:'20px', textAlign:"center"}}>
+                        <img style={{height:'40px', cursor:'pointer',}} onClick={prevLine} src={retry} alt="retry-again" />
+                        <p style={{fontSize:'18px'}}>Try Again</p>
+                      </div>
                       </div>
                     </Box>
                   </div>
