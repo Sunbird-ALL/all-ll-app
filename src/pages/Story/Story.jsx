@@ -119,9 +119,9 @@ const Story = () => {
 
   const prevLine = count => {
     setUserSpeak(!isUserSpeak)
-    if (currentLine > 0) {
-      setCurrentLine(currentLine - 1);
-    }
+    // if (currentLine > 0) {
+    //   setCurrentLine(currentLine - 1);
+    // }
   };
 
   function findRegex(str) {
