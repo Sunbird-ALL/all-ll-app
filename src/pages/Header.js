@@ -69,7 +69,7 @@ export default function Header() {
                 ))}
             </HStack>
           </HStack>
-                <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle')}</Box>
+                <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle') === ''? "My Stories" : localStorage.getItem('storyTitle') }</Box>
           <Flex alignItems={'center'}>
             <Button className='btn btn-success'
               variant={'solid'}

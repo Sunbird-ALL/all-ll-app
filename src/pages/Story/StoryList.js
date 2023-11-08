@@ -4,6 +4,7 @@ import { Box, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import PlaceHolder from '../../assests/Images/hackthon-images/sets.png'
 import kannadaPlaceholder from '../../assests/Images/hackthon-images/knCol.png'
+import Header from '../Header';
 
 const StoryList = () => {
   const [posts, setPosts] = useState([]);
@@ -27,17 +28,18 @@ const StoryList = () => {
       console.error(error.message);
     }
   }
-
+  localStorage.setItem('storyTitle','')
   const selectStoryTitle = (storyTitle,lang) =>{
     localStorage.setItem('storyTitle', storyTitle);
     localStorage.setItem('apphomelang',lang)
   }
       return (
         <>
+        <Header/>
         <section className='bg'>
       <div className="container">
         <div className="row">
-          <h1 style={{textAlign:'center'}}>My Stories</h1>
+          {/* <h1 style={{textAlign:'center'}}>My Stories</h1> */}
           {posts?.data?.map((post,ind) => (
             <Link to={`story/${post.collectionId}`} key={ind} >
              <Box
