@@ -7,8 +7,6 @@ import { response,interact } from '../../services/telementryService';
 import { replaceAll, compareArrays } from '../../utils/helper';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3';
-import JSConfetti from 'js-confetti'
-const jsConfetti = new JSConfetti();
 
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
@@ -121,19 +119,6 @@ function Mic({
       var base64Data = reader.result.split(',')[1];
       // getASROutput(base64Data, blob);
       saveIndb(base64Data)
-      stopLoading();
-      jsConfetti.addConfetti({
-        emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
-      })
-      setUserSpeak(true)
-      // setCurrentLine((oldData)=> oldData+1)
-      jsConfetti.addConfetti({
-        emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
-      })
-      jsConfetti.addConfetti({
-        emojis: ['⭐', '✨', '🌟','⭐', '✨', '🌟',],
-      })
-
     };
   };
 

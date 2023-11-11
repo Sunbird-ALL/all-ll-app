@@ -19,6 +19,9 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3'
 import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
+import JSConfetti from 'js-confetti'
+
+const jsConfetti = new JSConfetti();
 
 const Story = () => {
   const [posts, setPosts] = useState([]);
@@ -68,7 +71,7 @@ const Story = () => {
           // }
           // else{
             setPosts(data);
-            console.log(data);
+            console.log(posts);
           // }
           // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
           // console.log("api:-" ,data);
@@ -131,7 +134,7 @@ const Story = () => {
     return cleanString;
   }
 
-
+  
 
   async function  saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
@@ -140,13 +143,14 @@ const Story = () => {
     let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
+    // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
       .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio:base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
-        original_text: findRegex(localStorage.getItem('contentText')),
+        original_text: findRegex(posts?.data[currentLine]?.data[0]?.[lang]?.text),
         language: lang,
       })
       .then( async res => {
@@ -157,7 +161,6 @@ const Story = () => {
           (responseEndTime - responseStartTime) / 1000
         );
 
-
         let texttemp = responseText.toLowerCase();
         texttemp = replaceAll(texttemp, '.', '');
         texttemp = replaceAll(texttemp, "'", '');
@@ -167,7 +170,7 @@ const Story = () => {
         texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
 
-        let tempteacherText = localStorage.getItem('contentText').toLowerCase();
+        let tempteacherText = posts?.data[currentLine]?.data[0]?.[lang]?.text.toLowerCase();
         tempteacherText = replaceAll(tempteacherText, '.', '');
         tempteacherText = replaceAll(tempteacherText, "'", '');
         tempteacherText = replaceAll(tempteacherText, ',', '');
@@ -236,7 +239,7 @@ const Story = () => {
           //"qid": "", // Required. Unique assessment/question id
           "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
           "values": [
-              { "original_text": localStorage.getItem('contentText') },
+              { "original_text": posts?.data[currentLine]?.data[0]?.[lang]?.text},
               { "response_text": responseText},
               { "response_correct_words_array": student_correct_words_result},
               { "response_incorrect_words_array": student_incorrect_words_result},
@@ -249,11 +252,25 @@ const Story = () => {
         'ET'
       )
         stopLoading();
+        setUserSpeak(true)
+        handleStarAnimation();
       })
       .catch(error => {
         console.error(error);
         stopLoading();
       });
+  }
+
+  const handleStarAnimation=()=>{
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
+    })
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
+    })
+    jsConfetti.addConfetti({
+      emojis: ['⭐', '✨', '🌟','⭐', '✨', '🌟',],
+    })
   }
 
   useEffect(()=>{
@@ -306,7 +323,7 @@ const Story = () => {
                     }}
                   >
                     <Box  p="4">
-                      {currentLine === 1? <h1 style={{fontSize: '60px', marginTop: '40px' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '60px', marginTop: '40px' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '60px', marginTop: '40px' }}>WoW</h1>:<h1 style={{fontSize: '60px', marginTop: '60px' }}>Well Done</h1>}           
+                      {currentLine === 1? <h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>WoW</h1>:<h1 style={{fontSize: '60px', marginTop: '60px', textAlign:'center' }}>Well Done</h1>}           
                       <div style={{display:'flex', margin:'20px', }}>
 
                       <div style={{ margin:'20px', textAlign:"center"}}>
@@ -348,7 +365,7 @@ const Story = () => {
                       >
                         <Box p="4">
                           <h1 className='story-line'>
-                            {post?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
+                          {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
                           </h1>
                           {localStorage.setItem(
                             'contentText',
