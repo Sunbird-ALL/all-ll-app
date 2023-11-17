@@ -16,12 +16,13 @@ import Contents from './pages/content/Contents';
 //components
 import Dots from './components/Spinner/Dots';
 
-import StartV3 from './pages/ExploreAndLearn/Start/Start3';
+// import StartV3 from './pages/ExploreAndLearn/Start/Start3';
 import StartLearn3 from './pages/ExploreAndLearn/StartLearn/StartLearn';
-import Score3 from './pages/ExploreAndLearn/Score/Score';
+// import Score3 from './pages/ExploreAndLearn/Score/Score';
 import Score4 from './pages/PlayAndLearn/Score';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import StartLearn4 from './pages/PlayAndLearn/StartLearn';
+import loadable from 'react-loadable'
 
 function App() {
   const location = useLocation();
@@ -99,6 +100,17 @@ function App() {
     };
   }, []);
 
+  const LoadingComponent = ()=><h3>Loading wait....</h3>
+
+  const StartV3 = loadable({
+    loader: () => import(/* webpackChunkName: "Start3" */'./pages/ExploreAndLearn/Start/Start3'),
+    loading: LoadingComponent,
+  })
+
+  const Score3 = loadable({
+    loader: () => import(/* webpackChunkName: "Score3" */'./pages/ExploreAndLearn/Score/Score'),
+    loading: LoadingComponent,
+  })
 
   return (
     <>
