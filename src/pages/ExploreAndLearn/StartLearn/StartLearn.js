@@ -22,16 +22,8 @@ function StartLearn() {
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
     interactCall("playAudio", "startlearn","DT", "play");
-    // console.log(content[sel_lang]);
-    try {
-      // const audio = new Audio(content[sel_lang].audio);
       set_temp_audio(new Audio(content[sel_lang].audio));
-      // audio.play();
-    } catch (error) {
-      console.error('Error loading audio:', error);
-    }
   };
-  // console.log(isAudioPlay);
 
   const pauseAudio = () => {
     interactCall("pauseAudio", "startlearn","DT", "pause");
