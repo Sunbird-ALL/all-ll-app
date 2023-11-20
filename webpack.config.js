@@ -2,13 +2,15 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-    publicPath: '/', // specify the base path for all assets
+    publicPath: 'auto', // specify the base path for all assets
     chunkFilename: '[name].chunk.js', // dynamically generated chunks
   },
   module: {
@@ -63,8 +65,13 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'styles.css',
     }),
+    new Dotenv({
+      path: path.resolve(__dirname, '.env.local'), 
+    }),
+    new BundleAnalyzerPlugin(),
   ],
   resolve: {
     extensions: ['.js', '.jsx'], // Add '.jsx' to the extensions
   },
+  
 };
