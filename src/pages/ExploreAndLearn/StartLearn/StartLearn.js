@@ -22,9 +22,8 @@ function StartLearn() {
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
     interactCall("playAudio", "startlearn","DT", "play");
-    set_temp_audio(new Audio(content[sel_lang].audio));
+      set_temp_audio(new Audio(content[sel_lang].audio));
   };
-  // console.log(isAudioPlay);
 
   const pauseAudio = () => {
     interactCall("pauseAudio", "startlearn","DT", "pause");
@@ -151,7 +150,6 @@ function StartLearn() {
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
-
         set_content_id(getitem);
         localStorage.setItem(
           'contentText',

@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter,
-  HashRouter,
   Routes,
   Route,
   Link,
@@ -10,18 +8,11 @@ import {
 import { initialize, end } from './services/telementryService';
 import '@project-sunbird/telemetry-sdk/index.js';
 import { startEvent } from './services/callTelemetryIntract';
-import ContentCreate from './pages/content/ContentCreate';
-import Contents from './pages/content/Contents';
 
 //components
 import Dots from './components/Spinner/Dots';
-
-import StartV3 from './pages/ExploreAndLearn/Start/Start3';
-import StartLearn3 from './pages/ExploreAndLearn/StartLearn/StartLearn';
-import Score3 from './pages/ExploreAndLearn/Score/Score';
-import Score4 from './pages/PlayAndLearn/Score';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import StartLearn4 from './pages/PlayAndLearn/StartLearn';
+import loadable from 'react-loadable'
 
 function App() {
   const location = useLocation();
@@ -98,6 +89,43 @@ function App() {
       window.removeEventListener('beforeunload', cleanup);
     };
   }, []);
+
+  const LoadingComponent = ()=><h3>Loading wait....</h3>
+
+  const StartV3 = loadable({
+    loader: () => import(/* webpackChunkName: "Start3" */'./pages/ExploreAndLearn/Start/Start3'),
+    loading: LoadingComponent,
+  })
+
+  const Score3 = loadable({
+    loader: () => import(/* webpackChunkName: "Score3" */'./pages/ExploreAndLearn/Score/Score'),
+    loading: LoadingComponent,
+  })
+
+  const StartLearn3 = loadable({
+    loader: () => import(/* webpackChunkName: "StartLearn3" */'./pages/ExploreAndLearn/StartLearn/StartLearn'),
+    loading: LoadingComponent,
+  })
+
+  const Score4 = loadable({
+    loader: () => import(/* webpackChunkName: "Score4" */'./pages/PlayAndLearn/Score'),
+    loading: LoadingComponent,
+  })
+
+  const StartLearn4 = loadable({
+    loader: () => import(/* webpackChunkName: "StartLearn4" */'./pages/PlayAndLearn/StartLearn'),
+    loading: LoadingComponent,
+  })
+
+  const Contents = loadable({
+    loader: () => import(/* webpackChunkName: "Contents" */'./pages/content/Contents'),
+    loading: LoadingComponent,
+  })
+
+  const ContentCreate = loadable({
+    loader: () => import(/* webpackChunkName: "ContentCreate" */'./pages/content/ContentCreate'),
+    loading: LoadingComponent,
+  })
 
 
   return (
