@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter,
-  HashRouter,
   Routes,
   Route,
   Link,
@@ -10,18 +8,10 @@ import {
 import { initialize, end } from './services/telementryService';
 import '@project-sunbird/telemetry-sdk/index.js';
 import { startEvent } from './services/callTelemetryIntract';
-// import ContentCreate from './pages/content/ContentCreate';
-// import Contents from './pages/content/Contents';
 
 //components
 import Dots from './components/Spinner/Dots';
-
-// import StartV3 from './pages/ExploreAndLearn/Start/Start3';
-// import StartLearn3 from './pages/ExploreAndLearn/StartLearn/StartLearn';
-// import Score3 from './pages/ExploreAndLearn/Score/Score';
-// import Score4 from './pages/PlayAndLearn/Score';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-// import StartLearn4 from './pages/PlayAndLearn/StartLearn';
 import loadable from 'react-loadable'
 
 function App() {
