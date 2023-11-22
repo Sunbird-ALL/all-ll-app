@@ -78,6 +78,10 @@ export default class AudioRecorderCompair extends Component {
       errorCallback: err => {
         // console.log('error', err);
       },
+      width: 300,
+      height: 300,
+      backgroundColor:"#ffefd1",
+      strokeColor:'red'
     };
     //for tamil language
     const audioProps_tamil = {
@@ -110,25 +114,37 @@ export default class AudioRecorderCompair extends Component {
       errorCallback: err => {
         console.log('error', err);
       },
+      width: 300,
+      height: 300,
+      backgroundColor:"#ffefd1",
+      strokeColor:'red'
     };
     return (
       <div>
         <center>
+          <div style={{ position: 'relative' }}>
+            <div
+              className={status === 'recording' ? 'dis-visible' : 'dis-none'}
+            >
+              <AudioAnalyser {...audioProps}></AudioAnalyser>
+            </div>
+          </div>
           {(() => {
             if (status === 'recording') {
               return (
                 <>
-                    {this.props.flag ? (
+                  {this.props.flag ? (
                     <>
                       <img
                         src={mic_play}
                         style={{ height: '72px', width: '72px' }}
                         className="micimg mic_stop_record"
-                        onClick={() =>
-                          document.getElementById('stopaudio_compair').click()
-                        }
+                        onClick={() => {
+
+                          document.getElementById('stopaudio_compair').click();
+                        }}
                       />
-                       {/* <h4 className="text-speak m-0">Stop</h4> */}
+                      {/* <h4 className="text-speak m-0">Stop</h4> */}
                     </>
                   ) : (
                     <>
@@ -139,11 +155,9 @@ export default class AudioRecorderCompair extends Component {
                         onClick={() =>
                           document.getElementById('stopaudio_compair').click()
                         }
-                      />  
-                     
+                      />
                     </>
                   )}
-         
                 </>
               );
             } else {
@@ -153,11 +167,9 @@ export default class AudioRecorderCompair extends Component {
                     src={mic}
                     style={{ height: '72px', width: '72px' }}
                     className={'micimg mic_record'}
-                    onClick={() =>
-                      {
-                        this.handleMic()
-                      }
-                    }
+                    onClick={() => {
+                      this.handleMic();
+                    }}
                   ></img>
 
                   {/* <h4 className="record_text text-speak m-0">Stop</h4> */}

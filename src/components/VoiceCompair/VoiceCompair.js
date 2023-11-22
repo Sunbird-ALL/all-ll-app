@@ -310,21 +310,22 @@ const VoiceCompair = props => {
           if (audioPermission) {
             return (
               <div>
-                {lang_code == 'ta' ? (
+                {/* {lang_code == 'ta' ? (
                   <AudioRecorderTamil
                     setTamilRecordedAudio={setTamilRecordedAudio}
                     setTamilRecordedText={setTamilRecordedText}
                     flag={props.flag}
                     {...(props?._audio ? props?._audio : {})}
                   />
-                ) : (
+                ) : ( */}
                   <AudioRecorderCompairUI
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
-
+                    setTamilRecordedAudio={setTamilRecordedAudio}
+                    setTamilRecordedText={setTamilRecordedText}
                     {...(props?._audio ? props?._audio : {})}
                   />
-                )}
+                {/* )} */}
 
                 {/*recordedAudio !== "" ? (
                     <>
