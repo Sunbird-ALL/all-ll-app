@@ -1654,3 +1654,16 @@ nav .brand-logo.center {
     width: 70%;
   }
 }
+
+.dis-visible{
+  display: block;
+}
+
+.dis-none{
+  display: none;
+}
+
+.custom-design{
+  height: 180px;
+  width: 250px;
+}
