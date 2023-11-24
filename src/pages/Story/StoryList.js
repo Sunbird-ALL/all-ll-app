@@ -37,7 +37,7 @@ const StoryList = () => {
         <>
         <Header/>
         <section className='bg'>
-      <div className="container">
+      <div className="" style={{ margin:'55px'}}>
         <div className="row">
           {/* <h1 style={{textAlign:'center'}}>My Stories</h1> */}
           {posts?.data?.map((post,ind) => (
@@ -46,10 +46,9 @@ const StoryList = () => {
             onClick={()=> selectStoryTitle(post.title,post.language)}
             borderWidth="1px"
             borderRadius="10px"
-            overflow="hidden"
-            width="350px"
+            width="300px"
             backgroundColor="white"
-            margin= "2% 5% 0% 0%"
+            margin= '15px'
             display={"inline-block"}
              boxShadow="md"
              _hover={{ boxShadow: "lg" }}
