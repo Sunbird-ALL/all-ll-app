@@ -9,12 +9,17 @@ import { replaceAll, compareArrays } from '../../utils/helper';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3';
 
+
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
+
+  const [isEmptyAudio, setIsEmptyAudio] = useState(
+    true
+  )
 
   const ASR_REST_URLS = {
     bn: 'https://api.dhruva.ai4bharat.org',
@@ -98,7 +103,12 @@ const VoiceCompair = props => {
   const [ai4bharat, setAi4bharat] = useState('');
   useEffect(() => {
     if (recordedAudioBase64 !== '') {
-      fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
+      if(isEmptyAudio){
+        alert("Please Speak again");
+        stopLoading()
+      }else{
+        fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
+      }
     }
   }, [recordedAudioBase64]);
   useEffect(() => {
@@ -283,7 +293,7 @@ const VoiceCompair = props => {
       setLoadCnt(loadCnt => Number(loadCnt + 1));
     }
   }, [loadCnt]);
-  const getpermision = () => {
+  const getpermision = () => {  
     navigator.getUserMedia =
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -294,6 +304,7 @@ const VoiceCompair = props => {
       () => {
         console.log('Permission Granted');
         setAudioPermission(true);
+
       },
       () => {
         console.log('Permission Denied');
@@ -301,6 +312,28 @@ const VoiceCompair = props => {
         //alert("Microphone Permission Denied");
       }
     );
+
+        
+    let audios = window.audioStream
+    try {
+      // ask for an audio input
+      navigator.mediaDevices.getUserMedia(
+      {
+          'audio': {
+              'mandatory': {
+                  'googEchoCancellation': 'false',
+                  'googAutoGainControl': 'false',
+                  'googNoiseSuppression': 'false',
+                  'googHighpassFilter': 'false'
+              },
+              'optional': []
+          },
+      }).then(audios)
+      .catch();
+    } catch (e) {
+      alert('getUserMedia threw exception :' + e);
+    }
+
   };
 
   return (
@@ -319,6 +352,7 @@ const VoiceCompair = props => {
                   />
                 ) : ( */}
                   <AudioRecorderCompairUI
+                    setIsEmptyAudio = {setIsEmptyAudio}
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
                     setTamilRecordedAudio={setTamilRecordedAudio}
