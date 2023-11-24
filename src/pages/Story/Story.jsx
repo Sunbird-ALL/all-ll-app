@@ -20,6 +20,7 @@ import S3Client from '../../config/awsS3'
 import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
+import calcCER from 'character-error-rate';
 
 const jsConfetti = new JSConfetti();
 
@@ -134,7 +135,7 @@ const Story = () => {
     return cleanString;
   }
 
-  
+
 
   async function  saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
@@ -171,13 +172,14 @@ const Story = () => {
         const studentTextArray = texttemp.split(' ');
 
         let tempteacherText = posts?.data[currentLine]?.data[0]?.[lang]?.text.toLowerCase();
+        tempteacherText = tempteacherText.trim();
         tempteacherText = replaceAll(tempteacherText, '.', '');
         tempteacherText = replaceAll(tempteacherText, "'", '');
         tempteacherText = replaceAll(tempteacherText, ',', '');
         tempteacherText = replaceAll(tempteacherText, '!', '');
         tempteacherText = replaceAll(tempteacherText, '|', '');
         tempteacherText = replaceAll(tempteacherText, '?', '');
-        const teacherTextArray = tempteacherText.split(' ');;
+        const teacherTextArray = tempteacherText.split(' ');
 
         let student_correct_words_result = [];
         let student_incorrect_words_result = [];
@@ -215,7 +217,12 @@ const Story = () => {
             );
         }
 
-        let word_result = (result_per_words === 100) ? "correct" : "incorrect";  
+        const errorRate = calcCER(responseText, tempteacherText);
+        let finalScore = 100 - errorRate*100;
+
+        finalScore = finalScore<0? 0 : finalScore;
+
+        let word_result = (finalScore === 100) ? "correct" : "incorrect";  
 
         if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
           let getContentId = currentLine;
@@ -229,7 +236,7 @@ const Story = () => {
           });
           try {
             const response = await S3Client.send(command);
-            console.log("Data Ala",response);
+            // console.log("Data Ala",response);
           } catch (err) {
             console.error(err);
           }
@@ -245,7 +252,7 @@ const Story = () => {
               { "response_incorrect_words_array": student_incorrect_words_result},
               { "response_word_array_result": word_result_array},
               { "response_word_result": word_result},
-              { "accuracy_percentage": result_per_words},
+              { "accuracy_percentage": finalScore},
               { "duration":  responseDuration}
            ]
       },
