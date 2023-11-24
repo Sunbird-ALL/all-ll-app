@@ -5,6 +5,13 @@ import mic_on from '../../assests/Images/mic_on.png';
 import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
+
+  handleSpeechStart = event => {
+    this.props.setIsEmptyAudio(false);
+    // Remove the event listener after it has been triggered
+    document.removeEventListener('speechstart', this.handleSpeechStart);
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,16 +39,12 @@ export default class AudioRecorderCompair extends Component {
   }
 
   handleMic(){
-    navigator.mediaDevices.getUserMedia({audio: true})
-    .then(stream => {
-      if(stream.getAudioTracks()[0].muted){
-        alert("please turn your mic on")
-      }
-      else{
-        document.getElementById('startaudio_compair').click()
-      }
+    document.addEventListener('mute', event => {
+
     })
-    .catch(err => console.log(err));
+
+    document.addEventListener('speechstart', this.handleSpeechStart);
+    document.getElementById('startaudio_compair').click();
   }
 
   render() {
@@ -140,8 +143,9 @@ export default class AudioRecorderCompair extends Component {
                         style={{ height: '72px', width: '72px' }}
                         className="micimg mic_stop_record"
                         onClick={() => {
-
-                          document.getElementById('stopaudio_compair').click();
+                          
+                            document.getElementById('stopaudio_compair').click();
+                          
                         }}
                       />
                       {/* <h4 className="text-speak m-0">Stop</h4> */}
