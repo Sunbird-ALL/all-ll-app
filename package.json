@@ -41,7 +41,13 @@
   },
   "scripts": {
      "start": "env-cmd -f .env.local react-scripts start",
-    "build": "env-cmd -f .env.local react-scripts build",
+     "start:dev-appliance": "env-cmd -f .env.dev-appliance react-scripts start",
+     "start:dev-mozhigal": "env-cmd -f .env.dev-mozhigal react-scripts start",
+     "start:dev-ai-learner": "env-cmd -f .env.dev-ai-learner react-scripts start",
+     "build": "env-cmd -f .env.local react-scripts build",
+     "build:dev-appliance": "env-cmd -f .env.dev-appliance react-scripts build",
+     "build:dev-mozhigal": "env-cmd -f .env.dev-mozhigal react-scripts build",
+     "build:dev-ai-learner": "env-cmd -f .env.dev-ai-learner react-scripts build",
     "analyze": "webpack-bundle-analyzer dist/main.bundle.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

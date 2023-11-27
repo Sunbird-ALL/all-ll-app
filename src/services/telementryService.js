@@ -182,6 +182,9 @@ export const getEventOptions = () => {
     buddyUserId = buddyUserDetails.emis_username;
   }
 
+  let school_name = userDetails.school_name;
+  let class_studying_id = userDetails.class_studying_id;
+  let udise_code = userDetails.udise_code;
 
   const userType = isBuddyLogin ? 'Buddy User' : 'User';
   const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'
@@ -204,7 +207,14 @@ export const getEventOptions = () => {
       cdata: [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType }
+        { id: userId, type: userType },
+        { id: school_name ? school_name : 'anonymous', type: 'school_name' },
+        {
+          id: class_studying_id ? class_studying_id : 'anonymous',
+          type: 'class_studying_id',
+        },
+        { id: udise_code ? udise_code : 'anonymous', type: 'udise_code' },
+        { id: localStorage.getItem('apphomelang'), type: 'language' },
       ],
       rollup: {},
     },
