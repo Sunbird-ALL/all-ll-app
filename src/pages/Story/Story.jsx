@@ -172,6 +172,7 @@ const Story = () => {
         const studentTextArray = texttemp.split(' ');
 
         let tempteacherText = posts?.data[currentLine]?.data[0]?.[lang]?.text.toLowerCase();
+        tempteacherText = tempteacherText.replace(/\u00A0/g, ' ');
         tempteacherText = tempteacherText.trim();
         tempteacherText = replaceAll(tempteacherText, '.', '');
         tempteacherText = replaceAll(tempteacherText, "'", '');
@@ -352,7 +353,7 @@ const Story = () => {
               <>
                        {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                <Flex className='story-box-container' key={ind}>
+                <Flex pos={'relative'} w={'108%'}  className='story-box-container' key={ind}>
                       <img
                         className="story-image"
                         // src={post?.image}
@@ -432,7 +433,7 @@ const Story = () => {
                   // </VStack>
                 )}
                 <div className='voice-recorder'>
-                <VStack>
+                <VStack style={{marginTop:'-20px'}}>
                   <VoiceCompair
                     setVoiceText={setVoiceText}
                     setRecordedAudio={setRecordedAudio}
@@ -445,14 +446,14 @@ const Story = () => {
                     />
                   {isAudioPlay === 'recording' ? (
                     <h4
-                      style={{ position: 'relative', top: '-12px' }}
+                      style={{ position: 'relative', top: '-10px' }}
                       className="text-speak m-0"
                     >
                       Stop
                     </h4>
                   ) : (
                     <h4
-                      style={{ position: 'relative', top: '-12px' }}
+                      style={{ position: 'relative', top: '-10px' }}
                       className="text-speak m-0"
                     >
                       Speak

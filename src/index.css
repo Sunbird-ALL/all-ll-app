@@ -1768,3 +1768,16 @@ p.chakra-text.css-1r7spse {
   width: 100%;
   height: 220px!important;
 }
+
+.dis-visible{
+  display: block;
+}
+
+.dis-none{
+  display: none;
+}
+
+.custom-design{
+  position: 'relative';
+  margin: -140px;
+}

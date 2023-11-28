@@ -358,7 +358,7 @@ const VoiceCompair = props => {
           if (audioPermission) {
             return (
               <div>
-                {lang_code === 'kn' || lang_code ===  'ta'  ? (
+                {/* {lang_code === 'kn' || lang_code ===  'ta'  ? (
                   <AudioRecorderTamil
                     setTamilRecordedAudio={setTamilRecordedAudio}
                     setTamilRecordedText={setTamilRecordedText}
@@ -368,7 +368,7 @@ const VoiceCompair = props => {
                     setCurrentLine = {props.setCurrentLine}
                     {...(props?._audio ? props?._audio : {})}
                   />
-                ) : (
+                ) : ( */}
                   <AudioRecorderCompairUI
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
@@ -377,7 +377,7 @@ const VoiceCompair = props => {
                     saveIndb={props.saveIndb}
                     {...(props?._audio ? props?._audio : {})}
                   />
-                )}
+                {/* )} */}
 
                 {/*recordedAudio !== "" ? (
                     <>

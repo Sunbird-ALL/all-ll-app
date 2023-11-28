@@ -13,13 +13,13 @@
 }
 
 .story-line{
-  font-size: 50px;
+  font-size: 45px;
   margin-top: 40px; 
 }
 
 @media screen and (max-width: 580px) {
   .story-line{
-    font-size: 30px;
+    font-size: 28px;
     margin-top: -30px;
     width: 120%;
   }
@@ -71,9 +71,9 @@
 }
 
 
-@media screen and (min-width: 580px) and (max-width: 700px) {
+@media screen and  (max-width: 700px) {
   .story-line{
-    font-size: 35px;
+    font-size: 28px;
     margin-top: -45px;
     width: 100%;
   }
@@ -93,18 +93,6 @@
     justify-content: center;
     height:100vh;
   }
-  .story-item {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      padding: 10px;
-      border: 10px solid #331f1f;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      width: 100%;
-      padding: 20px;
-  }
-
   .story-image {
     height: 30vh !important;
     width: 100% !important;
@@ -159,9 +147,9 @@
     align-items: center;
     gap: 40px;
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f9f9f9;
+    /* background: linear-gradient(#5ef899, #eecf69); */
     border: 3px solid #d9d2d2;
     width: 90%;
     padding: 20px;
