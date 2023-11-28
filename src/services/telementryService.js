@@ -2,6 +2,7 @@ import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import jwt from 'jwt-decode';
+import { getParameter } from '../utils/helper';
 
 var contentSessionId;
 let playSessionId;
@@ -166,6 +167,9 @@ return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') |
 
 }
 
+const location = new URLSearchParams(window.location);
+const myCurrectLanguage = getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
+
 export const getEventOptions = () => {
   var emis_username = 'anonymous';
   var buddyUserId = '';
@@ -211,7 +215,7 @@ export const getEventOptions = () => {
           type: 'class_studying_id',
         },
         { id: userDetails?.udise_code ? userDetails?.udise_code : 'guest_user', type: 'udise_code' },
-        { id: localStorage.getItem('apphomelang'), type: 'language' },
+        { id: myCurrectLanguage, type: 'language' },
       ],
       rollup: {},
     },
