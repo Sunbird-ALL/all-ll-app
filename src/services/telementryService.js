@@ -2,6 +2,7 @@ import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import jwt from 'jwt-decode';
+import { getParameter } from '../utils/helper';
 
 var contentSessionId;
 let playSessionId;
@@ -166,6 +167,9 @@ return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') |
 
 }
 
+const location = new URLSearchParams(window.location);
+const myCurrectLanguage = getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
+
 export const getEventOptions = () => {
   var emis_username = 'anonymous';
   var buddyUserId = '';
@@ -201,10 +205,23 @@ export const getEventOptions = () => {
           ? emis_username + '/' + buddyUserId
           : emis_username || 'anonymous'
       }`,
-      cdata: [
+      cdata:  userId == 'anonymous'
+      ? [
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType }
+        { id: userId, type: userType },
+        { id: myCurrectLanguage, type: 'language' },
+      ]:[
+        { id: contentSessionId, type: 'ContentSession' },
+        { id: playSessionId, type: 'PlaySession' },
+        { id: userId === 'anonymous'? 'guest_user': userId, type: userType },
+        { id: userDetails?.school_name, type: 'school_name' },
+        {
+          id: userDetails?.class_studying_id,
+          type: 'class_studying_id',
+        },
+        { id: userDetails?.udise_code, type: 'udise_code' },
+        { id: myCurrectLanguage, type: 'language' },
       ],
       rollup: {},
     },
