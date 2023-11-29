@@ -188,7 +188,7 @@ export const getEventOptions = () => {
 
 
   const userType = isBuddyLogin ? 'Buddy User' : 'User';
-  const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'guest_user'
+  const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'
 
   return {
     object: {},
@@ -205,16 +205,22 @@ export const getEventOptions = () => {
           ? emis_username + '/' + buddyUserId
           : emis_username || 'guest_user'
       }`,
-      cdata: [
+      cdata:  userId == 'anonymous'
+      ? [
+        { id: contentSessionId, type: 'ContentSession' },
+        { id: playSessionId, type: 'PlaySession' },
+        { id: userId, type: userType },
+        { id: myCurrectLanguage, type: 'language' },
+      ]:[
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
         { id: userId === 'anonymous'? 'guest_user': userId, type: userType },
-        { id: userDetails?.school_name ? userDetails?.school_name : 'guest_user', type: 'school_name' },
+        { id: userDetails?.school_name, type: 'school_name' },
         {
-          id: userDetails?.class_studying_id ? userDetails?.class_studying_id : 'guest_user',
+          id: userDetails?.class_studying_id,
           type: 'class_studying_id',
         },
-        { id: userDetails?.udise_code ? userDetails?.udise_code : 'guest_user', type: 'udise_code' },
+        { id: userDetails?.udise_code, type: 'udise_code' },
         { id: myCurrectLanguage, type: 'language' },
       ],
       rollup: {},
