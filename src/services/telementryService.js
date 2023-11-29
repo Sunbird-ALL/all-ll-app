@@ -203,7 +203,7 @@ export const getEventOptions = () => {
       uid: `${
         isBuddyLogin
           ? emis_username + '/' + buddyUserId
-          : emis_username || 'guest_user'
+          : emis_username || 'anonymous'
       }`,
       cdata:  userId == 'anonymous'
       ? [
