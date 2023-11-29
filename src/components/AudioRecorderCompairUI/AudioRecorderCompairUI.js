@@ -69,7 +69,7 @@ export default class AudioRecorderCompair extends Component {
       width: 250,
       backgroundColor:"hsla(0, 100%, 0%, 0)",
       strokeColor:"red",
-      className:"",
+      className:"test",
 
     };
     //for tamil language
@@ -116,7 +116,7 @@ export default class AudioRecorderCompair extends Component {
       width: 250,
       backgroundColor:"hsla(0, 100%, 0%, 0)",
       strokeColor:"red",
-      className:"",
+      className:"test",
     };
     return (
       <div>
