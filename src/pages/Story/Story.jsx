@@ -172,6 +172,7 @@ const Story = () => {
         const studentTextArray = texttemp.split(' ');
 
         let tempteacherText = posts?.data[currentLine]?.data[0]?.[lang]?.text.toLowerCase();
+        tempteacherText = tempteacherText.replace(/\u00A0/g, ' ');
         tempteacherText = tempteacherText.trim();
         tempteacherText = replaceAll(tempteacherText, '.', '');
         tempteacherText = replaceAll(tempteacherText, "'", '');
