@@ -65,6 +65,12 @@ export default class AudioRecorderCompair extends Component {
       errorCallback: err => {
         // console.log('error', err);
       },
+      height: 300,
+      width: 250,
+      backgroundColor:"hsla(0, 100%, 0%, 0)",
+      strokeColor:"red",
+      className:"test",
+
     };
     //for tamil language
     const audioProps_tamil = {
@@ -88,7 +94,16 @@ export default class AudioRecorderCompair extends Component {
         this.setState({
           audioSrc: temp_audioSrc,
         });
+        const reader = new FileReader();
+    reader.readAsDataURL(e);
+    reader.onloadend = () => {
+      var base64Data = reader.result.split(',')[1];
+      // console.log(base64Data);
+      // getASROutput(base64Data, blob);
+      this.props.saveIndb(base64Data)
+    };
         this.props.setRecordedAudio(temp_audioSrc);
+        // console.log("temp_audioSrc",temp_audioSrc);
         console.log('succ stop', e);
       },
       onRecordCallback: e => {
@@ -97,9 +112,22 @@ export default class AudioRecorderCompair extends Component {
       errorCallback: err => {
         console.log('error', err);
       },
+      height: 300,
+      width: 250,
+      backgroundColor:"hsla(0, 100%, 0%, 0)",
+      strokeColor:"red",
+      className:"test",
     };
     return (
       <div>
+         <div className='custom-design'>
+            <div
+           
+              className={status === 'recording' ? 'dis-visible' : 'dis-none'}
+            >
+              <AudioAnalyser {...audioProps}></AudioAnalyser>
+            </div>
+          </div>
         <center>
           {(() => {
             if (status === 'recording') {
@@ -152,7 +180,7 @@ export default class AudioRecorderCompair extends Component {
             }
           })()}
           <AudioAnalyser
-            {...(lang_code === 'ta' ? audioProps_tamil : audioProps)}
+            {...(lang_code === 'kn' || lang_code ===  'ta' ? audioProps_tamil : audioProps)}
             className="hide"
           >
             <div className="btn-box hide">
