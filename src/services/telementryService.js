@@ -214,14 +214,14 @@ export const getEventOptions = () => {
       ]:[
         { id: contentSessionId, type: 'ContentSession' },
         { id: playSessionId, type: 'PlaySession' },
-        { id: userId === 'anonymous'? 'guest_user': userId, type: userType },
+        { id: userId, type: userType },
+        { id: myCurrectLanguage, type: 'language' },
         { id: userDetails?.school_name, type: 'school_name' },
         {
           id: userDetails?.class_studying_id,
           type: 'class_studying_id',
         },
         { id: userDetails?.udise_code, type: 'udise_code' },
-        { id: myCurrectLanguage, type: 'language' },
       ],
       rollup: {},
     },
