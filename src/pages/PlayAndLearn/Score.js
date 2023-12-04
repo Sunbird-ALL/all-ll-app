@@ -61,7 +61,7 @@ function Score() {
     set_temp_audio(new Audio(recordedAudio));
   };
   const pauseAudio = () => {
-    interactCall("pauseAudio", "startlearn","DT", "pause");
+    interactCall("pauseAudio", "score","DT", "pause");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -82,11 +82,11 @@ function Score() {
   };
 
   const newSentence = () => {
-    interactCall("newSentence", "startlearn","DT", "");
+    interactCall("newSentence", "score","DT", "");
     navigate(-1);
   };
   const trySameSentence = () => {
-    interactCall("trySameSentence", "startlearn","DT", "");
+    interactCall("trySameSentence", "score","DT", "");
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };
