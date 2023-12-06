@@ -62,7 +62,17 @@ export default function Header() {
               <Link to={'/storylist'}>
               <button
              style={buttonStyle}
-              >Home</button>
+              >Discover</button>
+              </Link>
+              <Link to={'all-ai-service/home'}>
+              <button
+             style={buttonStyle}
+              >practice</button>
+              </Link>
+              <Link to={'/all-ai-service/result'}>
+              <button
+             style={buttonStyle}
+              >Validate</button>
               </Link>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
