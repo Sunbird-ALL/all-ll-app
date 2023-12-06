@@ -292,7 +292,7 @@ const Story = () => {
   // console.log(posts?.data[currentLine]?.data[0]?.hi?.audio);
   return (
     <div style={{height:'97vh'}}>
-      <Header />
+      <Header isActive={'Discover'} />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
       <div
         style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',height:'97vh' }}

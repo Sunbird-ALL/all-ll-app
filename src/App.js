@@ -141,9 +141,9 @@ function App() {
         <Route path={'Results'} element={<Results/>}/>
         
 
-        <Route path="/all-ai-service/home" element={<Home/>} />
-        <Route path={'/all-ai-service/practice'} element={<StartLearn4/>} />
-        <Route path={'/all-ai-service/result'} element={<Score4/>} />
+        <Route path="home" element={<Home/>} />
+        <Route path={'practice'} element={<StartLearn3/>} />
+        <Route path={'result'} element={<Results/>} />
 
       </Routes>
       <Dots />

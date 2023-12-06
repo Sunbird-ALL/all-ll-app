@@ -35,7 +35,7 @@ const StoryList = () => {
   }
       return (
         <>
-        <Header/>
+        <Header isActive={'Discover'}/>
         <section className='bg'>
       <div className="" style={{ margin:'55px'}}>
         <div className="row">

@@ -138,7 +138,6 @@ function StartLearn() {
       let count_array = 0;
       const content_list = getContentList();
 
-      
       let tempContent = [];
       const content_count = Object.keys(content_list).length;
       const content_keys = Object.keys(content_list);
@@ -146,22 +145,23 @@ function StartLearn() {
         if (
           content_list[key].type === sel_level &&
           content_list[key]?.[sel_lang]
-        ) {
-          tempContent.push({
-            content: content_list[key],
-          });
-        }
-      });
-      if (tempContent.length > 0) {
+          ) {
+            tempContent.push({
+              content: content_list[key],
+            });
+          }
+        });
+        if (tempContent.length > 0) {
         let getitem = localStorage.getItem('content_random_id')
           ? localStorage.getItem('content_random_id')
           : 0;
-        if (trysame !== 'yes') {
-          let old_getitem = getitem;
-          while (old_getitem == getitem) {
-            getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
+          if (trysame !== 'yes') {
+            let old_getitem = getitem;
+            while (old_getitem == getitem) {
+              getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
+            }
           }
-        }
+         
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
