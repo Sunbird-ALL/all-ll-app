@@ -38,10 +38,20 @@ const NavLink = () => {
   )
 }
 
-export default function Header() {
+export default function Header({isActive}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const buttonStyle = {
+    backgroundColor: 'gray',
+    color: '#fff',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+  };
+  
+  const active = {
     backgroundColor: '#007bff',
     color: '#fff',
     padding: '10px 20px',
@@ -58,20 +68,20 @@ export default function Header() {
         <Flex mt={'10px'} h={20} alignItems={'center'} justifyContent={'space-between'}>
     
           <HStack spacing={8} alignItems={'center'} >
-            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-              <Link to={'/storylist'}>
+            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex', gap:'5' }} gap={'5'}>
+              <Link style={{margin:'5px'}} to={'/storylist'}>
               <button
-             style={buttonStyle}
+             style={isActive === 'Discover'? active:buttonStyle}
               >Discover</button>
               </Link>
-              <Link to={'all-ai-service/home'}>
+              <Link  style={{margin:'5px'}}  to={'/home'}>
               <button
-             style={buttonStyle}
-              >practice</button>
+             style={isActive === 'Practice'? active:buttonStyle}
+              >Practice</button>
               </Link>
-              <Link to={'/all-ai-service/result'}>
+              <Link  style={{margin:'5px'}}  to={'/result'}>
               <button
-             style={buttonStyle}
+             style={isActive === 'Validate'? active:buttonStyle}
               >Validate</button>
               </Link>
               {Links.map((link) => (

@@ -31,23 +31,39 @@ export default function Results() {
   };
   const [getGap, setGetGap] = useState(null);
 
+const [myPreviousSessionId,setPreviousSessionID] = useState();
+
   useEffect(() => {
     fetch(
-      `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${localStorage.getItem(
-        'virtualStorySessionID'
-      )}`
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem(
+        'virtualID'
+      )}?limit=1`
     )
       .then(response => response.text())
       .then(async result => {
         var apiResponse = JSON.parse(result);
-        setGetGap(apiResponse);
-        // console.log(apiResponse);
-        characterImprove();
-        // handleWordSentence()
-
+        setPreviousSessionID(apiResponse[0])
+    console.log(apiResponse[0]);
       });
-    GetRecommendedWordsAPI();
+      getTarget()
   }, []);
+
+ const getTarget = ()=>{
+  fetch(
+    `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${myPreviousSessionId}`
+  )
+    .then(response => response.text())
+    .then(async result => {
+      var apiResponse = JSON.parse(result);
+      setGetGap(apiResponse);
+      console.log(apiResponse);
+      characterImprove();
+      // handleWordSentence()
+
+    });
+  GetRecommendedWordsAPI();
+ }
+
   const GetRecommendedWordsAPI = () => {
     // const currentSentence = localStorage.getItem('contentText');
     // const splitSentence = currentSentence.split('');
@@ -181,7 +197,7 @@ setIsModalOpen(true);
 
   return (
     <>
-    <Header/>
+    <Header isActive={'Validate'}/>
     {/* <button >click me</button> */}
       <div className="main-bg">
         <section className="c-section">
