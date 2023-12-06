@@ -370,11 +370,13 @@ const VoiceCompair = props => {
                   />
                 ) : ( */}
                   <AudioRecorderCompairUI
+                    practice={props.practice}
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
                     setUserSpeak = {props.setUserSpeak}
                     setCurrentLine = {props.setCurrentLine}
-                    saveIndb={props.saveIndb}
+                    saveIndb={props?.saveIndb}
+                    showPracticeResult={props?.showPracticeResult}
                     {...(props?._audio ? props?._audio : {})}
                   />
                 {/* )} */}

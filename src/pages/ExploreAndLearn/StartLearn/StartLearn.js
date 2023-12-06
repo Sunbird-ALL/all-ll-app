@@ -425,15 +425,18 @@ function StartLearn() {
   const [counter, setCounter] = useState(1);
   const handleSubmit = () => {
     playAudio();
-    setCounter(old => old + 1);
-    if (counter === 5) {
-      setCounter(1);
-      navigate('/exploreandlearn/score');
-    }
-    var base64 = base64Data.split(',')[1];
-    getASROutput(base64, localStorage.getItem('apphomelang'));
+    // setCounter(old => old + 1);
+    // if (counter === 5) {
+    //   setCounter(1);
+    //   navigate('/exploreandlearn/score');
+    // }
+    // var base64 = base64Data.split(',')[1];
+    // getASROutput(base64, localStorage.getItem('apphomelang'));
   };
 
+  const showPracticeResult=(base64)=>{
+    navigate('/exploreandlearn/score');
+  }
 
   const [currentLine, setCurrentLine] = useState(0);
 
@@ -569,7 +572,9 @@ function StartLearn() {
                     {localStorage.getItem('apphomelevel') !== 'Paragraph' ? (
                       <VStack>
                         <VoiceCompair
+                          practice={true}
                           setVoiceText={setVoiceText}
+                          showPracticeResult={showPracticeResult}
                           setRecordedAudio={setRecordedAudio}
                           _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                           flag={true}

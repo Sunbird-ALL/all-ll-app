@@ -94,13 +94,18 @@ export default class AudioRecorderCompair extends Component {
         this.setState({
           audioSrc: temp_audioSrc,
         });
+        localStorage.setItem('recordedAudio', temp_audioSrc)
         const reader = new FileReader();
     reader.readAsDataURL(e);
     reader.onloadend = () => {
       var base64Data = reader.result.split(',')[1];
-      // console.log(base64Data);
       // getASROutput(base64Data, blob);
-      this.props.saveIndb(base64Data)
+      if(!this.props.practice){
+        this?.props?.saveIndb(base64Data)
+      }
+      else{
+        this?.props?.showPracticeResult(base64Data);
+      }
     };
         this.props.setRecordedAudio(temp_audioSrc);
         // console.log("temp_audioSrc",temp_audioSrc);

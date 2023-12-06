@@ -31,8 +31,6 @@ export default function Results() {
   };
   const [getGap, setGetGap] = useState(null);
 
-const [myPreviousSessionId,setPreviousSessionID] = useState();
-
   useEffect(() => {
     fetch(
       `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem(
@@ -42,13 +40,11 @@ const [myPreviousSessionId,setPreviousSessionID] = useState();
       .then(response => response.text())
       .then(async result => {
         var apiResponse = JSON.parse(result);
-        setPreviousSessionID(apiResponse[0])
-    console.log(apiResponse[0]);
+    getTarget(apiResponse[0])
       });
-      getTarget()
   }, []);
 
- const getTarget = ()=>{
+ const getTarget = (myPreviousSessionId)=>{
   fetch(
     `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${myPreviousSessionId}`
   )
@@ -56,23 +52,20 @@ const [myPreviousSessionId,setPreviousSessionID] = useState();
     .then(async result => {
       var apiResponse = JSON.parse(result);
       setGetGap(apiResponse);
-      console.log(apiResponse);
       characterImprove();
       // handleWordSentence()
 
     });
-  GetRecommendedWordsAPI();
+  GetRecommendedWordsAPI(myPreviousSessionId);
  }
 
-  const GetRecommendedWordsAPI = () => {
+  const GetRecommendedWordsAPI = (myPreviousSessionId) => {
     // const currentSentence = localStorage.getItem('contentText');
     // const splitSentence = currentSentence.split('');
     // console.log(splitSentence.length);
 
     fetch(
-      `https://www.learnerai-dev.theall.ai/lais/scores/GetFamiliarity/session/${localStorage.getItem(
-        'virtualStorySessionID'
-      )}`
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetFamiliarity/session/${myPreviousSessionId}`
     )
       .then(res => {
         return res.json();
@@ -214,7 +207,7 @@ setIsModalOpen(true);
                     {/* <br /> */}
                     <Link to={'/exploreandlearn/startlearn'}>
                     <button className='btn btn-info'>
-                      Improve Further
+                      practice
                     </button>
                     </Link>
 
