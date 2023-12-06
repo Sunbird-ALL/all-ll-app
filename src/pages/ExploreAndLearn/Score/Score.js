@@ -414,6 +414,9 @@ function Score() {
               }
                 <br />
                 <br />
+              <div className="content_text_div_see">
+               {teacherText}
+              </div>
                 {fluencyresult}
                 <br />
                 <br />
