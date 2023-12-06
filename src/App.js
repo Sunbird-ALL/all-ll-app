@@ -27,6 +27,7 @@ import Story from '../src/pages/Story/Story';
 import Login from '../src/pages/Login';
 import Header from './pages/Header';
 import Results from './pages/Results';
+import Home from './pages/All-AI-Service/Home';
 
 function App() {
   let ranonce = false;
@@ -139,6 +140,11 @@ function App() {
         <Route path={'Header'} element={<Header/>}/>
         <Route path={'Results'} element={<Results/>}/>
         
+
+        <Route path="/all-ai-service/home" element={<Home/>} />
+        <Route path={'/all-ai-service/practice'} element={<StartLearn4/>} />
+        <Route path={'/all-ai-service/result'} element={<Score4/>} />
+
       </Routes>
       <Dots />
     </HashRouter>
