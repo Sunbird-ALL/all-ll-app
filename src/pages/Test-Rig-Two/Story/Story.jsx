@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './Story.css';
-import { Box, Button, Flex, Image, Text, VStack } from '@chakra-ui/react';
+// import './Story.css';
+import { Box, Button, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import VoiceCompair from '../../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../../assests/Images/play-img.png';
@@ -160,10 +160,10 @@ const Story = () => {
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
 
   useEffect(() => {
-    if (currentLine === posts?.data?.length) {
-      navigate('/Results');
-      setPageNo(pageno + 1);
-    }
+    // if (currentLine === posts?.data?.length) {
+    //   navigate('/Results');
+    //   setPageNo(pageno + 1);
+    // }
   }, [currentLine]);
 
   function getLanguageConstants(languageCode) {
@@ -312,10 +312,13 @@ const Story = () => {
             <div
               style={{
                 display: 'flex',
-                gap: '20px',
-                position: 'relative',
-                bottom: '-220px',
-                left: '-40%',
+                // gap: '20px',
+                position: 'absolute',
+                bottom: '25%',
+                // border:'2px solid black',
+                // left: '-40%',
+                marginLeft:'80px',
+                width:'10%'
               }}
             >
               {currentLine === posts?.data?.length ? (
@@ -325,10 +328,12 @@ const Story = () => {
                   {isUserSpeak ? (
                     isAudioPlay !== 'recording' && (
                       <div>
-                        <VStack
+                        <HStack
+                        style={{display:'flex',}}
+                        display={'flex'}
                           alignItems="center"
                           gap="5"
-                          style={{ display: 'flex' }}
+                       
                         >
                           <div>
                             {flag ? (
@@ -350,12 +355,12 @@ const Story = () => {
                             )}
                             <h4
                               className="text-play m-0 "
-                              style={{ position: 'relative' }}
+                              style={{ position: 'relative',textAlign: 'center' }}
                             >
                               Listen
                             </h4>
                           </div>
-                          <div style={{ display: 'fl', textAlign: 'center' }}>
+                          <div style={{ position:'absolute', textAlign: 'center', right:'-80px' }}>
                             <img
                               style={{ height: '40px', cursor: 'pointer' }}
                               onClick={nextLine}
@@ -364,7 +369,7 @@ const Story = () => {
                             />
                             <p style={{ fontSize: '18px' }}>Try Next</p>
                           </div>
-                        </VStack>
+                        </HStack>
                       </div>
                     )
                   ) : (
@@ -403,18 +408,6 @@ const Story = () => {
             </div>
           }
         </div>
-        {currentLine === posts?.data?.length ? (
-          <div className="button-container">
-            <Link to={'/Results'}>
-              <button className="custom-button">View Result</button>
-            </Link>
-            <Link to={'/storyList'}>
-              <button className="custom-button">Back To StoryList</button>
-            </Link>
-          </div>
-        ) : (
-          ''
-        )}
       </div>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
     </div>
