@@ -28,6 +28,9 @@ import Login from '../src/pages/Login';
 import Header from './pages/Header';
 import Results from './pages/Results';
 
+import TestRigStory from './pages/Test-Rig-Two/Story/Story'
+import Validate from './pages/Test-Rig-Two/Result/Validate';
+
 function App() {
   let ranonce = false;
 
@@ -138,6 +141,12 @@ function App() {
         <Route path={'Login'} element={<Login/>} />
         <Route path={'Header'} element={<Header/>}/>
         <Route path={'Results'} element={<Results/>}/>
+
+        {/* Test Rig 2 */}
+
+        <Route path={'practice'} element={<TestRigStory/>} />
+        {/* <Route path={'Header'} element={<Header/>}/> */}
+        <Route path={'validate'} element={<Validate/>}/>
         
       </Routes>
       <Dots />

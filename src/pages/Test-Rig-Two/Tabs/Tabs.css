@@ -1,0 +1,47 @@
+/* YourStylesheet.css */
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .tab {
+    text-decoration: none;
+    background: #ffffff; /* Use your $purple-tab variable here */
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5em 0.5em 0 0;
+    color: black;
+    margin: 0 2px;
+    position: relative;
+    width: 180px;
+    text-align: center;
+  
+    &:hover {
+      opacity: 0.8;
+    }
+  
+    &::after,
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      height: 10px;
+      width: 10px;
+      z-index: 1;
+    }
+  }
+  
+  .tab.active {
+    background: #ffefd1;
+    z-index: 10;
+    font-weight: 600;
+    pointer-events: none;
+  }
+  
+  .tab-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+    /* width: 100%; */
+  }

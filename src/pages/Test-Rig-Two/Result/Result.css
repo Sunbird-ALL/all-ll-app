@@ -1,0 +1,222 @@
+.main-bg {	
+    -webkit-justify-content: center;	
+    justify-content: center;	
+    min-height: 97vh;	
+    background: gray.50;	
+    /* background-image: url('../../../src/assests/Images/hackthon-images/story.webp');	 */
+    background-image: url('../../../assests/Images/hackthon-images/story.webp');
+    background-color: #cccccc;	
+    height: 500px;	
+    background-position: center;	
+    background-repeat: no-repeat;	
+    background-size: cover;	
+  }	
+  * {
+    box-sizing: border-box;
+    text-transform: capitalize;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  .container1 {
+    padding: 0 20px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .container1 {
+      width: 750px;
+    }
+  }
+  @media (min-width: 992px) {
+    .container1 {
+      width: 970px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .container1 {
+        width: 1460px;
+    margin-right: 17%;
+    }
+  }
+  i {
+      color: #FFC83D;
+  }
+  section {
+    padding: 10px 0;
+  
+  }
+  .card1 {
+    background-color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 15px;
+}
+  section .container1 {
+      padding: 30px;
+      background-color: #eee;
+      border-radius: 10px;
+  }
+  section .container1 h1 + p {
+    color: white;
+    padding: 10px 0px 20px 0;
+    font-size: 15px;
+  }
+  section .container1 .info {
+      display: flex;
+      position: relative;
+  }
+  section .box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    
+  }
+  section .box h2 {
+      color: #4A5568;
+      position: relative;
+      z-index: 1;
+  }
+  
+  section .box .text {
+      padding-bottom: 80px;
+  }
+  section .box .price {
+      position: relative;
+  
+  }
+  section .one .price h3 {
+      position: absolute;
+      bottom: 35px;
+      left: 20px;
+      font-size: 40px;
+      color: #4A5568;
+  
+  }
+  section .one .price button {
+      font-size: 20px;
+      position: absolute;
+      bottom: 35px;
+      right: 50px;
+      background-color: #E5AF40;
+      color: white;
+      padding: 10px;
+      outline: none;
+      border: navajowhite;
+      border-radius: 5px;
+  }
+  section .one .price p {
+      font-size: 15px;
+      border: none;
+  }
+  section .box .price p a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+  }
+  section .box h2 {
+    padding: 10px;
+  }
+  section .box p {
+    padding: 10px;
+    border-bottom: 1px solid rgb(231, 215, 215);
+  }
+  section .one {
+      width: 50%;
+  }
+  section .tow {
+      height: 300px;
+      position: absolute;
+      top: 50%;
+      left: 48%;
+      transform: translatey(-50%);
+  }
+  section .tow .price h3 {
+      position: absolute;
+      bottom: 0;
+      left: 20px;
+      font-size: 40px;
+      color: #4A5568;
+  
+  }
+ 
+  section .tow .price button {
+      font-size: 20px;
+      position: absolute;
+      bottom: 0;
+      right: 15px;
+      background-color: #E5AF40;
+      color: white;
+      padding: 10px;
+      outline: none;
+      border: navajowhite;
+      border-radius: 5px;
+  }
+  .bg-image{	
+    -webkit-justify-content: center;	
+    justify-content: center;	
+    background-image: url('../../../assests/Images/hackthon-images/certificate-bg.png');	
+    height: 804px;	
+    background-position: center;	
+    background-repeat: no-repeat;	
+    background-size: cover;	
+  }
+  .content{
+    position: absolute;
+    top: 20rem;
+    text-align: center;
+    /* left: 23rem; */
+}
+.content h1{
+  font-size: 100px;
+  color: blueviolet;
+  text-align: center;
+}
+.content img{
+  width: 25px;
+}
+.content h4{
+  font-size: 25px;
+}
+button.btn.btn-info {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+
+
+.character-list {
+  display: flex;
+}
+
+.character {
+  margin: 5px; /* Adjust as needed for spacing */
+  cursor: pointer;
+  border-bottom: 1px dotted #000; /* Optional: Add an underline effect */
+}
+
+/* Style the tooltip */
+.character:hover::before {
+  content: attr(title);
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  top: -25px; /* Adjust the position as needed */
+  left: 0;
+  z-index: 1;
+  display: block;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.character:hover::before {
+  opacity: 1;
+  transform: translate3d(0, -10px, 0);
+}

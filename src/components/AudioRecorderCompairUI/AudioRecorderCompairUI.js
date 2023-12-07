@@ -56,7 +56,9 @@ export default class AudioRecorderCompair extends Component {
         this.setState({
           audioSrc: temp_audioSrc,
         });
+        localStorage.setItem('recordedAudio',temp_audioSrc)
         this.props.setRecordedAudio(temp_audioSrc);
+        this.props.saveIndb()
         // console.log('succ stop', e);
       },
       onRecordCallback: e => {
@@ -100,6 +102,7 @@ export default class AudioRecorderCompair extends Component {
       var base64Data = reader.result.split(',')[1];
       // console.log(base64Data);
       // getASROutput(base64Data, blob);
+      localStorage.setItem('recordedAudio',temp_audioSrc)
       this.props.saveIndb(base64Data)
     };
         this.props.setRecordedAudio(temp_audioSrc);
