@@ -82,10 +82,10 @@ export default function Header({active}) {
           <HStack spacing={5} alignItems={'center'} >
            {
             tabs.map((tab, index) => (
-              <div className="tab-container">
+              <div   key={index} className="tab-container">
                 {/* {console.log(tab.link)} */}
                 <Link
-                  key={index}
+                
                  to={tab.link}
                   className={`tab ${index + 1 === active ? 'active' : ''}`}
                   onClick={e => {
@@ -100,7 +100,7 @@ export default function Header({active}) {
            }
 
           </HStack>
-                <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle') === ''? "My Stories" : localStorage.getItem('storyTitle') }</Box>
+                {/* <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle') === ''? "My Stories" : localStorage.getItem('storyTitle') }</Box> */}
           <Flex alignItems={'center'}>
             <Button className='btn btn-success'
               variant={'solid'}

@@ -86,7 +86,6 @@ export default class AudioRecorderCompair extends Component {
           audioSrc: '',
         });
         this.props.setRecordedAudio('');
-        console.log('succ start', e);
       },
       pauseCallback: e => {
         console.log('succ pause', e);
@@ -106,11 +105,9 @@ export default class AudioRecorderCompair extends Component {
       this.props.saveIndb(base64Data)
     };
         this.props.setRecordedAudio(temp_audioSrc);
-        // console.log("temp_audioSrc",temp_audioSrc);
-        console.log('succ stop', e);
       },
       onRecordCallback: e => {
-        console.log('recording', e);
+        // console.log('recording', e);
       },
       errorCallback: err => {
         console.log('error', err);
