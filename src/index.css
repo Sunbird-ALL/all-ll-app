@@ -572,7 +572,7 @@ code {
   border-radius: 50px;
   border: 1px solid #fed7aa;
   height: 50px;
-  width: 80%;
+  width: 100vh;
 }
 
 .lang_select_div_active {
