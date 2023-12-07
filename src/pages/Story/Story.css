@@ -64,7 +64,6 @@
   }
 
   .voice-recorder{
-    position: absolute;
     bottom: -150px;
     left: -80px;
   }
@@ -103,7 +102,6 @@
   }
 
   .voice-recorder{
-    position: absolute;
     bottom: -140px;
     left: -80px;
   }

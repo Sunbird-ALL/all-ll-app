@@ -176,15 +176,18 @@ const Story = () => {
           <Tabs/>
             </div> */}
       <div
-        style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', height: '97vh' }}
+        style={{ height: '97vh' }}
         className="story-container"
       >
-        <Flex gap={14}>
-          <div className="col s12">
-            <center>
+        <Flex direction={{ base: 'column', md: 'row' }}
+          gap={14}
+          align="center"
+          justify="center">
+          <div className="col s4 m4">
+            
               <div className="row">
                 <div className="lang_select_div ">
-                  <div className="col s4">
+                  <div className="col s12 m4">
                     <div
                       className={
                         localStorage.getItem('apphomelang') === 'en'
@@ -204,7 +207,7 @@ const Story = () => {
                       {getLanguageConstants('en').LANGUAGE}
                     </div>
                   </div>
-                  <div className="col s4">
+                  <div className="col s12 m4">
                     <div
                       className={
                         localStorage.getItem('apphomelang') === 'kn'
@@ -224,7 +227,7 @@ const Story = () => {
                       {getLanguageConstants('kn').LANGUAGE}
                     </div>
                   </div>
-                  <div className="col s4">
+                  <div className="col s12 m4">
                     <div
                       className={
                         localStorage.getItem('apphomelang') === 'ta'
@@ -246,7 +249,7 @@ const Story = () => {
                   </div>
                 </div>
               </div>
-            </center>
+            
           </div>
         </Flex>
         <div
@@ -280,7 +283,7 @@ const Story = () => {
                               <h1 style={{ fontSize: '60px' }}>Well Done </h1>
                               <br />
                               <img
-                                style={{ height: '40px', cursor:'pointer' }}
+                                style={{ height: '40px', cursor: 'pointer' }}
                                 onClick={() => {
                                   setCurrentLine(0);
                                   setUserSpeak(false);
@@ -306,7 +309,7 @@ const Story = () => {
                     currentLine === ind ? (
                       <Flex
                         pos={'relative'}
-                        w={'108%'}
+                        w={'100%'}
                         className="story-box-container"
                         key={ind}
                       >
@@ -347,13 +350,7 @@ const Story = () => {
                 <div
                   style={{
                     display: 'flex',
-                    // gap: '20px',
-                    position: 'absolute',
-                    bottom: '25%',
-                    // border:'2px solid black',
-                    // left: '-40%',
-                    marginLeft: '80px',
-                    width: '30%',
+                    marginLeft: '45%',
                   }}
                 >
                   {currentLine === posts?.data?.length ? (
@@ -401,7 +398,8 @@ const Story = () => {
                                 style={{
                                   position: 'absolute',
                                   textAlign: 'center',
-                                  right: '-80px',
+                                  top: '50%',
+                                  right: '20vh',
                                 }}
                               >
                                 <img
@@ -410,7 +408,7 @@ const Story = () => {
                                   src={Next}
                                   alt="next-button"
                                 />
-                                <p style={{ fontSize: '18px' }}>Try Next</p>
+                                {/* <p style={{ fontSize: '18px' }}>Try Next</p> */}
                               </div>
                             </HStack>
                           </div>
