@@ -110,12 +110,10 @@ const VoiceCompair = props => {
         fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
         // alert("Sound Detected");
         setIsEmptyAudio(false)
-        stopLoading()
       }
     }
   }, [recordedAudioBase64]);
 
-  // console.log("isEmptyAudio",isEmptyAudio);
   useEffect(() => {
     props.setVoiceText(ai4bharat);
     props.setRecordedAudio(recordedAudio);

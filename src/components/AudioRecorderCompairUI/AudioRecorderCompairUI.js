@@ -188,13 +188,6 @@ export default class AudioRecorderCompair extends Component {
     return (
       <div>
         <center>
-        {/* <button
-            className="btn"
-            onClick={() => this.handleStop()}
-            disabled={this.state.status !== 'recording'} // Disable the button if not recording
-          >
-            Stop
-          </button> */}
           <div style={{ position: 'relative' }}>
             <div
               className={status === 'recording' ? 'dis-visible' : 'dis-none'}
