@@ -1,26 +1,36 @@
 {
   "hi": {
+    "LANGUAGE": "हिंदी",
     "HOME_TRY_IN": "try in हिंदी",
     "COMMON_WORD": "शब्द",
     "COMMON_SENTENCE": "वाक्य",
     "COMMON_PARAGRAPH": "अनुच्छेद"
   },
   "ta": {
+    "LANGUAGE": "தமிழ்",
     "HOME_TRY_IN": "try in தமிழ்",
     "COMMON_WORD": "வார்த்தை",
     "COMMON_SENTENCE": "வாக்கியம்",
     "COMMON_PARAGRAPH": "வரிகள்/பத்தி"
   } ,
   "kn": {
+    "LANGUAGE": "ಕನ್ನಡ",
     "HOME_TRY_IN": "try in ಕನ್ನಡ",
     "COMMON_WORD": "ಪದ",
     "COMMON_SENTENCE": "ವಾಕ್ಯ",
     "COMMON_PARAGRAPH": "ಪ್ಯಾರಾಗ್ರಾಫ್"
   },
   "en": {
+    "LANGUAGE": "English",
     "HOME_TRY_IN": "try in English",
     "COMMON_WORD": "Word",
     "COMMON_SENTENCE": "Sentence",
     "COMMON_PARAGRAPH": "Paragraph"
   }
 }
+
+
+
+
+
+
