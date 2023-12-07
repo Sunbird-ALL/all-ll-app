@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { Link, json, useNavigate } from 'react-router-dom';
-import './result.css';
-import startIMg from '../assests/Images/hackthon-images/Star.svg';
-import Modal from './Modal';
+import { Link } from 'react-router-dom';
+import './Result.css';
+import startIMg from '../../../assests/Images/hackthon-images/Star.svg'
+// import Modal from './Modal';
+import Modal from '../../Modal';
 import axios from 'axios';
-import Header from './Header';
-import thumbsup from '../assests/Images/Thumbs_up.svg'
-import thumbsdown from '../assests/Images/Thumbs_Down.svg'
+// import Header from './Header';
+import Header from '../../Header';
+import thumbsup from '../../../assests/Images/Thumbs_up.svg'
+import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Text } from '@chakra-ui/react';
 
 
-export default function Results() {
+export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stars, setStars] = useState(0);
  const [isCalled,setIsCalled] = useState(0)
@@ -33,30 +34,36 @@ export default function Results() {
 
   useEffect(() => {
     fetch(
-      `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${localStorage.getItem(
-        'virtualStorySessionID'
-      )}`
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem(
+        'virtualID'
+      )}?limit=1`
     )
       .then(response => response.text())
       .then(async result => {
         var apiResponse = JSON.parse(result);
-        setGetGap(apiResponse);
-        // console.log(apiResponse);
-        characterImprove();
-        // handleWordSentence()
-
+    getTarget(apiResponse[0])
       });
-    GetRecommendedWordsAPI();
   }, []);
-  const GetRecommendedWordsAPI = () => {
-    // const currentSentence = localStorage.getItem('contentText');
-    // const splitSentence = currentSentence.split('');
-    // console.log(splitSentence.length);
+
+ const getTarget = (myPreviousSessionId)=>{
+  fetch(
+    `https://www.learnerai-dev.theall.ai/lais/scores/GetTargets/session/${myPreviousSessionId}`
+  )
+    .then(response => response.text())
+    .then(async result => {
+      var apiResponse = JSON.parse(result);
+      setGetGap(apiResponse);
+      characterImprove();
+      // handleWordSentence()
+
+    });
+  GetRecommendedWordsAPI(myPreviousSessionId);
+ }
+
+  const GetRecommendedWordsAPI = (myPreviousSessionId) => {
 
     fetch(
-      `https://www.learnerai-dev.theall.ai/lais/scores/GetFamiliarity/session/${localStorage.getItem(
-        'virtualStorySessionID'
-      )}`
+      `https://www.learnerai-dev.theall.ai/lais/scores/GetFamiliarity/session/${myPreviousSessionId}`
     )
       .then(res => {
         return res.json();
@@ -181,16 +188,15 @@ setIsModalOpen(true);
 
   return (
     <>
-   <Header  active={2}/>
+    <Header active={2}/>
     {/* <button >click me</button> */}
       <div className="main-bg">
         <section className="c-section">
           <div className="container1">
             <div className="">
-              <div className='' >
+              <div classNameName='' >
                 <div className="">
                   <div className="content" >
-                    <h1 style={{ position:'relative', top:'-250px'}}>Congratulations...</h1>
                     <br />
                     <h2 style={{fontSize:'50px', position:'relative', top:'-100px', left:'10px'}}>Coins earned : {stars} <img src={startIMg} alt='start-image' /> </h2>
                     <br />
@@ -198,7 +204,7 @@ setIsModalOpen(true);
                     {/* <br /> */}
                     <Link to={'/exploreandlearn/startlearn'}>
                     <button className='btn btn-info'>
-                      Improve Further
+                      practice
                     </button>
                     </Link>
 
