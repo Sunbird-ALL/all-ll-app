@@ -202,7 +202,7 @@ setIsModalOpen(true);
                     <br />
                     <button className='btn btn-success' onClick={openModal}>Share With Teachers</button>
                     {/* <br /> */}
-                    <Link to={'/exploreandlearn/startlearn'}>
+                    <Link to={'/practice'}>
                     <button className='btn btn-info'>
                       practice
                     </button>

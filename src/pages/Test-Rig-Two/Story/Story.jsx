@@ -89,10 +89,6 @@ const Story = () => {
           // console.log("api:-" ,data);
           setLoading(false);
         });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const data = await response.json();
       setPosts(data);
       setLoading(false);
@@ -128,6 +124,9 @@ const Story = () => {
 
   const nextLine = count => {
     setUserSpeak(!isUserSpeak);
+    if(currentLine === posts?.data?.length - 1){
+      handleStarAnimation()
+    }
     if (currentLine <= posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
@@ -199,7 +198,7 @@ const Story = () => {
                   <div className="col s4">
                     <div
                       className={
-                        sel_lang === 'en'
+                        localStorage.getItem('apphomelang') === 'en'
                           ? 'lang_select_div_active'
                           : 'lang_select_div_inactive'
                       }
@@ -219,7 +218,7 @@ const Story = () => {
                   <div className="col s4">
                     <div
                       className={
-                        sel_lang === 'kn'
+                        localStorage.getItem('apphomelang') === 'kn'
                           ? 'lang_select_div_active'
                           : 'lang_select_div_inactive'
                       }
@@ -239,7 +238,7 @@ const Story = () => {
                   <div className="col s4">
                     <div
                       className={
-                        sel_lang === 'ta'
+                        localStorage.getItem('apphomelang') === 'ta'
                           ? 'lang_select_div_active'
                           : 'lang_select_div_inactive'
                       }
