@@ -82,10 +82,10 @@ export default function Header({active}) {
           <HStack spacing={5} alignItems={'center'} >
            {
             tabs.map((tab, index) => (
-              <div className="tab-container">
+              <div   key={index} className="tab-container">
                 {/* {console.log(tab.link)} */}
                 <Link
-                  key={index}
+                
                  to={tab.link}
                   className={`tab ${index + 1 === active ? 'active' : ''}`}
                   onClick={e => {

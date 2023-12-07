@@ -30,6 +30,7 @@ import retry from '../../../assests/Images/retry.svg';
 import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
 import Tabs from '../Tabs/Tabs';
+// import TryNew from '../../../assests/Images/refresh.svg'
 import lang_constants from '../../../lang/lang_constants.json';
 
 const jsConfetti = new JSConfetti();
@@ -60,9 +61,6 @@ const Story = () => {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
-    // if ((voiceText !== '') & (voiceText !== '-')) {
-    //   go_to_result(voiceText);
-    // }
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
@@ -79,18 +77,9 @@ const Story = () => {
           return res.json();
         })
         .then(data => {
-          // if(!!localStorage.getItem('contents')){
-          //   setPosts(JSON.parse(localStorage.getItem('contents')));
-          // }
-          // else{
           setPosts(data);
-          // }
-          // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
-          // console.log("api:-" ,data);
           setLoading(false);
         });
-      const data = await response.json();
-      setPosts(data);
       setLoading(false);
     } catch (error) {
       console.error(error.message);
@@ -124,8 +113,8 @@ const Story = () => {
 
   const nextLine = count => {
     setUserSpeak(!isUserSpeak);
-    if(currentLine === posts?.data?.length - 1){
-      handleStarAnimation()
+    if (currentLine === posts?.data?.length - 1) {
+      handleStarAnimation();
     }
     if (currentLine <= posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
@@ -269,71 +258,89 @@ const Story = () => {
           className="story-item"
         >
           <div className="row">
-            <div className='col-12'>
-
-            {currentLine === posts?.data?.length ? (
-              <>
-                <Flex>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: '40vh',
-                      position: 'relative',
-                      left: '-40px',
-                    }}
-                  >
-                    <Box p="4">
-                      <div style={{ textAlign: 'center' }}>
-                        <h1 style={{ fontSize: '60px' }}>Well Done </h1>
-                        <br />
-                        <h1>Do You Want To Practice More?</h1>
-                      </div>
-                    </Box>
-                  </div>
-                </Flex>
-              </>
-            ) : (
-              <>
-                {posts?.data?.map((post, ind) =>
-                  currentLine === ind ? (
-                    <Flex
-                      pos={'relative'}
-                      w={'108%'}
-                      className="story-box-container"
-                      key={ind}
+            <div className="col-12">
+              {currentLine === posts?.data?.length ? (
+                <>
+                  <Flex>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '40vh',
+                        position: 'relative',
+                        left: '-40px',
+                      }}
                     >
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          height: '40vh',
-                        }}
+                      <Box p="4">
+                        <div style={{ textAlign: 'center' }}>
+                          <br />
+                          <Box p="4">
+                            <div style={{ textAlign: 'center' }}>
+                              <h1 style={{ fontSize: '60px' }}>Well Done </h1>
+                              <br />
+                              <img
+                                style={{ height: '40px', cursor:'pointer' }}
+                                onClick={() => {
+                                  setCurrentLine(0);
+                                  setUserSpeak(false);
+                                  fetchApi();
+                                }}
+                                src={Next}
+                                alt="try_new"
+                              />
+
+                              <p>Practice More</p>
+                              {/* <button>No</button> */}
+                            </div>
+                          </Box>
+                          {/* <button>No</button> */}
+                        </div>
+                      </Box>
+                    </div>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  {posts?.data?.map((post, ind) =>
+                    currentLine === ind ? (
+                      <Flex
+                        pos={'relative'}
+                        w={'108%'}
+                        className="story-box-container"
+                        key={ind}
                       >
-                        <Box p="4">
-                          <h1 className="story-line">
-                            {
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '40vh',
+                          }}
+                        >
+                          <Box p="4">
+                            <h1 className="story-line">
+                              {
+                                post?.data[0]?.[
+                                  localStorage.getItem('apphomelang')
+                                ]?.text
+                              }
+                            </h1>
+                            {localStorage.setItem(
+                              'contentText',
                               post?.data[0]?.[
                                 localStorage.getItem('apphomelang')
                               ]?.text
-                            }
-                          </h1>
-                          {localStorage.setItem(
-                            'contentText',
-                            post?.data[0]?.[localStorage.getItem('apphomelang')]
-                            ?.text
-                          )}
-                        </Box>
-                      </div>
-                    </Flex>
-                  ) : (
-                    ''
+                            )}
+                          </Box>
+                        </div>
+                      </Flex>
+                    ) : (
+                      ''
                     )
-                    )}
-              </>
-            )}
+                  )}
+                </>
+              )}
             </div>
             {
               <div className="col-12">

@@ -42,7 +42,6 @@ export default class AudioRecorder extends Component {
           audioSrc: '',
         });
         this.props.setRecordedAudio('');
-        console.log('succ start', e);
       },
       pauseCallback: e => {
         console.log('succ pause', e);
@@ -53,7 +52,6 @@ export default class AudioRecorder extends Component {
           audioSrc: temp_audioSrc,
         });
         this.props.setRecordedAudio(temp_audioSrc);
-        console.log('succ stop', e);
       },
       onRecordCallback: e => {
         console.log('recording', e);

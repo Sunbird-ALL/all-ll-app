@@ -194,7 +194,7 @@ setIsModalOpen(true);
         <section className="c-section">
           <div className="container1">
             <div className="">
-              <div classNameName='' >
+              <div>
                 <div className="">
                   <div className="content" >
                     <br />
@@ -227,12 +227,12 @@ setIsModalOpen(true);
                 <div style={{textAlign:'center', paddingBottom:'10px'}}>
                   
                   {loding && recommededWords?.map((item,ind)=>{
-                    return <>
+                    return <div key={ind}>
                       <span style={{fontSize:'25px', margin:'10px',}}>
                    {   item?.data[0]?.ta?.text}{", "}
                       </span>
              
-                    </>
+                    </div>
                   })}
                 </div>
                 <div style={{textAlign:'center'}}>
