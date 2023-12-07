@@ -18,7 +18,7 @@ const VoiceCompair = props => {
   );
 
   const [isEmptyAudio, setIsEmptyAudio] = useState(
-    true
+    false
   )
 
   const ASR_REST_URLS = {
@@ -103,14 +103,17 @@ const VoiceCompair = props => {
   const [ai4bharat, setAi4bharat] = useState('');
   useEffect(() => {
     if (recordedAudioBase64 !== '') {
-      if(isEmptyAudio){
+      if(!isEmptyAudio){
         alert("Please Speak again");
         stopLoading()
       }else{
         fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
+        // alert("Sound Detected");
+        setIsEmptyAudio(false)
       }
     }
   }, [recordedAudioBase64]);
+
   useEffect(() => {
     props.setVoiceText(ai4bharat);
     props.setRecordedAudio(recordedAudio);
