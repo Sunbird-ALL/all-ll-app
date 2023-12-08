@@ -279,7 +279,7 @@ const Story = () => {
           }}
           className="story-item"
         >
-          <div className="row">
+          <div style={{width:'100%'}} className="row">
             {/* bg={'red'} */}
             <div className="col-12">
               {posts?.data?.length === 0 ? (
@@ -322,7 +322,8 @@ const Story = () => {
                         justifyContent: 'center',
                         height: '40vh',
                         position: 'relative',
-                        left: '-40px',
+                        width:'100%',
+                        // left: '40px',
                       }}
                     >
                       <Box p="4">
@@ -362,6 +363,9 @@ const Story = () => {
                         w={'100%'}
                         className="story-box-container"
                         key={ind}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        
                       >
                         <div
                           style={{
@@ -400,7 +404,8 @@ const Story = () => {
                 <div
                   style={{
                     display: 'flex',
-                    marginLeft: '45%',
+                    justifyContent:'center',
+                    marginLeft: '2%',
                   }}
                 >
                   {currentLine === posts?.data?.length ? (
@@ -411,10 +416,11 @@ const Story = () => {
                         isAudioPlay !== 'recording' && (
                           <div>
                             <HStack
+                            // gap={'5.5rem'}
                               style={{ display: 'flex' }}
                               display={'flex'}
                               alignItems="center"
-                              gap="5"
+                              // gap="15"
                             >
                               <div>
                                 {flag ? (
@@ -478,7 +484,7 @@ const Story = () => {
                         )
                       ) : (
                         <div className="voice-recorder">
-                          <HStack>
+                          <HStack gap={'2rem'}>
                             {posts.data?.[currentLine]?.data[0]?.[
                               localStorage.getItem('apphomelang')
                             ]?.audio !== ' '
