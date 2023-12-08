@@ -1774,7 +1774,9 @@ p.chakra-text.css-1r7spse {
 }
 
 .dis-none{
-  display: none;
+  /* display: none; */
+  /* display: hidden; */
+  visibility: hidden;
 }
 
 .custom-design{
@@ -1787,16 +1789,12 @@ p.chakra-text.css-1r7spse {
 }
 
 
-
-@media screen and (min-width:0px) and (max-width: 580px){
-
-  
-  
+@media screen and  (min-width: 580px) and (max-width: 980px){
   .lang_select_div {
     border-radius: 50px;
     border: 1px solid #fed7aa;
     height: 50px;
-    width: 40vh;
+    width: 60vh;
   }
   
   .lang_select_div_active {
@@ -1832,12 +1830,56 @@ p.chakra-text.css-1r7spse {
 }
 }
 
-@media screen and  (min-width: 580px) and (max-width: 980px){
+@media screen and (min-width:450px) and (max-width: 580px){
+
+  
+  
   .lang_select_div {
     border-radius: 50px;
     border: 1px solid #fed7aa;
     height: 50px;
-    width: 60vh;
+    width: 35vh;
+  }
+  
+  .lang_select_div_active {
+    background: #2e2e5d;
+    box-shadow: 0px 14px 8px -7px rgba(46, 46, 93, 0.24);
+    border-radius: 50px;
+    height: 50px;
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin-top: 0px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .lang_select_div_inactive {
+  border-radius: 50px;
+  height: 50px;
+  color: #000;
+  font-weight: 400;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin-top: 0px;
+  text-align: center;
+  cursor: pointer;
+}
+}
+
+@media screen and (min-width:0px) and (max-width: 450px){
+  .lang_select_div {
+    border-radius: 50px;
+    border: 1px solid #fed7aa;
+    height: 50px;
+    width: 25vh;
   }
   
   .lang_select_div_active {
