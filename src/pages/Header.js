@@ -62,12 +62,8 @@ export default function Header({active}) {
     navigate(link)
   };
 
-  // const tabs = ['Discover', 'Validate', 'Practice'];
-
-
   const tabs=
     [
-
       {name:'Discover', link:'/storylist'},
       {name:'Validate', link:'/validate'},
       {name:'Practice', link:'/practice'},
@@ -82,7 +78,7 @@ export default function Header({active}) {
           <HStack spacing={5} alignItems={'center'} >
            {
             tabs.map((tab, index) => (
-              <div   key={index} className="tab-container">
+              <div key={index} className="tab-container">
                 {/* {console.log(tab.link)} */}
                 <Link
                 

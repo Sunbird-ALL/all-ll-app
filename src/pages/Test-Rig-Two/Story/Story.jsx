@@ -13,6 +13,8 @@ import VoiceCompair from '../../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../../assests/Images/play-img.png';
 import pause from '../../../assests/Images/pause-img.png';
+import Speaker from '../../../assests/Images/Speaker.png';
+import MuteSpeaker from '../../../assests/Images/speakerMute.png';
 import Next from '../../../assests/Images/next.png';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -67,11 +69,13 @@ const Story = () => {
   }, []);
 
   const fetchApi = async () => {
+  let type =  localStorage.getItem('apphomelevel') === "Word"? "Sentence":"Word"
+  localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
         `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/getRandomContent?language=${localStorage.getItem(
           'apphomelang'
-        )}&type=Sentence&limit=5`
+        )}&type=${type}&limit= ${currentLine === 3? 2:3}`
       )
         .then(res => {
           return res.json();
@@ -94,6 +98,19 @@ const Story = () => {
   const playAudio = () => {
     const myAudio = localStorage.getItem('recordedAudio');
     set_temp_audio(new Audio(myAudio));
+  };
+
+  // console.log( posts.data?.[currentLine].data[0]?.[
+  //   localStorage.getItem('apphomelang')
+  // ].audio);
+  const playTeacherAudio = () => {
+    set_temp_audio(
+      new Audio(
+        posts.data?.[currentLine].data[0]?.[
+          localStorage.getItem('apphomelang')
+        ].audio
+      )
+    );
   };
 
   const pauseAudio = () => {
@@ -156,12 +173,7 @@ const Story = () => {
   const myCurrectLanguage =
     getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
-  // useEffect(() => {
-  //   // if (currentLine === posts?.data?.length) {
-  //   //   navigate('/Results');
-  //   //   setPageNo(pageno + 1);
-  //   // }
-  // }, [currentLine]);
+
 
   function getLanguageConstants(languageCode) {
     return lang_constants[languageCode] || lang_constants['en'];
@@ -175,94 +187,120 @@ const Story = () => {
       {/* <div style={{width:'100%', marginTop:'80px'}}>
           <Tabs/>
             </div> */}
-      <div
-        style={{ height: '97vh' }}
-        className="story-container"
-      >
-        <Flex direction={{ base: 'column', md: 'row' }}
+      <div style={{ height: '97vh' }} className="story-container">
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
           gap={14}
           align="center"
-          justify="center">
+          justify="center"
+        >
           <div className="col s4 m4">
-            
-              <div className="row">
-                <div className="lang_select_div ">
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'en'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
-                      onClick={() => {
-                        let temp_dt = 'en';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
-                        setCurrentLine(0);
-                        setUserSpeak(false);
-                        fetchApi();
-                        //window.location.reload();
-                      }}
-                    >
-                      {getLanguageConstants('en').LANGUAGE}
-                    </div>
+            <div className="row">
+              <div className="lang_select_div ">
+                <div className="col s12 m4">
+                  <div
+                    className={
+                      localStorage.getItem('apphomelang') === 'en'
+                        ? 'lang_select_div_active'
+                        : 'lang_select_div_inactive'
+                    }
+                    onClick={() => {
+                      let temp_dt = 'en';
+                      localStorage.setItem('apphomelang', temp_dt);
+                      set_sel_lang(temp_dt);
+                      setCurrentLine(0);
+                      setUserSpeak(false);
+                      fetchApi();
+                      //window.location.reload();
+                    }}
+                  >
+                    {getLanguageConstants('en').LANGUAGE}
                   </div>
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'kn'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
-                      onClick={() => {
-                        let temp_dt = 'kn';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
-                        setCurrentLine(0);
-                        setUserSpeak(false);
-                        fetchApi();
-                        //window.location.reload();
-                      }}
-                    >
-                      {getLanguageConstants('kn').LANGUAGE}
-                    </div>
+                </div>
+                <div className="col s12 m4">
+                  <div
+                    className={
+                      localStorage.getItem('apphomelang') === 'kn'
+                        ? 'lang_select_div_active'
+                        : 'lang_select_div_inactive'
+                    }
+                    onClick={() => {
+                      let temp_dt = 'kn';
+                      localStorage.setItem('apphomelang', temp_dt);
+                      set_sel_lang(temp_dt);
+                      setCurrentLine(0);
+                      setUserSpeak(false);
+                      fetchApi();
+                      //window.location.reload();
+                    }}
+                  >
+                    {getLanguageConstants('kn').LANGUAGE}
                   </div>
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'ta'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
-                      onClick={() => {
-                        let temp_dt = 'ta';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
-                        setCurrentLine(0);
-                        setUserSpeak(false);
-                        fetchApi();
-                        //window.location.reload();
-                      }}
-                    >
-                      {getLanguageConstants('ta').LANGUAGE}
-                    </div>
+                </div>
+                <div className="col s12 m4">
+                  <div
+                    className={
+                      localStorage.getItem('apphomelang') === 'ta'
+                        ? 'lang_select_div_active'
+                        : 'lang_select_div_inactive'
+                    }
+                    onClick={() => {
+                      let temp_dt = 'ta';
+                      localStorage.setItem('apphomelang', temp_dt);
+                      set_sel_lang(temp_dt);
+                      setCurrentLine(0);
+                      setUserSpeak(false);
+                      fetchApi();
+                      //window.location.reload();
+                    }}
+                  >
+                    {getLanguageConstants('ta').LANGUAGE}
                   </div>
                 </div>
               </div>
-            
+            </div>
           </div>
         </Flex>
         <div
           style={{
+            backgroundColor:`${localStorage.getItem('apphomelevel') === "Word" && (posts?.data?.length > 0 ) ? '#c9c4ff': posts?.data?.length > 0? '#d3ffbb' : 'white' }`,
             boxShadow: '2px 2px 15px 5px grey',
             // border: '2px solid white',
             borderRadius: '30px',
           }}
           className="story-item"
-        >
+          >
           <div className="row">
+          {/* bg={'red'} */}
             <div className="col-12">
-              {currentLine === posts?.data?.length ? (
+              { posts?.data?.length === 0?
+                      <>
+                       <Box p="4">
+                        <div style={{ textAlign: 'center' }}>
+                          <br />
+                          <Box p="4">
+                            <div style={{ textAlign: 'center' }}>
+                              <h1 style={{ fontSize: '20px', color:'red' }}>No Data Found</h1>
+                              <br />
+                              <img
+                                style={{ height: '40px', cursor: 'pointer' }}
+                                onClick={() => {
+                                  setCurrentLine(0);
+                                  setUserSpeak(false);
+                                  fetchApi();
+                                }}
+                                src={Next}
+                                alt="try_new"
+                              />
+
+                              <p>Try New</p>
+                              {/* <button>No</button> */}
+                            </div>
+                          </Box>
+                          {/* <button>No</button> */}
+                        </div>
+                      </Box>
+                      </>:currentLine!==0 &&currentLine >= posts?.data?.length ? (
                 <>
                   <Flex>
                     <div
@@ -339,7 +377,7 @@ const Story = () => {
                         </div>
                       </Flex>
                     ) : (
-                      ''
+                      ""
                     )
                   )}
                 </>
@@ -415,33 +453,107 @@ const Story = () => {
                         )
                       ) : (
                         <div className="voice-recorder">
-                          <VStack style={{ marginTop: '-20px' }}>
-                            <VoiceCompair
-                              setVoiceText={setVoiceText}
-                              setRecordedAudio={setRecordedAudio}
-                              _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                              flag={true}
-                              setCurrentLine={setCurrentLine}
-                              setStoryBase64Data={setStoryBase64Data}
-                              saveIndb={saveIndb}
-                              setUserSpeak={setUserSpeak}
-                            />
-                            {isAudioPlay === 'recording' ? (
-                              <h4
-                                style={{ position: 'relative', top: '-10px' }}
-                                className="text-speak m-0"
-                              >
-                                Stop
-                              </h4>
-                            ) : (
-                              <h4
-                                style={{ position: 'relative', top: '-10px' }}
-                                className="text-speak m-0"
-                              >
-                                Speak
-                              </h4>
-                            )}
-                          </VStack>
+                          <HStack>
+                            {posts.data?.[currentLine]?.data[0]?.[
+                              localStorage.getItem('apphomelang')
+                            ]?.audio !== ' '
+                              ? isAudioPlay !== 'recording' && (
+                                  <div>
+                                    <VStack
+                                      style={{
+                                        // display: 'flex', 
+                                        marginLeft: '-80px',
+                                        marginTop:'-50px'
+                                      }}
+                                      position={'absolute'}
+                                      // display={'flex'}
+                                      // display={'none'}
+                                      // alignItems="center"
+                                      // gap="5"
+                                    >
+                                      <div>
+                                        {flag ? (
+                                          <>
+                                          <img
+                                            className="play_btn"
+                                            src={Speaker}
+                                            style={{
+                                              height: '72px',
+                                              width: '72px',
+                                            }}
+                                            onClick={() => playTeacherAudio()}
+                                            alt="play_audio"
+                                          />
+                                           <h4
+                                          className="text-play m-0 "
+                                          style={{
+                                            position: 'relative',
+                                            textAlign: 'center',
+                                          }}
+                                        >
+                                          Listen
+                                        </h4>
+                                          </>
+                                        ) : (
+                                          <>
+                                          <img
+                                            className="play_btn"
+                                            src={MuteSpeaker}
+                                            style={{
+                                              height: '72px',
+                                              width: '72px',
+                                            }}
+                                            onClick={() => pauseAudio()}
+                                            alt="pause_audio"
+                                            />
+                                             <h4
+                                          className="text-play m-0 "
+                                          style={{
+                                            position: 'relative',
+                                            textAlign: 'center',
+                                          }}
+                                        >
+                                          Mute
+                                        </h4>
+                                            </>
+                                        )}
+                                       
+                                      </div>
+                                    </VStack>
+                                  </div>
+                                )
+                              : ''}
+
+                            <VStack
+                              style={{ marginTop: '15px', marginLeft: '0px' }}
+                            >
+                              <VoiceCompair
+                                setVoiceText={setVoiceText}
+                                setRecordedAudio={setRecordedAudio}
+                                _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                                flag={true}
+                                setCurrentLine={setCurrentLine}
+                                setStoryBase64Data={setStoryBase64Data}
+                                saveIndb={saveIndb}
+                                setUserSpeak={setUserSpeak}
+                              />
+                              {isAudioPlay === 'recording' ? (
+                                <h4
+                                  style={{ position: 'relative', top: '-10px' }}
+                                  className="text-speak m-0"
+                                >
+                                  Stop
+                                </h4>
+                              ) : (
+                                <h4
+                                  style={{ position: 'relative', top: '-10px' }}
+                                  className="text-speak m-0"
+                                >
+                                  Speak
+                                </h4>
+                              )}
+                            </VStack>
+                          </HStack>
                         </div>
                       )}
                     </>
