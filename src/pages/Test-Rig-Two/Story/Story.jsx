@@ -69,13 +69,14 @@ const Story = () => {
   }, []);
 
   const fetchApi = async () => {
-  let type =  localStorage.getItem('apphomelevel') === "Word"? "Sentence":"Word"
-  localStorage.setItem('apphomelevel', type);
+    let type =
+      localStorage.getItem('apphomelevel') === 'Word' ? 'Sentence' : 'Word';
+    localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
         `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/getRandomContent?language=${localStorage.getItem(
           'apphomelang'
-        )}&type=${type}&limit= ${currentLine === 3? 2:3}`
+        )}&type=${type}&limit= ${currentLine === 3 ? 2 : 3}`
       )
         .then(res => {
           return res.json();
@@ -174,7 +175,6 @@ const Story = () => {
     getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
 
-
   function getLanguageConstants(languageCode) {
     return lang_constants[languageCode] || lang_constants['en'];
   }
@@ -263,44 +263,56 @@ const Story = () => {
         </Flex>
         <div
           style={{
-            backgroundColor:`${localStorage.getItem('apphomelevel') === "Word" && (posts?.data?.length > 0 ) ? '#c9c4ff': posts?.data?.length > 0? '#d3ffbb' : 'white' }`,
+            backgroundColor: `${
+              localStorage.getItem('apphomelevel') === 'Word' &&
+              posts?.data?.length > 0
+                ? '#c9c4ff'
+                : posts?.data?.length > 0
+                ? '#d3ffbb'
+                : 'white'
+            }`,
             boxShadow: '2px 2px 15px 5px grey',
             // border: '2px solid white',
             borderRadius: '30px',
+            height: '55vh',
+            width: '65%',
           }}
           className="story-item"
-          >
+        >
           <div className="row">
-          {/* bg={'red'} */}
+            {/* bg={'red'} */}
             <div className="col-12">
-              { posts?.data?.length === 0?
-                      <>
-                       <Box p="4">
+              {posts?.data?.length === 0 ? (
+                <>
+                  <Box p="4">
+                    <div style={{ textAlign: 'center' }}>
+                      <br />
+                      <Box p="4">
                         <div style={{ textAlign: 'center' }}>
+                          <h1 style={{ fontSize: '20px', color: 'red' }}>
+                            No Data Found
+                          </h1>
                           <br />
-                          <Box p="4">
-                            <div style={{ textAlign: 'center' }}>
-                              <h1 style={{ fontSize: '20px', color:'red' }}>No Data Found</h1>
-                              <br />
-                              <img
-                                style={{ height: '40px', cursor: 'pointer' }}
-                                onClick={() => {
-                                  setCurrentLine(0);
-                                  setUserSpeak(false);
-                                  fetchApi();
-                                }}
-                                src={Next}
-                                alt="try_new"
-                              />
+                          <img
+                            style={{ height: '40px', cursor: 'pointer' }}
+                            onClick={() => {
+                              setCurrentLine(0);
+                              setUserSpeak(false);
+                              fetchApi();
+                            }}
+                            src={Next}
+                            alt="try_new"
+                          />
 
-                              <p>Try New</p>
-                              {/* <button>No</button> */}
-                            </div>
-                          </Box>
+                          <p>Try New</p>
                           {/* <button>No</button> */}
                         </div>
                       </Box>
-                      </>:currentLine!==0 &&currentLine >= posts?.data?.length ? (
+                      {/* <button>No</button> */}
+                    </div>
+                  </Box>
+                </>
+              ) : currentLine !== 0 && currentLine >= posts?.data?.length ? (
                 <>
                   <Flex>
                     <div
@@ -377,7 +389,7 @@ const Story = () => {
                         </div>
                       </Flex>
                     ) : (
-                      ""
+                      ''
                     )
                   )}
                 </>
@@ -406,38 +418,51 @@ const Story = () => {
                             >
                               <div>
                                 {flag ? (
-                                  <img
-                                    className="play_btn"
-                                    src={play}
-                                    style={{ height: '72px', width: '72px' }}
-                                    onClick={() => playAudio()}
-                                    alt="play_audio"
-                                  />
+                                  <>
+                                    <img
+                                      className="play_btn"
+                                      src={play}
+                                      style={{ height: '72px', width: '72px' }}
+                                      onClick={() => playAudio()}
+                                      alt="play_audio"
+                                    />
+                                    <h4
+                                      className="text-play m-0 "
+                                      style={{
+                                        position: 'relative',
+                                        textAlign: 'center',
+                                      }}
+                                    >
+                                      Listen
+                                    </h4>
+                                  </>
                                 ) : (
-                                  <img
-                                    className="play_btn"
-                                    src={pause}
-                                    style={{ height: '72px', width: '72px' }}
-                                    onClick={() => pauseAudio()}
-                                    alt="pause_audio"
-                                  />
+                                  <>
+                                    <img
+                                      className="play_btn"
+                                      src={pause}
+                                      style={{ height: '72px', width: '72px' }}
+                                      onClick={() => pauseAudio()}
+                                      alt="pause_audio"
+                                    />
+                                    <h4
+                                      className="text-play m-0 "
+                                      style={{
+                                        position: 'relative',
+                                        textAlign: 'center',
+                                      }}
+                                    >
+                                      Pause
+                                    </h4>
+                                  </>
                                 )}
-                                <h4
-                                  className="text-play m-0 "
-                                  style={{
-                                    position: 'relative',
-                                    textAlign: 'center',
-                                  }}
-                                >
-                                  Listen
-                                </h4>
                               </div>
                               <div
                                 style={{
                                   position: 'absolute',
                                   textAlign: 'center',
                                   top: '50%',
-                                  right: '20vh',
+                                  right: '20%',
                                 }}
                               >
                                 <img
@@ -461,9 +486,9 @@ const Story = () => {
                                   <div>
                                     <VStack
                                       style={{
-                                        // display: 'flex', 
+                                        // display: 'flex',
                                         marginLeft: '-80px',
-                                        marginTop:'-50px'
+                                        marginTop: '-50px',
                                       }}
                                       position={'absolute'}
                                       // display={'flex'}
@@ -474,50 +499,49 @@ const Story = () => {
                                       <div>
                                         {flag ? (
                                           <>
-                                          <img
-                                            className="play_btn"
-                                            src={Speaker}
-                                            style={{
-                                              height: '72px',
-                                              width: '72px',
-                                            }}
-                                            onClick={() => playTeacherAudio()}
-                                            alt="play_audio"
-                                          />
-                                           <h4
-                                          className="text-play m-0 "
-                                          style={{
-                                            position: 'relative',
-                                            textAlign: 'center',
-                                          }}
-                                        >
-                                          Listen
-                                        </h4>
+                                            <img
+                                              className="play_btn"
+                                              src={Speaker}
+                                              style={{
+                                                height: '72px',
+                                                width: '72px',
+                                              }}
+                                              onClick={() => playTeacherAudio()}
+                                              alt="play_audio"
+                                            />
+                                            <h4
+                                              className="text-play m-0 "
+                                              style={{
+                                                position: 'relative',
+                                                textAlign: 'center',
+                                              }}
+                                            >
+                                              Listen
+                                            </h4>
                                           </>
                                         ) : (
                                           <>
-                                          <img
-                                            className="play_btn"
-                                            src={MuteSpeaker}
-                                            style={{
-                                              height: '72px',
-                                              width: '72px',
-                                            }}
-                                            onClick={() => pauseAudio()}
-                                            alt="pause_audio"
+                                            <img
+                                              className="play_btn"
+                                              src={MuteSpeaker}
+                                              style={{
+                                                height: '72px',
+                                                width: '72px',
+                                              }}
+                                              onClick={() => pauseAudio()}
+                                              alt="pause_audio"
                                             />
-                                             <h4
-                                          className="text-play m-0 "
-                                          style={{
-                                            position: 'relative',
-                                            textAlign: 'center',
-                                          }}
-                                        >
-                                          Mute
-                                        </h4>
-                                            </>
+                                            <h4
+                                              className="text-play m-0 "
+                                              style={{
+                                                position: 'relative',
+                                                textAlign: 'center',
+                                              }}
+                                            >
+                                              Mute
+                                            </h4>
+                                          </>
                                         )}
-                                       
                                       </div>
                                     </VStack>
                                   </div>
