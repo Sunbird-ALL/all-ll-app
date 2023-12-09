@@ -419,6 +419,7 @@ const Story = () => {
                               style={{ display: 'flex' }}
                               display={'flex'}
                               alignItems="center"
+                              marginTop={'15px'}
                               // gap="15"
                             >
                               <div>
@@ -543,7 +544,7 @@ const Story = () => {
                               : ''}
 
                             <VStack
-                              style={{ marginTop: '15px', marginLeft: '0px' }}
+                              style={{ marginTop: '-17px', marginLeft: '0px' }}
                             >
                               <VoiceCompair
                                 setVoiceText={setVoiceText}
