@@ -509,9 +509,9 @@ const Story = () => {
 
                           )
                           : ''}
-
+                       
                         <VStack
-                          style={{ marginTop: '-17px', marginLeft: '0px' }}
+                          style={{ marginTop: '-13px', marginLeft: '0px' }}
                         >
                           <VoiceCompair
                             setVoiceText={setVoiceText}
