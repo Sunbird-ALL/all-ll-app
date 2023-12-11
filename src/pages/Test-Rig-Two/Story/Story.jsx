@@ -41,6 +41,7 @@ const jsConfetti = new JSConfetti();
 
 
 const Story = () => {
+  const maxAllowedContent = 4;
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   const [showWellDone, setWellDone] = useState(false);
@@ -93,18 +94,25 @@ const Story = () => {
           return res.json();
         })
         .then(data => {
-          setPosts(data);
+          if(currentLine <= maxAllowedContent){
+            let oldPosts = posts || [];
+            let newPosts = data.data;
+            let latestPosts =  [...oldPosts, ...newPosts];
+            setPosts(latestPosts);
+          }else{
+            setPosts(data.data);
+            setCurrentLine(0);
+          }
           setLoading(false);
         });
       setLoading(false);
-      setCurrentLine(0);
       setUserSpeak(false);
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  // console.log(posts);
+  //console.log(posts);
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -117,7 +125,7 @@ const Story = () => {
   const playTeacherAudio = () => {
     set_temp_audio(
       new Audio(
-        posts.data?.[currentLine].data[0]?.[
+        posts?.[currentLine].data[0]?.[
           localStorage.getItem('apphomelang')
         ].audio
       )
@@ -141,11 +149,12 @@ const Story = () => {
 
   const nextLine = count => {
     setUserSpeak(false);
-    if (currentLine === posts?.data?.length - 1) {
+    if (currentLine >= maxAllowedContent) {
       handleStarAnimation();
-      if (currentLine !== 0) setWellDone(true);
-    }
-    if (currentLine <= posts?.data?.length - 1) {
+      setWellDone(true);
+    } else if (currentLine >= posts?.length - 1) {
+      fetchApi();
+    }else{
       setCurrentLine(currentLine + 1);
     }
   };
@@ -246,9 +255,9 @@ const Story = () => {
           <Box maxW='2xl' centerContent
             style={{
               backgroundColor: `${localStorage.getItem('apphomelevel') === 'Word' &&
-                posts?.data?.length > 0
+                posts?.length > 0
                 ? '#c9c4ff'
-                : posts?.data?.length > 0
+                : posts?.length > 0
                   ? '#d3ffbb'
                   : 'white'
                 }`,
@@ -260,7 +269,7 @@ const Story = () => {
           >
             {loading ? (
               <Center h='50vh'>Loading...</Center>
-            ) : posts?.data?.length === 0 ? (
+            ) : posts?.length === 0 ? (
               <>
                 <Center h='50vh'>
                   <VStack>
@@ -311,6 +320,7 @@ const Story = () => {
                                 style={{ height: '40px', cursor: 'pointer' }}
                                 onClick={() => {
                                   fetchApi();
+                                  setCurrentLine(0);
                                   setWellDone(false);
                                 }}
                                 src={Next}
@@ -332,7 +342,7 @@ const Story = () => {
               <>
                 <VStack>
                   <Box>
-                    {posts?.data?.map((post, ind) =>
+                    {posts?.map((post, ind) =>
                       currentLine === ind ? (
                         <Center h='30vh'>
                           <Flex
@@ -453,7 +463,7 @@ const Story = () => {
                     ) : (
                       <div className="voice-recorder">
                         <HStack gap={'2rem'}>
-                          {posts.data?.[currentLine]?.data[0]?.[
+                          {posts?.[currentLine]?.data[0]?.[
                             localStorage.getItem('apphomelang')
                           ]?.audio !== ' '
                             ? isAudioPlay !== 'recording' && (
