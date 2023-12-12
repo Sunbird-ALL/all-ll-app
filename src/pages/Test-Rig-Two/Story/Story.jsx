@@ -88,19 +88,19 @@ const Story = () => {
       const response = await fetch(
         `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/getRandomContent?language=${localStorage.getItem(
           'apphomelang'
-        )}&type=${type}&limit= ${currentLine === 3 ? 2 : 3}`
+        )}&type=${type}&limit= ${currentLine === 2 ? 2 : 3}`
       )
         .then(res => {
           return res.json();
         })
         .then(data => {
-          if(currentLine <= maxAllowedContent){
-            let oldPosts = posts || [];
-            let newPosts = data.data;
-            let latestPosts =  [...oldPosts, ...newPosts];
-            setPosts(latestPosts);
-          }else{
-            setPosts(data.data);
+          const oldPosts = posts || [];
+          const newPosts = data?.data;
+
+          if (currentLine && currentLine < maxAllowedContent - 1 && newPosts?.length) {
+            setPosts([...oldPosts, ...newPosts]);
+          } else {
+            setPosts(newPosts);
             setCurrentLine(0);
           }
           setLoading(false);
@@ -154,6 +154,7 @@ const Story = () => {
       setWellDone(true);
     } else if (currentLine >= posts?.length - 1) {
       fetchApi();
+      setCurrentLine(currentLine + 1);
     }else{
       setCurrentLine(currentLine + 1);
     }
@@ -275,7 +276,7 @@ const Story = () => {
                   <VStack>
                     <div>
                       <h1 style={{ fontSize: '20px', color: 'red' }}>
-                        No Data Found
+                      {localStorage.getItem('apphomelevel') } Data Not Found
                       </h1>
                     </div>
                     <div>
