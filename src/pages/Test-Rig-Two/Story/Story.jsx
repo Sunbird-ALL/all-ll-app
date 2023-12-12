@@ -253,7 +253,7 @@ const Story = () => {
               </div>
             </div>
           </Center>
-          <Box maxW='2xl' centerContent
+          <Box maxW='2xl'
             style={{
               backgroundColor: `${localStorage.getItem('apphomelevel') === 'Word' &&
                 posts?.length > 0
@@ -345,12 +345,11 @@ const Story = () => {
                   <Box>
                     {posts?.map((post, ind) =>
                       currentLine === ind ? (
-                        <Center h='30vh'>
+                        <Center key={ind} h='30vh'>
                           <Flex
                             pos={'relative'}
                             w={'100%'}
-                            className="story-box-container"
-                            key={ind}
+                            className="story-box-container"                          
                             display={'flex'}
                             justifyContent={'center'}
 
@@ -364,7 +363,7 @@ const Story = () => {
                               }}
                             >
                               <Box p="4">
-                                <h1 className="story-line">
+                              <h1 className="story-line">
                                   {
                                     post?.data[0]?.[
                                       localStorage.getItem('apphomelang')

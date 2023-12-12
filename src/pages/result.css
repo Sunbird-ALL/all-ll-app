@@ -5,7 +5,7 @@
     background: gray.50;	
     background-image: url('../../src/assests/Images/hackthon-images/story.webp');	
     background-color: #cccccc;	
-    height: 500px;	
+    /* height: 500px;	 */
     background-position: center;	
     background-repeat: no-repeat;	
     background-size: cover;	
@@ -154,7 +154,7 @@
     -webkit-justify-content: center;	
     justify-content: center;	
     background-image: url('../assests/Images/hackthon-images/certificate-bg.png');	
-    height: 804px;	
+    /* height: 804px;	 */
     background-position: center;	
     background-repeat: no-repeat;	
     background-size: cover;	
