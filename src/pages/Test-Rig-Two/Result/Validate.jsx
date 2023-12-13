@@ -11,12 +11,11 @@ import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Text, VStack } from '@chakra-ui/react';
 
-
 export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCurrentCharModalOpen, SetCurrentCharModalOpen] = useState(false);
   const [recommededWords, setRecommendedWords] = useState("")
-  const [loding, setLoading] = useState(false);
+  const [loding, setLoading] = useState(true);
   const [myCurrectChar, setMyCurrentChar] = useState('')
   const [chars, setCharacter] = useState([])
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
@@ -47,12 +46,13 @@ export default function Validate() {
 
   useEffect(() => {
     if (!chars.length) {
+      setLoading(true);
       axios
         .get(
           `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}&limit=5`,
         )
         .then(res => {
-          setLoading(true);
+          setLoading(false);
           const targetChars = res.data.getTargetChar || []; // Handle empty or undefined case
           setCharacter(targetChars);
           setCurrentCharIndex(0);
@@ -60,6 +60,7 @@ export default function Validate() {
           setRecommendedWords(res.data.content);
         })
         .catch(error => {
+          setLoading(false);
           console.error(error);
         });
     }
@@ -99,6 +100,7 @@ export default function Validate() {
       <Header active={2} />
       {/* <button >click me</button> */}
       <Container style={{ height: '97vh' }} className="main-bg">
+      {loding && <Center>Loading...</Center>}
         {chars.length ? <VStack>
           <Container>
             <Center>
@@ -174,19 +176,19 @@ export default function Validate() {
               </button>
             </Link>
           </section>
-        </VStack> : 
+        </VStack> : !loding && 
           <>
-                  <Center>
-                    No character available to validate 
-                  </Center>
-                  <section className="c-section">
-                  <Link to={'/StoryList'}>
-                    <button className='btn btn-info'>
-                      Discover {'>'}
-                    </button>
-                  </Link>
-                </section>
-                </>
+            <Center>
+              No character available to validate
+            </Center>
+            <section className="c-section">
+              <Link to={'/StoryList'}>
+                <button className='btn btn-info'>
+                  Discover {'>'}
+                </button>
+              </Link>
+            </section>
+          </>
         }
       </Container>
 
