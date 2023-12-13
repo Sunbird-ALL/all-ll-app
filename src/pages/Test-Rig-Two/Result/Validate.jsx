@@ -99,7 +99,7 @@ export default function Validate() {
       <Header active={2} />
       {/* <button >click me</button> */}
       <Container style={{ height: '97vh' }} className="main-bg">
-        <VStack>
+        {chars.length ? <VStack>
           <Container>
             <Center>
               <div className='col s6'>
@@ -149,15 +149,16 @@ export default function Validate() {
                     </button>}
                 </div>
                 <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
-
-                  {recommededWords.length && recommededWords?.map((item, ind) => {
-                    return <span key={ind}>
-                      <span style={{ fontSize: '25px', margin: '10px', }}>
-                        {item?.contentSourceData[0]?.text}{", "}
-                      </span>
-
+                  {recommededWords.length > 0 &&
+                    <span style={{ fontSize: '25px' }}>
+                      {recommededWords.map((item, ind, arr) => (
+                        <span key={ind}>
+                          {item?.contentSourceData[0]?.text}
+                          {ind !== arr.length - 1 && ", "}
+                        </span>
+                      ))}
                     </span>
-                  })}
+                  }
                 </div>
                 <div style={{ textAlign: 'center' }}>
                   <img onClick={() => { handelFeedBack(1) }} style={{ marginLeft: '10px', cursor: 'pointer' }} src={thumbsup} alt='thumbs-up' />
@@ -173,7 +174,20 @@ export default function Validate() {
               </button>
             </Link>
           </section>
-        </VStack>
+        </VStack> : 
+          <>
+                  <Center>
+                    No character available to validate 
+                  </Center>
+                  <section className="c-section">
+                  <Link to={'/StoryList'}>
+                    <button className='btn btn-info'>
+                      Discover {'>'}
+                    </button>
+                  </Link>
+                </section>
+                </>
+        }
       </Container>
 
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
