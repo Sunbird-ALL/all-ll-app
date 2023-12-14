@@ -118,7 +118,8 @@ export default function Validate() {
                         borderRadius: '5px',
                         cursor: 'pointer',
                         position: 'absolute',
-                        left: '10px',
+                        left: '20%',
+                        fontSize: 'x-large',
                         top: '50%',
                         transform: 'translateY(-50%)',
                       }}
@@ -142,15 +143,16 @@ export default function Validate() {
                         borderRadius: '5px',
                         cursor: 'pointer',
                         position: 'absolute',
-                        right: '10px',
+                        right: '20%',
                         top: '50%',
+                        fontSize: 'x-large',
                         transform: 'translateY(-50%)',
                       }}
                     >
                       {'>'}
                     </button>}
                 </div>
-                <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
+                <div style={{ textAlign: 'center', paddingBottom: '10px', width: '100vh' }}>
                   {recommededWords.length > 0 &&
                     <span style={{ fontSize: '25px' }}>
                       {recommededWords.map((item, ind, arr) => (
