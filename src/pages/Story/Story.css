@@ -196,7 +196,7 @@
   background: gray.50;	
   background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
   background-color: #cccccc;	
-  height: 500px;	
+  /* height: 500px;	 */
   background-position: center;	
   background-repeat: no-repeat;	
   background-size: cover;	
@@ -208,7 +208,7 @@
   background: gray.50;	
   background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
   background-color: #cccccc;	
-  height: 500px;	
+  /* height: 500px;	 */
   background-position: center;	
   background-repeat: no-repeat;	
   background-size: cover;	

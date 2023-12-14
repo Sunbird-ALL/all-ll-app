@@ -333,7 +333,7 @@ const Story = () => {
               <>
                 {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                    <>
+                    <div key={ind}>
                       <HStack pos={'relative'} className='story-box-container' key={ind}>
                         <div>
                           <img
@@ -390,7 +390,7 @@ const Story = () => {
                           </Center>
                         </div>
                       </HStack>
-                    </>
+                    </div>
 
                   ) : (
                     ''
