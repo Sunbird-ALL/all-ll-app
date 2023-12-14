@@ -284,7 +284,7 @@ const Story = () => {
   useEffect(() => {
 
     if (currentLine === posts?.data?.length) {
-      navigate('/Results')
+      navigate('/Validate')
       setPageNo(pageno + 1)
     }
   }, [currentLine])
@@ -309,12 +309,13 @@ const Story = () => {
             ) : isUserSpeak ? (
               <>
 
-                <Flex>
-                  <Center>
+                
                     <VStack>
+                      <div>
                       {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
+                      </div>
                       <div style={{ display: 'flex', margin: '20px', }}>
-
+                        <HStack>
                         <div style={{ margin: '20px', textAlign: "center" }}>
                           <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
                           <p style={{ fontSize: '18px' }}>Try Next</p>
@@ -323,10 +324,10 @@ const Story = () => {
                           <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
                           <p style={{ fontSize: '18px' }}>Try Again</p>
                         </div>
+                        </HStack>
                       </div>
                     </VStack>
-                  </Center>
-                </Flex>
+                
               </>
             ) : (
               <>
