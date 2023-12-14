@@ -186,9 +186,7 @@ setIsModalOpen(true);
       <div className="main-bg">
         <section className="c-section">
           <div className="container1">
-            <div className="">
-              <div className='' >
-                <div className="">
+            
                   <div className="content" >
                     <h1 style={{ position:'relative', top:'-250px'}}>Congratulations...</h1>
                     <br />
@@ -202,9 +200,7 @@ setIsModalOpen(true);
                     </button>
                     </Link>
 
-                  </div>
-                </div>
-              </div>
+                  
             </div>
 
             <div className="row">
