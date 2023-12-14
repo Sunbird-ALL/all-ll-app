@@ -309,43 +309,43 @@ const Story = () => {
             ) : isUserSpeak ? (
               <>
 
-                
-                    <VStack>
-                      <div>
-                      {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
+
+                <VStack>
+                  <div>
+                    {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
+                  </div>
+                  <div style={{ display: 'flex', margin: '20px', }}>
+                    <HStack>
+                      <div style={{ margin: '20px', textAlign: "center" }}>
+                        <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
+                        <p style={{ fontSize: '18px' }}>Try Next</p>
                       </div>
-                      <div style={{ display: 'flex', margin: '20px', }}>
-                        <HStack>
-                        <div style={{ margin: '20px', textAlign: "center" }}>
-                          <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
-                          <p style={{ fontSize: '18px' }}>Try Next</p>
-                        </div>
-                        <div style={{ margin: '20px', textAlign: "center" }}>
-                          <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
-                          <p style={{ fontSize: '18px' }}>Try Again</p>
-                        </div>
-                        </HStack>
+                      <div style={{ margin: '20px', textAlign: "center" }}>
+                        <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
+                        <p style={{ fontSize: '18px' }}>Try Again</p>
                       </div>
-                    </VStack>
-                
+                    </HStack>
+                  </div>
+                </VStack>
+
               </>
             ) : (
               <>
                 {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
                     <>
-                      <HStack pos={'relative'} className='story-box-container' key={ind}>
-                        <div>
+                      <div className='story-box-container' key={ind}>
+                        <Center>
                           <img
                             className="story-image"
                             src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
                             }
                             alt={post?.title}
                           />
-                        </div>
+                        </Center>
                         <div>
                           <Center>
-                            <h1 style={{textAlign: "center" }} className='story-line'>
+                            <h1 style={{ textAlign: "center" }} className='story-line'>
                               {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
                             </h1>
                             {localStorage.setItem(
@@ -389,7 +389,7 @@ const Story = () => {
                             }
                           </Center>
                         </div>
-                      </HStack>
+                      </div>
                     </>
 
                   ) : (
