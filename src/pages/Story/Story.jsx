@@ -345,7 +345,7 @@ const Story = () => {
                         </div>
                         <div>
                           <Center>
-                            <h1 className='story-line'>
+                            <h1 style={{textAlign: "center" }} className='story-line'>
                               {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
                             </h1>
                             {localStorage.setItem(
