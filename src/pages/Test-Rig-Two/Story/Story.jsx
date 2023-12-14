@@ -189,7 +189,7 @@ const Story = () => {
     <div>
       <VStack>
         <Header active={3} />
-        <Container style={{ height: '97vh', width: '100vh' }} className="story-container">
+        <Container style={{ height: '97vh'}} className="story-container">
           <Center
           >
             <div className="col s4 m4">
@@ -207,6 +207,7 @@ const Story = () => {
                         localStorage.setItem('apphomelang', temp_dt);
                         set_sel_lang(temp_dt);
                         fetchApi();
+                        setWellDone(false);
                         //window.location.reload();
                       }}
                     >
@@ -225,6 +226,7 @@ const Story = () => {
                         localStorage.setItem('apphomelang', temp_dt);
                         set_sel_lang(temp_dt);
                         fetchApi();
+                        setWellDone(false);
                         //window.location.reload();
                       }}
                     >
@@ -243,6 +245,7 @@ const Story = () => {
                         localStorage.setItem('apphomelang', temp_dt);
                         set_sel_lang(temp_dt);
                         fetchApi();
+                        setWellDone(false);
                         //window.location.reload();
                       }}
                     >
@@ -253,7 +256,7 @@ const Story = () => {
               </div>
             </div>
           </Center>
-          <Box maxW='2xl' centerContent
+          <Center
             style={{
               backgroundColor: `${localStorage.getItem('apphomelevel') === 'Word' &&
                 posts?.length > 0
@@ -264,7 +267,7 @@ const Story = () => {
                 }`,
               boxShadow: '2px 2px 15px 5px grey',
               borderRadius: '30px',
-              width: '100%',
+              width: 'inherit',
               height: '50vh'
             }}
           >
@@ -364,7 +367,7 @@ const Story = () => {
                               }}
                             >
                               <Box p="4">
-                                <h1 className="story-line">
+                                <h1 style={{ textAlign: "center" }}  className="story-line">
                                   {
                                     post?.data[0]?.[
                                       localStorage.getItem('apphomelang')
@@ -557,7 +560,7 @@ const Story = () => {
                 </VStack>
               </>
             ) : ""}
-          </Box>
+          </Center>
         </Container>
       </VStack>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
