@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, Image, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import PlaceHolder from '../../assests/Images/hackthon-images/sets.png';
 import kannadaPlaceholder from '../../assests/Images/hackthon-images/knCol.png';
@@ -38,8 +38,8 @@ const StoryList = () => {
   return (
     <>
       <Header active={1} />
-      <section className='bg'>
-        <div className="" style={{ margin: '55px' }}>
+      <Container className='bg'>
+        <div className="" style={{ padding: '50px 0px 0px 50px' }}>
           <div className="row">
             {posts?.data?.map((post, ind) => (
               <Link to={`story/${post.collectionId}`} key={ind}>
@@ -71,7 +71,7 @@ const StoryList = () => {
             ))}
           </div>
         </div>
-      </section>
+      </Container>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
     </>
   )
