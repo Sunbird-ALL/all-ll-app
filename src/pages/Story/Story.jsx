@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Flex, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -35,14 +35,14 @@ const Story = () => {
   const [flag, setFlag] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
   const [loading, setLoading] = useState(true);
-  const [isUserSpeak,setUserSpeak] = useState(false);
+  const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
 
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
-  const[pageno,setPageNo] = useState(1);
+  const [pageno, setPageNo] = useState(1);
 
   React.useEffect(() => {
     if (voiceText == '-') {
@@ -58,7 +58,7 @@ const Story = () => {
   }, []);
 
   const fetchApi = async () => {
-   
+
     try {
       const response = await fetch(
         `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
@@ -71,8 +71,8 @@ const Story = () => {
           //   setPosts(JSON.parse(localStorage.getItem('contents')));
           // }
           // else{
-            setPosts(data);
-            console.log(posts);
+          setPosts(data);
+          console.log(posts);
           // }
           // console.log("localStorage.getItem('contents'):-" ,JSON.parse(localStorage.getItem('contents')));
           // console.log("api:-" ,data);
@@ -137,7 +137,7 @@ const Story = () => {
 
 
 
-  async function  saveIndb(base64Data) {
+  async function saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
     showLoading();
     // .replace(/[.',|!|?-']/g, '')
@@ -147,14 +147,14 @@ const Story = () => {
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
       .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
-        audio:base64Data,
+        audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
         original_text: findRegex(posts?.data[currentLine]?.data[0]?.[lang]?.text),
         language: lang,
       })
-      .then( async res => {
+      .then(async res => {
         // console.log(res);
         responseText = res.data.responseText
         const responseEndTime = new Date().getTime();
@@ -195,40 +195,40 @@ const Story = () => {
         let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
         for (let i = 0; i < studentTextArray.length; i++) {
-            if (teacherTextArray.includes(studentTextArray[i])) {
-               correct_words++;
-               student_correct_words_result.push(
-                  studentTextArray[i]
-               );
-            } else {
-                wrong_words++;
-                student_incorrect_words_result.push(
-                   studentTextArray[i]
-                );
-            }
+          if (teacherTextArray.includes(studentTextArray[i])) {
+            correct_words++;
+            student_correct_words_result.push(
+              studentTextArray[i]
+            );
+          } else {
+            wrong_words++;
+            student_incorrect_words_result.push(
+              studentTextArray[i]
+            );
+          }
         }
         //calculation method
         if (originalwords >= studentswords) {
-           result_per_words = Math.round(
-                 Number((correct_words / originalwords) * 100)
-           );
+          result_per_words = Math.round(
+            Number((correct_words / originalwords) * 100)
+          );
         } else {
-            result_per_words = Math.round(
-              Number((correct_words / studentswords) * 100)
-            );
+          result_per_words = Math.round(
+            Number((correct_words / studentswords) * 100)
+          );
         }
 
         const errorRate = calcCER(responseText, tempteacherText);
-        let finalScore = 100 - errorRate*100;
+        let finalScore = 100 - errorRate * 100;
 
-        finalScore = finalScore<0? 0 : finalScore;
+        finalScore = finalScore < 0 ? 0 : finalScore;
 
-        let word_result = (finalScore === 100) ? "correct" : "incorrect";  
+        let word_result = (finalScore === 100) ? "correct" : "incorrect";
 
         if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
           let getContentId = currentLine;
           var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('virtualStorySessionID')}-${Date.now()}-${getContentId}.wav`;
-  
+
           const command = new PutObjectCommand({
             Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
             Key: audioFileName,
@@ -247,18 +247,18 @@ const Story = () => {
           //"qid": "", // Required. Unique assessment/question id
           "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
           "values": [
-              { "original_text": posts?.data[currentLine]?.data[0]?.[lang]?.text},
-              { "response_text": responseText},
-              { "response_correct_words_array": student_correct_words_result},
-              { "response_incorrect_words_array": student_incorrect_words_result},
-              { "response_word_array_result": word_result_array},
-              { "response_word_result": word_result},
-              { "accuracy_percentage": finalScore},
-              { "duration":  responseDuration}
-           ]
-      },
-        'ET'
-      )
+            { "original_text": posts?.data[currentLine]?.data[0]?.[lang]?.text },
+            { "response_text": responseText },
+            { "response_correct_words_array": student_correct_words_result },
+            { "response_incorrect_words_array": student_incorrect_words_result },
+            { "response_word_array_result": word_result_array },
+            { "response_word_result": word_result },
+            { "accuracy_percentage": finalScore },
+            { "duration": responseDuration }
+          ]
+        },
+          'ET'
+        )
         stopLoading();
         setUserSpeak(true)
         handleStarAnimation();
@@ -269,7 +269,7 @@ const Story = () => {
       });
   }
 
-  const handleStarAnimation=()=>{
+  const handleStarAnimation = () => {
     jsConfetti.addConfetti({
       emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
     })
@@ -277,182 +277,149 @@ const Story = () => {
       emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
     })
     jsConfetti.addConfetti({
-      emojis: ['⭐', '✨', '🌟','⭐', '✨', '🌟',],
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
     })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(currentLine === posts?.data?.length){
+    if (currentLine === posts?.data?.length) {
       navigate('/Results')
-      setPageNo(pageno+1)
+      setPageNo(pageno + 1)
     }
-  },[currentLine])
+  }, [currentLine])
 
   // console.log(posts?.data[currentLine]?.data[0]?.hi?.audio);
   return (
-    <div style={{height:'97vh'}}>
+    <div style={{ height: '97vh' }}>
       <Header />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
-      <div
-        style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',height:'97vh' }}
-        className="story-container"
-      >
-        <Flex gap={14}>
-  
-        </Flex>
-        <div
-          style={{
-            boxShadow: '2px 2px 15px 5px grey',
-            // border: '2px solid white',
-            borderRadius: '30px',
-          }}
-          className="story-item"
-        >
-          <div className="row">
-            {/* <h1 style={{position:'relative', left:'-100px'}}>{posts?.data[0]?.title}</h1> */}
-            {/* <Modal /> */}
-            {/* <button onClick={()=> setUserSpeak(!isUserSpeak)}>see Score</button> */}
-            {loading ? (
-              <div>Loading...</div>
-            ) : isUserSpeak ? (
-              <>
-            
-              <Flex>
+      <VStack>
+          <Center className="story-container">
+            <div
+              style={{
+                boxShadow: '2px 2px 15px 5px grey',
+                // border: '2px solid white',
+                borderRadius: '30px',
+              }}
+              className="story-item"
+            >
 
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      height: '40vh',
-                      position:'relative',
-                      left:'-40px'
-                    }}
-                  >
-                    <Box  p="4">
-                      {currentLine === 1? <h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>Very Good</h1>: currentLine===2? <h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>Nice Try</h1>: currentLine === 3?<h1 style={{fontSize: '60px', marginTop: '40px', textAlign:'center' }}>WoW</h1>:<h1 style={{fontSize: '60px', marginTop: '60px', textAlign:'center' }}>Well Done</h1>}           
-                      <div style={{display:'flex', margin:'20px', }}>
+              {loading ? (
+                <div>Loading...</div>
+              ) : isUserSpeak ? (
+                <>
 
-                      <div style={{ margin:'20px', textAlign:"center"}}>
-                      <img style={{height:'40px', cursor:'pointer',}} onClick={nextLine} src={Next} alt='next-button'/>
-                      <p style={{fontSize:'18px'}}>Try Next</p>
+                  <Flex minWidth={'100vh'}>
+                    <Center p="4">
+                      <VStack>
+                      {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
+                      <div style={{ display: 'flex', margin: '20px', }}>
+
+                        <div style={{ margin: '20px', textAlign: "center" }}>
+                          <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
+                          <p style={{ fontSize: '18px' }}>Try Next</p>
+                        </div>
+                        <div style={{ margin: '20px', textAlign: "center" }}>
+                          <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
+                          <p style={{ fontSize: '18px' }}>Try Again</p>
+                        </div>
                       </div>
-                      <div style={{ margin:'20px', textAlign:"center"}}>
-                        <img style={{height:'40px', cursor:'pointer',}} onClick={prevLine} src={retry} alt="retry-again" />
-                        <p style={{fontSize:'18px'}}>Try Again</p>
-                      </div>
-                      </div>
-                    </Box>
-                  </div>
-                </Flex>
-        
-         
-              </>
-            ) : (
-              <>
-                       {posts?.data?.map((post, ind) =>
-                  currentLine === ind ? (
-                <Flex pos={'relative'} w={'108%'}  className='story-box-container' key={ind}>
-                      <img
-                        className="story-image"
-                        // src={post?.image}
-                        src={localStorage.getItem('apphomelang') === 'kn'?KnPlaceHolder:PlaceHolder
-                          // 'data:image/jpeg;base64,' +
-                          // post.image.replace('data:image/jpeg;base64,', '')
-                        }
-                        alt={post?.title}
-                      />
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          height: '40vh',
-                        }}
-                      >
-                        <Box p="4">
-                          <h1 className='story-line'>
-                          {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
-                          </h1>
-                          {localStorage.setItem(
-                            'contentText',
-                            post?.data[0]?.[localStorage.getItem('apphomelang')]?.text
-                          )}
-                        </Box>
-                      </div>
-                    </Flex>
-                  ) : (
-                    ''
-                  )
-                )}
-              </>
-            )}
-          </div>
-          {
-            isUserSpeak? <></> : <div
-            style={{
-              display: 'flex',
-              gap: '20px',
-              position: 'relative',
-              bottom: '-220px',
-              left: '-40%',
-            }}
-          >
-            {currentLine === posts?.data?.length ? (
-              ''
-            ) : (
-              <>
-                <div className='voice-recorder'>
-                <VStack style={{marginTop:'-20px'}}>
-                  <VoiceCompair
-                    setVoiceText={setVoiceText}
-                    setRecordedAudio={setRecordedAudio}
-                    _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                    flag={true}
-                    setCurrentLine={setCurrentLine}
-                    setStoryBase64Data={setStoryBase64Data}
-                    saveIndb={saveIndb}
-                    setUserSpeak={setUserSpeak}
-                    />
-                  {isAudioPlay === 'recording' ? (
-                    <h4
-                      style={{ position: 'relative', top: '-10px' }}
-                      className="text-speak m-0"
-                    >
-                      Stop
-                    </h4>
-                  ) : (
-                    <h4
-                      style={{ position: 'relative', top: '-10px' }}
-                      className="text-speak m-0"
-                    >
-                      Speak
-                    </h4>
+                      </VStack>
+                    </Center>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  {posts?.data?.map((post, ind) =>
+                    currentLine === ind ? (
+                      <>
+                      <VStack>
+                      <HStack pos={'relative'} className='story-box-container' key={ind}>
+                        <img
+                          className="story-image"
+                          src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
+                          }
+                          alt={post?.title}
+                        />
+                          <Center>
+                            <h1 style={{ textAlign: 'center' }} className='story-line'>
+                              {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
+                            </h1>
+                            {localStorage.setItem(
+                              'contentText',
+                              post?.data[0]?.[localStorage.getItem('apphomelang')]?.text
+                            )}
+                          </Center>
+                      </HStack>
+                      <Center>
+                      {
+                            isUserSpeak ? <></> : <div>
+                              {currentLine === posts?.data?.length ? (
+                                ''
+                              ) : (
+                                <>
+                                  <div className='voice-recorder'>
+                                    <VStack style={{ marginTop: '-20px' }}>
+                                      <VoiceCompair
+                                        setVoiceText={setVoiceText}
+                                        setRecordedAudio={setRecordedAudio}
+                                        _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                                        flag={true}
+                                        setCurrentLine={setCurrentLine}
+                                        setStoryBase64Data={setStoryBase64Data}
+                                        saveIndb={saveIndb}
+                                        setUserSpeak={setUserSpeak}
+                                      />
+                                      {isAudioPlay === 'recording' ? (
+                                        <h4
+                                          style={{ position: 'relative', top: '-10px' }}
+                                          className="text-speak m-0"
+                                        >
+                                          Stop
+                                        </h4>
+                                      ) : (
+                                        <h4
+                                          style={{ position: 'relative', top: '-10px' }}
+                                          className="text-speak m-0"
+                                        >
+                                          Speak
+                                        </h4>
+                                      )}
+                                    </VStack>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          }
+                      </Center>
+                      </VStack>
+                      </>
+                      
+                    ) : (
+                      ''
+                    )
                   )}
-                </VStack>
-                  </div>
-              </>
-            )}
-          </div>
-          }
-         
-        </div>
-        {currentLine === posts?.data?.length ? (
-          <div className="button-container">
-            <Link to={'/Results'}>
-              <button className="custom-button">View Result</button>
-            </Link>
-            <Link to={'/storyList'}>
-              <button className="custom-button">Back To StoryList</button>
-            </Link>
-          </div>
-        ) : (
-          ''
-        )}
-      </div>
+                </>
+              )}
+
+            </div>
+          </Center>
+          {currentLine === posts?.data?.length ? (
+            <div className="button-container">
+              <Link to={'/Results'}>
+                <button className="custom-button">View Result</button>
+              </Link>
+              <Link to={'/storyList'}>
+                <button className="custom-button">Back To StoryList</button>
+              </Link>
+            </div>
+          ) : (
+            ''
+          )}
+      </VStack>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
-          
+
     </div>
   );
 };
