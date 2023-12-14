@@ -10,22 +10,31 @@
   width: 80%;
 }
 
-.story-line{
-  font-size: 38px; 
+.story-box-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  position: relative;
+  align-items: center;
+  -webkit-box-align: center;
+}
+
+.story-line {
+  font-size: 38px;
   text-align: 'center';
 }
 
 @media screen and (max-width: 580px) {
-  .story-line{
+  .story-line {
     font-size: 16px;
     text-align: 'center';
   }
 
 
-  .story-box-container{
+  .story-box-container {
     display: flex;
     flex-direction: column;
-    
+
   }
 
   .story-container {
@@ -34,19 +43,20 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height:97vh;
+    height: 97vh;
   }
+
   .story-item {
-      align-items: center;
-      gap: 40px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: #f9f9f9;
-      border: 3px solid #d9d2d2;
-      width: 120%;
-      padding: 20px;
-      border: 4px solid black;
+    align-items: center;
+    gap: 40px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    border: 3px solid #d9d2d2;
+    width: 120%;
+    padding: 20px;
+    border: 4px solid black;
   }
 
   .story-image {
@@ -55,24 +65,24 @@
     border: 5px solid black;
     border-radius: 25px;
     position: relative;
-    right : 10px;
+    right: 10px;
   }
 
-  .voice-recorder{
+  .voice-recorder {
     bottom: -150px;
     left: -80px;
   }
 }
 
 
-@media screen and  (max-width: 700px) {
-  .story-line{
+@media screen and (max-width: 700px) {
+  .story-line {
     font-size: 28px;
     text-align: 'center';
   }
 
 
-  .story-box-container{
+  .story-box-container {
     display: flex;
     flex-direction: column;
   }
@@ -83,18 +93,19 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height:97vh;
+    height: 97vh;
   }
+
   .story-image {
     height: 30vh !important;
     width: 100% !important;
     border: 5px solid black;
     border-radius: 25px;
     position: relative;
-    right : 10px;
+    right: 10px;
   }
 
-  .voice-recorder{
+  .voice-recorder {
     bottom: -140px;
     left: -80px;
   }
@@ -131,39 +142,45 @@
   align-items: center;
   /* gap: 20px; */
   justify-content: center;
-  height:97vh;
+  height: 97vh;
   width: 80%;
 }
+
 .story-item {
-    align-items: center;
-    gap: 40px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    /* background: linear-gradient(#5ef899, #eecf69); */
-    border: 3px solid #d9d2d2;
-    padding: 20px;
+  align-items: center;
+  gap: 40px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  /* background: linear-gradient(#5ef899, #eecf69); */
+  border: 3px solid #d9d2d2;
+  padding: 20px;
 }
+
 .story-image {
   height: 50vh;
   width: 100%;
   border: 5px solid black;
   border-radius: 25px;
   position: relative;
-  right : 10px;
+  right: 10px;
 }
+
 .story {
   font-size: 16px;
 }
+
 .highlighted-story {
   font-size: 18px;
   background-color: #ffd700;
   /* Yellow background for highlighted story */
 }
+
 .next-btn-visible {
   background-color: greenyellow;
   padding: 5px;
 }
+
 .next-btn-hidden {
   display: none;
 }
@@ -176,8 +193,10 @@
 
 .custom-button {
   padding: 10px 20px;
-  background-color: #007BFF; /* Button background color */
-  color: #fff; /* Button text color */
+  background-color: #007BFF;
+  /* Button background color */
+  color: #fff;
+  /* Button text color */
   border: none;
   cursor: pointer;
   margin: 5px;
@@ -187,7 +206,8 @@
 }
 
 .custom-button:hover {
-  background-color: #0056b3; /* Hover background color */
+  background-color: #0056b3;
+  /* Hover background color */
 }
 .css-1jc7f17 {	
   -webkit-justify-content: center;	
@@ -196,7 +216,7 @@
   background: gray.50;	
   background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
   background-color: #cccccc;	
-  /* height: 500px;	 */
+  height: 500px;	
   background-position: center;	
   background-repeat: no-repeat;	
   background-size: cover;	
@@ -208,7 +228,7 @@
   background: gray.50;	
   background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');	
   background-color: #cccccc;	
-  /* height: 500px;	 */
+  height: 500px;	
   background-position: center;	
   background-repeat: no-repeat;	
   background-size: cover;	
