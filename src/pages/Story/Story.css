@@ -149,7 +149,7 @@
 }
 .story-image {
   height: 50vh;
-  width: 50%;
+  width: 100%;
   border: 5px solid black;
   border-radius: 25px;
   position: relative;

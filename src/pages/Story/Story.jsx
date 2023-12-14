@@ -295,24 +295,23 @@ const Story = () => {
       <Header />
       {/* <button onClick={GetRecommendedWordsAPI}>getStars</button> */}
       <VStack>
-          <Center className="story-container">
-            <div
-              style={{
-                boxShadow: '2px 2px 15px 5px grey',
-                // border: '2px solid white',
-                borderRadius: '30px',
-              }}
-              className="story-item"
-            >
+        <Center className="story-container">
+          <div
+            style={{
+              boxShadow: '2px 2px 15px 5px grey',
+              borderRadius: '30px',
+            }}
+            className="story-item"
+          >
 
-              {loading ? (
-                <div>Loading...</div>
-              ) : isUserSpeak ? (
-                <>
+            {loading ? (
+              <div>Loading...</div>
+            ) : isUserSpeak ? (
+              <>
 
-                  <Flex minWidth={'100vh'}>
-                    <Center p="4">
-                      <VStack>
+                <Flex>
+                  <Center>
+                    <VStack>
                       {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
                       <div style={{ display: 'flex', margin: '20px', }}>
 
@@ -325,25 +324,27 @@ const Story = () => {
                           <p style={{ fontSize: '18px' }}>Try Again</p>
                         </div>
                       </div>
-                      </VStack>
-                    </Center>
-                  </Flex>
-                </>
-              ) : (
-                <>
-                  {posts?.data?.map((post, ind) =>
-                    currentLine === ind ? (
-                      <>
-                      <VStack>
+                    </VStack>
+                  </Center>
+                </Flex>
+              </>
+            ) : (
+              <>
+                {posts?.data?.map((post, ind) =>
+                  currentLine === ind ? (
+                    <>
                       <HStack pos={'relative'} className='story-box-container' key={ind}>
-                        <img
-                          className="story-image"
-                          src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
-                          }
-                          alt={post?.title}
-                        />
+                        <div>
+                          <img
+                            className="story-image"
+                            src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
+                            }
+                            alt={post?.title}
+                          />
+                        </div>
+                        <div>
                           <Center>
-                            <h1 style={{ textAlign: 'center' }} className='story-line'>
+                            <h1 className='story-line'>
                               {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
                             </h1>
                             {localStorage.setItem(
@@ -351,72 +352,66 @@ const Story = () => {
                               post?.data[0]?.[localStorage.getItem('apphomelang')]?.text
                             )}
                           </Center>
+                          <Center>
+                            {
+                              isUserSpeak ? <></> : <div>
+                                {currentLine === posts?.data?.length ? (
+                                  ''
+                                ) : (
+                                  <>
+                                    <div className='voice-recorder'>
+                                      <VStack>
+                                        <VoiceCompair
+                                          setVoiceText={setVoiceText}
+                                          setRecordedAudio={setRecordedAudio}
+                                          _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                                          flag={true}
+                                          setCurrentLine={setCurrentLine}
+                                          setStoryBase64Data={setStoryBase64Data}
+                                          saveIndb={saveIndb}
+                                          setUserSpeak={setUserSpeak}
+                                        />
+                                        {isAudioPlay === 'recording' ? (
+                                          <h4 className="text-speak m-0">
+                                            Stop
+                                          </h4>
+                                        ) : (
+                                          <h4 className="text-speak m-0">
+                                            Speak
+                                          </h4>
+                                        )}
+                                      </VStack>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            }
+                          </Center>
+                        </div>
                       </HStack>
-                      <Center>
-                      {
-                            isUserSpeak ? <></> : <div>
-                              {currentLine === posts?.data?.length ? (
-                                ''
-                              ) : (
-                                <>
-                                  <div className='voice-recorder'>
-                                    <VStack style={{ marginTop: '-20px' }}>
-                                      <VoiceCompair
-                                        setVoiceText={setVoiceText}
-                                        setRecordedAudio={setRecordedAudio}
-                                        _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                                        flag={true}
-                                        setCurrentLine={setCurrentLine}
-                                        setStoryBase64Data={setStoryBase64Data}
-                                        saveIndb={saveIndb}
-                                        setUserSpeak={setUserSpeak}
-                                      />
-                                      {isAudioPlay === 'recording' ? (
-                                        <h4
-                                          style={{ position: 'relative', top: '-10px' }}
-                                          className="text-speak m-0"
-                                        >
-                                          Stop
-                                        </h4>
-                                      ) : (
-                                        <h4
-                                          style={{ position: 'relative', top: '-10px' }}
-                                          className="text-speak m-0"
-                                        >
-                                          Speak
-                                        </h4>
-                                      )}
-                                    </VStack>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          }
-                      </Center>
-                      </VStack>
-                      </>
-                      
-                    ) : (
-                      ''
-                    )
-                  )}
-                </>
-              )}
+                    </>
 
-            </div>
-          </Center>
-          {currentLine === posts?.data?.length ? (
-            <div className="button-container">
-              <Link to={'/Results'}>
-                <button className="custom-button">View Result</button>
-              </Link>
-              <Link to={'/storyList'}>
-                <button className="custom-button">Back To StoryList</button>
-              </Link>
-            </div>
-          ) : (
-            ''
-          )}
+                  ) : (
+                    ''
+                  )
+                )}
+              </>
+            )}
+
+          </div>
+        </Center>
+        {currentLine === posts?.data?.length ? (
+          <div className="button-container">
+            <Link to={'/Results'}>
+              <button className="custom-button">View Result</button>
+            </Link>
+            <Link to={'/storyList'}>
+              <button className="custom-button">Back To StoryList</button>
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
       </VStack>
       <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
 
