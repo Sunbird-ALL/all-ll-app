@@ -403,35 +403,6 @@ const Story = () => {
               ''
             ) : (
               <>
-                {isAudioPlay !== 'recording' && (
-                  <>
-                  </>
-                  // <VStack alignItems="center" gap="5">
-                  //   {flag ? (
-                  //     <img
-                  //       className="play_btn"
-                  //       src={play}
-                  //       style={{ height: '72px', width: '72px' }}
-                  //       onClick={() => playAudio()}
-                  //       alt="play_audio"
-                  //     />
-                  //   ) : (
-                  //     <img
-                  //       className="play_btn"
-                  //       src={pause}
-                  //       style={{ height: '72px', width: '72px' }}
-                  //       onClick={() => pauseAudio()}
-                  //       alt="pause_audio"
-                  //     />
-                  //   )}
-                  //   <h4
-                  //     className="text-play m-0 "
-                  //     style={{ position: 'relative' }}
-                  //   >
-                  //     Listen
-                  //   </h4>
-                  // </VStack>
-                )}
                 <div className='voice-recorder'>
                 <VStack style={{marginTop:'-20px'}}>
                   <VoiceCompair
