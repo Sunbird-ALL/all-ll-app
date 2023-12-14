@@ -225,6 +225,7 @@
 
 .bg {
   -webkit-justify-content: center;
+  overflow-y: scroll;
   justify-content: center;
   min-height: 97vh;
   background: gray.50;
