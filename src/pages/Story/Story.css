@@ -3,8 +3,7 @@
 .story-item {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 10px;
+  padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #f9f9f9;
@@ -13,22 +12,20 @@
 }
 
 .story-line{
-  font-size: 45px;
-  margin-top: 40px; 
+  font-size: 38px; 
+  text-align: 'center';
 }
 
 @media screen and (max-width: 580px) {
   .story-line{
-    font-size: 28px;
-    margin-top: -30px;
-    width: 120%;
+    font-size: 16px;
+    text-align: 'center';
   }
 
 
   .story-box-container{
     display: flex;
     flex-direction: column;
-    width: 100%;
     
   }
 
@@ -38,7 +35,7 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height:100vh;
+    height:97vh;
   }
   .story-item {
       display: flex;
@@ -73,15 +70,13 @@
 @media screen and  (max-width: 700px) {
   .story-line{
     font-size: 28px;
-    margin-top: -45px;
-    width: 100%;
+    text-align: 'center';
   }
 
 
   .story-box-container{
     display: flex;
     flex-direction: column;
-    width: 110%;
   }
 
   .story-container {
@@ -90,7 +85,7 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height:100vh;
+    height:97vh;
   }
   .story-image {
     height: 30vh !important;
@@ -138,7 +133,7 @@
   align-items: center;
   /* gap: 20px; */
   justify-content: center;
-  height:100vh;
+  height:97vh;
 }
 .story-item {
     display: flex;
@@ -149,12 +144,12 @@
     background-color: #f9f9f9;
     /* background: linear-gradient(#5ef899, #eecf69); */
     border: 3px solid #d9d2d2;
-    width: 90%;
+    min-width: 52vh;
     padding: 20px;
 }
 .story-image {
   height: 50vh;
-  width: 50%;
+  width: 100%;
   border: 5px solid black;
   border-radius: 25px;
   position: relative;
