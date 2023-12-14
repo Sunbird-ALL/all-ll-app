@@ -1,7 +1,6 @@
 /* Story.css */
 
 .story-item {
-  display: flex;
   align-items: center;
   padding: 15px;
   border: 1px solid #ddd;
@@ -38,7 +37,6 @@
     height:97vh;
   }
   .story-item {
-      display: flex;
       align-items: center;
       gap: 40px;
       padding: 10px;
@@ -134,9 +132,9 @@
   /* gap: 20px; */
   justify-content: center;
   height:97vh;
+  width: 80%;
 }
 .story-item {
-    display: flex;
     align-items: center;
     gap: 40px;
     padding: 10px;
@@ -144,7 +142,6 @@
     background-color: #f9f9f9;
     /* background: linear-gradient(#5ef899, #eecf69); */
     border: 3px solid #d9d2d2;
-    min-width: 52vh;
     padding: 20px;
 }
 .story-image {

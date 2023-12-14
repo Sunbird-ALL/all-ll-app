@@ -189,7 +189,7 @@ const Story = () => {
     <div>
       <VStack>
         <Header active={3} />
-        <Container style={{ height: '97vh' }} className="story-container">
+        <Container style={{ height: '97vh', width: '100vh' }} className="story-container">
           <Center
           >
             <div className="col s4 m4">
