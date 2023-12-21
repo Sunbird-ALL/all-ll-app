@@ -144,7 +144,7 @@ export default class AudioRecorderCompair extends Component {
         // console.log('error', err);
       },
       width: 300,
-      height: 300,
+      height: 150,
       backgroundColor:"#ffefd1",
       strokeColor:'red'
     };
@@ -180,7 +180,7 @@ export default class AudioRecorderCompair extends Component {
         console.log('error', err);
       },
       width: 300,
-      height: 300,
+      height: 150,
       backgroundColor:"#ffefd1",
       strokeColor:'red'
     };
