@@ -9,7 +9,7 @@ import axios from 'axios';
 import Header from '../../Header';
 import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
-import { Center, Container, Flex, Text, VStack } from '@chakra-ui/react';
+import { Center, Container, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 
 export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,15 +49,15 @@ export default function Validate() {
       setLoading(true);
       axios
         .get(
-          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}&limit=5`,
+          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}&limit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
-          const targetChars = res.data.getTargetChar || []; // Handle empty or undefined case
+          const targetChars = res.data.getTargetChar || [];
           setCharacter(targetChars);
           setCurrentCharIndex(0);
           setMyCurrentChar(targetChars[0]);
-          setRecommendedWords(res.data.content);
+          setRecommendedWords(res.data.contentForToken || []);
         })
         .catch(error => {
           setLoading(false);
@@ -97,10 +97,16 @@ export default function Validate() {
 
   return (
     <>
-      <Header active={2} />
+      <Header active={1} />
       {/* <button >click me</button> */}
-      <Container style={{ height: '97vh' }} className="main-bg">
-      {loding && <Center>Loading...</Center>}
+      <div className="main-bg">
+      {loding && <Center h='50vh'><Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            /></Center>}
         {chars.length ? <VStack>
           <Container>
             <Center>
@@ -153,9 +159,9 @@ export default function Validate() {
                     </button>}
                 </div>
                 <div style={{ textAlign: 'center', paddingBottom: '10px', width: '100vh' }}>
-                  {recommededWords.length > 0 &&
+                  {recommededWords[myCurrectChar].length > 0 &&
                     <span style={{ fontSize: '25px' }}>
-                      {recommededWords.map((item, ind, arr) => (
+                      {recommededWords[myCurrectChar].map((item, ind, arr) => (
                         <span key={ind}>
                           {item?.contentSourceData[0]?.text}
                           {ind !== arr.length - 1 && ", "}
@@ -164,17 +170,17 @@ export default function Validate() {
                     </span>
                   }
                 </div>
-                <div style={{ textAlign: 'center' }}>
+                <Center style={{ textAlign: 'center' }}>
                   <img onClick={() => { handelFeedBack(1) }} style={{ marginLeft: '10px', cursor: 'pointer' }} src={thumbsup} alt='thumbs-up' />
                   <img onClick={() => { handelFeedBack(0) }} style={{ marginLeft: '10px', cursor: 'pointer' }} src={thumbsdown} alt='thumbs-down' />
-                </div>
+                </Center>
               </div>
             </Center>
           </Container>
           <section className="c-section">
             <Link to={'/practice'}>
               <button className='btn btn-info'>
-                practice {'>'}
+                Practice {'>'}
               </button>
             </Link>
           </section>
@@ -184,7 +190,7 @@ export default function Validate() {
               No character available to validate
             </Center>
             <section className="c-section">
-              <Link to={'/StoryList'}>
+              <Link to={'/discoveryList'}>
                 <button className='btn btn-info'>
                   Discover {'>'}
                 </button>
@@ -192,9 +198,9 @@ export default function Validate() {
             </section>
           </>
         }
-      </Container>
+      </div>
 
-      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+      {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 
     </>
   );

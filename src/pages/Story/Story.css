@@ -140,10 +140,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* gap: 20px; */
   justify-content: center;
-  height: 97vh;
-  width: 80%;
 }
 
 .story-item {
@@ -226,7 +223,7 @@
 .bg {
   -webkit-justify-content: center;
   justify-content: center;
-  min-height: 97vh;
+  min-height: 100vh;
   background: gray.50;
   background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');
   background-color: #cccccc;

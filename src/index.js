@@ -3,7 +3,7 @@ import React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider } from '@chakra-ui/react'
 
 import "./index.css";
 
@@ -12,8 +12,10 @@ const root = ReactDOM.createRoot(container);
 
 root.render(
   <>
-    <ColorModeScript />
-    <App />
+    {/* <ColorModeScript /> */}
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
   </>
 );
 

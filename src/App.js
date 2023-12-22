@@ -30,6 +30,9 @@ import Results from './pages/Results';
 
 import TestRigStory from './pages/Test-Rig-Two/Story/Story'
 import Validate from './pages/Test-Rig-Two/Result/Validate';
+import Discovery from './pages/Story/Discover';
+import DiscoveryList from './pages/Story/DiscoveryList';
+import Showcase from './pages/Story/Showcase';
 
 function App() {
   let ranonce = false;
@@ -137,6 +140,8 @@ function App() {
                 {/* Story Section */}
         <Route path={'/storylist'} element={<Storylist/>} />
         <Route path={'storylist/story/:slug'} element={<Story/>} />
+        <Route path={'discoverylist/discovery/:slug'} element={<Discovery/>} />
+        <Route path={'discoverylist'} element={<DiscoveryList/>} />
         {/* <Route path={'/result'} element={<Result/>} /> */}
         <Route path={'Login'} element={<Login/>} />
         <Route path={'Header'} element={<Header/>}/>
@@ -147,6 +152,7 @@ function App() {
         <Route path={'practice'} element={<TestRigStory/>} />
         {/* <Route path={'Header'} element={<Header/>}/> */}
         <Route path={'validate'} element={<Validate/>}/>
+        <Route path={'showcase'} element={<Showcase/>}/>
         
       </Routes>
       <Dots />

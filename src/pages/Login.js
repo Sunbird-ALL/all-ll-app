@@ -27,7 +27,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const handleSubmit = async (username,password) => {
+  const handleSubmit = async (username, password) => {
     try {
       const response = await fetch(
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
@@ -35,16 +35,16 @@ export default function Login() {
       if (response.ok) {
         const data = await response.json();
         const virtualID = data.virtualID;
-        console.log('virtual Id' ,virtualID)
+        console.log('virtual Id', virtualID)
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
         );
-        navigate('/Storylist')
+        navigate('/discoverylist')
         alert("Successfully Login");
-       //history.push('Story');
+        //history.push('Story');
       } else {
         console.error('Error fetching virtual ID');
       }
@@ -54,53 +54,51 @@ export default function Login() {
   };
   return (
     <Flex
+      className='bg'
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
-      >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}  width={'600px'}>
+    >
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6} width={'600px'}>
         <Box
           rounded={'lg'}
           bg={useColorModeValue('white', 'gray.700')}
           boxShadow={'lg'}
-          p={8}>
-            <Stack align={'center'}>
-          <Heading fontSize={'4xl'} textAlign={'center'}>
-          </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            Login
-          </Text>
-        </Stack>
+          p={8}
+        >
+          <Stack align={'center'}>
+            <Heading fontSize={'4xl'} textAlign={'center'}>
+              Login
+            </Heading>
+          </Stack>
           <Stack spacing={4}>
             <FormControl id="uername" isRequired>
               <FormLabel>Username</FormLabel>
-              <input
-              className='form-control'
-            type="text"
-            id="username"
-            name="username"
-            value={username}
-            onChange={(e)=> setUsername(e.target.value)}
-          />
-              {/* <Input  type="username" /> */}
+              <Input
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-              <input
-               className='form-control'
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e)=> setPassword(e.target.value)}
-          />
-                {/* <Input className='form-control' type={showPassword ? 'text' : 'password'} /> */}
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
-                    onClick={() => setShowPassword((showPassword) => !showPassword)}>
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }
+                  >
                     {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                   </Button>
                 </InputRightElement>
@@ -108,8 +106,10 @@ export default function Login() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                className='btn btn-primary'
-                onClick={()=> handleSubmit(username,password)}>
+                className='btn-primary'
+                colorScheme='blue'
+                onClick={() => handleSubmit(username, password)}
+              >
                 Login
               </Button>
             </Stack>
@@ -117,5 +117,6 @@ export default function Login() {
         </Box>
       </Stack>
     </Flex>
+
   )
 }
