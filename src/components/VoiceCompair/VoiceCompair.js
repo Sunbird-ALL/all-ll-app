@@ -22,29 +22,29 @@ const VoiceCompair = props => {
   )
 
   const ASR_REST_URLS = {
-    bn: 'https://api.dhruva.ai4bharat.org',
-    en: 'https://api.dhruva.ai4bharat.org',
-    gu: 'https://api.dhruva.ai4bharat.org',
-    hi: 'https://api.dhruva.ai4bharat.org',
-    kn: 'https://api.dhruva.ai4bharat.org',
-    ml: 'https://api.dhruva.ai4bharat.org',
-    mr: 'https://api.dhruva.ai4bharat.org',
-    ne: 'https://api.dhruva.ai4bharat.org',
-    or: 'https://api.dhruva.ai4bharat.org',
-    pa: 'https://api.dhruva.ai4bharat.org',
-    sa: 'https://api.dhruva.ai4bharat.org',
-    si: 'https://api.dhruva.ai4bharat.org',
-    ta: 'https://api.dhruva.ai4bharat.org',
-    kn: 'https://api.dhruva.ai4bharat.org',
+    bn: 'https://api.dhruva.ekstep.ai',
+    en: 'https://api.dhruva.ekstep.ai',
+    gu: 'https://api.dhruva.ekstep.ai',
+    hi: 'https://api.dhruva.ekstep.ai',
+    kn: 'https://api.dhruva.ekstep.ai',
+    ml: 'https://api.dhruva.ekstep.ai',
+    mr: 'https://api.dhruva.ekstep.ai',
+    ne: 'https://api.dhruva.ekstep.ai',
+    or: 'https://api.dhruva.ekstep.ai',
+    pa: 'https://api.dhruva.ekstep.ai',
+    sa: 'https://api.dhruva.ekstep.ai',
+    si: 'https://api.dhruva.ekstep.ai',
+    ta: 'https://api.dhruva.ekstep.ai',
+    kn: 'https://api.dhruva.ekstep.ai',
     //ta: "https://ai4b-dev-asr.ulcacontrib.org",
     te: 'https://ai4b-dev-asr.ulcacontrib.org',
-    ur: 'https://api.dhruva.ai4bharat.org',
+    ur: 'https://api.dhruva.ekstep.ai',
   };
 
-  const DEFAULT_ASR_LANGUAGE_CODE = 'ai4bharat/whisper-medium-en--gpu--t4';
-  const HINDI_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-hi-gpu--t4';
-  const KANNADA_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian-gpu--t4';
-  const TAMIL_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian-gpu--t4';
+  const DEFAULT_ASR_LANGUAGE_CODE = 'ai4bharat/whisper--gpu-t4';
+  const HINDI_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-hi--gpu-t4';
+  const KANNADA_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
+  const TAMIL_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
 
