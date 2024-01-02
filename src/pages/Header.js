@@ -72,7 +72,7 @@ export default function Header({ active }) {
   
   return (
     <>
-      <Box pos={'absolute'} w="100vw" style={{ background: "#fff", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
+      <Box h='100%' w="100vw" style={{ background: "#fff", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
         <Flex>
           {/* <Box p={1}>
             <TabCard naviagteTo={(a) => navigate(a)} />

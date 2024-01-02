@@ -37,6 +37,8 @@ function AppDrawer() {
   const [value, setValue] = React.useState(localStorage.getItem('apphomelang'))
   const [validateLimit, setValidateLimit] = React.useState(localStorage.getItem('validateLimit') || 5)
   const [discoveryLimit, setDiscoveryLimit] = React.useState(localStorage.getItem('discoveryLimit') || 5)
+  const [contentPracticeLimit, setContentPracticeLimit] = React.useState(localStorage.getItem('contentPracticeLimit') || 5)
+  const [contentTargetLimit, setContentTargetLimit] = React.useState(localStorage.getItem('contentTargetLimit') || 5)
   const [level, setLevel] = React.useState('');
 
   React.useEffect(() => {
@@ -56,6 +58,18 @@ function AppDrawer() {
       localStorage.setItem('discoveryLimit', discoveryLimit);
     }
   }, [discoveryLimit]);
+
+  React.useEffect(() => {
+    if (contentPracticeLimit) {
+      localStorage.setItem('contentPracticeLimit', contentPracticeLimit);
+    }
+  }, [contentPracticeLimit]);
+
+  React.useEffect(() => {
+    if (contentTargetLimit) {
+      localStorage.setItem('contentTargetLimit', contentTargetLimit);
+    }
+  }, [contentTargetLimit]);
 
   React.useEffect(() => {
     fetchApi();
@@ -145,6 +159,28 @@ function AppDrawer() {
               <FormControl>
                 <FormLabel>Select Discovery limit</FormLabel>
                 <RadioGroup onChange={setDiscoveryLimit} value={discoveryLimit}>
+                  <HStack spacing='4'>
+                    <Radio value='5'>5</Radio>
+                    <Radio value='10'>10</Radio>
+                    <Radio value='15'>15</Radio>
+                  </HStack>
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Select Practice Content Limit</FormLabel>
+                <RadioGroup onChange={setContentPracticeLimit} value={contentPracticeLimit}>
+                  <HStack spacing='4'>
+                    <Radio value='5'>5</Radio>
+                    <Radio value='10'>10</Radio>
+                    <Radio value='15'>15</Radio>
+                  </HStack>
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Select Practice Target Limit</FormLabel>
+                <RadioGroup onChange={setContentTargetLimit} value={contentTargetLimit}>
                   <HStack spacing='4'>
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>

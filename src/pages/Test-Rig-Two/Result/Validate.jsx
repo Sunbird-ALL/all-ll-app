@@ -9,9 +9,11 @@ import axios from 'axios';
 import Header from '../../Header';
 import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
-import { Center, Container, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 
 export default function Validate() {
+  localStorage.setItem('userPracticeState', 0)
+  localStorage.setItem('firstPracticeSessionCompleted', false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCurrentCharModalOpen, SetCurrentCharModalOpen] = useState(false);
   const [recommededWords, setRecommendedWords] = useState("")
@@ -19,6 +21,7 @@ export default function Validate() {
   const [myCurrectChar, setMyCurrentChar] = useState('')
   const [chars, setCharacter] = useState([])
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
+  const toast = useToast()
 
   const handleNext = () => {
     setTimeout(() => {
@@ -49,7 +52,7 @@ export default function Validate() {
       setLoading(true);
       axios
         .get(
-          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}&limit=${localStorage.getItem('validateLimit')}`,
+          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -73,11 +76,24 @@ export default function Validate() {
   function handelFeedBack(feedback) {
     handleCharMopdal()
     if (feedback === 1) {
-      alert("Bingo! Your Character recognition skills are on point. Way to go!")
+      toast({
+        position: 'top',
+        title: `Bingo! \n
+        Your Character recognition skills are on point. Way to go!`,
+        duration: 500,
+        status: 'success'
+      })
     }
     else {
-      alert(`No problem at all. Character recognition can be tricky, but you're learning!.`)
+      toast({
+        position: 'top',
+        title: `No problem at all \n
+        Character recognition can be tricky, but you're learning!`,
+        duration: 500,
+        status: 'info'
+      })
     }
+    (currentCharIndex < chars.length - 1) &&  handleNext();
     setIsModalOpen(true);
     axios
       .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
