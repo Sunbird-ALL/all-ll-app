@@ -9,8 +9,6 @@ import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
 
 const DiscoveryList = () => {
-  localStorage.setItem('userPracticeState', 0)
-  localStorage.setItem('firstPracticeSessionCompleted', false)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,8 +66,9 @@ const DiscoveryList = () => {
                     <Box
                       onClick={() => selectStoryTitle(post.name, post.language)}
                       borderWidth="1px"
-                      borderRadius="1px"
+                      borderRadius="10px"
                       backgroundColor="white"
+                      display="inline-block"
                       boxShadow="md"
                       key={ind}
                       _hover={{ boxShadow: "lg" }}
@@ -80,6 +79,7 @@ const DiscoveryList = () => {
                           src={!post.image ? post.language === 'kn' ? kannadaPlaceholder : PlaceHolder : post.image}
                           alt={post.name}
                           width="100%"
+                          height="auto"
                         />
                         <Box textAlign='center'>
                           <Text fontSize="xl" fontWeight="bold" lineHeight="1.1" mb="2">

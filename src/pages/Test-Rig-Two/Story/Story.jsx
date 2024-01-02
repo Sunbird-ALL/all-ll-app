@@ -20,7 +20,6 @@ import {
   Stepper,
   Text,
   VStack,
-  useToast,
 } from '@chakra-ui/react';
 import VoiceCompair from '../../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
@@ -46,21 +45,23 @@ import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
 // import TryNew from '../../../assests/Images/refresh.svg'
 import lang_constants from '../../../lang/lang_constants.json';
-import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
-import completionCriteria from '../../../config/practiceConfig';
 
 const jsConfetti = new JSConfetti();
 
 
 const Story = () => {
-  const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
+  const maxAllowedContent = 4;
+  const completionCriteria = [
+    { title: 'P1', description: 'Words', criteria: 'word' },
+    { title: 'P2', description: 'Words', criteria: 'word' },
+    { title: 'P3', description: 'Sentences', criteria: 'sentence' },
+    { title: 'P4', description: 'Sentences', criteria: 'sentence' },
+    { title: 'P5', description: 'Sentences', criteria: 'sentence' },
+  ]
   const [posts, setPosts] = useState([]);
-  const toast = useToast()
   const [voiceText, setVoiceText] = useState('');
   const [showWellDone, setWellDone] = useState(false);
-  const [isGame, setIsGame] = useState(true);
-  const [sourceChars, setSourceChars] = useState([]);
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(0);
   // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
@@ -76,6 +77,8 @@ const Story = () => {
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem('sentenceCounter', currentLine);
+  const overflowStyle = posts[currentLine]?.contentSourceData[0].text.length > 120 ? { overflowY: 'scroll' } : {};
+  const textHeight = posts[currentLine]?.contentSourceData[0].text.length > 120 ? { height: '30vh' } : {};
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
 
@@ -84,14 +87,9 @@ const Story = () => {
     getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
 
+
   React.useEffect(() => {
     if (voiceText == '-') {
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the first practice session`,
-        status: 'success'
-      })
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
@@ -102,34 +100,12 @@ const Story = () => {
 
   const fetchApi = async () => {
     setLoading(true);
-    if (parseInt(localStorage.getItem('userPracticeState')) >= 4 && localStorage.getItem('firstPracticeSessionCompleted') === 'false') {
-      let index = completionCriteriaIndex + 1;
-      setCompletionCriteriaIndex(index);
-      localStorage.setItem('userPracticeState', index)
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the first practice session`,
-        status: 'success'
-      })
-      localStorage.setItem('firstPracticeSessionCompleted', true)
-      navigate('/showcase')
-    } else if (completionCriteriaIndex >= 7 && localStorage.getItem('firstPracticeSessionCompleted') === 'true') {
+    if (completionCriteriaIndex >= completionCriteria.length) {
       setCompletionCriteriaIndex(0);
-      localStorage.setItem('userPracticeState', 0)
-      localStorage.setItem('firstPracticeSessionCompleted', false)
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the second practice session`,
-        status: 'success'
-      })
+      alert('Well Done, you have completed the practice session');
       navigate('/showcase')
-    }
-    else {
-      let index = completionCriteriaIndex + 1;
-      setCompletionCriteriaIndex(index);
-      localStorage.setItem('userPracticeState', index)
+    } else {
+      setCompletionCriteriaIndex(completionCriteriaIndex + 1);
     }
     let type = completionCriteria[completionCriteriaIndex]?.criteria;
     localStorage.setItem('apphomelevel', type);
@@ -137,7 +113,7 @@ const Story = () => {
       const response = await fetch(
         `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
-        )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
+        )}&contentlimit=5}&gettargetlimit=5`
       )
         .then(res => {
           return res.json();
@@ -145,7 +121,7 @@ const Story = () => {
         .then(data => {
           const oldPosts = posts || [];
           const newPosts = data?.content || [];
-          setSourceChars(data?.getTargetChar)
+
           if (currentLine && currentLine < maxAllowedContent - 1 && newPosts?.length) {
             setPosts([...oldPosts, ...newPosts]);
           } else {
@@ -188,10 +164,6 @@ const Story = () => {
     }
   };
 
-  const handleSuccess = () => {
-    handleStarAnimation();
-    setWellDone(true);
-  }
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
@@ -202,7 +174,7 @@ const Story = () => {
 
   const nextLine = count => {
     setUserSpeak(false);
-    if (currentLine >= maxAllowedContent - 1) {
+    if (currentLine >= maxAllowedContent) {
       handleStarAnimation();
       setWellDone(true);
     } else if (currentLine >= posts?.length - 1) {
@@ -234,51 +206,56 @@ const Story = () => {
   }
 
   return (
-    <>
+    <div>
 
       <Header active={2} />
+      <div className="main-bg">
+      <Container w={'75vw'} style={{ height: '100vh' }} className="story-container">
 
-      <Container mt={20} w={'75vw'} className="story-container">
-
-        <Center minH={'50vh'}
+        <Center
           style={{
-            backgroundColor: `${completionCriteria[completionCriteriaIndex -1]?.criteria === 'word' && completionCriteria[completionCriteriaIndex -1]?.template === 'simple' &&
-              posts?.length > 0 
+            backgroundColor: `${localStorage.getItem('apphomelevel') === 'word' &&
+              posts?.length > 0
               ? '#c9c4ff'
-              : completionCriteria[completionCriteriaIndex -1]?.criteria === 'sentence' && completionCriteria[completionCriteriaIndex -1]?.template === 'simple' && posts?.length > 0
+              : posts?.length > 0
                 ? '#d3ffbb'
-                : completionCriteria[completionCriteriaIndex -1]?.criteria === 'word' && completionCriteria[completionCriteriaIndex -1]?.template === 'game' && posts?.length > 0 ? '#FFDAB9' : 'white'
+                : 'white'
               }`,
             boxShadow: '2px 2px 15px 5px grey',
             borderRadius: '30px',
             width: 'inherit',
+            height: '50vh'
           }}
         >
           {loading ? (
             <Center h='50vh'><Spinner
-              thickness='4px'
-              speed='0.65s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            /></Center>
-          ) : posts?.length === 0 && completionCriteria[completionCriteriaIndex -1].template=='simple' ? (
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          /></Center>
+          ) : posts?.length === 0 ? (
             <>
               <Center h='50vh'>
                 <VStack>
                   <div>
                     <h1 style={{ fontSize: '20px', color: 'red' }}>
-                      Practice Data Not Found
+                      {localStorage.getItem('apphomelevel')} Data Not Found
                     </h1>
                   </div>
                   <div>
-                    <section className="c-section">
-                      <Link to={'/discoveryList'}>
-                        <button className='btn btn-info'>
-                          Discover {'>'}
-                        </button>
-                      </Link>
-                    </section>
+                    <img
+                      style={{ height: '40px', cursor: 'pointer' }}
+                      onClick={() => {
+                        fetchApi();
+                      }}
+                      src={Next}
+                      alt="try_new"
+                    />
+                  </div>
+                  <div>
+                    <p>Try New</p>
                   </div>
                   {/* <button>No</button> */}
                 </VStack>
@@ -332,13 +309,13 @@ const Story = () => {
                 </Flex>
               </Center>
             </>
-          ) : posts && completionCriteria[completionCriteriaIndex - 1].template=='simple' ? (
+          ) : posts ? (
             <>
               <VStack>
                 <Box>
                   {posts?.map((post, ind) =>
                     currentLine === ind ? (
-                      <Center>
+                      <Center h='30vh'>
                         <Flex
                           pos={'relative'}
                           w={'100%'}
@@ -356,9 +333,9 @@ const Story = () => {
                             }}
                           >
                             <Box p="4">
-                              <h1 style={{ textAlign: "center" }} className="story-line">
+                              <h1 style={{ textAlign: "center", ...overflowStyle, ...textHeight }} className="story-line">
                                 {
-                                  post?.contentSourceData[0]?.text
+                                  post?.contentSourceData[0].text
                                 }
                               </h1>
                               {localStorage.setItem(
@@ -544,16 +521,10 @@ const Story = () => {
                 </Box>
               </VStack>
             </>
-          ) : posts && completionCriteria[completionCriteriaIndex - 1].template=='game' ?
-        <CharacterToWordMatchingGame 
-        sourceChars={sourceChars}
-        targetWords={posts}
-        handleSuccess={()=>handleSuccess()}
-        
-        /> : ''}
+          ) : ""}
         </Center>
-        <Box paddingTop={10}>
-          <Stepper size='sm' colorScheme='green' index={completionCriteriaIndex -1}>
+        <Box paddingTop={10} w={'80vw'}>
+        <Stepper size='sm' colorScheme='green' index={completionCriteriaIndex - 1}>
             {completionCriteria.map((step, index) => (
               <Step key={index}>
                 <StepIndicator>
@@ -573,11 +544,11 @@ const Story = () => {
               </Step>
             ))}
           </Stepper>
-        </Box>
+          </Box>
       </Container>
-
+      </div>
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
-    </>
+    </div>
   );
 };
 
