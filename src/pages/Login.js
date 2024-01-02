@@ -36,6 +36,8 @@ export default function Login() {
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
       if (response.ok) {
+        localStorage.clear();
+        localStorage.setItem('apphomelang', 'ta');
         const data = await response.json();
         const virtualID = data.virtualID;
         console.log('virtual Id', virtualID)
@@ -54,6 +56,8 @@ export default function Login() {
         navigate('/discoverylist')
         localStorage.setItem('userPracticeState', 0)
         localStorage.setItem('firstPracticeSessionCompleted', false)
+        localStorage.setItem('validationSession', '')
+        localStorage.setItem('practiceSession', '');
       } else {
         console.error('Error fetching virtual ID');
       }

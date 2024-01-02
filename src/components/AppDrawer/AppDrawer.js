@@ -9,26 +9,26 @@ import {
   useDisclosure,
   Button,
   Input,
-  Menu,
   Avatar,
   HStack,
   Text,
-  VStack,
-  CheckboxGroup,
   Stack,
-  Checkbox,
   FormControl,
   FormLabel,
   Select,
   RadioGroup,
   Radio,
-  InputGroup,
-  InputLeftAddon,
   Divider,
-  StackDivider,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  Box,
+  AccordionIcon,
+  AccordionPanel,
 } from '@chakra-ui/react'
 import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
+import ConfigForm from '../../config/ConfigForm';
 
 
 function AppDrawer() {
@@ -39,6 +39,9 @@ function AppDrawer() {
   const [discoveryLimit, setDiscoveryLimit] = React.useState(localStorage.getItem('discoveryLimit') || 5)
   const [contentPracticeLimit, setContentPracticeLimit] = React.useState(localStorage.getItem('contentPracticeLimit') || 5)
   const [contentTargetLimit, setContentTargetLimit] = React.useState(localStorage.getItem('contentTargetLimit') || 5)
+  const [PreviousUserSessions, setUserSessions] = React.useState(localStorage.getItem('sessions'))
+  const [validationSession, setValidationSession] = React.useState(localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID'))
+  const [practiceSession, setPracticeSession] = React.useState(localStorage.getItem('practiceSession') || localStorage.getItem('virtualStorySessionID'))
   const [level, setLevel] = React.useState('');
 
   React.useEffect(() => {
@@ -72,9 +75,20 @@ function AppDrawer() {
   }, [contentTargetLimit]);
 
   React.useEffect(() => {
+    if (validationSession) {
+      localStorage.setItem('validationSession', validationSession);
+    }
+  }, [validationSession]);
+
+  React.useEffect(() => {
+    if (practiceSession) {
+      localStorage.setItem('practiceSession', practiceSession);
+    }
+  }, [practiceSession]);
+
+  React.useEffect(() => {
     fetchApi();
   }, []);
-
 
   const fetchApi = async () => {
     try {
@@ -87,6 +101,20 @@ function AppDrawer() {
         .then(data => {
           setLevel(data.currentLevel);
           localStorage.setItem('userCurrentLevel', data.currentLevel)
+        });
+    } catch (error) {
+      console.error(error.message);
+    }
+
+    try {
+      const response = await fetch(
+        `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          setUserSessions(data);
         });
     } catch (error) {
       console.error(error.message);
@@ -113,29 +141,26 @@ function AppDrawer() {
         isOpen={isOpen}
         placement='right'
         onClose={onClose}
+        size={'md'}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton top={'-2'}   size='sm' />
+          <DrawerCloseButton top={'-2'} size='sm' />
           <DrawerHeader borderBottomWidth='1px'>Profile</DrawerHeader>
 
           <DrawerBody>
             <Stack spacing='4'>
               <Text fontSize='lg' fontWeight='bold'>
-                Hello, {localStorage.getItem('virtualID')}
+                Hello, {localStorage.getItem('virtualID')} [{level}]
               </Text>
               <Divider />
               <FormControl>
-                <FormLabel>Session ID</FormLabel>
+                <FormLabel><Text as={'b'} >Session ID</Text></FormLabel>
                 <Input variant='filled' value={localStorage.getItem('virtualStorySessionID')} isReadOnly />
               </FormControl>
               <FormControl>
-                <FormLabel>Current Level</FormLabel>
-                <Input variant='filled' value={level} isReadOnly />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Select Language</FormLabel>
+                <FormLabel><Text as={'b'} >Language </Text></FormLabel>
                 <RadioGroup onChange={setValue} value={value}>
                   <HStack spacing='4'>
                     <Radio value='en'>English</Radio>
@@ -144,33 +169,48 @@ function AppDrawer() {
                   </HStack>
                 </RadioGroup>
               </FormControl>
-
+              <Divider />
               <FormControl>
-                <FormLabel>Select Validation limit</FormLabel>
-                <RadioGroup onChange={setValidateLimit} value={validateLimit}>
-                  <HStack spacing='4'>
-                    <Radio value='5'>5</Radio>
-                    <Radio value='10'>10</Radio>
-                    <Radio value='15'>15</Radio>
-                  </HStack>
-                </RadioGroup>
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Select Discovery limit</FormLabel>
+                <FormLabel><Text as={'b'} >Discovery </Text></FormLabel>
                 <RadioGroup onChange={setDiscoveryLimit} value={discoveryLimit}>
                   <HStack spacing='4'>
+                    <span>Limit:</span>
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
-
+              <Divider />
               <FormControl>
-                <FormLabel>Select Practice Content Limit</FormLabel>
+                <FormLabel><Text as={'b'} >Validation </Text></FormLabel>
+                <RadioGroup onChange={setValidateLimit} value={validateLimit}>
+                  <HStack spacing='4'>
+                    <span>Limit:</span>
+                    <Radio value='5'>5</Radio>
+                    <Radio value='10'>10</Radio>
+                    <Radio value='15'>15</Radio>
+                  </HStack>
+                </RadioGroup>
+              </FormControl>
+              <FormControl>
+                <HStack>
+                  <div>Session ID:</div>
+                  <div>
+                    <Select placeholder='Select option' value={validationSession} onChange={(event) => setValidationSession(event.target.value)}>
+                      {PreviousUserSessions?.map((session, ind) =>
+                        <option key={ind} value={session}>{session}</option>
+                      )}
+                    </Select>
+                  </div>
+                </HStack>
+              </FormControl>
+              <Divider />
+              <FormControl>
+                <FormLabel><Text as={'b'} > Practice </Text></FormLabel>
                 <RadioGroup onChange={setContentPracticeLimit} value={contentPracticeLimit}>
                   <HStack spacing='4'>
+                    <span>Content Limit:</span>
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
@@ -179,16 +219,39 @@ function AppDrawer() {
               </FormControl>
 
               <FormControl>
-                <FormLabel>Select Practice Target Limit</FormLabel>
                 <RadioGroup onChange={setContentTargetLimit} value={contentTargetLimit}>
                   <HStack spacing='4'>
+                    <span>Target Limit:</span>
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
-              
+              <HStack>
+                <div>Session ID:</div>
+                <div><Select placeholder='Select option' value={practiceSession} onChange={(event) => setPracticeSession(event.target.value)}>
+                  {PreviousUserSessions?.map((session, ind) =>
+                    <option key={ind} value={session}>{session}</option>
+                  )}
+                </Select></div>
+              </HStack>
+              <Accordion defaultIndex={[0]} allowMultiple>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex='1' textAlign='left'>
+                        <Text as={'b'} >Practice config </Text>
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <ConfigForm />
+                  </AccordionPanel>
+                </AccordionItem>
+
+              </Accordion>
             </Stack>
           </DrawerBody>
 

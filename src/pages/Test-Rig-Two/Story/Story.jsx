@@ -5,9 +5,11 @@ import {
   Button,
   Center,
   Container,
+  Divider,
   Flex,
   HStack,
   Image,
+  Progress,
   Spinner,
   Step,
   StepDescription,
@@ -51,7 +53,6 @@ import completionCriteria from '../../../config/practiceConfig';
 
 const jsConfetti = new JSConfetti();
 
-
 const Story = () => {
   const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
   const [posts, setPosts] = useState([]);
@@ -70,11 +71,15 @@ const Story = () => {
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
-
   const [storycase64Data, setStoryBase64Data] = useState('');
-
+  const practiceCompletionCriteria = [
+    ...(JSON.parse(localStorage.getItem('criteria')) || []),
+    ...completionCriteria,
+  ];
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
+  const max = practiceCompletionCriteria.length - 1
+  const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
@@ -103,9 +108,6 @@ const Story = () => {
   const fetchApi = async () => {
     setLoading(true);
     if (parseInt(localStorage.getItem('userPracticeState')) >= 4 && localStorage.getItem('firstPracticeSessionCompleted') === 'false') {
-      let index = completionCriteriaIndex + 1;
-      setCompletionCriteriaIndex(index);
-      localStorage.setItem('userPracticeState', index)
       toast({
         position: 'top',
         title: `Well Done! \n
@@ -126,16 +128,11 @@ const Story = () => {
       })
       navigate('/showcase')
     }
-    else {
-      let index = completionCriteriaIndex + 1;
-      setCompletionCriteriaIndex(index);
-      localStorage.setItem('userPracticeState', index)
-    }
-    let type = completionCriteria[completionCriteriaIndex]?.criteria;
+    let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/session/${localStorage.getItem('practiceSession')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -161,7 +158,6 @@ const Story = () => {
     }
   };
 
-  console.log(posts);
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -242,12 +238,12 @@ const Story = () => {
 
         <Center minH={'50vh'}
           style={{
-            backgroundColor: `${completionCriteria[completionCriteriaIndex -1]?.criteria === 'word' && completionCriteria[completionCriteriaIndex -1]?.template === 'simple' &&
-              posts?.length > 0 
+            backgroundColor: `${practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'word' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'simple' &&
+              posts?.length > 0
               ? '#c9c4ff'
-              : completionCriteria[completionCriteriaIndex -1]?.criteria === 'sentence' && completionCriteria[completionCriteriaIndex -1]?.template === 'simple' && posts?.length > 0
+              : practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'sentence' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'simple' && posts?.length > 0
                 ? '#d3ffbb'
-                : completionCriteria[completionCriteriaIndex -1]?.criteria === 'word' && completionCriteria[completionCriteriaIndex -1]?.template === 'game' && posts?.length > 0 ? '#FFDAB9' : 'white'
+                : practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'word' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'game' && posts?.length > 0 ? '#FFDAB9' : 'white'
               }`,
             boxShadow: '2px 2px 15px 5px grey',
             borderRadius: '30px',
@@ -262,7 +258,7 @@ const Story = () => {
               color='blue.500'
               size='xl'
             /></Center>
-          ) : posts?.length === 0 && completionCriteria[completionCriteriaIndex -1].template=='simple' ? (
+          ) : posts?.length === 0 && practiceCompletionCriteria[completionCriteriaIndex].template == 'simple' ? (
             <>
               <Center h='50vh'>
                 <VStack>
@@ -313,6 +309,9 @@ const Story = () => {
                                 onClick={() => {
                                   fetchApi();
                                   setCurrentLine(0);
+                                  let index = completionCriteriaIndex + 1;
+                                  setCompletionCriteriaIndex(index);
+                                  localStorage.setItem('userPracticeState', index)
                                   setWellDone(false);
                                 }}
                                 src={Next}
@@ -332,18 +331,17 @@ const Story = () => {
                 </Flex>
               </Center>
             </>
-          ) : posts && completionCriteria[completionCriteriaIndex - 1].template=='simple' ? (
+          ) : posts && practiceCompletionCriteria[completionCriteriaIndex].template == 'simple' ? (
             <>
               <VStack>
                 <Box>
                   {posts?.map((post, ind) =>
                     currentLine === ind ? (
-                      <Center>
+                      <Center key={ind}>
                         <Flex
                           pos={'relative'}
                           w={'100%'}
                           className="story-box-container"
-                          key={ind}
                           display={'flex'}
                           justifyContent={'center'}
 
@@ -544,35 +542,33 @@ const Story = () => {
                 </Box>
               </VStack>
             </>
-          ) : posts && completionCriteria[completionCriteriaIndex - 1].template=='game' ?
-        <CharacterToWordMatchingGame 
-        sourceChars={sourceChars}
-        targetWords={posts}
-        handleSuccess={()=>handleSuccess()}
-        
-        /> : ''}
+          ) : posts && practiceCompletionCriteria[completionCriteriaIndex].template == 'game' ?
+            <CharacterToWordMatchingGame
+              sourceChars={sourceChars}
+              targetWords={posts}
+              handleSuccess={() => handleSuccess()}
+
+            /> : ''}
         </Center>
         <Box paddingTop={10}>
-          <Stepper size='sm' colorScheme='green' index={completionCriteriaIndex -1}>
-            {completionCriteria.map((step, index) => (
+          <Stepper size='md' colorScheme='green' index={completionCriteriaIndex}>
+            {practiceCompletionCriteria.map((step, index) => (
               <Step key={index}>
                 <StepIndicator>
-                  <StepStatus
+                <StepStatus
                     complete={<StepIcon />}
-                    incomplete={<StepNumber />}
-                    active={<StepNumber />}
+                    incomplete={<StepTitle>{step.title}</StepTitle>}
+                    active={<StepTitle>{step.title}</StepTitle>}
                   />
                 </StepIndicator>
-
-                <Box flexShrink='0'>
-                  <StepTitle>{step.title}</StepTitle>
-                  <StepDescription>{step.description}</StepDescription>
-                </Box>
-
-                <StepSeparator />
               </Step>
             ))}
           </Stepper>
+          <Box p={10}>
+          <Center>Progress: {parseInt(progressPercent)}%</Center>
+          <Progress colorScheme='green' size='sm' value={progressPercent} />
+          </Box>
+           
         </Box>
       </Container>
 
