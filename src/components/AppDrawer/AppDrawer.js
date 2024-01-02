@@ -236,7 +236,7 @@ function AppDrawer() {
                   )}
                 </Select></div>
               </HStack>
-              <Accordion defaultIndex={[0]} allowMultiple>
+              <Accordion allowMultiple>
                 <AccordionItem>
                   <h2>
                     <AccordionButton>
