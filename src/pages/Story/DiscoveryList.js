@@ -23,7 +23,7 @@ const DiscoveryList = () => {
     axios
       .post(`https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment`, {
         "tags": ["ASER"],
-        "language": localStorage.getItem('apphomelang')
+        "language": localStorage.getItem('apphomelang') || 'ta'
       })
       .then(async response => {
         setLoading(false)
