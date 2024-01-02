@@ -277,10 +277,10 @@ const Discovery = () => {
   }, [currentLine])
 
   return (
-    <div style={{ height: '97vh' }}>
+    <>
       <Header active={0}/>
       
-        <Center className='bg'>
+        <Center pt={'10vh'} className='bg'>
           <div
             style={{
               boxShadow: '2px 2px 15px 5px grey',
@@ -410,7 +410,7 @@ const Discovery = () => {
       
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 
-    </div>
+    </>
   );
 };
 

@@ -43,7 +43,6 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height: 97vh;
   }
 
   .story-item {
@@ -93,7 +92,6 @@
     align-items: center;
     gap: 20px;
     justify-content: center;
-    height: 97vh;
   }
 
   .story-image {
@@ -223,10 +221,9 @@
 .bg {
   -webkit-justify-content: center;
   justify-content: center;
-  min-height: 100vh;
   background: gray.50;
-  background-image: url('../../assests/Images/hackthon-images/login-bg.jpg');
-  background-color: #cccccc;
+  /* background-image: url('../../assests/Images/hackthon-images/login-bg.jpg'); */
+  /* background-color: #cccccc; */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

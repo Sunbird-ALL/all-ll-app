@@ -14,6 +14,8 @@ import {
   Text,
   useColorModeValue,
   Link,
+  Toast,
+  useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
@@ -27,6 +29,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast()
   const handleSubmit = async (username, password) => {
     try {
       const response = await fetch(
@@ -42,9 +45,15 @@ export default function Login() {
           'virtualStorySessionID',
           virtualID + '' + Date.now()
         );
+        toast({
+          position: 'top',
+          title: `Successfully Login!`,
+          duration: 1000,
+          status: 'success'
+        })
         navigate('/discoverylist')
-        alert("Successfully Login");
-        //history.push('Story');
+        localStorage.setItem('userPracticeState', 0)
+        localStorage.setItem('firstPracticeSessionCompleted', false)
       } else {
         console.error('Error fetching virtual ID');
       }
