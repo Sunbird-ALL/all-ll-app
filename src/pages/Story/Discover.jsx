@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -24,7 +24,7 @@ import calcCER from 'character-error-rate';
 
 const jsConfetti = new JSConfetti();
 
-const Story = () => {
+const Discovery = () => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   // console.log(voiceText);
@@ -49,18 +49,16 @@ const Story = () => {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
-    // if ((voiceText !== '') & (voiceText !== '-')) {
-    //   go_to_result(voiceText);
-    // }
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
   }, []);
 
   const fetchApi = async () => {
+    setLoading(true);
     try {
       const response = await fetch(
-        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
+        `https://www.learnerai-dev.theall.ai/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -86,7 +84,7 @@ const Story = () => {
   }, [temp_audio]);
 
   const playAudio = () => {
-    set_temp_audio(new Audio(posts?.data[currentLine].data[0].ta.audio));
+    set_temp_audio(new Audio(posts?.data[currentLine].contentSourceData[0].audioUrl));
   };
 
   const pauseAudio = () => {
@@ -139,7 +137,7 @@ const Story = () => {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         date: utcDate,
-        original_text: findRegex(posts?.data[currentLine]?.data[0]?.[lang]?.text),
+        original_text: findRegex(posts?.data[currentLine]?.contentSourceData[0]?.text),
         language: lang,
       })
       .then(async res => {
@@ -159,7 +157,7 @@ const Story = () => {
         texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
 
-        let tempteacherText = posts?.data[currentLine]?.data[0]?.[lang]?.text.toLowerCase();
+        let tempteacherText = posts?.data[currentLine]?.contentSourceData[0]?.text.toLowerCase();
         tempteacherText = tempteacherText.replace(/\u00A0/g, ' ');
         tempteacherText = tempteacherText.trim();
         tempteacherText = replaceAll(tempteacherText, '.', '');
@@ -235,7 +233,7 @@ const Story = () => {
           //"qid": "", // Required. Unique assessment/question id
           "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
           "values": [
-            { "original_text": posts?.data[currentLine]?.data[0]?.[lang]?.text },
+            { "original_text": posts?.data[currentLine]?.contentSourceData[0]?.text },
             { "response_text": responseText },
             { "response_correct_words_array": student_correct_words_result },
             { "response_incorrect_words_array": student_incorrect_words_result },
@@ -271,27 +269,35 @@ const Story = () => {
 
   useEffect(() => {
 
-    if (currentLine === posts?.data?.length) {
+    if (currentLine && currentLine === posts?.data?.length) {
       navigate('/Validate')
-      setPageNo(pageno + 1)
+      localStorage.setItem('tabIndex', parseInt(localStorage.getItem('tabIndex')) + 1) 
+      //setPageNo(pageno + 1)
     }
   }, [currentLine])
 
   return (
     <div style={{ height: '97vh' }}>
-      <Header />
-      <VStack>
-        <Center className="story-container">
+      <Header active={0}/>
+      
+        <Center className='bg'>
           <div
             style={{
               boxShadow: '2px 2px 15px 5px grey',
               borderRadius: '30px',
+              width: '75vw',
             }}
             className="story-item"
           >
 
             {loading ? (
-              <div>Loading...</div>
+              <Center h='50vh'><Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            /></Center>
             ) : isUserSpeak ? (
               <>
 
@@ -321,25 +327,26 @@ const Story = () => {
                   currentLine === ind ? (
                     <>
                       <div className='story-box-container' key={ind}>
-                        <Center>
+                        <Center w={'100%'}>
                           <img
                             className="story-image"
                             src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
                             }
-                            alt={post?.title}
+                            alt={post?.name}
                           />
                         </Center>
-                        <div>
-                          <Center>
+                        <Center w={'100%'}>
+                          <VStack>
+                          <div>
                             <h1 style={{ textAlign: "center" }} className='story-line'>
-                              {posts?.data[currentLine]?.data[0]?.[localStorage.getItem('apphomelang')]?.text}
+                              {posts?.data[currentLine]?.contentSourceData[0].text}
                             </h1>
                             {localStorage.setItem(
                               'contentText',
-                              post?.data[0]?.[localStorage.getItem('apphomelang')]?.text
+                              posts?.data[currentLine]?.contentSourceData[0].text
                             )}
-                          </Center>
-                          <Center>
+                          </div>
+                          <div>
                             {
                               isUserSpeak ? <></> : <div>
                                 {currentLine === posts?.data?.length ? (
@@ -373,8 +380,9 @@ const Story = () => {
                                 )}
                               </div>
                             }
-                          </Center>
-                        </div>
+                          </div>
+                          </VStack>
+                        </Center>
                       </div>
                     </>
 
@@ -399,11 +407,11 @@ const Story = () => {
         ) : (
           ''
         )}
-      </VStack>
-      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+      
+      {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 
     </div>
   );
 };
 
-export default Story;
+export default Discovery;

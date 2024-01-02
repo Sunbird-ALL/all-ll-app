@@ -131,7 +131,7 @@ export default class AudioRecorderCompair extends Component {
            
               className={status === 'recording' ? 'dis-visible' : 'dis-none'}
             >
-              <AudioAnalyser {...audioProps}></AudioAnalyser>
+              <AudioAnalyser {...(lang_code === 'kn' || lang_code ===  'ta' ? audioProps_tamil : audioProps)}></AudioAnalyser>
             </div>
           </div>
         <center>

@@ -8,6 +8,16 @@ import {
   Flex,
   HStack,
   Image,
+  Spinner,
+  Step,
+  StepDescription,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
   Text,
   VStack,
 } from '@chakra-ui/react';
@@ -33,7 +43,6 @@ import { response } from '../../../services/telementryService';
 import retry from '../../../assests/Images/retry.svg';
 import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
-import Tabs from '../Tabs/Tabs';
 // import TryNew from '../../../assests/Images/refresh.svg'
 import lang_constants from '../../../lang/lang_constants.json';
 
@@ -42,9 +51,17 @@ const jsConfetti = new JSConfetti();
 
 const Story = () => {
   const maxAllowedContent = 4;
+  const completionCriteria = [
+    { title: 'P1', description: 'Words', criteria: 'word' },
+    { title: 'P2', description: 'Words', criteria: 'word' },
+    { title: 'P3', description: 'Sentences', criteria: 'sentence' },
+    { title: 'P4', description: 'Sentences', criteria: 'sentence' },
+    { title: 'P5', description: 'Sentences', criteria: 'sentence' },
+  ]
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   const [showWellDone, setWellDone] = useState(false);
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(0);
   // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
@@ -60,6 +77,8 @@ const Story = () => {
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem('sentenceCounter', currentLine);
+  const overflowStyle = posts[currentLine]?.contentSourceData[0].text.length > 120 ? { overflowY: 'scroll' } : {};
+  const textHeight = posts[currentLine]?.contentSourceData[0].text.length > 120 ? { height: '30vh' } : {};
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
 
@@ -81,21 +100,27 @@ const Story = () => {
 
   const fetchApi = async () => {
     setLoading(true);
-    let type =
-      localStorage.getItem('apphomelevel') === 'Word' ? 'Sentence' : 'Word';
+    if (completionCriteriaIndex >= completionCriteria.length) {
+      setCompletionCriteriaIndex(0);
+      alert('Well Done, you have completed the practice session');
+      navigate('/showcase')
+    } else {
+      setCompletionCriteriaIndex(completionCriteriaIndex + 1);
+    }
+    let type = completionCriteria[completionCriteriaIndex]?.criteria;
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/getRandomContent?language=${localStorage.getItem(
+        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
-        )}&type=${type}&limit= ${currentLine === 2 ? 2 : 3}`
+        )}&contentlimit=5}&gettargetlimit=5`
       )
         .then(res => {
           return res.json();
         })
         .then(data => {
           const oldPosts = posts || [];
-          const newPosts = data?.data;
+          const newPosts = data?.content || [];
 
           if (currentLine && currentLine < maxAllowedContent - 1 && newPosts?.length) {
             setPosts([...oldPosts, ...newPosts]);
@@ -112,7 +137,7 @@ const Story = () => {
     }
   };
 
-  //console.log(posts);
+  console.log(posts);
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -155,18 +180,13 @@ const Story = () => {
     } else if (currentLine >= posts?.length - 1) {
       fetchApi();
       setCurrentLine(currentLine + 1);
-    }else{
+    } else {
       setCurrentLine(currentLine + 1);
     }
   };
 
   function saveIndb() {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
     setUserSpeak(true);
-
   }
 
   const handleStarAnimation = () => {
@@ -187,139 +207,84 @@ const Story = () => {
 
   return (
     <div>
-      <VStack>
-        <Header active={3} />
-        <Container style={{ height: '97vh'}} className="story-container">
-          <Center
-          >
-            <div className="col s4 m4">
-              <div className="row">
-                <div className="lang_select_div ">
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'en'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
-                      onClick={() => {
-                        let temp_dt = 'en';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
-                        fetchApi();
-                        setWellDone(false);
-                        //window.location.reload();
-                      }}
-                    >
-                      {getLanguageConstants('en').LANGUAGE}
-                    </div>
+
+      <Header active={2} />
+      <div className="main-bg">
+      <Container w={'75vw'} style={{ height: '100vh' }} className="story-container">
+
+        <Center
+          style={{
+            backgroundColor: `${localStorage.getItem('apphomelevel') === 'word' &&
+              posts?.length > 0
+              ? '#c9c4ff'
+              : posts?.length > 0
+                ? '#d3ffbb'
+                : 'white'
+              }`,
+            boxShadow: '2px 2px 15px 5px grey',
+            borderRadius: '30px',
+            width: 'inherit',
+            height: '50vh'
+          }}
+        >
+          {loading ? (
+            <Center h='50vh'><Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          /></Center>
+          ) : posts?.length === 0 ? (
+            <>
+              <Center h='50vh'>
+                <VStack>
+                  <div>
+                    <h1 style={{ fontSize: '20px', color: 'red' }}>
+                      {localStorage.getItem('apphomelevel')} Data Not Found
+                    </h1>
                   </div>
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'kn'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
+                  <div>
+                    <img
+                      style={{ height: '40px', cursor: 'pointer' }}
                       onClick={() => {
-                        let temp_dt = 'kn';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
                         fetchApi();
-                        setWellDone(false);
-                        //window.location.reload();
                       }}
-                    >
-                      {getLanguageConstants('kn').LANGUAGE}
-                    </div>
+                      src={Next}
+                      alt="try_new"
+                    />
                   </div>
-                  <div className="col s12 m4">
-                    <div
-                      className={
-                        localStorage.getItem('apphomelang') === 'ta'
-                          ? 'lang_select_div_active'
-                          : 'lang_select_div_inactive'
-                      }
-                      onClick={() => {
-                        let temp_dt = 'ta';
-                        localStorage.setItem('apphomelang', temp_dt);
-                        set_sel_lang(temp_dt);
-                        fetchApi();
-                        setWellDone(false);
-                        //window.location.reload();
-                      }}
-                    >
-                      {getLanguageConstants('ta').LANGUAGE}
-                    </div>
+                  <div>
+                    <p>Try New</p>
                   </div>
-                </div>
-              </div>
-            </div>
-          </Center>
-          <Center
-            style={{
-              backgroundColor: `${localStorage.getItem('apphomelevel') === 'Word' &&
-                posts?.length > 0
-                ? '#c9c4ff'
-                : posts?.length > 0
-                  ? '#d3ffbb'
-                  : 'white'
-                }`,
-              boxShadow: '2px 2px 15px 5px grey',
-              borderRadius: '30px',
-              width: 'inherit',
-              height: '50vh'
-            }}
-          >
-            {loading ? (
-              <Center h='50vh'>Loading...</Center>
-            ) : posts?.length === 0 ? (
-              <>
-                <Center h='50vh'>
-                  <VStack>
-                    <div>
-                      <h1 style={{ fontSize: '20px', color: 'red' }}>
-                      {localStorage.getItem('apphomelevel') } Data Not Found
-                      </h1>
-                    </div>
-                    <div>
-                      <img
-                        style={{ height: '40px', cursor: 'pointer' }}
-                        onClick={() => {
-                          fetchApi();
-                        }}
-                        src={Next}
-                        alt="try_new"
-                      />
-                    </div>
-                    <div>
-                      <p>Try New</p>
-                    </div>
-                    {/* <button>No</button> */}
-                  </VStack>
-                </Center>
-              </>
-            ) : showWellDone ? (
-              <>
-                <Center h='50vh'>
-                  <Flex>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        position: 'relative',
-                        width: '100%',
-                        // left: '40px',
-                      }}
-                    >
-                      <Box p="4">
-                        <div style={{ textAlign: 'center' }}>
-                          <br />
-                          <Box p="4">
+                  {/* <button>No</button> */}
+                </VStack>
+              </Center>
+            </>
+          ) : showWellDone ? (
+            <>
+              <Center h='50vh'>
+                <Flex>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      width: '100%',
+                      // left: '40px',
+                    }}
+                  >
+                    <Box p="4">
+                      <div style={{ textAlign: 'center' }}>
+                        <br />
+                        <Box p="4">
+                          <VStack>
                             <div style={{ textAlign: 'center' }}>
                               <h1 style={{ fontSize: '60px' }}>Well Done </h1>
                               <br />
+                            </div>
+                            <div>
                               <img
                                 style={{ height: '40px', cursor: 'pointer' }}
                                 onClick={() => {
@@ -330,84 +295,157 @@ const Story = () => {
                                 src={Next}
                                 alt="try_new"
                               />
-
+                            </div>
+                            <div>
                               <p>Practice More</p>
                               {/* <button>No</button> */}
                             </div>
-                          </Box>
-                          {/* <button>No</button> */}
-                        </div>
-                      </Box>
-                    </div>
-                  </Flex>
-                </Center>
-              </>
-            ) : posts ? (
-              <>
-                <VStack>
-                  <Box>
-                    {posts?.map((post, ind) =>
-                      currentLine === ind ? (
-                        <Center h='30vh'>
-                          <Flex
-                            pos={'relative'}
-                            w={'100%'}
-                            className="story-box-container"
-                            key={ind}
-                            display={'flex'}
-                            justifyContent={'center'}
+                          </VStack>
+                        </Box>
+                        {/* <button>No</button> */}
+                      </div>
+                    </Box>
+                  </div>
+                </Flex>
+              </Center>
+            </>
+          ) : posts ? (
+            <>
+              <VStack>
+                <Box>
+                  {posts?.map((post, ind) =>
+                    currentLine === ind ? (
+                      <Center h='30vh'>
+                        <Flex
+                          pos={'relative'}
+                          w={'100%'}
+                          className="story-box-container"
+                          key={ind}
+                          display={'flex'}
+                          justifyContent={'center'}
 
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
                           >
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                height: '40vh',
-                              }}
-                            >
-                              <Box p="4">
-                                <h1 style={{ textAlign: "center" }}  className="story-line">
-                                  {
-                                    post?.data[0]?.[
-                                      localStorage.getItem('apphomelang')
-                                    ]?.text
-                                  }
-                                </h1>
-                                {localStorage.setItem(
-                                  'contentText',
-                                  post?.data[0]?.[
-                                    localStorage.getItem('apphomelang')
-                                  ]?.text
-                                )}
-                              </Box>
+                            <Box p="4">
+                              <h1 style={{ textAlign: "center", ...overflowStyle, ...textHeight }} className="story-line">
+                                {
+                                  post?.contentSourceData[0].text
+                                }
+                              </h1>
+                              {localStorage.setItem(
+                                'contentText',
+                                post?.contentSourceData[0]?.text
+                              )}
+                            </Box>
+                          </div>
+                        </Flex>
+                      </Center>
+                    ) : (
+                      ''
+                    )
+                  )}
+                </Box>
+                <Box>
+                  {isUserSpeak ? (
+                    isAudioPlay !== 'recording' && (
+                      <div>
+                        <HStack
+                          style={{ display: 'flex' }}
+                          display={'flex'}
+                          alignItems="center"
+                          marginTop={'15px'}
+                        >
+                          <Flex gap={'2rem'} alignItems="center">
+                            <div>
+                              {flag ? (
+                                <>
+                                  <img
+                                    className="play_btn"
+                                    src={play}
+                                    style={{ height: '72px', width: '72px' }}
+                                    onClick={() => playAudio()}
+                                    alt="play_audio"
+                                  />
+                                  <h4
+                                    className="text-play m-0 "
+                                    style={{
+                                      position: 'relative',
+                                      textAlign: 'center',
+                                    }}
+                                  >
+                                    Listen
+                                  </h4>
+                                </>
+                              ) : (
+                                <>
+                                  <img
+                                    className="play_btn"
+                                    src={pause}
+                                    style={{ height: '72px', width: '72px' }}
+                                    onClick={() => pauseAudio()}
+                                    alt="pause_audio"
+                                  />
+                                  <h4
+                                    className="text-play m-0 "
+                                    style={{
+                                      position: 'relative',
+                                      textAlign: 'center',
+                                    }}
+                                  >
+                                    Pause
+                                  </h4>
+                                </>
+                              )}
+                            </div>
+                            <div>
+                              <img
+                                className="play_btn"
+                                style={{
+                                  height: '72px', width: '72px',
+                                  padding: '8px'
+                                }}
+                                onClick={nextLine}
+                                src={Next}
+                                alt="next-button"
+                              />
+                              <h4
+                                className="text-play m-0"
+                                style={{
+                                  position: 'relative',
+                                  textAlign: 'center',
+                                }}
+                              >
+                                Try Next
+                              </h4>
                             </div>
                           </Flex>
-                        </Center>
-                      ) : (
-                        ''
-                      )
-                    )}
-                  </Box>
-                  <Box>
-                    {isUserSpeak ? (
-                      isAudioPlay !== 'recording' && (
-                        <div>
-                          <HStack
-                            style={{ display: 'flex' }}
-                            display={'flex'}
-                            alignItems="center"
-                            marginTop={'15px'}
-                          >
-                            <Flex gap={'2rem'} alignItems="center">
+                        </HStack>
+                      </div>
+                    )
+                  ) : (
+                    <div className="voice-recorder">
+                      <HStack gap={'2rem'}>
+                        {posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ' '
+                          ? isAudioPlay !== 'recording' && (
+
+                            <VStack>
                               <div>
                                 {flag ? (
                                   <>
                                     <img
                                       className="play_btn"
-                                      src={play}
-                                      style={{ height: '72px', width: '72px' }}
-                                      onClick={() => playAudio()}
+                                      src={Speaker}
+                                      style={{
+                                        height: '72px',
+                                        width: '72px',
+                                      }}
+                                      onClick={() => playTeacherAudio()}
                                       alt="play_audio"
                                     />
                                     <h4
@@ -424,8 +462,11 @@ const Story = () => {
                                   <>
                                     <img
                                       className="play_btn"
-                                      src={pause}
-                                      style={{ height: '72px', width: '72px' }}
+                                      src={MuteSpeaker}
+                                      style={{
+                                        height: '72px',
+                                        width: '72px',
+                                      }}
                                       onClick={() => pauseAudio()}
                                       alt="pause_audio"
                                     />
@@ -436,134 +477,77 @@ const Story = () => {
                                         textAlign: 'center',
                                       }}
                                     >
-                                      Pause
+                                      Mute
                                     </h4>
                                   </>
                                 )}
                               </div>
-                              <div>
-                                <img
-                                  className="play_btn"
-                                  style={{ height: '72px', width: '72px', 
-                                  padding: '8px'}}
-                                  onClick={nextLine}
-                                  src={Next}
-                                  alt="next-button"
-                                />
-                                <h4
-                                  className="text-play m-0"
-                                  style={{
-                                    position: 'relative',
-                                    textAlign: 'center',
-                                  }}
-                                >
-                                  Try Next
-                                </h4>
-                              </div>
-                            </Flex>
-                          </HStack>
-                        </div>
-                      )
-                    ) : (
-                      <div className="voice-recorder">
-                        <HStack gap={'2rem'}>
-                          {posts?.[currentLine]?.data[0]?.[
-                            localStorage.getItem('apphomelang')
-                          ]?.audio !== ' '
-                            ? isAudioPlay !== 'recording' && (
+                            </VStack>
 
-                              <VStack>
-                                <div>
-                                  {flag ? (
-                                    <>
-                                      <img
-                                        className="play_btn"
-                                        src={Speaker}
-                                        style={{
-                                          height: '72px',
-                                          width: '72px',
-                                        }}
-                                        onClick={() => playTeacherAudio()}
-                                        alt="play_audio"
-                                      />
-                                      <h4
-                                        className="text-play m-0 "
-                                        style={{
-                                          position: 'relative',
-                                          textAlign: 'center',
-                                        }}
-                                      >
-                                        Listen
-                                      </h4>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <img
-                                        className="play_btn"
-                                        src={MuteSpeaker}
-                                        style={{
-                                          height: '72px',
-                                          width: '72px',
-                                        }}
-                                        onClick={() => pauseAudio()}
-                                        alt="pause_audio"
-                                      />
-                                      <h4
-                                        className="text-play m-0 "
-                                        style={{
-                                          position: 'relative',
-                                          textAlign: 'center',
-                                        }}
-                                      >
-                                        Mute
-                                      </h4>
-                                    </>
-                                  )}
-                                </div>
-                              </VStack>
+                          )
+                          : ''}
 
-                            )
-                            : ''}
-                        
-                          <VStack
-                            style={{ marginTop: '-13px', marginLeft: '0px' }}
-                          >
-                            <VoiceCompair
-                              setVoiceText={setVoiceText}
-                              setRecordedAudio={setRecordedAudio}
-                              _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                              flag={true}
-                              setStoryBase64Data={setStoryBase64Data}
-                              saveIndb={saveIndb}
-                            />
-                            {isAudioPlay === 'recording' ? (
-                              <h4
-                                style={{ position: 'relative', top: '-10px' }}
-                                className="text-speak m-0"
-                              >
-                                Stop
-                              </h4>
-                            ) : (
-                              <h4
-                                style={{ position: 'relative', top: '-10px' }}
-                                className="text-speak m-0"
-                              >
-                                Speak
-                              </h4>
-                            )}
-                          </VStack>
-                        </HStack>
-                      </div>
-                    )}
+                        <VStack
+                          style={{ marginTop: '-13px', marginLeft: '0px' }}
+                        >
+                          <VoiceCompair
+                            setVoiceText={setVoiceText}
+                            setRecordedAudio={setRecordedAudio}
+                            _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                            flag={true}
+                            setStoryBase64Data={setStoryBase64Data}
+                            saveIndb={saveIndb}
+                          />
+                          {isAudioPlay === 'recording' ? (
+                            <h4
+                              style={{ position: 'relative', top: '-10px' }}
+                              className="text-speak m-0"
+                            >
+                              Stop
+                            </h4>
+                          ) : (
+                            <h4
+                              style={{ position: 'relative', top: '-10px' }}
+                              className="text-speak m-0"
+                            >
+                              Speak
+                            </h4>
+                          )}
+                        </VStack>
+                      </HStack>
+                    </div>
+                  )}
 
-                  </Box>
-                </VStack>
-              </>
-            ) : ""}
-          </Center>
-        </Container>
-      </VStack>
-      <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text>
+                </Box>
+              </VStack>
+            </>
+          ) : ""}
+        </Center>
+        <Box paddingTop={10} w={'80vw'}>
+        <Stepper size='sm' colorScheme='green' index={completionCriteriaIndex - 1}>
+            {completionCriteria.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={<StepIcon />}
+                    incomplete={<StepNumber />}
+                    active={<StepNumber />}
+                  />
+                </StepIndicator>
+
+                <Box flexShrink='0'>
+                  <StepTitle>{step.title}</StepTitle>
+                  <StepDescription>{step.description}</StepDescription>
+                </Box>
+
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+          </Box>
+      </Container>
+      </div>
+      {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
     </div>
   );
 };

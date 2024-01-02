@@ -3,28 +3,30 @@
 import {
   Box,
   Flex,
-  Avatar,
-  HStack,
-  Button,
-  Menu,
   useDisclosure,
   useColorModeValue,
   Stack,
+  Spacer,
+  Stepper,
+  Step,
+  StepIndicator,
+  StepStatus,
+  StepIcon,
+  StepNumber,
+  useSteps,
+  StepTitle,
+  StepDescription,
+  StepSeparator,
 } from '@chakra-ui/react'
 
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Children from '../assests/Images/children-thumbnail.png'
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons'
-
-// interface Props {
-//   children: React.ReactNode
-// }
+import React, { useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import AppDrawer from '../components/AppDrawer/AppDrawer'
+import TabCard from './TabCard'
 
 const Links = ['Dashboard', 'Projects', 'Team']
 
 const NavLink = () => {
-  //const { children } = props
   return (
     <Box
       as="a"
@@ -39,93 +41,68 @@ const NavLink = () => {
     </Box>
   )
 }
+const steps = [
+  { title: 'Discover', description: 'Discover' },
+  { title: 'Validate', description: 'Validate' },
+  { title: 'Practice', description: 'Practice' },
+  { title: 'Showcase', description: 'Showcase' },
+]
 
-export default function Header({active}) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+const tabs =
+  [
+    { name: 'Discover', link: '/discoverylist' },
+    { name: 'Validate', link: '/validate' },
+    { name: 'Practice', link: '/practice' },
+    { name: 'Showcase', link: '/showcase' },
+  ];
 
-  const buttonStyle = {
-    backgroundColor: '#007bff',
-    color: '#fff',
-    padding: '10px 20px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  };
-
-
-  // const [activeTab, setActiveTab] = React.useState(1);
+export default function Header({ active }) {
   const navigate = useNavigate()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { activeStep, setActiveStep } = useSteps({
+    index: active,
+    count: steps.length,
+  })
 
-  const handleTabClick = (link,index) => {
-    // setActiveTab(index);
-    navigate(link)
-  };
-
-  const tabs=
-    [
-      {name:'Discover', link:'/storylist'},
-      {name:'Validate', link:'/validate'},
-      {name:'Practice', link:'/practice'},
-    ]
-    
-// console.log(bgColor);
+  
+  const setNavigationToRoute = function (a){
+    navigate(tabs[a].link);
+    localStorage.setItem('tabIndex', a);
+  }
+  
   return (
     <>
-      <Box pos={'absolute'} p={'20px'} h={'50px'} top={'0'} w="100%" style={{ background: "#fff", padding: "4px",  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
-        <Flex mt={'10px'} h={20} alignItems={'center'} justifyContent={'space-between'}>
-    
-          <HStack spacing={5} alignItems={'center'} >
-           {
-            tabs.map((tab, index) => (
-              <div key={index} className="tab-container">
-                {/* {console.log(tab.link)} */}
-                <Link
-                
-                 to={tab.link}
-                  className={`tab ${index + 1 === active ? 'active' : ''}`}
-                  onClick={e => {
-                    e.preventDefault();
-                    handleTabClick(tab.link,index + 1);
-                  }}
-                >
-                  {tab.name}
-                </Link>
-              </div>
-            ))
-           }
+      <Box pos={'absolute'} w="100vw" style={{ background: "#fff", boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", }} >
+        <Flex>
+          {/* <Box p={1}>
+            <TabCard naviagteTo={(a) => navigate(a)} />
+          </Box> */}
+          <Box p={3} w={'100vw'}>
+            <Stepper size='lg' index={activeStep}>
+              {steps.map((step, index) => (
+                <Step key={index}  onClick={() => setNavigationToRoute(index)}>
+                  <StepIndicator>
+                    <StepStatus
+                      complete={`✅`} incomplete={`🚩`} active={`📍`}
+                    />
+                    {/* 😐 */}
+                  </StepIndicator>
 
-          </HStack>
-                {/* <Box style={{color:"#000",fontSize: "28px" , fontWeight: '700', textAlign:'center' }}>{localStorage.getItem('storyTitle') === ''? "My Stories" : localStorage.getItem('storyTitle') }</Box> */}
-          <Flex alignItems={'center'}>
-            <Button className='btn btn-success'
-              variant={'solid'}
-              colorScheme={'teal'}
-              onClick={onOpen}
-              size={'sm'}
-              mr={4}>
-              My Profile : {localStorage.getItem('virtualID')}
-            </Button>
-            <Menu>
-              <Avatar
-                  size={'sm'}
-                  src={
-                    Children
-                  }
-                />
-            </Menu>
-          </Flex>
-        </Flex>
+                  <Box flexShrink='0'>
+                    <StepTitle>{step.title}</StepTitle>
+                    {/* <StepDescription>{step.description}</StepDescription> */}
+                  </Box>
 
-        {isOpen ? (
-          <Box pb={4}>
-            <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                  <StepSeparator />
+                </Step>
               ))}
-            </Stack>
+            </Stepper>
           </Box>
-        ) : null}
+          <Spacer />
+          <Box p={1}>
+            <AppDrawer />
+          </Box>
+        </Flex>
       </Box>
     </>
   )
