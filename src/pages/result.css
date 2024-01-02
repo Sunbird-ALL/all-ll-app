@@ -1,11 +1,12 @@
 .main-bg {	
     -webkit-justify-content: center;	
     justify-content: center;	
-    min-height: 97vh;	
-    background: gray.50;	
-    background-image: url('../../src/assests/Images/hackthon-images/story.webp');	
-    background-color: #cccccc;	
-    height: 500px;	
+    padding-top: 10vh;
+    /* min-height: 97vh;	 */
+    /* background: gray.50;	 */
+    /* background-image: url('../../src/assests/Images/hackthon-images/story.webp');	 */
+    /* background-color: #cccccc;	 */
+    /* height: 500px;	 */
     background-position: center;	
     background-repeat: no-repeat;	
     background-size: cover;	
