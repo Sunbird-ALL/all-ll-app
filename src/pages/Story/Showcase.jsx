@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack } from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -43,7 +43,6 @@ const Showcase = () => {
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
   const [pageno, setPageNo] = useState(1);
-  const toast = useToast()
 
   React.useEffect(() => {
     if (voiceText == '-') {
@@ -68,8 +67,8 @@ const Showcase = () => {
           setPosts(res.data.data[0].content);
           setLoading(false);
         });
+      setLoading(false);
     } catch (error) {
-      setLoading(false)
       console.error(error.message);
     }
   };
@@ -263,7 +262,6 @@ console.log(currentLine)
   }
 
   const fetchCurrentLevel = async () => {
-    setLoading(true);
     try {
       const response = await fetch(
         `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
@@ -272,29 +270,14 @@ console.log(currentLine)
           return res.json();
         })
         .then(data => {
-          setLoading(false);
           if (localStorage.getItem('userCurrentLevel') === data.currentLevel){
-            toast({
-              position: 'top',
-              title: `You need to practice more to complete this level.`,
-              status: 'error',
-            })
             navigate('/practice')
           }else{
             localStorage.setItem('userCurrentLevel', data.currentLevel)
-            toast({
-              position: 'top',
-              title: `Congratulations! \n
-              Your current level has been upgraded`,
-              status: 'success'
-            })
-            localStorage.setItem('userPracticeState', 0)
-            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/showcase')
           }
         });
     } catch (error) {
-      setLoading(false);
       console.error(error.message);
     }
   };
@@ -308,10 +291,10 @@ console.log(currentLine)
   }, [currentLine])
 
   return (
-    <>
+    <div style={{ height: '97vh' }}>
       <Header active={3} />
 
-      <Center pt={'10vh'} className='bg'>
+      <Center className='bg'>
         <div
           style={{
             boxShadow: '2px 2px 15px 5px grey',
@@ -322,7 +305,7 @@ console.log(currentLine)
         >
 
           {loading ? (
-            <Center minH='50vh'><Spinner
+            <Center h='50vh'><Spinner
             thickness='4px'
             speed='0.65s'
             emptyColor='gray.200'
@@ -426,10 +409,22 @@ console.log(currentLine)
 
         </div>
       </Center>
+      {currentLine === posts?.length ? (
+        <div className="button-container">
+          <Link to={'/Results'}>
+            <button className="custom-button">View Result</button>
+          </Link>
+          <Link to={'/storyList'}>
+            <button className="custom-button">Back To StoryList</button>
+          </Link>
+        </div>
+      ) : (
+        ''
+      )}
 
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 
-    </>
+    </div>
   );
 };
 

@@ -4,11 +4,11 @@
   align-items: center;
   gap: 20px;
   justify-content: center;
-  /* height: 100vh; */
-  /* background: gray.50; */
+  height: 100vh;
+  background: gray.50;
   /* background-image: url('../../../src/assests/Images/hackthon-images/story.webp');	 */
-  /* background-image: url('../../../assests/Images/hackthon-images/story.webp'); */
-  /* background-color: #cccccc; */
+  background-image: url('../../../assests/Images/hackthon-images/story.webp');
+  background-color: #cccccc;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
