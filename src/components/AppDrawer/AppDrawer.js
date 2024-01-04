@@ -155,10 +155,12 @@ function AppDrawer() {
           <DrawerBody>
             <Stack spacing='4'>
               <Text fontSize='lg' fontWeight='bold'>
-                Hello, {localStorage.getItem('virtualID')} <Editable defaultValue={level}>
+                Hello, {localStorage.getItem('virtualID')} 
+                [{level}]
+                {/* <Editable defaultValue={level}>
                   <EditablePreview />
                   <EditableInput onChange={(event) => setLevel(event.target.value)}/>
-                </Editable>
+                </Editable> */}
               </Text>
               <Divider />
               <FormControl>
