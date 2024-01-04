@@ -63,7 +63,7 @@ const Story = () => {
   const [isGame, setIsGame] = useState(true);
   const [sourceChars, setSourceChars] = useState([]);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
-  const [recordedAudio, setRecordedAudio] = useState(''); 
+  const [recordedAudio, setRecordedAudio] = useState('');
   const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [flag, setFlag] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
@@ -73,19 +73,19 @@ const Story = () => {
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')){
-      return storedData[localStorage.getItem('practiceSession')]?.completionCriteriaIndex ||  0;
-    }else{
+    if (storedData && localStorage.getItem('practiceSession')) {
+      return storedData[localStorage.getItem('practiceSession')]?.completionCriteriaIndex || 0;
+    } else {
       return 0;
-    }    
+    }
   });
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')){
+    if (storedData && localStorage.getItem('practiceSession')) {
       return storedData[localStorage.getItem('practiceSession')]?.currentLine || 0;
-    }else{
+    } else {
       return 0;
     }
   });
@@ -97,9 +97,7 @@ const Story = () => {
   const { slug } = useParams();
   
   const max = practiceCompletionCriteria.length - 1
-  const [progressPercent, setProgressPercent] = useState(()=> {
-    return ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
-  });
+  const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
@@ -123,6 +121,7 @@ const Story = () => {
       ...prevData,
       [sessionId]: { ...prevData[sessionId], ...newData },
     }));
+    //setProgressPercent();
   };
 
   React.useEffect(() => {
@@ -168,7 +167,7 @@ const Story = () => {
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/session/${localStorage.getItem('practiceSession')}?language=${localStorage.getItem(
+        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -234,7 +233,7 @@ const Story = () => {
 
   const nextLine = count => {
     const sessionId = localStorage.getItem('practiceSession');
-    const newData = { progressPercent: progressPercent, currentLine: currentLine , completionCriteriaIndex: completionCriteriaIndex};
+    const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
     if (currentLine >= maxAllowedContent - 1) {
@@ -592,7 +591,7 @@ const Story = () => {
             {practiceCompletionCriteria.map((step, index) => (
               <Step key={index}>
                 <StepIndicator>
-                <StepStatus
+                  <StepStatus
                     complete={<StepIcon />}
                     incomplete={<StepTitle>{step.title}</StepTitle>}
                     active={<StepTitle>{step.title}</StepTitle>}
@@ -602,10 +601,10 @@ const Story = () => {
             ))}
           </Stepper>
           <Box p={10}>
-          <Center>Progress: {parseInt(progressPercent)}%</Center>
-          <Progress colorScheme='green' size='sm' value={progressPercent} />
+            <Center>Progress: {parseInt(progressPercent)}%</Center>
+            <Progress colorScheme='green' size='sm' value={progressPercent} />
           </Box>
-           
+
         </Box>
       </Container>
 
