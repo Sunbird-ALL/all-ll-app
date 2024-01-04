@@ -41,14 +41,8 @@ export default function Login({setIsLoggedIn = false}) {
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
       if (response.ok) {
-        setIsLoggedIn(true);
         const data = await response.json();
         const virtualID = data.virtualID;
-        if (localStorage.getItem('virtualID') != virtualID){
-          localStorage.clear();
-          localStorage.setItem('apphomelang', 'ta');
-        }
-        console.log('virtual Id', virtualID)
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
         localStorage.setItem(
@@ -61,6 +55,7 @@ export default function Login({setIsLoggedIn = false}) {
           duration: 1000,
           status: 'success'
         })
+        setIsLoggedIn(true);
         navigate('/discoverylist')
 
         localStorage.setItem('userPracticeState', 0)
