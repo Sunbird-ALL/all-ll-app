@@ -205,9 +205,7 @@ const Story = () => {
   const playTeacherAudio = () => {
     set_temp_audio(
       new Audio(
-        posts?.[currentLine].data[0]?.[
-          localStorage.getItem('apphomelang')
-        ].audio
+        posts?.[currentLine]?.contentSourceData[0]?.audioUrl
       )
     );
   };
@@ -492,8 +490,9 @@ const Story = () => {
                           ? isAudioPlay !== 'recording' && (
 
                             <VStack>
+                             {posts?.[currentLine]?.contentSourceData[0]?.audioUrl?
                               <div>
-                                {flag ? (
+                              {flag ? (
                                   <>
                                     <img
                                       className="play_btn"
@@ -539,6 +538,7 @@ const Story = () => {
                                   </>
                                 )}
                               </div>
+                            :''}
                             </VStack>
 
                           )
