@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { startEvent } from '../services/callTelemetryIntract'
 export default function Login({setIsLoggedIn = false}) {
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function Login({setIsLoggedIn = false}) {
       );
       if (response.ok) {
         setIsLoggedIn(true);
+        startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;
         if (localStorage.getItem('virtualID') != virtualID){
