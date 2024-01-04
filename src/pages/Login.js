@@ -20,6 +20,7 @@ import {
 import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { startEvent } from '../services/callTelemetryIntract'
 export default function Login({setIsLoggedIn = false}) {
 
   useEffect(() => {
@@ -41,6 +42,8 @@ export default function Login({setIsLoggedIn = false}) {
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
       if (response.ok) {
+        setIsLoggedIn(true);
+        startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
