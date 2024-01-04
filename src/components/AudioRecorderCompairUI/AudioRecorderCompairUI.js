@@ -185,10 +185,6 @@ export default class AudioRecorderCompair extends Component {
               );
             }
           })()}
-          <AudioAnalyser
-            {...(lang_code === 'kn' || lang_code ===  'ta' ? audioProps_tamil : audioProps)}
-            className="hide"
-          >
             <div className="btn-box hide">
               <br />
               <button
@@ -206,7 +202,6 @@ export default class AudioRecorderCompair extends Component {
                 Stop
               </button>
             </div>
-          </AudioAnalyser>
         </center>
       </div>
     );
