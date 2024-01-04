@@ -50,6 +50,7 @@ import calcCER from 'character-error-rate';
 import lang_constants from '../../../lang/lang_constants.json';
 import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
+import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 
 const jsConfetti = new JSConfetti();
 
@@ -61,25 +62,44 @@ const Story = () => {
   const [showWellDone, setWellDone] = useState(false);
   const [isGame, setIsGame] = useState(true);
   const [sourceChars, setSourceChars] = useState([]);
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
-  // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
-  const [recordedAudio, setRecordedAudio] = useState(''); // blob
-  //   localStorage.setItem('recordedAudio', recordedAudio);
+  const [recordedAudio, setRecordedAudio] = useState(''); 
   const [isAudioPlay, setIsAudioPlay] = useState(true);
   const [flag, setFlag] = useState(true);
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
+    const storedData = JSON.parse(localStorage.getItem('progressData'));
+    if (storedData && localStorage.getItem('practiceSession')){
+      return storedData[localStorage.getItem('practiceSession')]?.completionCriteriaIndex ||  0;
+    }else{
+      return 0;
+    }    
+  });
+  // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+
+  const [currentLine, setCurrentLine] = useState(() => {
+    const storedData = JSON.parse(localStorage.getItem('progressData'));
+    if (storedData && localStorage.getItem('practiceSession')){
+      return storedData[localStorage.getItem('practiceSession')]?.currentLine || 0;
+    }else{
+      return 0;
+    }
+  });
+
   const practiceCompletionCriteria = [
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
     ...completionCriteria,
   ];
   const { slug } = useParams();
-  const [currentLine, setCurrentLine] = useState(0);
+  
   const max = practiceCompletionCriteria.length - 1
-  const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+  const [progressPercent, setProgressPercent] = useState(()=> {
+    return ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+  });
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
@@ -88,6 +108,22 @@ const Story = () => {
   const myCurrectLanguage =
     getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
+
+  const [progressData, setProgressData] = useState(() => {
+    const storedData = localStorage.getItem('progressData');
+    return storedData ? JSON.parse(storedData) : {};
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('progressData', JSON.stringify(progressData));
+  }, [progressData]);
+
+  const updateProgress = (sessionId, newData) => {
+    setProgressData((prevData) => ({
+      ...prevData,
+      [sessionId]: { ...prevData[sessionId], ...newData },
+    }));
+  };
 
   React.useEffect(() => {
     if (voiceText == '-') {
@@ -197,6 +233,9 @@ const Story = () => {
   };
 
   const nextLine = count => {
+    const sessionId = localStorage.getItem('practiceSession');
+    const newData = { progressPercent: progressPercent, currentLine: currentLine , completionCriteriaIndex: completionCriteriaIndex};
+    updateProgress(sessionId, newData);
     setUserSpeak(false);
     if (currentLine >= maxAllowedContent - 1) {
       handleStarAnimation();
@@ -233,9 +272,7 @@ const Story = () => {
     <>
 
       <Header active={2} />
-
       <Container mt={20} w={'75vw'} className="story-container">
-
         <Center minH={'50vh'}
           style={{
             backgroundColor: `${practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'word' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'simple' &&

@@ -89,14 +89,14 @@ export const response = (context, telemetryMode) => {
 
 };
 
-export const end = () => {
+export const end = (data) => {
     CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
       edata: {
         type: 'content',
         mode: 'play',
         pageid: url,
-        summary: [],
-        duration: '000',
+        summary: data?.summary || {},
+        duration: data?.duration || '000',
       },
     });
 };

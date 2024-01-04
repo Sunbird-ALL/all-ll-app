@@ -12,8 +12,6 @@ import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 
 export default function Validate() {
-  localStorage.setItem('userPracticeState', 0)
-  localStorage.setItem('firstPracticeSessionCompleted', false)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCurrentCharModalOpen, SetCurrentCharModalOpen] = useState(false);
   const [recommededWords, setRecommendedWords] = useState("")

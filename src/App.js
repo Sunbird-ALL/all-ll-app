@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter,
   HashRouter,
@@ -33,11 +33,18 @@ import Validate from './pages/Test-Rig-Two/Result/Validate';
 import Discovery from './pages/Story/Discover';
 import DiscoveryList from './pages/Story/DiscoveryList';
 import Showcase from './pages/Story/Showcase';
+import AppTimer from './components/AppTimer/AppTimer';
 
 function App() {
   let ranonce = false;
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('virtualID') ? true : false);
+
 
   useEffect(() => {
+    if(localStorage.getItem('virtualID')){
+      setIsLoggedIn(true);
+    }
+
     const setFp = async () => {
       const fp = await FingerprintJS.load();
 
@@ -100,7 +107,7 @@ function App() {
   useEffect(() => {
     const cleanup = () => {
       if (localStorage.getItem('contentSessionId') === null) {
-        end();
+        end({});
       }
     };
 
@@ -121,7 +128,7 @@ function App() {
       <Link to={'/playandlearn/score'} id="link_score_proto4" className="hide">
         score
       </Link>
-
+      <AppTimer isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       <Routes>
         <Route path="/content" element={<Contents />} />
         <Route path="/content/add" element={<ContentCreate />} />
@@ -143,7 +150,7 @@ function App() {
         <Route path={'discoverylist/discovery/:slug'} element={<Discovery/>} />
         <Route path={'discoverylist'} element={<DiscoveryList/>} />
         {/* <Route path={'/result'} element={<Result/>} /> */}
-        <Route path={'Login'} element={<Login/>} />
+        <Route path={'Login'} element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path={'Header'} element={<Header/>}/>
         <Route path={'Results'} element={<Results/>}/>
 
