@@ -46,11 +46,6 @@ export default function Login({setIsLoggedIn = false}) {
         startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;
-        if (localStorage.getItem('virtualID') != virtualID){
-          localStorage.clear();
-          localStorage.setItem('apphomelang', 'ta');
-        }
-        console.log('virtual Id', virtualID)
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
         localStorage.setItem(
@@ -63,6 +58,7 @@ export default function Login({setIsLoggedIn = false}) {
           duration: 1000,
           status: 'success'
         })
+        setIsLoggedIn(true);
         navigate('/discoverylist')
 
         localStorage.setItem('userPracticeState', 0)
