@@ -9,8 +9,6 @@ import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
 
 const DiscoveryList = () => {
-  localStorage.setItem('userPracticeState', 0)
-  localStorage.setItem('firstPracticeSessionCompleted', false)
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -25,6 +25,9 @@ import {
   Box,
   AccordionIcon,
   AccordionPanel,
+  Editable,
+  EditablePreview,
+  EditableInput,
 } from '@chakra-ui/react'
 import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
@@ -152,7 +155,10 @@ function AppDrawer() {
           <DrawerBody>
             <Stack spacing='4'>
               <Text fontSize='lg' fontWeight='bold'>
-                Hello, {localStorage.getItem('virtualID')} [{level}]
+                Hello, {localStorage.getItem('virtualID')} <Editable defaultValue={level}>
+                  <EditablePreview />
+                  <EditableInput onChange={(event) => setLevel(event.target.value)}/>
+                </Editable>
               </Text>
               <Divider />
               <FormControl>

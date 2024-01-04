@@ -20,7 +20,7 @@ import {
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
-export default function Login() {
+export default function Login({setIsLoggedIn}) {
   const boxShadowStyle = {
     boxShadow: '-4px 8px 19px -1px',
   };
@@ -36,10 +36,13 @@ export default function Login() {
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
       if (response.ok) {
-        localStorage.clear();
-        localStorage.setItem('apphomelang', 'ta');
+        setIsLoggedIn(true);
         const data = await response.json();
         const virtualID = data.virtualID;
+        if (localStorage.getItem('virtualID') != virtualID){
+          localStorage.clear();
+          localStorage.setItem('apphomelang', 'ta');
+        }
         console.log('virtual Id', virtualID)
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
@@ -54,6 +57,7 @@ export default function Login() {
           status: 'success'
         })
         navigate('/discoverylist')
+
         localStorage.setItem('userPracticeState', 0)
         localStorage.setItem('firstPracticeSessionCompleted', false)
         localStorage.setItem('validationSession', '')
