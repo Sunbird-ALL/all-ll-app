@@ -29,7 +29,6 @@ import VoiceCompair from '../../../components/VoiceCompair/VoiceCompair';
 import play from '../../../assests/Images/play-img.png';
 import pause from '../../../assests/Images/pause-img.png';
 import Speaker from '../../../assests/Images/Speaker.png';
-import Speaker_Disable from '../../../assests/Images/Speaker_disable.svg';
 import MuteSpeaker from '../../../assests/Images/speakerMute.png';
 import Next from '../../../assests/Images/next.png';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -496,7 +495,7 @@ const Story = () => {
                                   <img
                                     className="play_btn"
                                     // 
-                                    src={posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ''? Speaker:Speaker_Disable}
+                                    src={Speaker}
                                     style={{
                                       height: '72px',
                                       width: '72px',
