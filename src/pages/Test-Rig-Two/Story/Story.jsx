@@ -205,9 +205,7 @@ const Story = () => {
   const playTeacherAudio = () => {
     set_temp_audio(
       new Audio(
-        posts?.[currentLine].data[0]?.[
-          localStorage.getItem('apphomelang')
-        ].audio
+        posts?.[currentLine]?.contentSourceData[0]?.audioUrl
       )
     );
   };
@@ -490,56 +488,56 @@ const Story = () => {
                       <HStack gap={'2rem'}>
                         {posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ' '
                           ? isAudioPlay !== 'recording' && (
-
                             <VStack>
-                              <div>
-                                {flag ? (
-                                  <>
-                                    <img
-                                      className="play_btn"
-                                      src={Speaker}
-                                      style={{
-                                        height: '72px',
-                                        width: '72px',
-                                      }}
-                                      onClick={() => playTeacherAudio()}
-                                      alt="play_audio"
-                                    />
-                                    <h4
-                                      className="text-play m-0 "
-                                      style={{
-                                        position: 'relative',
-                                        textAlign: 'center',
-                                      }}
-                                    >
-                                      Listen
-                                    </h4>
-                                  </>
-                                ) : (
-                                  <>
-                                    <img
-                                      className="play_btn"
-                                      src={MuteSpeaker}
-                                      style={{
-                                        height: '72px',
-                                        width: '72px',
-                                      }}
-                                      onClick={() => pauseAudio()}
-                                      alt="pause_audio"
-                                    />
-                                    <h4
-                                      className="text-play m-0 "
-                                      style={{
-                                        position: 'relative',
-                                        textAlign: 'center',
-                                      }}
-                                    >
-                                      Mute
-                                    </h4>
-                                  </>
-                                )}
-                              </div>
-                            </VStack>
+                            <div>
+                              {flag ? (
+                                <>
+                                  <img
+                                    className="play_btn"
+                                    // 
+                                    src={Speaker}
+                                    style={{
+                                      height: '72px',
+                                      width: '72px',
+                                    }}
+                                    onClick={() => posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ''? playTeacherAudio():""}
+                                    alt="play_audio"
+                                  />
+                                  <h4
+                                    className="text-play m-0 "
+                                    style={{
+                                      position: 'relative',
+                                      textAlign: 'center',
+                                    }}
+                                  >
+                                    Listen
+                                  </h4>
+                                </>
+                              ) : (
+                                <>
+                                  <img
+                                    className="play_btn"
+                                    src={MuteSpeaker}
+                                    style={{
+                                      height: '72px',
+                                      width: '72px',
+                                    }}
+                                    onClick={() => pauseAudio()}
+                                    alt="pause_audio"
+                                  />
+                                  <h4
+                                    className="text-play m-0 "
+                                    style={{
+                                      position: 'relative',
+                                      textAlign: 'center',
+                                    }}
+                                  >
+                                    Mute
+                                  </h4>
+                                </>
+                              )}
+                            </div>
+                          </VStack>
 
                           )
                           : ''}
