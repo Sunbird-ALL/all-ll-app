@@ -29,8 +29,12 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
     setIsLoggedIn(false);
     const progressData = JSON.parse(localStorage.getItem('progressData'))
     localStorage.removeItem("virtualID");
-    if(progressData && progressData[localStorage.getItem('practiceSession')]?.progressPercent)
-    end({"summary": [{progress: progressData[localStorage.getItem('practiceSession')]?.progressPercent}], duration: timer });
+    if(progressData && progressData[localStorage.getItem('practiceSession')]?.progressPercent){
+      end({"summary": [{progress: progressData[localStorage.getItem('practiceSession')]?.progressPercent}], duration: timer });
+    }
+    else{
+      end({})
+    }
     navigate('/Login')
   };
 
@@ -47,7 +51,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
   };
 
   return (
-    <div style={{  position:'absolute', top:'55px', right:'5px', textAlign: 'right', fontSize: '24px', fontWeight: 'bold', padding: '10px' }}>
+<div style={{  position:'absolute', top:'55px', right:'5px', textAlign: 'right', fontSize: '24px', fontWeight: 'bold', padding: '10px' }}>
       {isLoggedIn && (
         <div>
           <p>Timer: {formatTime(timer)}</p>
