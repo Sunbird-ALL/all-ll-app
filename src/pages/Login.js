@@ -17,10 +17,15 @@ import {
   Toast,
   useToast,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
-export default function Login({setIsLoggedIn}) {
+import { Navigate, useNavigate } from 'react-router-dom'
+export default function Login({setIsLoggedIn = false}) {
+
+  useEffect(() => {
+    setIsLoggedIn(false);
+  }, [Navigate, setIsLoggedIn]);
+
   const boxShadowStyle = {
     boxShadow: '-4px 8px 19px -1px',
   };
