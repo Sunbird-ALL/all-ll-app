@@ -21,8 +21,7 @@ import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
-export default function Login({setIsLoggedIn = false}) {
-
+export default function Login({setIsLoggedIn = false, timer, setTimer}) {
   useEffect(() => {
     setIsLoggedIn(false);
   }, [Navigate, setIsLoggedIn]);
@@ -58,6 +57,7 @@ export default function Login({setIsLoggedIn = false}) {
           status: 'success'
         })
         setIsLoggedIn(true);
+        setTimer(0)
         navigate('/discoverylist')
 
         localStorage.setItem('userPracticeState', 0)

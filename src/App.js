@@ -118,6 +118,8 @@ function App() {
     };
   }, []);
 
+  const [timer, setTimer] = useState(0);
+
   return (
     <HashRouter>
 
@@ -128,7 +130,7 @@ function App() {
       <Link to={'/playandlearn/score'} id="link_score_proto4" className="hide">
         score
       </Link>
-      <AppTimer isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+      <AppTimer timer={timer} setTimer={setTimer} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       <Routes>
         <Route path="/content" element={<Contents />} />
         <Route path="/content/add" element={<ContentCreate />} />
@@ -150,7 +152,7 @@ function App() {
         <Route path={'discoverylist/discovery/:slug'} element={<Discovery/>} />
         <Route path={'discoverylist'} element={<DiscoveryList/>} />
         {/* <Route path={'/result'} element={<Result/>} /> */}
-        <Route path={'Login'} element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
+        <Route path={'Login'} element={<Login timer={timer} setTimer={setTimer} setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path={'Header'} element={<Header/>}/>
         <Route path={'Results'} element={<Results/>}/>
 
