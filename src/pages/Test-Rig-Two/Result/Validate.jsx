@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import './Result.css';
 import startIMg from '../../../assests/Images/hackthon-images/Star.svg'
 // import Modal from './Modal';
@@ -20,6 +20,7 @@ export default function Validate() {
   const [chars, setCharacter] = useState([])
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const toast = useToast()
+  const navigate = useNavigate();
 
   const handleNext = () => {
     setTimeout(() => {
@@ -77,21 +78,23 @@ export default function Validate() {
       toast({
         position: 'top',
         title: `Bingo! \n
-        Your Character recognition skills are on point. Way to go!`,
-        duration: 500,
+        ${(currentCharIndex >= chars.length - 1)? 'Lets Practice More!' : 'Your Character recognition skills are on point. Way to go!'} `,
+        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 500,
         status: 'success'
       })
     }
     else {
       toast({
         position: 'top',
-        title: `No problem at all \n
-        Character recognition can be tricky, but you're learning!`,
-        duration: 500,
+        title: `No problem at all -  \n
+        ${(currentCharIndex >= chars.length - 1)? 'Lets Practice More!' : 'Character recognition can be tricky, but you are learning!'} `,
+        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 500,
         status: 'info'
       })
     }
     (currentCharIndex < chars.length - 1) &&  handleNext();
+    (currentCharIndex >= chars.length - 1) && navigate('/Practice') ;
+
     setIsModalOpen(true);
     axios
       .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {

@@ -77,10 +77,10 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn, timer, setTimer}) => {
           <ModalHeader>Log Out</ModalHeader>
           {/* <ModalCloseButton /> */}
           <ModalBody>
-            <Text fontSize={'24px'}>Your Score: 20</Text>
+            {/* <Text fontSize={'24px'}>Your Score: 20</Text> */}
           <Flex alignItems={'center'} gap={'2'}>
             <Text>
-              You tried it Well. Please Log In again to Continue
+              Congratulations!! You have completed the session. Please Log In again to Continue
             </Text>
           </Flex>
           </ModalBody>
@@ -118,8 +118,8 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn, timer, setTimer}) => {
             <p style={timerStyles}>{formatTime(timer)}</p>
           </div>
           <Flex alignItems={'center'} gap={'2'}>
-            <Text fontSize={'17px'}>Score: 20</Text>
-            <Box>
+            {/* <Text fontSize={'17px'}>Score: 20</Text> */}
+            <Box paddingLeft={'11vh'}>
 
             <Image height={'35px'} src={PowerLogo}   onClick={handleLogout}
               cursor={'pointer'} alt="" />

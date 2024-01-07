@@ -73,8 +73,8 @@ const Story = () => {
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')) {
-      return storedData[localStorage.getItem('practiceSession')]?.completionCriteriaIndex || 0;
+    if (storedData && localStorage.getItem('virtualID')) {
+      return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
     } else {
       return 0;
     }
@@ -83,8 +83,8 @@ const Story = () => {
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')) {
-      return storedData[localStorage.getItem('practiceSession')]?.currentLine || 0;
+    if (storedData && localStorage.getItem('virtualID')) {
+      return storedData[localStorage.getItem('virtualID')]?.currentLine || 0;
     } else {
       return 0;
     }
@@ -92,12 +92,13 @@ const Story = () => {
 
   const practiceCompletionCriteria = [
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
-    ...completionCriteria,
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  
+  console.log(practiceCompletionCriteria);
   const max = practiceCompletionCriteria.length - 1
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
   const [pageno, setPageNo] = useState(1);
@@ -205,7 +206,9 @@ const Story = () => {
   const playTeacherAudio = () => {
     set_temp_audio(
       new Audio(
-        posts?.[currentLine]?.contentSourceData[0]?.audioUrl
+        posts?.[currentLine].data[0]?.[
+          localStorage.getItem('apphomelang')
+        ].audio
       )
     );
   };
@@ -230,7 +233,7 @@ const Story = () => {
   };
 
   const nextLine = count => {
-    const sessionId = localStorage.getItem('practiceSession');
+    const sessionId = localStorage.getItem('virtualID');
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
@@ -488,56 +491,56 @@ const Story = () => {
                       <HStack gap={'2rem'}>
                         {posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ' '
                           ? isAudioPlay !== 'recording' && (
+
                             <VStack>
-                            <div>
-                              {flag ? (
-                                <>
-                                  <img
-                                    className="play_btn"
-                                    // 
-                                    src={Speaker}
-                                    style={{
-                                      height: '72px',
-                                      width: '72px',
-                                    }}
-                                    onClick={() => posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ''? playTeacherAudio():""}
-                                    alt="play_audio"
-                                  />
-                                  <h4
-                                    className="text-play m-0 "
-                                    style={{
-                                      position: 'relative',
-                                      textAlign: 'center',
-                                    }}
-                                  >
-                                    Listen
-                                  </h4>
-                                </>
-                              ) : (
-                                <>
-                                  <img
-                                    className="play_btn"
-                                    src={MuteSpeaker}
-                                    style={{
-                                      height: '72px',
-                                      width: '72px',
-                                    }}
-                                    onClick={() => pauseAudio()}
-                                    alt="pause_audio"
-                                  />
-                                  <h4
-                                    className="text-play m-0 "
-                                    style={{
-                                      position: 'relative',
-                                      textAlign: 'center',
-                                    }}
-                                  >
-                                    Mute
-                                  </h4>
-                                </>
-                              )}
-                            </div>
-                          </VStack>
+                              <div>
+                                {flag ? (
+                                  <>
+                                    <img
+                                      className="play_btn"
+                                      src={Speaker}
+                                      style={{
+                                        height: '72px',
+                                        width: '72px',
+                                      }}
+                                      onClick={() => playTeacherAudio()}
+                                      alt="play_audio"
+                                    />
+                                    <h4
+                                      className="text-play m-0 "
+                                      style={{
+                                        position: 'relative',
+                                        textAlign: 'center',
+                                      }}
+                                    >
+                                      Listen
+                                    </h4>
+                                  </>
+                                ) : (
+                                  <>
+                                    <img
+                                      className="play_btn"
+                                      src={MuteSpeaker}
+                                      style={{
+                                        height: '72px',
+                                        width: '72px',
+                                      }}
+                                      onClick={() => pauseAudio()}
+                                      alt="pause_audio"
+                                    />
+                                    <h4
+                                      className="text-play m-0 "
+                                      style={{
+                                        position: 'relative',
+                                        textAlign: 'center',
+                                      }}
+                                    >
+                                      Mute
+                                    </h4>
+                                  </>
+                                )}
+                              </div>
+                            </VStack>
 
                           )
                           : ''}

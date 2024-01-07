@@ -245,6 +245,11 @@ console.log(currentLine)
         handleStarAnimation();
       })
       .catch(error => {
+        toast({
+          position: 'top',
+          title: `Error! Please try again.`,
+          status: 'error',
+        })
         console.error(error);
         stopLoading();
       });
@@ -273,25 +278,35 @@ console.log(currentLine)
         })
         .then(data => {
           setLoading(false);
-          if (localStorage.getItem('userCurrentLevel') === data.currentLevel){
+          if (localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
+            toast({
+              position: 'top',
+              title: `Level Reset!! You need to practice more to complete this level.`,
+              status: 'error',
+            })
+            localStorage.removeItem('progressData');
+            navigate('/practice')
+          }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
               title: `You need to practice more to complete this level.`,
               status: 'error',
             })
             navigate('/practice')
-          }else{
-            localStorage.setItem('userCurrentLevel', data.currentLevel)
+          }
+          else{
             toast({
               position: 'top',
               title: `Congratulations! \n
               Your current level has been upgraded`,
               status: 'success'
             })
+            localStorage.removeItem('progressData');
             localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/showcase')
           }
+          localStorage.setItem('userCurrentLevel', data.currentLevel)
         });
     } catch (error) {
       setLoading(false);

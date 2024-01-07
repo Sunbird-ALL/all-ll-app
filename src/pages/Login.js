@@ -41,7 +41,6 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
       );
       if (response.ok) {
-        setIsLoggedIn(true);
         startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;

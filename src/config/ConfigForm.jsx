@@ -5,7 +5,7 @@ import completionCriteria from './practiceConfig';
 const initialCriteria = completionCriteria;
 
 const ConfigForm = () => {
-  const [criteria, setCriteria] = useState(initialCriteria);
+  const [criteria, setCriteria] = useState(initialCriteria[localStorage.getItem('userCurrentLevel') || 'm1']);
   const toast = useToast()
 
   useEffect(() => {
