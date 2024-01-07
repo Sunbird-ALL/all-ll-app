@@ -39,6 +39,9 @@
     "web-vitals": "^2.1.4",
     "write-json-file": "^5.0.0"
   },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^1.0.8"
+  },
   "scripts": {
     "start": "env-cmd -f .env.local react-scripts start",
     "start:dev-appliance": "env-cmd -f .env.dev-appliance react-scripts start",
