@@ -154,7 +154,7 @@ function AppDrawer() {
 
           <DrawerBody>
             <Stack spacing='4'>
-              <Text fontSize='lg' fontWeight='bold'>
+              <Text textTransform={'capitalize'} fontSize='lg' fontWeight='bold'>
                 Hello, {localStorage.getItem('virtualID')} 
                 [{level}]
                 {/* <Editable defaultValue={level}>
