@@ -80,7 +80,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn, timer, setTimer}) => {
             {/* <Text fontSize={'24px'}>Your Score: 20</Text> */}
           <Flex alignItems={'center'} gap={'2'}>
             <Text>
-              Congratulations!! You have completed the session. Please Log In again to Continue
+              Congratulations!! You have completed the session. Please Log In again to Continue...
             </Text>
           </Flex>
           </ModalBody>
