@@ -73,8 +73,8 @@ const Story = () => {
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')) {
-      return storedData[localStorage.getItem('practiceSession')]?.completionCriteriaIndex || 0;
+    if (storedData && localStorage.getItem('virtualID')) {
+      return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
     } else {
       return 0;
     }
@@ -83,8 +83,8 @@ const Story = () => {
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('practiceSession')) {
-      return storedData[localStorage.getItem('practiceSession')]?.currentLine || 0;
+    if (storedData && localStorage.getItem('virtualID')) {
+      return storedData[localStorage.getItem('virtualID')]?.currentLine || 0;
     } else {
       return 0;
     }
@@ -92,10 +92,10 @@ const Story = () => {
 
   const practiceCompletionCriteria = [
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
-    ...completionCriteria,
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  
+  console.log(practiceCompletionCriteria);
   const max = practiceCompletionCriteria.length - 1
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
 
@@ -233,7 +233,7 @@ const Story = () => {
   };
 
   const nextLine = count => {
-    const sessionId = localStorage.getItem('practiceSession');
+    const sessionId = localStorage.getItem('virtualID');
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
