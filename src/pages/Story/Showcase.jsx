@@ -59,7 +59,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       axios
-        .post(`https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment`, {
+        .post(`https://www.learnerai.theall.ai/content-service/v1/content/getAssessment`, {
           "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
           "language": localStorage.getItem('apphomelang')
         })
@@ -127,7 +127,7 @@ console.log(currentLine)
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
@@ -271,7 +271,7 @@ console.log(currentLine)
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `https://www.learnerai.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
       )
         .then(res => {
           return res.json();

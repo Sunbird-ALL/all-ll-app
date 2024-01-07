@@ -48,6 +48,7 @@
     "build:dev-appliance": "env-cmd -f .env.dev-appliance react-scripts build",
     "build:dev-mozhigal": "env-cmd -f .env.dev-mozhigal react-scripts build",
     "build:dev-ai-learner": "env-cmd -f .env.dev-ai-learner react-scripts build",
+    "build:prod-ai-learner": "env-cmd -f .env.prod-ai-learner react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

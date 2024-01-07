@@ -58,7 +58,7 @@ const Discovery = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
+        `https://www.learnerai.theall.ai/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -132,7 +132,7 @@ const Discovery = () => {
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),

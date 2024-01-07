@@ -18,6 +18,7 @@
 .env.test.local
 .env.production.local
 .env.dev-ai-learner
+.env.prod-ai-learner
 .env.dev-mozhigal
 
 npm-debug.log*
