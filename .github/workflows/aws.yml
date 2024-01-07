@@ -57,7 +57,7 @@ jobs:
           echo "REACT_APP_AWS_S3_REGION=ap-south-1" >> .env.prod-ai-learner
 
       - name: Build Production
-        run: npm run build
+        run: npm run build:prod-ai-learner
       - name: Deploy to S3 Bucket
         run: |
           aws s3 sync ./build s3://sb-all-rig
