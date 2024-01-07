@@ -168,7 +168,7 @@ const Story = () => {
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `https://www.learnerai.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )

@@ -51,7 +51,7 @@ export default function Validate() {
       setLoading(true);
       axios
         .get(
-          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `https://www.learnerai.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -97,7 +97,7 @@ export default function Validate() {
 
     setIsModalOpen(true);
     axios
-      .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
+      .post(`https://www.learnerai.theall.ai/lais/scores/addAssessmentInput`, {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         token: myCurrectChar,

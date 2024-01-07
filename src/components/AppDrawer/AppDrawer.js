@@ -96,7 +96,7 @@ function AppDrawer() {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `https://www.learnerai.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
       )
         .then(res => {
           return res.json();
@@ -111,7 +111,7 @@ function AppDrawer() {
 
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
+        `https://www.learnerai.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
@@ -198,6 +198,7 @@ function AppDrawer() {
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
+                    <Radio value='0'>ALL</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
