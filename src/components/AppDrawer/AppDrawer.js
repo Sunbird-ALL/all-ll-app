@@ -198,6 +198,7 @@ function AppDrawer() {
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
+                    <Radio value='0'>ALL</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
