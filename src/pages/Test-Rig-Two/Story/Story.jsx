@@ -246,7 +246,7 @@ const Story = () => {
       body: JSON.stringify({
         userId: localStorage.getItem('virtualID'),
         sessionId: localStorage.getItem('virtualStorySessionID'),
-        milestone: keysToPass[completionCriteriaIndex],
+        milestone: localStorage.getItem('userCurrentLevel'),
         lesson: practiceCompletionCriteria[completionCriteriaIndex].title,
         progress: percentage,
       }),

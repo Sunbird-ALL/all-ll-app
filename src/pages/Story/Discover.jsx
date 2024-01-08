@@ -96,7 +96,8 @@ const percentage = ((currentLine+1) / posts?.data?.length) * 100;
       body:JSON.stringify({
         userId : localStorage.getItem('virtualID'),
         sessionId : localStorage.getItem('virtualStorySessionID'),
-        milestone : pathnameWithoutSlash + location.search,
+        // milestone : 'discovery',
+        milestone : pathnameWithoutSlash,
         lesson : localStorage.getItem('storyTitle'),
         progress:percentage
         })

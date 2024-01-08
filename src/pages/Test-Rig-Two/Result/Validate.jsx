@@ -129,7 +129,7 @@ export default function Validate() {
         sessionId : localStorage.getItem('virtualStorySessionID'),
         milestone : pathnameWithoutSlash + location.search,
         lesson : pathnameWithoutSlash + location.search,
-        progress:0
+        progress:100
         })
   })
  }

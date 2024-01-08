@@ -77,10 +77,20 @@ export default function Login({setIsLoggedIn = false}) {
     .then((res)=>{
       return res.json();
     }).then((data)=>{
-      var dataLength = data.result.result; 
-      var myValue = data.result.result[dataLength.length-1].milestone
-      // console.log(myValue);
-      navigate(`/${myValue}`)
+      var dataLength = data?.result?.result; 
+      var myValue = data?.result?.result[dataLength.length-1]?.milestone;
+      if(data?.result?.result?.length>0){
+        const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
+        if(keysToPass.includes(myValue)){
+          navigate(`/practice`)  
+        }
+        else{
+          navigate(`/${myValue}`)
+        }
+      }
+      else{
+        navigate('/discoverylist')
+      }
     })
   }
 
