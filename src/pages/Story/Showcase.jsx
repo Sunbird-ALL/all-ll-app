@@ -6,7 +6,7 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import Next from '../../assests/Images/next.png';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
@@ -21,6 +21,7 @@ import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
+import { addPointerApi } from '../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
@@ -59,7 +60,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       axios
-        .post(`https://www.learnerai.theall.ai/content-service/v1/content/getAssessment`, {
+        .post(`https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment`, {
           "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
           "language": localStorage.getItem('apphomelang')
         })
@@ -73,7 +74,7 @@ const Showcase = () => {
       console.error(error.message);
     }
   };
-console.log(currentLine)
+
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -97,9 +98,30 @@ console.log(currentLine)
     }
   };
 
+  
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      console.log('Pointer added successfully:', response);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
+
 
   const nextLine = count => {
+    addLessonApi()
     setUserSpeak(!isUserSpeak)
+    handleAddPointer(1)
     if (currentLine <= posts.length - 1) {
       setCurrentLine(currentLine + 1);
     }
@@ -127,7 +149,7 @@ console.log(currentLine)
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
@@ -271,7 +293,7 @@ console.log(currentLine)
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
       )
         .then(res => {
           return res.json();
@@ -313,6 +335,29 @@ console.log(currentLine)
       console.error(error.message);
     }
   };
+
+
+  const location = useLocation();
+
+  const addLessonApi = ()=>{
+    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const pathnameWithoutSlash = location.pathname.slice(1);
+// console.log(pathnameWithoutSlash,pathnameWithoutSlash + location.search);
+  fetch(`${base64url}/lesson/addLesson`,{
+    method:'POST',
+    headers:{
+      "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        userId : localStorage.getItem('virtualID'),
+        sessionId : localStorage.getItem('virtualStorySessionID'),
+        milestone : localStorage.getItem('userCurrentLevel'),
+        lesson : pathnameWithoutSlash + location.search,
+        progress:0
+        })
+  })
+ }
+
 
   useEffect(() => {
 

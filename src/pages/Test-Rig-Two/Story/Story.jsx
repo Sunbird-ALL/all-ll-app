@@ -51,6 +51,7 @@ import lang_constants from '../../../lang/lang_constants.json';
 import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
+import { addPointerApi } from '../../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
@@ -95,7 +96,6 @@ const Story = () => {
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  console.log(practiceCompletionCriteria);
   const max = practiceCompletionCriteria.length - 1
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
 
@@ -168,7 +168,7 @@ const Story = () => {
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -232,7 +232,30 @@ const Story = () => {
     }
   };
 
+  const addLessonApi = (percentage) => {
+    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const pathnameWithoutSlash = location.pathname.slice(1);  
+    const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
+//  console.log(keysToPass[completionCriteriaIndex]);
+    // console.log(practiceCompletionCriteria[completionCriteriaIndex].title);
+    fetch(`${base64url}/lesson/addLesson`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: localStorage.getItem('virtualID'),
+        sessionId: localStorage.getItem('virtualStorySessionID'),
+        milestone: keysToPass[completionCriteriaIndex],
+        lesson: practiceCompletionCriteria[completionCriteriaIndex].title,
+        progress: percentage,
+      }),
+    });
+  };
+
   const nextLine = count => {
+    handleAddPointer(1);
+    addLessonApi(parseInt(progressPercent));
     const sessionId = localStorage.getItem('virtualID');
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
@@ -247,6 +270,24 @@ const Story = () => {
       setCurrentLine(currentLine + 1);
     }
   };
+
+
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
 
   function saveIndb() {
     setUserSpeak(true);
@@ -596,7 +637,7 @@ const Story = () => {
                     complete={<StepIcon />}
                     incomplete={<StepTitle>{step.title}</StepTitle>}
                     active={<StepTitle>{step.title}</StepTitle>}
-                  />
+                    />
                 </StepIndicator>
               </Step>
             ))}

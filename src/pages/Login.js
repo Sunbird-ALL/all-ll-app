@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
-export default function Login({setIsLoggedIn = false, timer, setTimer}) {
+export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
   }, [Navigate, setIsLoggedIn]);
@@ -39,13 +39,14 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
     try {
       const response = await fetch(
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
-      );
+        );
       if (response.ok) {
         startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
+        handleGetLesson(virtualID)
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -57,7 +58,6 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
           status: 'success'
         })
         setIsLoggedIn(true);
-        setTimer(0)
         navigate('/discoverylist')
 
         localStorage.setItem('userPracticeState', 0)
@@ -71,6 +71,19 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
       console.error('Error:', error);
     }
   };
+
+  const handleGetLesson = (virtualID)=>{
+    fetch(`https://www.learnerai-dev.theall.ai/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}`)
+    .then((res)=>{
+      return res.json();
+    }).then((data)=>{
+      var dataLength = data.result.result; 
+      var myValue = data.result.result[dataLength.length-1].milestone
+      // console.log(myValue);
+      navigate(`/${myValue}`)
+    })
+  }
+
   return (
     <Flex
       className='bg'
