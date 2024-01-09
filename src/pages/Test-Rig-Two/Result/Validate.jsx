@@ -10,6 +10,7 @@ import Header from '../../Header';
 import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
+import { addPointerApi } from '../../../utils/api/PointerApi';
 
 export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,7 +73,27 @@ export default function Validate() {
     SetCurrentCharModalOpen(false)
   }
 
+
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      // You can update your component state or take other actions as needed
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
   function handelFeedBack(feedback) {
+    addLessonApi()
+    handleAddPointer(1)
     handleCharMopdal()
     if (feedback === 1) {
       toast({
@@ -118,6 +139,7 @@ export default function Validate() {
   const addLessonApi = ()=>{
     const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
     const pathnameWithoutSlash = location.pathname.slice(1);
+    const percentage = ((currentCharIndex+1) / chars.length) * 100;
    fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -128,7 +150,7 @@ export default function Validate() {
         sessionId : localStorage.getItem('virtualStorySessionID'),
         milestone : pathnameWithoutSlash + location.search,
         lesson : pathnameWithoutSlash + location.search,
-        progress:100
+        progress:percentage
         })
   })
  }
