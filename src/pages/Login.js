@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
+import { minSafeInteger } from '@chakra-ui/utils'
 export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
@@ -37,6 +38,7 @@ export default function Login({setIsLoggedIn = false}) {
   const toast = useToast()
   const handleSubmit = async (username, password) => {
     try {
+      localStorage.removeItem('userPracticeState')
       const response = await fetch(
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
         );
@@ -77,23 +79,20 @@ export default function Login({setIsLoggedIn = false}) {
     .then((res)=>{
       return res.json();
     }).then((data)=>{
-      var dataLength = data?.result?.result; 
-      var myValue = data?.result?.result[0]?.milestone;
-      if(data?.result?.result?.length>0){
-        const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
-        if(keysToPass.includes(myValue) && data?.result?.result[0]?.lesson === 'showcase'){
+      let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
+      if(milestone === 'showcase'){
           navigate(`/showcase`)  
         }
-        else if(keysToPass.includes(myValue)){
+        else if(milestone === 'practice'){
           localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
           navigate(`/practice`)  
         }
-        else{
-          navigate(`/${myValue}`)
+        else if (milestone === 'validate'){
+          localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
+          navigate(`/validate`)
         }
-      }
       else{
-        navigate('/discoverylist')
+        navigate(`/${milestone}`)
       }
     })
   }

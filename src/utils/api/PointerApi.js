@@ -1,5 +1,5 @@
 
-const baseURL = 'https://www.learnerai-dev.theall.ai/lp-tracker/api/pointer';
+const baseURL = `https://www.learnerai-dev.theall.ai/lp-tracker/api/pointer`;
 
 export const fetchPointerApi = () => {
     const url = `${baseURL}/getPointers/${localStorage.getItem('virtualID')}/${localStorage.getItem('virtualStorySessionID')}`;

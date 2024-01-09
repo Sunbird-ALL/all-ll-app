@@ -84,7 +84,7 @@ const Discovery = () => {
   const location = useLocation();
 
   const addLessonApi = ()=>{
-    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const base64url = `https://www.learnerai-dev.theall.ai/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
 // console.log(pathnameWithoutSlash,pathnameWithoutSlash + location.search);
 const percentage = ((currentLine+1) / posts?.data?.length) * 100;

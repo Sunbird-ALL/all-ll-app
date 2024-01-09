@@ -235,7 +235,6 @@ const Story = () => {
   const addLessonApi = (percentage) => {
     const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
     const pathnameWithoutSlash = location.pathname.slice(1);  
-    const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
 //  console.log(keysToPass[completionCriteriaIndex]);
     // console.log(practiceCompletionCriteria[completionCriteriaIndex].title);
     fetch(`${base64url}/lesson/addLesson`, {
@@ -245,9 +244,9 @@ const Story = () => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem('virtualID'),
-        sessionId: localStorage.getItem('virtualStorySessionID'),
-        milestone: localStorage.getItem('userCurrentLevel'),
-        lesson: localStorage.getItem('userPracticeState'),
+        sessionId: localStorage.getItem('virtualStorySessionID') ,
+        milestone: 'practice',
+        lesson: localStorage.getItem('userPracticeState') || 0,
         progress: percentage,
       }),
     });
