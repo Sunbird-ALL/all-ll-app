@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { end } from '../../services/telementryService';
-import { Box, Button, Flex, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react';
 import TimerLogo from '../../assests/Images/timer.png'
 import PowerLogo from '../../assests/Images/power_logo.png'
 import { fetchPointerApi } from '../../utils/api/PointerApi';
@@ -12,12 +12,22 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
 
   const navigate = useNavigate()
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [timeoutCount,setTimeOutCount] = useState(120)
   useEffect(() => {
     let interval;
-
     if (isLoggedIn && timer < 1800) {
       interval = setInterval(() => {
           setTimer((prevTimer) => prevTimer + 1);
+          if(formatTime(timer) >= "30:00"){
+            setTimeOutCount((prevTimer) => prevTimer - 1)
+          }
+          if(formatTime(timer) == "30:00"){
+            onOpen();
+          }
+          else if(formatTime(timer).slice(0, 2) >= 32){
+            handleLogout();
+          }
         }, 1000);
     } else {
       clearInterval(interval);
@@ -26,7 +36,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
     return () => {
       clearInterval(interval);
     };
-  }, [isLoggedIn,timer]);
+  }, [isLoggedIn,timer,timeoutCount]);
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -96,36 +106,39 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
         width:'100%'
       }}
     >
-      <Modal isOpen={formatTime(timer).slice(0, 2) >= 30}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Log Out</ModalHeader>
-          {/* <ModalCloseButton /> */}
-          <ModalBody>
-            {/* <Text fontSize={'24px'}>Your Score: 20</Text> */}
-          <Flex alignItems={'center'} gap={'2'}>
-            <Text>
-              Congratulations!! You have completed the session. Please Log In again to Continue...
-            </Text>
-          </Flex>
-          </ModalBody>
+<Modal isOpen={isOpen} onClose={onClose}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>Log Out</ModalHeader>
+    <ModalCloseButton onClick={onClose} />
+    <ModalBody>
+      <Box textAlign={'center'} alignItems={'center'} gap={'2'}>
+        <Heading>
+          {timeoutCount}
+        </Heading>
+        <Text>
+          Congratulations!! You have completed the session. Please Log In again to Continue...
+        </Text>
+      </Box>
+    </ModalBody>
 
-          <ModalFooter>
-            <Button
-              border="2px"
-              borderColor="red.500"
-              color={'red'}
-              // size="xs"
-              onClick={handleLogout}
-              cursor={'pointer'}
-              mr={3}
-            >
-              Logout
-            </Button>
-
-          </ModalFooter>
-        </ModalContent>
-    </Modal>
+    <ModalFooter>
+      <Button colorScheme='blue' mr={3} onClick={onClose}>
+        Close
+      </Button>
+      <Button
+        border="2px"
+        borderColor="red.500"
+        color={'red'}
+        onClick={handleLogout}
+        cursor={'pointer'}
+        mr={3}
+      >
+        Logout
+      </Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
       {isLoggedIn && (
         <Flex pos={'absolute'} right={0}  w={'100%'}>
         <Box textAlign={'start'} pl={5}>
