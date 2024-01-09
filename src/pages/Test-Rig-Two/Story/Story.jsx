@@ -390,6 +390,7 @@ const Story = () => {
                                   setCurrentLine(0);
                                   let index = completionCriteriaIndex + 1;
                                   setCompletionCriteriaIndex(index);
+                                  addLessonApi(parseInt(progressPercent));
                                   localStorage.setItem('userPracticeState', index)
                                   setWellDone(false);
                                 }}
