@@ -81,7 +81,10 @@ export default function Login({setIsLoggedIn = false}) {
       var myValue = data?.result?.result[dataLength.length-1]?.milestone;
       if(data?.result?.result?.length>0){
         const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
-        if(keysToPass.includes(myValue)){
+        if(keysToPass.includes(myValue) && data?.result?.result[dataLength.length-1]?.lesson === 'showcase'){
+          navigate(`/showcase`)  
+        }
+        else if(keysToPass.includes(myValue)){
           navigate(`/practice`)  
         }
         else{
