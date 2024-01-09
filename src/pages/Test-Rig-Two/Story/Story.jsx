@@ -168,7 +168,7 @@ const Story = () => {
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -233,7 +233,7 @@ const Story = () => {
   };
 
   const addLessonApi = (percentage) => {
-    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);  
 //  console.log(keysToPass[completionCriteriaIndex]);
     // console.log(practiceCompletionCriteria[completionCriteriaIndex].title);

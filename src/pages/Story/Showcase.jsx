@@ -60,7 +60,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       axios
-        .post(`https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment`, {
+        .post(`${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/getAssessment`, {
           "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
           "language": localStorage.getItem('apphomelang')
         })
@@ -149,7 +149,7 @@ const Showcase = () => {
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
@@ -293,7 +293,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
       )
         .then(res => {
           return res.json();
@@ -339,7 +339,7 @@ const Showcase = () => {
   const location = useLocation();
 
   const addLessonApi = ()=>{
-    const base64url = `https://www.learnerai-dev.theall.ai/lp-tracker/api`;
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     const percentage = ((currentLine+1) / posts?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
