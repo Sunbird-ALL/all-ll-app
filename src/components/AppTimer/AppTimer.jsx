@@ -129,8 +129,8 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
       {isLoggedIn && (
         <Flex pos={'absolute'} right={0}  w={'100%'}>
         <Box textAlign={'start'} pl={5}>
-        <Text>Total Points:- {localStorage.getItem('totalUserPoints')}</Text>
-        <Text>Current Points:- {localStorage.getItem('totalSessionPoints')}</Text>
+        {/* <Text>Total Points:- {localStorage.getItem('totalUserPoints')}</Text>
+        <Text>Current Points:- {localStorage.getItem('totalSessionPoints')}</Text> */}
         </Box>
         <Box  style={{ position: 'absolute', textAlign: 'center', right:'0' }}>
           <div
@@ -147,8 +147,8 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
             <p style={timerStyles}>{formatTime(timer)}</p>
           </div>
           <Flex alignItems={'center'} gap={'2'}>
-            {/* <Text fontSize={'17px'}>Score: 20</Text> */}
-            <Box display={'flex'} gap={5} paddingLeft={'11vh'}>
+            <Text fontSize={'17px'}>Score: {localStorage.getItem('totalUserPoints')}</Text>
+            <Box display={'flex'} gap={5} >
               
             <Image height={'35px'} src={PowerLogo}   onClick={handleLogout}
               cursor={'pointer'} alt="" />

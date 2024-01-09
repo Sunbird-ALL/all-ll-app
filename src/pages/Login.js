@@ -60,7 +60,7 @@ export default function Login({setIsLoggedIn = false}) {
         setIsLoggedIn(true);
         navigate('/discoverylist')
 
-        localStorage.setItem('userPracticeState', 0)
+        // localStorage.setItem('userPracticeState', 0)
         localStorage.setItem('firstPracticeSessionCompleted', false)
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
