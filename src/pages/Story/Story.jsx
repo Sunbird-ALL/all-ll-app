@@ -134,7 +134,7 @@ const Story = () => {
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`https://www.learnerai-dev.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),

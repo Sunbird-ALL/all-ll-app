@@ -19,7 +19,7 @@ const DiscoveryList = () => {
   const fetchApi = async () => {
     setLoading(true)
     axios
-      .post(`https://www.learnerai.theall.ai/content-service/v1/content/getAssessment`, {
+      .post(`https://www.learnerai-dev.theall.ai/content-service/v1/content/getAssessment`, {
         "tags": ["ASER"],
         "language": localStorage.getItem('apphomelang') || 'ta'
       })

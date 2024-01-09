@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './Result.css';
 import startIMg from '../../../assests/Images/hackthon-images/Star.svg'
 // import Modal from './Modal';
@@ -51,7 +51,7 @@ export default function Validate() {
       setLoading(true);
       axios
         .get(
-          `https://www.learnerai.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `https://www.learnerai-dev.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -97,7 +97,7 @@ export default function Validate() {
 
     setIsModalOpen(true);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/addAssessmentInput`, {
+      .post(`https://www.learnerai-dev.theall.ai/lais/scores/addAssessmentInput`, {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         token: myCurrectChar,
@@ -111,6 +111,27 @@ export default function Validate() {
         console.error(error);
       });
   }
+
+  const location = useLocation();
+
+  
+  const addLessonApi = ()=>{
+    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const pathnameWithoutSlash = location.pathname.slice(1);
+   fetch(`${base64url}/lesson/addLesson`,{
+    method:'POST',
+    headers:{
+      "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        userId : localStorage.getItem('virtualID'),
+        sessionId : localStorage.getItem('virtualStorySessionID'),
+        milestone : pathnameWithoutSlash + location.search,
+        lesson : pathnameWithoutSlash + location.search,
+        progress:100
+        })
+  })
+ }
 
   return (
     <>
