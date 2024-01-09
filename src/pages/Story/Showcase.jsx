@@ -339,7 +339,7 @@ const Showcase = () => {
   const location = useLocation();
 
   const addLessonApi = ()=>{
-    const base64url = 'https://www.learnerai-dev.theall.ai/lp-tracker/api';
+    const base64url = `https://www.learnerai-dev.theall.ai/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     const percentage = ((currentLine+1) / posts?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
@@ -350,8 +350,8 @@ const Showcase = () => {
       body:JSON.stringify({
         userId : localStorage.getItem('virtualID'),
         sessionId : localStorage.getItem('virtualStorySessionID'),
-        milestone : localStorage.getItem('userCurrentLevel'),
-        lesson : pathnameWithoutSlash + location.search,
+        milestone : `showcase`,
+        lesson : currentLine,
         progress:percentage
         })
   })
