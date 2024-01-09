@@ -96,7 +96,7 @@ function AppDrawer() {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
       )
         .then(res => {
           return res.json();
@@ -111,7 +111,7 @@ function AppDrawer() {
 
     try {
       const response = await fetch(
-        `https://www.learnerai-dev.theall.ai/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
