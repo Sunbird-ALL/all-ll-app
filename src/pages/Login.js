@@ -85,6 +85,7 @@ export default function Login({setIsLoggedIn = false}) {
           navigate(`/showcase`)  
         }
         else if(keysToPass.includes(myValue)){
+          localStorage.setItem('userPracticeState', data?.result?.result[dataLength.length-1]?.lesson)
           navigate(`/practice`)  
         }
         else{

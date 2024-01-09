@@ -72,15 +72,15 @@ const Story = () => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
 
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
-    const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('virtualID')) {
-      return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
-    } else {
-      return 0;
-    }
-  });
-  // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+  // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
+  //   const storedData = JSON.parse(localStorage.getItem('progressData'));
+  //   if (storedData && localStorage.getItem('virtualID')) {
+  //     return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
+  //   } else {
+  //     return 0;
+  //   }
+  // });
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -247,7 +247,7 @@ const Story = () => {
         userId: localStorage.getItem('virtualID'),
         sessionId: localStorage.getItem('virtualStorySessionID'),
         milestone: localStorage.getItem('userCurrentLevel'),
-        lesson: practiceCompletionCriteria[completionCriteriaIndex].title,
+        lesson: localStorage.getItem('userPracticeState'),
         progress: percentage,
       }),
     });
@@ -256,6 +256,7 @@ const Story = () => {
   const nextLine = count => {
     handleAddPointer(1);
     addLessonApi(parseInt(progressPercent));
+    localStorage.setItem('lessonProgressPercent', parseInt(progressPercent))
     const sessionId = localStorage.getItem('virtualID');
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
