@@ -78,14 +78,14 @@ export default function Login({setIsLoggedIn = false}) {
       return res.json();
     }).then((data)=>{
       var dataLength = data?.result?.result; 
-      var myValue = data?.result?.result[dataLength.length-1]?.milestone;
+      var myValue = data?.result?.result[0]?.milestone;
       if(data?.result?.result?.length>0){
         const keysToPass = ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8"];
-        if(keysToPass.includes(myValue) && data?.result?.result[dataLength.length-1]?.lesson === 'showcase'){
+        if(keysToPass.includes(myValue) && data?.result?.result[0]?.lesson === 'showcase'){
           navigate(`/showcase`)  
         }
         else if(keysToPass.includes(myValue)){
-          localStorage.setItem('userPracticeState', data?.result?.result[dataLength.length-1]?.lesson)
+          localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
           navigate(`/practice`)  
         }
         else{
