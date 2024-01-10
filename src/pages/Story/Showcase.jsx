@@ -124,6 +124,9 @@ const Showcase = () => {
     handleAddPointer(1)
     if (currentLine <= posts.length - 1) {
       setCurrentLine(currentLine + 1);
+    }else{
+      fetchCurrentLevel()
+      setCurrentLine(0)
     }
   };
 
@@ -303,14 +306,18 @@ const Showcase = () => {
           if (localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
             toast({
               position: 'top',
+              duration: '2000',
               title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
             })
             localStorage.removeItem('progressData');
+            localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
           }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
+              duration: '2000',
               title: `You need to practice more to complete this level.`,
               status: 'error',
             })
@@ -319,12 +326,13 @@ const Showcase = () => {
           else{
             toast({
               position: 'top',
+              duration: '2000',
               title: `Congratulations! \n
               Your current level has been upgraded`,
               status: 'success'
             })
             localStorage.removeItem('progressData');
-            // localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/showcase')
           }

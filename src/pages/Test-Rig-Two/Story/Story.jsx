@@ -127,12 +127,6 @@ const Story = () => {
 
   React.useEffect(() => {
     if (voiceText == '-') {
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the first practice session`,
-        status: 'success'
-      })
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
