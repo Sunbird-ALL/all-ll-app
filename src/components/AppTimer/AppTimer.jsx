@@ -97,6 +97,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
       : 'black',
   };
 
+  
   return (
     <div
       style={{
