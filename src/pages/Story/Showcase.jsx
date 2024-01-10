@@ -307,20 +307,19 @@ const Showcase = () => {
             toast({
               position: 'top',
               duration: '2000',
-              title: `Level Reset!! You need to practice more to complete this level.`,
+              title: `You need to practice more to complete this level.`,
               status: 'error',
             })
-            localStorage.removeItem('progressData');
-            localStorage.setItem('userPracticeState', 0)
-            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
           }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
               duration: '2000',
-              title: `You need to practice more to complete this level.`,
+              title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
             })
+            localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
           }
           else{
