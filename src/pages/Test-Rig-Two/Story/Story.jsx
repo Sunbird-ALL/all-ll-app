@@ -194,6 +194,35 @@ const Story = () => {
     }
   };
 
+
+  const handleAudioFile = async (base64Data)=>{
+    if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {	
+      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
+      const command = new PutObjectCommand({
+        Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+        Key: audioFileName,
+        Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
+        ContentType: 'audio/wav'
+      });
+      try {
+        const response = await S3Client.send(command);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    response({ // Required
+      "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
+      //"qid": "", // Required. Unique assessment/question id
+      "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+      "values": [
+        { "original_text": posts[currentLine]?.contentSourceData[0]?.text },
+      ]
+    },
+      'ET'
+    )
+  }
+
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -289,7 +318,8 @@ const Story = () => {
   };
 
 
-  function saveIndb() {
+  function saveIndb(base64Data) {
+    handleAudioFile(base64Data)
     setUserSpeak(true);
   }
 
@@ -596,6 +626,7 @@ const Story = () => {
                             _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                             flag={true}
                             setStoryBase64Data={setStoryBase64Data}
+                            handleAudioFile={handleAudioFile}
                             saveIndb={saveIndb}
                           />
                           {isAudioPlay === 'recording' ? (
