@@ -16,17 +16,20 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
   const [timeoutCount,setTimeOutCount] = useState(120)
   useEffect(() => {
     let interval;
-    if (isLoggedIn && timer < 1800) {
+    let totalTime = 1920;
+    let sessionTimeOut = "30:00";
+    let forceLogOut = 32;
+    if (isLoggedIn && timer <= totalTime) {
       interval = setInterval(() => {
           setTimer((prevTimer) => prevTimer + 1);
-          if(formatTime(timer) >= "30:00"){
-            setTimeOutCount((prevTimer) => prevTimer - 1)
-          }
-          if(formatTime(timer) == "30:00"){
-            onOpen();
-          }
-          else if(formatTime(timer).slice(0, 2) >= 32){
+
+          if(formatTime(timer).slice(0, 2) >= forceLogOut){
+            setTimeOutCount(120)
             handleLogout();
+          }
+          if(formatTime(timer) >= sessionTimeOut && timeoutCount>0){
+            onOpen();
+            setTimeOutCount((prevTimer) => prevTimer - 1)
           }
         }, 1000);
     } else {
@@ -36,7 +39,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
     return () => {
       clearInterval(interval);
     };
-  }, [isLoggedIn,timer,timeoutCount]);
+  }, [isLoggedIn, timer, timeoutCount, isOpen]);
 
   useEffect(() => {
     const fetchDataFromApi = async () => {
@@ -61,7 +64,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    // addLessonApi();
+    onClose();
     localStorage.setItem('totalSessionPoints',0)
     localStorage.setItem('totalUserPoints',0)
     const progressData = JSON.parse(localStorage.getItem('progressData'))
@@ -89,7 +92,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
   };
 
   const timerStyles = {
-    color: formatTime(timer).slice(0, 2) >= 25 && formatTime(timer).slice(0, 2) <= 30
+    color: formatTime(timer).slice(0, 2) >= 25 && formatTime(timer).slice(0, 2) <= 32
       ? 'red'
       : 'black',
   };
@@ -109,8 +112,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
 <Modal isOpen={isOpen} onClose={onClose}>
   <ModalOverlay />
   <ModalContent>
-    <ModalHeader>Log Out</ModalHeader>
-    <ModalCloseButton onClick={onClose} />
+    <ModalHeader>Session Time Out</ModalHeader>
     <ModalBody>
       <Box textAlign={'center'} alignItems={'center'} gap={'2'}>
         <Heading>
@@ -123,9 +125,6 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
     </ModalBody>
 
     <ModalFooter>
-      <Button colorScheme='blue' mr={3} onClick={onClose}>
-        Close
-      </Button>
       <Button
         border="2px"
         borderColor="red.500"
@@ -150,7 +149,7 @@ const AppTimer = ({isLoggedIn, setIsLoggedIn}) => {
             style={{
               visibility:
               formatTime(timer).slice(0, 2) >= 25 &&
-              formatTime(timer).slice(0, 2) <= 30 &&
+              formatTime(timer).slice(0, 2) <= 32 &&
               formatTime(timer).slice(3, 5) % 2 === 0
                   ? 'hidden'
                   : 'visible', textAlign:'center', display:'flex', alignItems:'center', gap:'10px'
