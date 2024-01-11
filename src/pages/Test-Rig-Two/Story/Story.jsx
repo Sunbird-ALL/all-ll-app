@@ -96,12 +96,9 @@ const Story = () => {
 
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
-  const [pageno, setPageNo] = useState(1);
-
   const location = useLocation();
   const myCurrectLanguage =
     getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
-  const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
 
   const [progressData, setProgressData] = useState(() => {
     const storedData = localStorage.getItem('progressData');
