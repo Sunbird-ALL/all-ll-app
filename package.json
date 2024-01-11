@@ -4,7 +4,7 @@
   "private": true,
   "homepage": ".",
   "devDependencies": {
-  "@babel/plugin-proposal-private-property-in-object": "^1.0.7",
+    "@babel/plugin-proposal-private-property-in-object": "^1.0.7"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.388.0",
