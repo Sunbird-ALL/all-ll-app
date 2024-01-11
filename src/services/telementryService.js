@@ -140,6 +140,7 @@ export const error = (error, data,telemetryMode) => {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
       edata: {
+        pageid: url,
         err: data.err,
         errtype: data.errtype,
         stacktrace: error.toString() || '',
