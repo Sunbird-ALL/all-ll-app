@@ -38,7 +38,6 @@ const DiscoveryList = () => {
         stopLoading();
       });
   }
-  localStorage.setItem('storyTitle', '');
 
   const selectStoryTitle = (storyTitle, lang) => {
     localStorage.setItem('storyTitle', storyTitle);
