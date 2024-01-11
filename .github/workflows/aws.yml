@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14'  # Use the latest LTS version
+          node-version: '14.21.2'  # Use the latest LTS version
 
       - name: Install AWS CLI
         run: |
