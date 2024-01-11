@@ -60,7 +60,6 @@ const Story = () => {
   const toast = useToast()
   const [voiceText, setVoiceText] = useState('');
   const [showWellDone, setWellDone] = useState(false);
-  const [isGame, setIsGame] = useState(true);
   const [sourceChars, setSourceChars] = useState([]);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState('');
