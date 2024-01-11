@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-dev-rig
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
