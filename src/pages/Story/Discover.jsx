@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack ,useToast} from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -22,13 +22,12 @@ import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
-
+import { error } from '../../services/telementryService'
 const jsConfetti = new JSConfetti();
 
 const Discovery = () => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
-  // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
   localStorage.setItem('recordedAudio', recordedAudio);
@@ -38,6 +37,7 @@ const Discovery = () => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+  const toast = useToast();
   
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
@@ -76,8 +76,14 @@ const Discovery = () => {
       const data = await response.json();
       setPosts(data);
       setLoading(false);
-    } catch (error) {
-      console.error(error.message);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', "ET");
+
     }
   };
 
@@ -86,8 +92,7 @@ const Discovery = () => {
   const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
-// console.log(pathnameWithoutSlash,pathnameWithoutSlash + location.search);
-const percentage = ((currentLine+1) / posts?.data?.length) * 100;
+    const percentage = ((currentLine+1) / posts?.data?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -174,7 +179,6 @@ const percentage = ((currentLine+1) / posts?.data?.length) * 100;
     let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
-    // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
       .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
@@ -185,7 +189,6 @@ const percentage = ((currentLine+1) / posts?.data?.length) * 100;
         language: lang,
       })
       .then(async res => {
-        // console.log(res);
         responseText = res.data.responseText
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
@@ -267,9 +270,14 @@ const percentage = ((currentLine+1) / posts?.data?.length) * 100;
           });
           try {
             const response = await S3Client.send(command);
-            // console.log("Data Ala",response);
           } catch (err) {
-            console.error(err);
+            toast({
+              position: 'top',
+              title: `${err?.message}`,
+              status: 'error',
+            })
+           error(err,'', "ET");
+
           }
         }
         response({ // Required
@@ -293,8 +301,14 @@ const percentage = ((currentLine+1) / posts?.data?.length) * 100;
         setUserSpeak(true)
         handleStarAnimation();
       })
-      .catch(error => {
-        console.error(error);
+      .catch(err => {
+        toast({
+          position: 'top',
+          title: `${err?.message}`,
+          status: 'error',
+        })
+        error(err,'', "ET");
+
         stopLoading();
       });
   }

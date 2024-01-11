@@ -1,16 +1,17 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Box, Center, Container, HStack, Image, SimpleGrid, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Box, Center, Container, HStack, Image, SimpleGrid, Spinner, Text, VStack, useToast } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import PlaceHolder from '../../assests/Images/hackthon-images/sets.png';
 import kannadaPlaceholder from '../../assests/Images/hackthon-images/knCol.png';
 import Header from '../Header';
 import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
-
+import {error} from '../../services/telementryService'
 const DiscoveryList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
 
   useEffect(() => {
     fetchApi();
@@ -32,9 +33,14 @@ const DiscoveryList = () => {
         //localStorage.setItem('selectedStoryTitle', response.data.);
         localStorage.setItem('sentenceCounter', 0);
       })
-      .catch(error => {
+      .catch(err => {
         setLoading(false)
-        console.error(error);
+        toast({
+          position: 'top',
+          title: `${err?.message}`,
+          status: 'error',
+        })
+        error(err,'', 'ET');
         stopLoading();
       });
   }
