@@ -7,7 +7,7 @@ import kannadaPlaceholder from '../../assests/Images/hackthon-images/knCol.png';
 import Header from '../Header';
 import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
-
+import {error} from '../../services/telementryService'
 const DiscoveryList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,13 +33,14 @@ const DiscoveryList = () => {
         //localStorage.setItem('selectedStoryTitle', response.data.);
         localStorage.setItem('sentenceCounter', 0);
       })
-      .catch(error => {
+      .catch(err => {
         setLoading(false)
         toast({
           position: 'top',
-          title: `${error.message}`,
+          title: `${err?.message}`,
           status: 'error',
         })
+        error(err,'', 'ET');
         stopLoading();
       });
   }

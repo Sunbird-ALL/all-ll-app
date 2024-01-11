@@ -22,7 +22,7 @@ import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
-
+import { error } from '../../services/telementryService'
 const jsConfetti = new JSConfetti();
 
 const Discovery = () => {
@@ -76,12 +76,14 @@ const Discovery = () => {
       const data = await response.json();
       setPosts(data);
       setLoading(false);
-    } catch (error) {
+    } catch (err) {
       toast({
         position: 'top',
-        title: `${error.message}`,
+        title: `${err?.message}`,
         status: 'error',
       })
+      error(err,'', "ET");
+
     }
   };
 
@@ -268,12 +270,14 @@ const Discovery = () => {
           });
           try {
             const response = await S3Client.send(command);
-          } catch (error) {
+          } catch (err) {
             toast({
               position: 'top',
-              title: `${error.message}`,
+              title: `${err?.message}`,
               status: 'error',
             })
+           error(err,'', "ET");
+
           }
         }
         response({ // Required
@@ -297,12 +301,14 @@ const Discovery = () => {
         setUserSpeak(true)
         handleStarAnimation();
       })
-      .catch(error => {
+      .catch(err => {
         toast({
           position: 'top',
-          title: `${error.message}`,
+          title: `${err?.message}`,
           status: 'error',
         })
+        error(err,'', "ET");
+
         stopLoading();
       });
   }
