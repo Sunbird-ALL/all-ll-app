@@ -45,8 +45,6 @@ import S3Client from '../../../config/awsS3';
 import { response } from '../../../services/telementryService';
 import retry from '../../../assests/Images/retry.svg';
 import JSConfetti from 'js-confetti';
-import calcCER from 'character-error-rate';
-// import TryNew from '../../../assests/Images/refresh.svg'
 import lang_constants from '../../../lang/lang_constants.json';
 import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
