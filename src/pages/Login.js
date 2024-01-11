@@ -21,7 +21,8 @@ import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
-export default function Login({setIsLoggedIn = false, timer, setTimer}) {
+import { minSafeInteger } from '@chakra-ui/utils'
+export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
   }, [Navigate, setIsLoggedIn]);
@@ -37,15 +38,17 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
   const toast = useToast()
   const handleSubmit = async (username, password) => {
     try {
+      localStorage.removeItem('userPracticeState')
       const response = await fetch(
         `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
-      );
+        );
       if (response.ok) {
         startEvent();
         const data = await response.json();
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
+        handleGetLesson(virtualID)
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -57,10 +60,9 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
           status: 'success'
         })
         setIsLoggedIn(true);
-        setTimer(0)
         navigate('/discoverylist')
 
-        localStorage.setItem('userPracticeState', 0)
+        // localStorage.setItem('userPracticeState', 0)
         localStorage.setItem('firstPracticeSessionCompleted', false)
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
@@ -71,6 +73,30 @@ export default function Login({setIsLoggedIn = false, timer, setTimer}) {
       console.error('Error:', error);
     }
   };
+
+  const handleGetLesson = (virtualID)=>{
+    fetch(`${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}`)
+    .then((res)=>{
+      return res.json();
+    }).then((data)=>{
+      let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
+      if(milestone === 'showcase'){
+          navigate(`/showcase`)  
+        }
+        else if(milestone === 'practice'){
+          localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
+          navigate(`/practice`)  
+        }
+        else if (milestone === 'validate'){
+          localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
+          navigate(`/validate`)
+        }
+      else{
+        navigate(`/${milestone}`)
+      }
+    })
+  }
+
   return (
     <Flex
       className='bg'

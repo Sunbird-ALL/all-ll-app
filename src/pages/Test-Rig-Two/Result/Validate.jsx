@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './Result.css';
 import startIMg from '../../../assests/Images/hackthon-images/Star.svg'
 // import Modal from './Modal';
@@ -10,6 +10,7 @@ import Header from '../../Header';
 import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
+import { addPointerApi } from '../../../utils/api/PointerApi';
 
 export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function Validate() {
       setLoading(true);
       axios
         .get(
-          `https://www.learnerai.theall.ai/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -72,7 +73,27 @@ export default function Validate() {
     SetCurrentCharModalOpen(false)
   }
 
+
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      // You can update your component state or take other actions as needed
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
   function handelFeedBack(feedback) {
+    addLessonApi()
+    handleAddPointer(1)
     handleCharMopdal()
     if (feedback === 1) {
       toast({
@@ -97,7 +118,7 @@ export default function Validate() {
 
     setIsModalOpen(true);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/addAssessmentInput`, {
+      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/addAssessmentInput`, {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         token: myCurrectChar,
@@ -111,6 +132,28 @@ export default function Validate() {
         console.error(error);
       });
   }
+
+  const location = useLocation();
+
+  
+  const addLessonApi = ()=>{
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const pathnameWithoutSlash = location.pathname.slice(1);
+    const percentage = ((currentCharIndex+1) / chars.length) * 100;
+   fetch(`${base64url}/lesson/addLesson`,{
+    method:'POST',
+    headers:{
+      "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        userId : localStorage.getItem('virtualID'),
+        sessionId : localStorage.getItem('virtualStorySessionID'),
+        milestone : 'validate',
+        lesson : localStorage.getItem('validationSession'),
+        progress:percentage
+        })
+  })
+ }
 
   return (
     <>

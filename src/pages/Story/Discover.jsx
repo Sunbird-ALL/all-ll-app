@@ -6,7 +6,7 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import Next from '../../assests/Images/next.png';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
@@ -21,6 +21,7 @@ import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
+import { addPointerApi } from '../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
@@ -37,13 +38,14 @@ const Discovery = () => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
-
+  
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
   const [pageno, setPageNo] = useState(1);
-
+  
+  
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -58,7 +60,7 @@ const Discovery = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai.theall.ai/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
+        `${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -78,6 +80,29 @@ const Discovery = () => {
       console.error(error.message);
     }
   };
+
+  const location = useLocation();
+
+  const addLessonApi = ()=>{
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const pathnameWithoutSlash = location.pathname.slice(1);
+// console.log(pathnameWithoutSlash,pathnameWithoutSlash + location.search);
+const percentage = ((currentLine+1) / posts?.data?.length) * 100;
+  fetch(`${base64url}/lesson/addLesson`,{
+    method:'POST',
+    headers:{
+      "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        userId : localStorage.getItem('virtualID'),
+        sessionId : localStorage.getItem('virtualStorySessionID'),
+        // milestone : 'discovery',
+        milestone : pathnameWithoutSlash,
+        lesson : localStorage.getItem('storyTitle'),
+        progress:percentage
+        })
+  })
+ }
 
   React.useEffect(() => {
     learnAudio();
@@ -102,12 +127,31 @@ const Discovery = () => {
     }
   };
 
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      // You can update your component state or take other actions as needed
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
 
   const nextLine = count => {
-    setUserSpeak(!isUserSpeak)
+    setUserSpeak(!isUserSpeak);
     if (currentLine <= posts?.data?.length - 1) {
       setCurrentLine(currentLine + 1);
     }
+    handleAddPointer(1);
+    addLessonApi();
   };
 
   const prevLine = count => {
@@ -132,7 +176,7 @@ const Discovery = () => {
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),

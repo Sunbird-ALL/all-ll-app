@@ -51,6 +51,7 @@ import lang_constants from '../../../lang/lang_constants.json';
 import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
+import { addPointerApi } from '../../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
@@ -71,15 +72,15 @@ const Story = () => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
 
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
-    const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('virtualID')) {
-      return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
-    } else {
-      return 0;
-    }
-  });
-  // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+  // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
+  //   const storedData = JSON.parse(localStorage.getItem('progressData'));
+  //   if (storedData && localStorage.getItem('virtualID')) {
+  //     return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
+  //   } else {
+  //     return 0;
+  //   }
+  // });
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -95,7 +96,6 @@ const Story = () => {
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  console.log(practiceCompletionCriteria);
   const max = practiceCompletionCriteria.length - 1
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
 
@@ -127,12 +127,6 @@ const Story = () => {
 
   React.useEffect(() => {
     if (voiceText == '-') {
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the first practice session`,
-        status: 'success'
-      })
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
       setVoiceText('');
     }
@@ -168,7 +162,7 @@ const Story = () => {
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `https://www.learnerai.theall.ai/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -193,6 +187,35 @@ const Story = () => {
       console.error(error.message);
     }
   };
+
+
+  const handleAudioFile = async (base64Data)=>{
+    if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {	
+      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
+      const command = new PutObjectCommand({
+        Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+        Key: audioFileName,
+        Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
+        ContentType: 'audio/wav'
+      });
+      try {
+        const response = await S3Client.send(command);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    response({ // Required
+      "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
+      //"qid": "", // Required. Unique assessment/question id
+      "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+      "values": [
+        { "original_text": posts[currentLine]?.contentSourceData[0]?.text },
+      ]
+    },
+      'ET'
+    )
+  }
 
   React.useEffect(() => {
     learnAudio();
@@ -232,7 +255,30 @@ const Story = () => {
     }
   };
 
+  const addLessonApi = (percentage) => {
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const pathnameWithoutSlash = location.pathname.slice(1);  
+//  console.log(keysToPass[completionCriteriaIndex]);
+    // console.log(practiceCompletionCriteria[completionCriteriaIndex].title);
+    fetch(`${base64url}/lesson/addLesson`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: localStorage.getItem('virtualID'),
+        sessionId: localStorage.getItem('virtualStorySessionID') ,
+        milestone: 'practice',
+        lesson: localStorage.getItem('userPracticeState') || 0,
+        progress: percentage,
+      }),
+    });
+  };
+
   const nextLine = count => {
+    handleAddPointer(1);
+    addLessonApi(parseInt(progressPercent));
+    localStorage.setItem('lessonProgressPercent', parseInt(progressPercent))
     const sessionId = localStorage.getItem('virtualID');
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
@@ -248,7 +294,26 @@ const Story = () => {
     }
   };
 
-  function saveIndb() {
+
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
+
+  function saveIndb(base64Data) {
+    handleAudioFile(base64Data)
     setUserSpeak(true);
   }
 
@@ -348,6 +413,7 @@ const Story = () => {
                                   setCurrentLine(0);
                                   let index = completionCriteriaIndex + 1;
                                   setCompletionCriteriaIndex(index);
+                                  addLessonApi(parseInt(progressPercent));
                                   localStorage.setItem('userPracticeState', index)
                                   setWellDone(false);
                                 }}
@@ -554,6 +620,7 @@ const Story = () => {
                             _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                             flag={true}
                             setStoryBase64Data={setStoryBase64Data}
+                            handleAudioFile={handleAudioFile}
                             saveIndb={saveIndb}
                           />
                           {isAudioPlay === 'recording' ? (
@@ -596,7 +663,7 @@ const Story = () => {
                     complete={<StepIcon />}
                     incomplete={<StepTitle>{step.title}</StepTitle>}
                     active={<StepTitle>{step.title}</StepTitle>}
-                  />
+                    />
                 </StepIndicator>
               </Step>
             ))}

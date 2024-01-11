@@ -31,7 +31,6 @@ jobs:
       - name: Build and Package Application
         run: |
           npm install
-
       - name: Build Production
         run: npm run build
       - name: Deploy to S3 Bucket

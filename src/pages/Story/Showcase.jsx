@@ -6,7 +6,7 @@ import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import Next from '../../assests/Images/next.png';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
@@ -21,6 +21,7 @@ import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
+import { addPointerApi } from '../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
@@ -59,7 +60,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       axios
-        .post(`https://www.learnerai.theall.ai/content-service/v1/content/getAssessment`, {
+        .post(`${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/getAssessment`, {
           "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
           "language": localStorage.getItem('apphomelang')
         })
@@ -73,7 +74,7 @@ const Showcase = () => {
       console.error(error.message);
     }
   };
-console.log(currentLine)
+
   React.useEffect(() => {
     learnAudio();
   }, [temp_audio]);
@@ -97,11 +98,35 @@ console.log(currentLine)
     }
   };
 
+  
+  const handleAddPointer = async (point) => {
+    const requestBody = {
+      userId: localStorage.getItem('virtualID'),
+      sessionId: localStorage.getItem('virtualStorySessionID'),
+      points: point,
+    };
+
+    try {
+      const response = await addPointerApi(requestBody);
+      console.log('Pointer added successfully:', response);
+      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+    } catch (error) {
+      console.error('Error adding pointer:', error);
+    }
+  };
+
+
 
   const nextLine = count => {
+    addLessonApi()
     setUserSpeak(!isUserSpeak)
+    handleAddPointer(1)
     if (currentLine <= posts.length - 1) {
       setCurrentLine(currentLine + 1);
+    }else{
+      fetchCurrentLevel()
+      setCurrentLine(0)
     }
   };
 
@@ -127,7 +152,7 @@ console.log(currentLine)
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`https://www.learnerai.theall.ai/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
@@ -271,7 +296,7 @@ console.log(currentLine)
     setLoading(true);
     try {
       const response = await fetch(
-        `https://www.learnerai.theall.ai/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
@@ -281,22 +306,26 @@ console.log(currentLine)
           if (localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
             toast({
               position: 'top',
-              title: `Level Reset!! You need to practice more to complete this level.`,
+              duration: '2000',
+              title: `You need to practice more to complete this level.`,
               status: 'error',
             })
-            localStorage.removeItem('progressData');
             navigate('/practice')
           }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
-              title: `You need to practice more to complete this level.`,
+              duration: '2000',
+              title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
             })
+            localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
           }
           else{
             toast({
               position: 'top',
+              duration: '2000',
               title: `Congratulations! \n
               Your current level has been upgraded`,
               status: 'success'
@@ -313,6 +342,28 @@ console.log(currentLine)
       console.error(error.message);
     }
   };
+
+  const location = useLocation();
+
+  const addLessonApi = ()=>{
+    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const pathnameWithoutSlash = location.pathname.slice(1);
+    const percentage = ((currentLine+1) / posts?.length) * 100;
+  fetch(`${base64url}/lesson/addLesson`,{
+    method:'POST',
+    headers:{
+      "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        userId : localStorage.getItem('virtualID'),
+        sessionId : localStorage.getItem('virtualStorySessionID'),
+        milestone : `showcase`,
+        lesson : currentLine,
+        progress:percentage
+        })
+  })
+ }
+
 
   useEffect(() => {
 
