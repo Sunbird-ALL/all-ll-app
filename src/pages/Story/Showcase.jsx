@@ -296,7 +296,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
