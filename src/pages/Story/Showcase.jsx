@@ -124,6 +124,9 @@ const Showcase = () => {
     handleAddPointer(1)
     if (currentLine <= posts.length - 1) {
       setCurrentLine(currentLine + 1);
+    }else{
+      fetchCurrentLevel()
+      setCurrentLine(0)
     }
   };
 
@@ -293,7 +296,7 @@ const Showcase = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/session/${localStorage.getItem('virtualStorySessionID')}`
+        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
@@ -303,28 +306,32 @@ const Showcase = () => {
           if (localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
             toast({
               position: 'top',
-              title: `Level Reset!! You need to practice more to complete this level.`,
+              duration: '2000',
+              title: `You need to practice more to complete this level.`,
               status: 'error',
             })
-            localStorage.removeItem('progressData');
             navigate('/practice')
           }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
-              title: `You need to practice more to complete this level.`,
+              duration: '2000',
+              title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
             })
+            localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
           }
           else{
             toast({
               position: 'top',
+              duration: '2000',
               title: `Congratulations! \n
               Your current level has been upgraded`,
               status: 'success'
             })
             localStorage.removeItem('progressData');
-            // localStorage.setItem('userPracticeState', 0)
+            localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/showcase')
           }
