@@ -42,7 +42,7 @@ import Animation from '../../../components/Animation/Animation';
 import { showLoading, stopLoading } from '../../../utils/Helper/SpinnerHandle';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import S3Client from '../../../config/awsS3';
-import { error,response } from '../../../services/telementryService';
+import { error, response } from '../../../services/telementryService';
 import retry from '../../../assests/Images/retry.svg';
 import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
@@ -170,15 +170,10 @@ const Story = () => {
           return res.json();
         })
         .then(data => {
-          const oldPosts = posts || [];
           const newPosts = data?.content || [];
           setSourceChars(data?.getTargetChar)
-          if (currentLine && currentLine < maxAllowedContent - 1 && newPosts?.length) {
-            setPosts([...oldPosts, ...newPosts]);
-          } else {
-            setPosts(newPosts);
-            setCurrentLine(0);
-          }
+          setPosts(newPosts);
+          setCurrentLine(0);
           setLoading(false);
         });
       setLoading(false);
@@ -189,14 +184,13 @@ const Story = () => {
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', 'ET');
+      error(err, '', 'ET');
     }
   };
 
-
-  const handleAudioFile = async (base64Data)=>{
-    if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {	
-      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
+  const handleAudioFile = async (base64Data) => {
+    if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
+      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId') === null ? localStorage.getItem('allAppContentSessionId') : localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
       const command = new PutObjectCommand({
         Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
         Key: audioFileName,
@@ -211,7 +205,7 @@ const Story = () => {
           title: `${err?.message}`,
           status: 'error',
         })
-        error(err,'', 'ET');
+        error(err, '', 'ET');
       }
     }
 
@@ -267,7 +261,7 @@ const Story = () => {
 
   const addLessonApi = (percentage) => {
     const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
-    const pathnameWithoutSlash = location.pathname.slice(1);  
+    const pathnameWithoutSlash = location.pathname.slice(1);
     fetch(`${base64url}/lesson/addLesson`, {
       method: 'POST',
       headers: {
@@ -275,7 +269,7 @@ const Story = () => {
       },
       body: JSON.stringify({
         userId: localStorage.getItem('virtualID'),
-        sessionId: localStorage.getItem('virtualStorySessionID') ,
+        sessionId: localStorage.getItem('virtualStorySessionID'),
         milestone: 'practice',
         lesson: localStorage.getItem('userPracticeState') || 0,
         progress: percentage,
@@ -312,15 +306,15 @@ const Story = () => {
 
     try {
       const response = await addPointerApi(requestBody);
-      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
-      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      localStorage.setItem('totalSessionPoints', response.result.totalSessionPoints)
+      localStorage.setItem('totalUserPoints', response.result.totalUserPoints)
     } catch (err) {
       toast({
         position: 'top',
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', 'ET');
+      error(err, '', 'ET');
     }
   };
 
@@ -676,7 +670,7 @@ const Story = () => {
                     complete={<StepIcon />}
                     incomplete={<StepTitle>{step.title}</StepTitle>}
                     active={<StepTitle>{step.title}</StepTitle>}
-                    />
+                  />
                 </StepIndicator>
               </Step>
             ))}
