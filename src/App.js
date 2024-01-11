@@ -38,10 +38,9 @@
 
   function App() {
     let ranonce = false;
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('virtualID') ? true : false);
 
     useEffect(() => {
-
       const setFp = async () => {
         const fp = await FingerprintJS.load();
 
