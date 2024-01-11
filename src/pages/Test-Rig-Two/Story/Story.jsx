@@ -42,7 +42,7 @@ import Animation from '../../../components/Animation/Animation';
 import { showLoading, stopLoading } from '../../../utils/Helper/SpinnerHandle';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import S3Client from '../../../config/awsS3';
-import { response } from '../../../services/telementryService';
+import { error,response } from '../../../services/telementryService';
 import retry from '../../../assests/Images/retry.svg';
 import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
@@ -183,8 +183,13 @@ const Story = () => {
         });
       setLoading(false);
       setUserSpeak(false);
-    } catch (error) {
-      console.error(error.message);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', 'ET');
     }
   };
 
@@ -201,7 +206,12 @@ const Story = () => {
       try {
         const response = await S3Client.send(command);
       } catch (err) {
-        console.error(err);
+        toast({
+          position: 'top',
+          title: `${err?.message}`,
+          status: 'error',
+        })
+        error(err,'', 'ET');
       }
     }
 
@@ -258,8 +268,6 @@ const Story = () => {
   const addLessonApi = (percentage) => {
     const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);  
-//  console.log(keysToPass[completionCriteriaIndex]);
-    // console.log(practiceCompletionCriteria[completionCriteriaIndex].title);
     fetch(`${base64url}/lesson/addLesson`, {
       method: 'POST',
       headers: {
@@ -306,8 +314,13 @@ const Story = () => {
       const response = await addPointerApi(requestBody);
       localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
       localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
-    } catch (error) {
-      console.error('Error adding pointer:', error);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', 'ET');
     }
   };
 

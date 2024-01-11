@@ -17,7 +17,7 @@ import Animation from '../../components/Animation/Animation'
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3'
-import { response } from '../../services/telementryService';
+import { error,response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
@@ -28,7 +28,6 @@ const jsConfetti = new JSConfetti();
 const Showcase = () => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
-  // console.log(voiceText);
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
   const [recordedAudio, setRecordedAudio] = useState(''); // blob
   localStorage.setItem('recordedAudio', recordedAudio);
@@ -65,13 +64,17 @@ const Showcase = () => {
           "language": localStorage.getItem('apphomelang')
         })
         .then(res => {
-          console.log(res)
           setPosts(res.data.data[0].content);
           setLoading(false);
         });
-    } catch (error) {
+    } catch (err) {
       setLoading(false)
-      console.error(error.message);
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', "ET");
     }
   };
 
@@ -108,11 +111,15 @@ const Showcase = () => {
 
     try {
       const response = await addPointerApi(requestBody);
-      console.log('Pointer added successfully:', response);
       localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
       localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
-    } catch (error) {
-      console.error('Error adding pointer:', error);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', "ET");
     }
   };
 
@@ -150,7 +157,6 @@ const Showcase = () => {
     let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
-    // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
       .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
@@ -161,7 +167,6 @@ const Showcase = () => {
         language: lang,
       })
       .then(async res => {
-        // console.log(res);
         responseText = res.data.responseText
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
@@ -243,9 +248,13 @@ const Showcase = () => {
           });
           try {
             const response = await S3Client.send(command);
-            // console.log("Data Ala",response);
           } catch (err) {
-            console.error(err);
+            toast({
+              position: 'top',
+              title: `${err?.message}`,
+              status: 'error',
+            })
+            error(err,'', "ET");
           }
         }
         response({ // Required
@@ -269,13 +278,13 @@ const Showcase = () => {
         setUserSpeak(true)
         handleStarAnimation();
       })
-      .catch(error => {
+      .catch(err => {
         toast({
           position: 'top',
-          title: `Error! Please try again.`,
+          title: `${err?.message}`,
           status: 'error',
         })
-        console.error(error);
+        error(err,'', "ET");
         stopLoading();
       });
   }
@@ -337,9 +346,14 @@ const Showcase = () => {
           }
           localStorage.setItem('userCurrentLevel', data.currentLevel)
         });
-    } catch (error) {
+    } catch (err) {
       setLoading(false);
-      console.error(error.message);
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', "ET");
     }
   };
 

@@ -69,13 +69,6 @@ const Discovery = () => {
           setPosts(data);
           setLoading(false);
         });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      setPosts(data);
-      setLoading(false);
     } catch (err) {
       toast({
         position: 'top',
