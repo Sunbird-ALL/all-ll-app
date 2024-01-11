@@ -91,7 +91,6 @@ const Story = () => {
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
-  const { slug } = useParams();
   console.log(practiceCompletionCriteria);
   const max = practiceCompletionCriteria.length - 1
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
