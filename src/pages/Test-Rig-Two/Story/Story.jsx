@@ -66,7 +66,6 @@ const Story = () => {
   const [temp_audio, set_temp_audio] = useState(null); // base64url of teachertext
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
-  const [storycase64Data, setStoryBase64Data] = useState('');
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -549,7 +548,6 @@ const Story = () => {
                             setRecordedAudio={setRecordedAudio}
                             _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                             flag={true}
-                            setStoryBase64Data={setStoryBase64Data}
                             saveIndb={saveIndb}
                           />
                           {isAudioPlay === 'recording' ? (
