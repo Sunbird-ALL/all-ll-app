@@ -11,6 +11,7 @@ import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import { error } from '../../../services/telementryService'
 
 export default function Validate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,9 +63,14 @@ export default function Validate() {
           setMyCurrentChar(targetChars[0]);
           setRecommendedWords(res.data.contentForToken || []);
         })
-        .catch(error => {
+        .catch(err => {
           setLoading(false);
-          console.error(error);
+          toast({
+            position: 'top',
+            title: `${err?.message}`,
+            status: 'error',
+          })
+          error(err,'', "ET");
         });
     }
   }, []);
@@ -86,8 +92,13 @@ export default function Validate() {
       localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
       localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
       // You can update your component state or take other actions as needed
-    } catch (error) {
-      console.error('Error adding pointer:', error);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', "ET");
     }
   };
 
@@ -125,11 +136,15 @@ export default function Validate() {
         feedback: feedback,
       })
       .then(res => {
-        // console.log(res);
 
       })
-      .catch(error => {
-        console.error(error);
+      .catch(err => {
+        toast({
+          position: 'top',
+          title: `${err?.message}`,
+          status: 'error',
+        })
+        error(err,'', "ET");
       });
   }
 

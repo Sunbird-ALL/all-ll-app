@@ -22,6 +22,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
 import { minSafeInteger } from '@chakra-ui/utils'
+import {error} from '../services/telementryService';
 export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
@@ -67,10 +68,19 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
       } else {
-        console.error('Error fetching virtual ID');
+        toast({
+          position: 'top',
+          title: `Error fetching virtual ID`,
+          status: 'error',
+        })
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err,'', 'ET');
     }
   };
 
