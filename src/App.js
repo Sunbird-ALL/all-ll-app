@@ -115,7 +115,7 @@
     }, []);
 
     
-
+    const [forceRerender,setForceRerender] = useState(false);
 
     return (
       <HashRouter>
@@ -146,8 +146,8 @@
                   {/* Story Section */}
           <Route path={'/storylist'} element={<Storylist/>} />
           <Route path={'storylist/story/:slug'} element={<Story/>} />
-          <Route path={'discoverylist/discovery/:slug'} element={<Discovery/>} />
-          <Route path={'discoverylist'} element={<DiscoveryList/>} />
+          <Route path={'discoverylist/discovery/:slug'} element={<Discovery forceRerender={forceRerender} setForceRerender={setForceRerender}/>} />
+          <Route path={'discoverylist'} element={<DiscoveryList forceRerender={forceRerender} setForceRerender={setForceRerender}/>} />
           {/* <Route path={'/result'} element={<Result/>} /> */}
           <Route path={'Login'} element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
           <Route path={'Header'} element={<Header/>}/>
@@ -155,10 +155,10 @@
 
           {/* Test Rig 2 */}
 
-          <Route path={'practice'} element={<TestRigStory/>} />
+          <Route path={'practice'} element={<TestRigStory forceRerender={forceRerender} setForceRerender={setForceRerender}/>} />
           {/* <Route path={'Header'} element={<Header/>}/> */}
-          <Route path={'validate'} element={<Validate/>}/>
-          <Route path={'showcase'} element={<Showcase/>}/>
+          <Route path={'validate'} element={<Validate forceRerender={forceRerender} setForceRerender={setForceRerender}/>}/>
+          <Route path={'showcase'} element={<Showcase forceRerender={forceRerender} setForceRerender={setForceRerender}/>}/>
           
         </Routes>
         <Dots />

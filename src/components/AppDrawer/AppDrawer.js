@@ -34,7 +34,7 @@ import Children from '../../assests/Images/children-thumbnail.png'
 import ConfigForm from '../../config/ConfigForm';
 
 
-function AppDrawer() {
+function AppDrawer({forceRerender, setForceRerender}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const [value, setValue] = React.useState(localStorage.getItem('apphomelang'))
@@ -124,6 +124,10 @@ function AppDrawer() {
     }
   };
 
+  const handleSave = () => {
+    onClose();
+    setForceRerender(!forceRerender);
+  };
   return (
     <>
       <Button className='btn btn-success'
@@ -268,7 +272,7 @@ function AppDrawer() {
             <Button variant='outline' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={() => window.location.reload()} colorScheme='blue'>Save</Button>
+            <Button onClick={() =>   handleSave()} colorScheme='blue'>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

@@ -13,7 +13,7 @@ import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakr
 import { addPointerApi } from '../../../utils/api/PointerApi';
 import { error } from '../../../services/telementryService'
 
-export default function Validate() {
+export default function Validate({forceRerender, setForceRerender}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCurrentCharModalOpen, SetCurrentCharModalOpen] = useState(false);
   const [recommededWords, setRecommendedWords] = useState("")
@@ -73,7 +73,7 @@ export default function Validate() {
           error(err,'', "ET");
         });
     }
-  }, []);
+  }, [forceRerender]);
 
   const handleCharMopdal = () => {
     SetCurrentCharModalOpen(false)

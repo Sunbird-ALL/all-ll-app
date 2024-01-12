@@ -25,7 +25,7 @@ import { addPointerApi } from '../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
-const Showcase = () => {
+const Showcase = ({forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
@@ -53,7 +53,7 @@ const Showcase = () => {
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
-  }, []);
+  }, [forceRerender]);
 
   const fetchApi = async () => {
     setLoading(true);
@@ -389,7 +389,7 @@ const Showcase = () => {
 
   return (
     <>
-      <Header active={3} />
+      <Header active={3} forceRerender={forceRerender} setForceRerender={setForceRerender} />
 
       <Center pt={'10vh'} className='bg'>
         <div

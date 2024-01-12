@@ -56,7 +56,7 @@ const tabs =
     { name: 'Showcase', link: '/showcase' },
   ];
 
-export default function Header({ active }) {
+export default function Header({ active,forceRerender=false,setForceRerender = () => {} }) {
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { activeStep, setActiveStep } = useSteps({
@@ -100,7 +100,7 @@ export default function Header({ active }) {
           </Box>
           <Spacer />
           <Box p={1}>
-            <AppDrawer />
+            <AppDrawer forceRerender={forceRerender} setForceRerender={setForceRerender} />
           </Box>
         </Flex>
       </Box>
