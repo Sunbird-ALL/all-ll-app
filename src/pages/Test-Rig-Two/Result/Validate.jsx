@@ -70,7 +70,7 @@ export default function Validate({forceRerender, setForceRerender}) {
             title: `${err?.message}`,
             status: 'error',
           })
-          error(err,'', "ET");
+          error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
         });
     }
   }, [forceRerender]);
@@ -98,7 +98,7 @@ export default function Validate({forceRerender, setForceRerender}) {
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', "ET");
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
@@ -144,7 +144,7 @@ export default function Validate({forceRerender, setForceRerender}) {
           title: `${err?.message}`,
           status: 'error',
         })
-        error(err,'', "ET");
+        error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
       });
   }
 

@@ -74,7 +74,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', "ET");
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
@@ -119,7 +119,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', "ET");
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
@@ -254,7 +254,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
               title: `${err?.message}`,
               status: 'error',
             })
-            error(err,'', "ET");
+            error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
           }
         }
         response({ // Required
@@ -284,7 +284,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           title: `${err?.message}`,
           status: 'error',
         })
-        error(err,'', "ET");
+        error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
         stopLoading();
       });
   }
@@ -353,7 +353,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         title: `${err?.message}`,
         status: 'error',
       })
-      error(err,'', "ET");
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
