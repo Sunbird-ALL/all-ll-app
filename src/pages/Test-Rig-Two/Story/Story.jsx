@@ -215,6 +215,13 @@ const Story = () => {
       "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
       "values": [
         { "original_text": posts[currentLine]?.contentSourceData[0]?.text },
+        { "response_text": "" },
+        { "response_correct_words_array": [] },
+        { "response_incorrect_words_array": [] },
+        { "response_word_array_result": []},
+        { "response_word_result": "" },
+        { "accuracy_percentage": 0 },
+        { "duration": 0 }
       ]
     },
       'ET'
