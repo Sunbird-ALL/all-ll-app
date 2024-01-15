@@ -91,6 +91,12 @@ const Story = ({forceRerender, setForceRerender}) => {
     }
   });
 
+  useEffect(()=>{
+    const sessionId = localStorage.getItem('virtualID');
+    const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
+    updateProgress(sessionId, newData);
+  },[currentLine])
+
   const practiceCompletionCriteria = [
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
@@ -288,9 +294,6 @@ const Story = ({forceRerender, setForceRerender}) => {
     handleAddPointer(1);
     addLessonApi(parseInt(progressPercent));
     localStorage.setItem('lessonProgressPercent', parseInt(progressPercent))
-    const sessionId = localStorage.getItem('virtualID');
-    const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
-    updateProgress(sessionId, newData);
     setUserSpeak(false);
     if (currentLine >= maxAllowedContent - 1) {
       handleStarAnimation();
