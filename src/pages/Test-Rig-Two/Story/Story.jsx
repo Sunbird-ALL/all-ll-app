@@ -55,7 +55,7 @@ import { addPointerApi } from '../../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
-const Story = () => {
+const Story = ({forceRerender, setForceRerender}) => {
   const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
   const [posts, setPosts] = useState([]);
   const toast = useToast()
@@ -133,7 +133,7 @@ const Story = () => {
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
-  }, []);
+  }, [forceRerender]);
 
   const fetchApi = async () => {
     setLoading(true);
@@ -350,7 +350,7 @@ const Story = () => {
   return (
     <>
 
-      <Header active={2} />
+      <Header active={2} forceRerender={forceRerender} setForceRerender={setForceRerender}/>
       <Container mt={20} w={'75vw'} className="story-container">
         <Center minH={'50vh'}
           style={{
