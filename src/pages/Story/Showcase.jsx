@@ -64,7 +64,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           "language": localStorage.getItem('apphomelang')
         })
         .then(res => {
-          setPosts(res.data.data[0].content);
+          setPosts(res?.data?.data[0]?.content);
           setLoading(false);
         });
     } catch (err) {
@@ -400,7 +400,15 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           }}
           className="story-item"
         >
-
+          {!posts?.length>0 ? <>
+            <div style={{ display: 'flex', margin: '20px', justifyContent:'center' }}>
+                  <HStack>
+                    <div style={{ margin: '20px', textAlign: "center" }}>
+                      <p style={{ color:'red' }}>No Content Available</p>
+                    </div>
+                  </HStack>
+                </div>
+          </>:<></>}
           {loading ? (
             <Center minH='50vh'><Spinner
             thickness='4px'
@@ -411,8 +419,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           /></Center>
           ) : isUserSpeak ? (
             <>
-
-
               <VStack>
                 <div>
                   {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
@@ -430,7 +436,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                   </HStack>
                 </div>
               </VStack>
-
             </>
           ) : (
             <>
