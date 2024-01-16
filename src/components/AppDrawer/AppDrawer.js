@@ -96,7 +96,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
@@ -111,7 +111,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetSessionIds/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();

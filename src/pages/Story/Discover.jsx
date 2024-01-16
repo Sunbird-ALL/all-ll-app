@@ -59,7 +59,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -82,7 +82,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   const location = useLocation();
 
   const addLessonApi = ()=>{
-    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     const percentage = ((currentLine+1) / posts?.data?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
@@ -172,7 +172,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
     axios
-      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
