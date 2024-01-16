@@ -33,7 +33,29 @@ jobs:
           npm install
       
       - name: Build Production
-        run: npm run build
+        run: |
+          REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }} \
+          REACT_APP_APISLUG=${{ secrets.REACT_APP_APISLUG }} \
+          REACT_APP_AWS_S3_BUCKET_NAME=${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }} \
+          REACT_APP_AWS_S3_BUCKET_URL=${{ secrets.REACT_APP_AWS_S3_BUCKET_URL }} \
+          REACT_APP_AWS_S3_REGION=${{ secrets.REACT_APP_AWS_S3_REGION }} \
+          REACT_APP_BATCHSIZE=${{ secrets.REACT_APP_BATCHSIZE }} \
+          REACT_APP_CAPTURE_AUDIO=${{ secrets.REACT_APP_CAPTURE_AUDIO }} \
+          REACT_APP_CHANNEL=${{ secrets.REACT_APP_CHANNEL }} \
+          REACT_APP_CONTENT_SIZE=${{ secrets.REACT_APP_CONTENT_SIZE }} \
+          REACT_APP_ENDPOINT=${{ secrets.REACT_APP_ENDPOINT }} \
+          REACT_APP_ENV=${{ secrets.REACT_APP_ENV }} \
+          REACT_APP_HOST=${{ secrets.REACT_APP_HOST }} \
+          REACT_APP_ID=${{ secrets.REACT_APP_ID }} \
+          REACT_APP_LANGUAGE=${{ secrets.REACT_APP_LANGUAGE }} \
+          REACT_APP_LEARNER_AI_APP_HOST=${{ secrets.REACT_APP_LEARNER_AI_APP_HOST }} \
+          REACT_APP_MODE=${{ secrets.REACT_APP_MODE }} \
+          REACT_APP_PID=${{ secrets.REACT_APP_PID }} \
+          REACT_APP_TELEMETRY_MODE=${{ secrets.REACT_APP_TELEMETRY_MODE }} \
+          REACT_APP_TIMEDIFF=${{ secrets.REACT_APP_TIMEDIFF }} \
+          REACT_APP_UID=${{ secrets.REACT_APP_UID }} \
+          REACT_APP_VER=${{ secrets.REACT_APP_VER }} \
+          npm run build
       - name: Deploy to S3 Bucket
         run: |
           aws s3 sync ./build s3://sballappliance/assets/sb-ai/
