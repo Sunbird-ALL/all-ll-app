@@ -47,7 +47,7 @@ jobs:
           REACT_APP_HOST=${{ secrets.REACT_APP_HOST }} \
           REACT_APP_ID=${{ secrets.REACT_APP_ID }} \
           REACT_APP_LANGUAGE=${{ secrets.REACT_APP_LANGUAGE }} \
-          REACT_APP_LEARNER_AI_APP_HOST=${{ secrets.REACT_APP_LEARNER_AI_APP_HOST }} \
+          REACT_APP_LEARNER_AI_APP_HOST=${{ REACT_APP_LEARNER_AI_APP_HOST }} \
           REACT_APP_MODE=${{ secrets.REACT_APP_MODE }} \
           REACT_APP_authToken='' \
           REACT_APP_PID=${{ secrets.REACT_APP_PID }} \
