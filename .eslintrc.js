@@ -31,6 +31,13 @@ module.exports = {
         'no-unused-vars': 'off',
         'react/prop-types': 'off',
         'no-redeclare': 'off',
-        'no-global-assign': 'off'
+        'no-global-assign': 'off',
+        'no-extra-semi': 'off',
+        'no-irregular-whitespace': 'off',
+        'no-dupe-keys': 'off',
+        'no-prototype-builtins': 'off',
+        'react/jsx-key': 'off',
+        'react/react-in-jsx-scop': 'off',
+        'no-self-assign': 'off',
     }
 }
