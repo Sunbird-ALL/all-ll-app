@@ -84,7 +84,7 @@ export default function Login({setIsLoggedIn = false}) {
   };
 
   const handleGetLesson = (virtualID)=>{
-    fetch(`${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}`)
+    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}`)
     .then((res)=>{
       return res.json();
     }).then((data)=>{

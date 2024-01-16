@@ -33,7 +33,7 @@ export default function Results() {
 
   useEffect(() => {
     fetch(
-      `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetTargets/session/${localStorage.getItem(
+      `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetTargets/session/${localStorage.getItem(
         'virtualStorySessionID'
       )}`
     )
@@ -54,7 +54,7 @@ export default function Results() {
     // console.log(splitSentence.length);
 
     fetch(
-      `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetFamiliarity/session/${localStorage.getItem(
+      `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetFamiliarity/session/${localStorage.getItem(
         'virtualStorySessionID'
       )}`
     )
@@ -164,7 +164,7 @@ else{
 }
 setIsModalOpen(true);
   axios
-  .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/addAssessmentInput`, {
+  .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/addAssessmentInput`, {
       user_id: localStorage.getItem('virtualID'),
       session_id: localStorage.getItem('virtualStorySessionID'),
       token: myCurrectChar,

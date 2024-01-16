@@ -59,7 +59,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
     setLoading(true);
     try {
       axios
-        .post(`${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/getAssessment`, {
+        .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {
           "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
           "language": localStorage.getItem('apphomelang')
         })
@@ -158,7 +158,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
     axios
-      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
@@ -305,7 +305,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
@@ -360,7 +360,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const location = useLocation();
 
   const addLessonApi = ()=>{
-    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     const percentage = ((currentLine+1) / posts?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{

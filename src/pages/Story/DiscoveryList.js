@@ -20,7 +20,7 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const fetchApi = async () => {
     setLoading(true)
     axios
-      .post(`${process.env.REACT_APP_learner_ai_app_host}/content-service/v1/content/getAssessment`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {
         "tags": ["ASER"],
         "language": localStorage.getItem('apphomelang') || 'ta'
       })

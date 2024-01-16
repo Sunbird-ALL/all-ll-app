@@ -47,7 +47,7 @@ export const initialize = ({ context, config, metadata }) => {
         authtoken: context.authToken || '',
         uid: 'anonymous',
         sid: context.sid,
-        batchsize: process.env.REACT_APP_batchsize,
+        batchsize: process.env.REACT_APP_BATCHSIZE,
         mode: context.mode,
         host: context.host,
         apislug: context.apislug,
@@ -193,11 +193,11 @@ export const getEventOptions = () => {
     context: {
       pdata: {
         // optional
-        id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-        ver: process.env.REACT_APP_ver, // Version of the App
-        pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
+        id: process.env.REACT_APP_ID, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+        ver: process.env.REACT_APP_VER, // Version of the App
+        pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
       },
-      env: process.env.REACT_APP_env,
+      env: process.env.REACT_APP_ENV,
       uid: `${
         isBuddyLogin
           ? emis_username + '/' + buddyUserId

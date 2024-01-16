@@ -53,7 +53,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       setLoading(true);
       axios
         .get(
-          `${process.env.REACT_APP_learner_ai_app_host}/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -129,7 +129,7 @@ export default function Validate({forceRerender, setForceRerender}) {
 
     setIsModalOpen(true);
     axios
-      .post(`${process.env.REACT_APP_learner_ai_app_host}/lais/scores/addAssessmentInput`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/addAssessmentInput`, {
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
         token: myCurrectChar,
@@ -152,7 +152,7 @@ export default function Validate({forceRerender, setForceRerender}) {
 
   
   const addLessonApi = ()=>{
-    const base64url = `${process.env.REACT_APP_learner_ai_app_host}/lp-tracker/api`;
+    const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     const percentage = ((currentCharIndex+1) / chars.length) * 100;
    fetch(`${base64url}/lesson/addLesson`,{
