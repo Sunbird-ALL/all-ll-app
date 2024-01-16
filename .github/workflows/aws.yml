@@ -35,27 +35,29 @@ jobs:
       - name: Build Production
         run: |
           REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }} \
-          REACT_APP_APISLUG=${{ secrets.REACT_APP_APISLUG }} \
-          REACT_APP_AWS_S3_BUCKET_NAME=${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }} \
-          REACT_APP_AWS_S3_BUCKET_URL=${{ secrets.REACT_APP_AWS_S3_BUCKET_URL }} \
-          REACT_APP_BATCHSIZE=${{ secrets.REACT_APP_BATCHSIZE }} \
-          REACT_APP_CAPTURE_AUDIO=${{ secrets.REACT_APP_CAPTURE_AUDIO }} \
-          REACT_APP_CHANNEL=${{ secrets.REACT_APP_CHANNEL }} \
-          REACT_APP_CONTENT_SIZE=${{ secrets.REACT_APP_CONTENT_SIZE }} \
-          REACT_APP_ENDPOINT=${{ secrets.REACT_APP_ENDPOINT }} \
-          REACT_APP_ENV=${{ secrets.REACT_APP_ENV }} \
-          REACT_APP_HOST=${{ secrets.REACT_APP_HOST }} \
-          REACT_APP_ID=${{ secrets.REACT_APP_ID }} \
-          REACT_APP_LANGUAGE=${{ secrets.REACT_APP_LANGUAGE }} \
-          REACT_APP_LEARNER_AI_APP_HOST=${{ REACT_APP_LEARNER_AI_APP_HOST }} \
-          REACT_APP_MODE=${{ secrets.REACT_APP_MODE }} \
-          REACT_APP_authToken='' \
-          REACT_APP_PID=${{ secrets.REACT_APP_PID }} \
-          REACT_APP_TELEMETRY_MODE=${{ secrets.REACT_APP_TELEMETRY_MODE }} \
-          REACT_APP_TIMEDIFF=${{ secrets.REACT_APP_TIMEDIFF }} \
-          REACT_APP_UID=${{ secrets.REACT_APP_UID }} \
-          REACT_APP_VER=${{ secrets.REACT_APP_VER }} \
-          REACT_APP_AWS_S3_REGION=${{secrets.AWS_REGION}} \
+          REACT_APP_MODE=play \
+          REACT_APP_authToken="" \
+          REACT_APP_PID=learner-ai-story-demo \
+          REACT_APP_UID=anonymous \
+          REACT_APP_ID=all.ll.app \
+          REACT_APP_VER="0.3.0" \
+          REACT_APP_TIMEDIFF="0" \
+          REACT_APP_HOST=https://telemetry-dev.theall.ai \
+          REACT_APP_ENDPOINT=telemetry \
+          REACT_APP_APISLUG= /v1/ \
+          REACT_APP_CHANNEL="learner-ai-demo" \
+          REACT_APP_ENV="all-player" \
+          REACT_APP_BATCHSIZE=1 \
+          REACT_APP_CONTENT_SIZE=5 \
+          REACT_APP_LANGUAGE=ta \
+          REACT_APP_TELEMETRY_MODE=DT \
+          REACT_APP_LEARNER_AI_APP_HOST="https://www.learnerai-dev.theall.ai" \
+          REACT_APP_CAPTURE_AUDIO=true \
+          REACT_APP_AWS_s3_BUCKET_NAME=all-dev-storage
+          REACT_APP_AWS_s3_BUCKET_URL=https://all-dev-storage.s3.ap-south-1.amazonaws.com
+          REACT_APP_AWS_S3_REGION=ap-south-1
+          REACT_APP_AWS_ACCESS_KEY_ID= ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          REACT_APP_AWS_SECRET_ACCESS_KEY= ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
           npm run build
       - name: Deploy to S3 Bucket
         run: |
