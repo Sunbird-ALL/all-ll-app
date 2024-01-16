@@ -96,7 +96,7 @@ const Story = ({forceRerender, setForceRerender}) => {
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  const max = practiceCompletionCriteria.length - 1
+  const max = practiceCompletionCriteria.length;
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
 
   localStorage.setItem('sentenceCounter', currentLine);
@@ -292,7 +292,7 @@ const Story = ({forceRerender, setForceRerender}) => {
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
-    if (currentLine >= maxAllowedContent - 1) {
+    if (currentLine >= posts?.length - 1) {
       handleStarAnimation();
       setWellDone(true);
     } else if (currentLine >= posts?.length - 1) {
@@ -427,8 +427,8 @@ const Story = ({forceRerender, setForceRerender}) => {
                                   setCurrentLine(0);
                                   let index = completionCriteriaIndex + 1;
                                   setCompletionCriteriaIndex(index);
-                                  addLessonApi(parseInt(progressPercent));
                                   localStorage.setItem('userPracticeState', index)
+                                  addLessonApi(parseInt(progressPercent));
                                   setWellDone(false);
                                 }}
                                 src={Next}
