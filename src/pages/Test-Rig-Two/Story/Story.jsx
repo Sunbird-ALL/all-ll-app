@@ -295,9 +295,6 @@ const Story = ({forceRerender, setForceRerender}) => {
     if (currentLine >= posts?.length - 1) {
       handleStarAnimation();
       setWellDone(true);
-    } else if (currentLine >= posts?.length - 1) {
-      fetchApi();
-      setCurrentLine(currentLine + 1);
     } else {
       setCurrentLine(currentLine + 1);
     }
