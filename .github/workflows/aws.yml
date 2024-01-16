@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: all-dev-rig
 
     steps:
       - name: Checkout code
@@ -30,34 +31,9 @@ jobs:
       - name: Build and Package Application
         run: |
           npm install
-      - name: Set Environment Variables
-        run: |
-          echo "REACT_APP_MODE=play" >> .env.prod-ai-learner
-          echo "REACT_APP_authToken=${{ '' }}" >> .env.prod-ai-learner
-          echo "REACT_APP_pid=learner-ai-rig" >> .env.prod-ai-learner
-          echo "REACT_APP_uid=anonymous" >> .env.prod-ai-learner
-          echo "REACT_APP_id=all.ll.app" >> .env.prod-ai-learner
-          echo "REACT_APP_ver=0.3.0" >> .env.prod-ai-learner
-          echo "REACT_APP_timeDiff=0" >> .env.prod-ai-learner
-          echo "REACT_APP_host=https://telemetry.theall.ai" >> .env.prod-ai-learner
-          echo "REACT_APP_endpoint=telemetry" >> .env.prod-ai-learner
-          echo "REACT_APP_apislug=/v1/" >> .env.prod-ai-learner
-          echo "REACT_APP_CHANNEL=learner-ai-demo" >> .env.prod-ai-learner
-          echo "REACT_APP_env=all-player" >> .env.prod-ai-learner
-          echo "REACT_APP_batchsize=1" >> .env.prod-ai-learner
-          echo "REACT_APP_ASR_API_KEY=${{ secrets.REACT_APP_ASR_API_KEY }}" >> .env.prod-ai-learner
-          echo "REACT_APP_CONTENT_SIZE=5" >> .env.prod-ai-learner
-          echo "REACT_APP_LANGUAGE=ta" >> .env.prod-ai-learner
-          echo "REACT_APP_TELEMETRY_MODE=DT" >> .env.prod-ai-learner
-          echo "REACT_APP_CAPTURE_AUDIO=true" >> .env.prod-ai-learner
-          echo "REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}" >> .env.prod-ai-learner
-          echo "REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}" >> .env.prod-ai-learner
-          echo "REACT_APP_AWS_s3_BUCKET_NAME=all-prod-storage" >> .env.prod-ai-learner
-          echo "REACT_APP_AWS_s3_BUCKET_URL=https://all-prod-storage.s3.ap-south-1.amazonaws.com" >> .env.prod-ai-learner
-          echo "REACT_APP_AWS_S3_REGION=ap-south-1" >> .env.prod-ai-learner
 
       - name: Build Production
-        run: npm run build:prod-ai-learner
+        run: npm run build
       - name: Deploy to S3 Bucket
         run: |
-          aws s3 sync ./build s3://sb-all-rig
+          aws s3 sync ./build s3://all-appliance/assets
