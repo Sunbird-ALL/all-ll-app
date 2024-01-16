@@ -44,7 +44,7 @@ jobs:
           REACT_APP_TIMEDIFF="0" \
           REACT_APP_HOST=https://telemetry-dev.theall.ai \
           REACT_APP_ENDPOINT=telemetry \
-          REACT_APP_APISLUG= /v1/ \
+          REACT_APP_APISLUG= "/v1/" \
           REACT_APP_CHANNEL="learner-ai-demo" \
           REACT_APP_ENV="all-player" \
           REACT_APP_BATCHSIZE=1 \
