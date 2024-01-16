@@ -3,7 +3,7 @@ name: ALL rig Deployment
 on:
   push:
     branches:
-      - all-rig-0.1
+      - all-rig-0.1-lesson-progress
 
 jobs:
   deploy:
