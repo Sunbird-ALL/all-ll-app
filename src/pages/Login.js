@@ -1,4 +1,4 @@
-'use client'
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Box,
@@ -17,7 +17,6 @@ import {
   Toast,
   useToast,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
