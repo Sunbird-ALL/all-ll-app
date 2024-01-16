@@ -31,13 +31,16 @@ jobs:
       - name: Build and Package Application
         run: |
           npm install
-
+      
       - name: Build Production
         run: npm run build
       - name: Deploy to S3 Bucket
         run: |
           aws s3 sync ./build s3://sballappliance/assets/sb-ai/
-
+      - name: Debug Environment Variables
+        run: |
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "AWS_REGION: $AWS_REGION"
        ### Invalidate Cloudfront
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
