@@ -609,7 +609,6 @@ const Story = () => {
                             setRecordedAudio={setRecordedAudio}
                             _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                             flag={true}
-                            setStoryBase64Data={setStoryBase64Data}
                             handleAudioFile={handleAudioFile}
                             saveIndb={saveIndb}
                           />
