@@ -39,8 +39,9 @@ jobs:
           aws s3 sync ./build s3://sballappliance/assets/sb-ai/
       - name: Debug Environment Variables
         run: |
-          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: ${{REACT_APP_AWS_S3_BUCKET_NAME}}"
           echo "AWS_REGION: $AWS_REGION"
+          echo "secrate": ${{secrets.REACT_APP_AWS_S3_BUCKET_NAME}}
        ### Invalidate Cloudfront
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
