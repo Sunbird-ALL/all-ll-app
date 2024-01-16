@@ -38,7 +38,6 @@ jobs:
           REACT_APP_APISLUG=${{ secrets.REACT_APP_APISLUG }} \
           REACT_APP_AWS_S3_BUCKET_NAME=${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }} \
           REACT_APP_AWS_S3_BUCKET_URL=${{ secrets.REACT_APP_AWS_S3_BUCKET_URL }} \
-          REACT_APP_AWS_S3_REGION=${{ secrets.REACT_APP_AWS_S3_REGION }} \
           REACT_APP_BATCHSIZE=${{ secrets.REACT_APP_BATCHSIZE }} \
           REACT_APP_CAPTURE_AUDIO=${{ secrets.REACT_APP_CAPTURE_AUDIO }} \
           REACT_APP_CHANNEL=${{ secrets.REACT_APP_CHANNEL }} \
@@ -56,6 +55,7 @@ jobs:
           REACT_APP_TIMEDIFF=${{ secrets.REACT_APP_TIMEDIFF }} \
           REACT_APP_UID=${{ secrets.REACT_APP_UID }} \
           REACT_APP_VER=${{ secrets.REACT_APP_VER }} \
+          REACT_APP_AWS_S3_REGION=${{secrets.AWS_REGION}} \
           npm run build
       - name: Deploy to S3 Bucket
         run: |
