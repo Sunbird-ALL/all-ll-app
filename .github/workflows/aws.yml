@@ -30,9 +30,9 @@ jobs:
 
       - name: Install Dependencies and Build
         run: |
-          yarn install
-          yarn build
-
+          npm install
+      - name: Build Production
+        run: npm run build
       - name: Deploy to S3 Bucket
         run: |
           aws s3 sync ./build s3://all-appliance/assets
