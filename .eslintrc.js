@@ -38,6 +38,6 @@ module.exports = {
         'no-prototype-builtins': 'off',
         'react/jsx-key': 'off',
         'react/react-in-jsx-scop': 'off',
-        'no-self-assign': 'off',
+        'no-self-assign': 'off'
     }
 }
