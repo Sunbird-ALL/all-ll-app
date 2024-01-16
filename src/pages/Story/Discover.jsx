@@ -25,7 +25,7 @@ import { addPointerApi } from '../../utils/api/PointerApi';
 import { error } from '../../services/telementryService'
 const jsConfetti = new JSConfetti();
 
-const Discovery = () => {
+const Discovery = ( {forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
@@ -45,7 +45,6 @@ const Discovery = () => {
   const navigate = useNavigate()
   const [pageno, setPageNo] = useState(1);
   
-  
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -54,7 +53,7 @@ const Discovery = () => {
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
-  }, []);
+  }, [forceRerender]);
 
   const fetchApi = async () => {
     setLoading(true);
@@ -329,7 +328,7 @@ const Discovery = () => {
 
   return (
     <>
-      <Header active={0}/>
+      <Header active={0}  forceRerender={forceRerender} setForceRerender={setForceRerender}/>
       
         <Center pt={'10vh'} className='bg'>
           <div

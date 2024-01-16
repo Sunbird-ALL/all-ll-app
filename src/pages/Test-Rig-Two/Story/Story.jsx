@@ -55,7 +55,7 @@ import { addPointerApi } from '../../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
-const Story = () => {
+const Story = ({forceRerender, setForceRerender}) => {
   const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
   const [posts, setPosts] = useState([]);
   const toast = useToast()
@@ -96,7 +96,7 @@ const Story = () => {
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
   const { slug } = useParams();
-  const max = practiceCompletionCriteria.length - 1
+  const max = practiceCompletionCriteria.length;
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
 
   localStorage.setItem('sentenceCounter', currentLine);
@@ -133,7 +133,7 @@ const Story = () => {
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
-  }, []);
+  }, [forceRerender]);
 
   const fetchApi = async () => {
     setLoading(true);
@@ -292,7 +292,7 @@ const Story = () => {
     const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
-    if (currentLine >= maxAllowedContent - 1) {
+    if (currentLine >= posts?.length - 1) {
       handleStarAnimation();
       setWellDone(true);
     } else if (currentLine >= posts?.length - 1) {
@@ -350,7 +350,7 @@ const Story = () => {
   return (
     <>
 
-      <Header active={2} />
+      <Header active={2} forceRerender={forceRerender} setForceRerender={setForceRerender}/>
       <Container mt={20} w={'75vw'} className="story-container">
         <Center minH={'50vh'}
           style={{
@@ -427,8 +427,8 @@ const Story = () => {
                                   setCurrentLine(0);
                                   let index = completionCriteriaIndex + 1;
                                   setCompletionCriteriaIndex(index);
-                                  addLessonApi(parseInt(progressPercent));
                                   localStorage.setItem('userPracticeState', index)
+                                  addLessonApi(parseInt(progressPercent));
                                   setWellDone(false);
                                 }}
                                 src={Next}

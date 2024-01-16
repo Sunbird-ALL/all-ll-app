@@ -8,14 +8,14 @@ import Header from '../Header';
 import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
 import {error} from '../../services/telementryService'
-const DiscoveryList = () => {
+const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const toast = useToast();
 
   useEffect(() => {
     fetchApi();
-  }, []);
+  }, [forceRerender]);
 
   const fetchApi = async () => {
     setLoading(true)
@@ -51,7 +51,7 @@ const DiscoveryList = () => {
   };
   return (
     <>
-      <Header active={0} />
+      <Header active={0} forceRerender={forceRerender} setForceRerender={setForceRerender} />
       <div className='bg'>
         <div style={{ padding: '100px 25px 5px 25px' }}>
           {

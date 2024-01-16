@@ -56,7 +56,7 @@ const tabs =
     { name: 'Showcase', link: '/showcase' },
   ];
 
-export default function Header({ active }) {
+export default function Header({ active,forceRerender=false,setForceRerender = () => {} }) {
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { activeStep, setActiveStep } = useSteps({
@@ -80,7 +80,7 @@ export default function Header({ active }) {
           <Box p={3} w={'100vw'}>
             <Stepper size='lg' index={activeStep}>
               {steps.map((step, index) => (
-                <Step key={index}  onClick={() => setNavigationToRoute(index)}>
+               <Step key={index}  onClick={() => active>=index?setNavigationToRoute(index):''}>
                   <StepIndicator>
                     <StepStatus
                       complete={`✅`} incomplete={`🚩`} active={`📍`}
@@ -100,7 +100,7 @@ export default function Header({ active }) {
           </Box>
           <Spacer />
           <Box p={1}>
-            <AppDrawer />
+            <AppDrawer forceRerender={forceRerender} setForceRerender={setForceRerender} />
           </Box>
         </Flex>
       </Box>
