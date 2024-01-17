@@ -22,6 +22,7 @@ import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
+import { uniqueId } from '../../services/utilService';
 
 const jsConfetti = new JSConfetti();
 
@@ -57,6 +58,9 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   }, [forceRerender]);
 
   const fetchApi = async () => {
+    localStorage.setItem(
+      'sub_session_id',uniqueId()
+     );
     setLoading(true);
     try {
       axios
@@ -309,29 +313,36 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const fetchCurrentLevel = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
-      )
-        .then(res => {
-          return res.json();
-        })
+      axios
+    .post(
+      `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
+      {
+        sub_session_id: localStorage.getItem('sub_session_id'),
+        contentType : contentType,
+        session_id: localStorage.getItem('virtualStorySessionID'),
+        user_id: localStorage.getItem('virtualID')
+      }
+    )
         .then(data => {
           setLoading(false);
-          if (localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
+
+          if ( data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
             toast({
               position: 'top',
               duration: '2000',
               title: `You need to practice more to complete this level.`,
               status: 'error',
             })
+          
             navigate('/practice')
-          }else if(localStorage.getItem('userCurrentLevel') === data.currentLevel && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
+          }else if(data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
               position: 'top',
               duration: '2000',
               title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
             })
+          
             localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/practice')
@@ -349,7 +360,31 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             localStorage.setItem('firstPracticeSessionCompleted', false)
             navigate('/showcase')
           }
-          localStorage.setItem('userCurrentLevel', data.currentLevel)
+          fetchMileStone();
+        });
+    } catch (err) {
+      setLoading(false);
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
+    }
+  };
+
+  const fetchMileStone = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}`
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          setLoading(false);
+          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level)
         });
     } catch (err) {
       setLoading(false);

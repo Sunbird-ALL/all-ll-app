@@ -8,7 +8,6 @@ import Header from '../Header';
 import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
 import {error} from '../../services/telementryService'
-import { uniqueId } from '../../services/utilService';
 const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,9 +21,6 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
   }, [forceRerender]);
 
   const fetchApi = async () => {
-    localStorage.setItem(
-      'sub_session_id',uniqueId()
-     );
     setLoading(true)
     axios
       .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {

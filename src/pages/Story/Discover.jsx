@@ -23,6 +23,7 @@ import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
 import { error } from '../../services/telementryService'
+import { uniqueId } from '../../services/utilService';
 const jsConfetti = new JSConfetti();
 
 const Discovery = ( {forceRerender, setForceRerender}) => {
@@ -60,6 +61,9 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
 
 
   const fetchApi = async (slug) => {
+    localStorage.setItem(
+      'sub_session_id',uniqueId()
+     );
     setLoading(true);
     try {
       const response = await fetch(
@@ -168,6 +172,11 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
 
 
   const checkSetResult =() => {
+    var allCollectionId =  JSON.parse(localStorage.getItem('AllCollectionId'))
+    const resultArray = allCollectionId.map(item => ({ id: item.collectionId, tags: item.tags[1] }));
+    const checkInd = resultArray.findIndex(element => element.id === slug);
+    var newIndex = null;
+  
     axios
     .post(
       `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
@@ -176,21 +185,24 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         contentType : contentType,
         session_id: localStorage.getItem('virtualStorySessionID'),
         user_id: localStorage.getItem('virtualID'),
-
+        collectionId: resultArray[checkInd].id
       }
     )
     .then(res => {
       if(res.data.status === "success"){
         setSessionResult(res.data.data.sessionResult);
-          var allCollectionId =  JSON.parse(localStorage.getItem('AllCollectionId'))
-          const resultArray = allCollectionId.map(item => ({ id: item.collectionId, tags: item.tags[1] }));
-          const checkInd = resultArray.findIndex(element => element.id === slug);
-          var newIndex = null;
-        
+          if(res.data.data.currentLevel === 'm1'){
+            navigate('/Validate')
+          }
           if(res.data.data.sessionResult === 'pass'){
-            newIndex = checkInd + 1;
+              newIndex = checkInd + 1;
+           
           }else if(res.data.data.sessionResult === 'fail'){
-            newIndex = checkInd - 1;
+            if(checkInd === 3){
+              navigate('/Validate')
+            }else {
+              newIndex = checkInd - 1;
+            }
           }
           if(resultArray[newIndex]){
             setCollectionId(resultArray[newIndex].id)
@@ -505,13 +517,13 @@ const handleSubmit = () => {
     <AlertDialogContent>
       <AlertDialogHeader>
         {sessionResult === 'pass'
-          ? 'Congratulations!'
-          : 'Oops'}
+          ? 'Well Done !'
+          : 'Good Job !'}
       </AlertDialogHeader>
       <AlertDialogBody>
         {sessionResult === 'pass'
-          ? "You did an excellent job! Keep it up!"
-          : "Don't worry, better luck next time. You'll do great"}
+          ? "Discover More For Level Up"
+          : "Keep trying to Improve Level"}
       </AlertDialogBody>
       <AlertDialogFooter>
         <Button colorScheme='linkedin' ml={3} onClick={handleSubmit}>
