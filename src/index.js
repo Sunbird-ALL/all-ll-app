@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(container);
 root.render(
   <>
     {/* <ColorModeScript /> */}
-    <ChakraProvider toastOptions={{ defaultOptions: { duration: '1000' } }}>
+    <ChakraProvider toastOptions={{ defaultOptions: { duration: '2000' } }}>
       <App />
     </ChakraProvider>
   </>
