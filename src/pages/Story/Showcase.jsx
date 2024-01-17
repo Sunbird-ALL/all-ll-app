@@ -333,7 +333,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
               title: `You need to practice more to complete this level.`,
               status: 'error',
             })
-          
+            localStorage.setItem('userPracticeState',parseInt(localStorage.getItem('userPracticeState'))+1)
             navigate('/practice')
           }else if(data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
