@@ -37,6 +37,7 @@ const Story = () => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+  const [contentType, setContentType] = useState('')
 
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
@@ -67,6 +68,7 @@ const Story = () => {
         })
         .then(data => {
           setPosts(data);
+          setContentType(data?.data[0]?.contentType)
           setLoading(false);
         });
       if (!response.ok) {
@@ -141,6 +143,9 @@ const Story = () => {
         date: utcDate,
         original_text: findRegex(posts?.data[currentLine]?.data[0]?.[lang]?.text),
         language: lang,
+        sub_session_id: localStorage.getItem('sub_session_id'),
+        contentId:slug,
+        contentType : contentType
       })
       .then(async res => {
         // console.log(res);

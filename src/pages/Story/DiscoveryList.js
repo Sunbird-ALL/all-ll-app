@@ -12,7 +12,10 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const toast = useToast();
-
+  const  [startEndIndex , setStartEndIndex ] = useState({
+    start : 2,
+    end : 3
+  });
   useEffect(() => {
     fetchApi();
   }, [forceRerender]);
@@ -30,6 +33,7 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
           throw new Error('Network response was not ok');
         }
         setPosts(response.data?.data);
+        localStorage.setItem('AllCollectionId',JSON.stringify(response.data?.data))
         //localStorage.setItem('selectedStoryTitle', response.data.);
         localStorage.setItem('sentenceCounter', 0);
       })
@@ -53,7 +57,7 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
     <>
       <Header active={0} forceRerender={forceRerender} setForceRerender={setForceRerender} />
       <div className='bg'>
-        <div style={{ padding: '100px 25px 5px 25px' }}>
+        <div style={{ padding: '100px 25px 5px 25px', maxWidth: '500px', margin: '0 auto' }}>
           {
             loading ? (
               <Center h='50vh'><Spinner
@@ -65,38 +69,38 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
             /></Center>
             ) :
               posts?.length ?
-                <SimpleGrid minChildWidth='25vh' spacing='25px'>
-
-                  {posts?.map((post, ind) => (
-                    <Box
-                      onClick={() => selectStoryTitle(post.name, post.language)}
-                      borderWidth="1px"
-                      borderRadius="1px"
-                      backgroundColor="white"
-                      boxShadow="md"
-                      key={ind}
-                      _hover={{ boxShadow: "lg" }}
-                    >
-                      <Link to={`discovery/${post.collectionId}`} key={ind}>
-                        {/* <Image src={post.image == " " ? post.language === 'kn' ? kannadaPlaceholder : PlaceHolder : post.image} alt={post.title} width="100%" height="auto" /> */}
-                        <Image
-                          src={!post.image ? post.language === 'kn' ? kannadaPlaceholder : PlaceHolder : post.image}
-                          alt={post.name}
-                          width="100%"
-                        />
-                        <Box textAlign='center'>
-                          <Text fontSize="xl" fontWeight="bold" lineHeight="1.1" mb="2">
-                            {post.name}
-                          </Text>
-                        </Box>
-                      </Link>
-                    </Box>
-                  ))}
-
-
-                </SimpleGrid>
-                : <>
-                  <Center>
+            (
+    <SimpleGrid minChildWidth='25vh' spacing='25px'>
+      {posts.slice(startEndIndex.start, startEndIndex.end).map((post, ind) => (
+        post.tags[1] ? (
+          <Box
+            onClick={() => selectStoryTitle(post.name, post.language)}
+            borderWidth="1px"
+            borderRadius="1px"
+            backgroundColor="white"
+            boxShadow="md"
+            key={ind}
+            _hover={{ boxShadow: "lg" }}
+          >
+            
+            <Link to={`discovery/${post.collectionId}`} key={ind}>
+              <Image
+                src={!post.image ? (post.language === 'kn' ? kannadaPlaceholder : PlaceHolder) : post.image}
+                alt={post.name}
+                width="100%"
+              />
+              <Box textAlign='center'>
+                <Text fontSize="xl" fontWeight="bold" lineHeight="1.1" mb="2">
+                  {post.name}
+                </Text>
+              </Box>
+            </Link>
+          </Box>
+        ) : null
+      ))}
+    </SimpleGrid>
+  ) : <>
+             <Center>
                     <Text color='red'>
                       Data not available
                     </Text>

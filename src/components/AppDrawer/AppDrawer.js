@@ -96,14 +96,14 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestoneProgress/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}`
       )
         .then(res => {
           return res.json();
         })
         .then(data => {
-          setLevel(data.currentLevel);
-          localStorage.setItem('userCurrentLevel', data.currentLevel)
+          setLevel(data?.data?.milestone_level);
+          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level)
         });
     } catch (error) {
       console.error(error.message);
