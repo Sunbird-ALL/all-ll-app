@@ -22,7 +22,6 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
 import { minSafeInteger } from '@chakra-ui/utils'
 import {error} from '../services/telementryService';
-import { uniqueId } from '../services/utilService'
 export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
@@ -37,7 +36,6 @@ export default function Login({setIsLoggedIn = false}) {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const toast = useToast()
-  const subSessionId = uniqueId();
   const handleSubmit = async (username, password) => {
     try {
       localStorage.removeItem('userPracticeState')
@@ -54,9 +52,6 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
-        );
-        localStorage.setItem(
-         'sub_session_id',subSessionId
         );
         toast({
           position: 'top',
