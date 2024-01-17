@@ -192,7 +192,7 @@ const Story = ({forceRerender, setForceRerender}) => {
     if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
       var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId') === null ? localStorage.getItem('allAppContentSessionId') : localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
       const command = new PutObjectCommand({
-        Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+        Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
         Key: audioFileName,
         Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
         ContentType: 'audio/wav'
