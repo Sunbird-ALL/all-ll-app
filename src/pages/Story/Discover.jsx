@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack ,useToast} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack ,useToast,AlertDialogContent,AlertDialog,AlertDialogOverlay,AlertDialogHeader,AlertDialogBody,AlertDialogFooter} from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -44,7 +44,10 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   localStorage.setItem("sentenceCounter", currentLine)
   const navigate = useNavigate()
   const [pageno, setPageNo] = useState(1);
-  
+  const [sessionResult, setSessionResult] = useState('');
+  const [contentType, setContentType] = useState('')
+  const location = useLocation();
+  const [collectionId, setCollectionId] = useState(slug)
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -52,10 +55,11 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     }
   }, [voiceText]);
   React.useEffect(() => {
-    fetchApi();
-  }, [forceRerender]);
+    fetchApi(slug);
+  }, [forceRerender,location]);
 
-  const fetchApi = async () => {
+
+  const fetchApi = async (slug) => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -65,6 +69,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
           return res.json();
         })
         .then(data => {
+          setContentType(data.data[0].contentType)
           setPosts(data);
           setLoading(false);
         });
@@ -79,7 +84,6 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     }
   };
 
-  const location = useLocation();
 
   const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
@@ -163,6 +167,48 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   }
 
 
+  const checkSetResult =() => {
+    axios
+    .post(
+      `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
+      {
+        sub_session_id: localStorage.getItem('sub_session_id'),
+        contentType : contentType,
+        session_id: localStorage.getItem('virtualStorySessionID'),
+        user_id: localStorage.getItem('virtualID'),
+
+      }
+    )
+    .then(res => {
+      if(res.data.status === "success"){
+        setSessionResult(res.data.data.sessionResult);
+          var allCollectionId =  JSON.parse(localStorage.getItem('AllCollectionId'))
+          const resultArray = allCollectionId.map(item => ({ id: item.collectionId, tags: item.tags[1] }));
+          const checkInd = resultArray.findIndex(element => element.id === slug);
+          var newIndex = null;
+        
+          if(res.data.data.sessionResult === 'pass'){
+            newIndex = checkInd + 1;
+          }else if(res.data.data.sessionResult === 'fail'){
+            newIndex = checkInd - 1;
+          }
+          if(resultArray[newIndex]){
+            setCollectionId(resultArray[newIndex].id)
+          }else{
+            navigate('/Validate')
+          }
+        
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+const handleSubmit = () => {
+    setCurrentLine(0)
+    navigate(`/discoverylist/discovery/${collectionId}`)
+}
 
   async function saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
@@ -179,6 +225,9 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         date: utcDate,
         original_text: findRegex(posts?.data[currentLine]?.contentSourceData[0]?.text),
         language: lang,
+        sub_session_id: localStorage.getItem('sub_session_id'),
+        contentId:slug,
+        contentType : contentType
       })
       .then(async res => {
         responseText = res.data.responseText
@@ -320,7 +369,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   useEffect(() => {
 
     if (currentLine && currentLine === posts?.data?.length) {
-      navigate('/Validate')
+       checkSetResult();
       localStorage.setItem('tabIndex', parseInt(localStorage.getItem('tabIndex')) + 1) 
       //setPageNo(pageno + 1)
     }
@@ -446,17 +495,34 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
           </div>
         </Center>
         {currentLine === posts?.data?.length ? (
-          <div className="button-container">
-            <Link to={'/Results'}>
-              <button className="custom-button">View Result</button>
-            </Link>
-            <Link to={'/storyList'}>
-              <button className="custom-button">Back To StoryList</button>
-            </Link>
-          </div>
-        ) : (
-          ''
-        )}
+  <AlertDialog
+    motionPreset='slideInBottom'
+    isOpen={true}
+    isCentered
+  >
+    <AlertDialogOverlay />
+
+    <AlertDialogContent>
+      <AlertDialogHeader>
+        {sessionResult === 'pass'
+          ? 'Congratulations!'
+          : 'Oops'}
+      </AlertDialogHeader>
+      <AlertDialogBody>
+        {sessionResult === 'pass'
+          ? "You did an excellent job! Keep it up!"
+          : "Don't worry, better luck next time. You'll do great"}
+      </AlertDialogBody>
+      <AlertDialogFooter>
+        <Button colorScheme='linkedin' ml={3} onClick={handleSubmit}>
+          {'OK'}
+        </Button>
+      </AlertDialogFooter>
+    </AlertDialogContent>
+  </AlertDialog>
+) : (
+  ''
+)}
       
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 

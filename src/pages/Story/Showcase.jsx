@@ -37,6 +37,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+  const [contentType, setContentType] = useState('')
 
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
@@ -66,6 +67,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         .then(res => {
           setPosts(res?.data?.data[0]?.content);
           setLoading(false);
+          setContentType(res?.data?.data[0]?.category)
         });
     } catch (err) {
       setLoading(false)
@@ -165,6 +167,9 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         date: utcDate,
         original_text: findRegex(posts[currentLine]?.contentSourceData[0]?.text),
         language: lang,
+        sub_session_id: localStorage.getItem('sub_session_id'),
+        contentId:posts[currentLine].collectionId,
+        contentType : contentType
       })
       .then(async res => {
         responseText = res.data.responseText
