@@ -133,31 +133,32 @@ const Story = ({forceRerender, setForceRerender}) => {
   }, [voiceText]);
   React.useEffect(() => {
     fetchApi();
-  }, [forceRerender]);
+  }, [forceRerender, completionCriteriaIndex]);
 
   const fetchApi = async () => {
     setLoading(true);
-    if (parseInt(localStorage.getItem('userPracticeState')) >= 4 && localStorage.getItem('firstPracticeSessionCompleted') === 'false') {
+    if(practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1'){
       toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the first practice session`,
-        status: 'success'
-      })
-      localStorage.setItem('firstPracticeSessionCompleted', true)
-      navigate('/showcase')
-    } else if (completionCriteriaIndex >= 7 && localStorage.getItem('firstPracticeSessionCompleted') === 'true') {
-      setCompletionCriteriaIndex(0);
-      localStorage.setItem('userPracticeState', 0)
-      localStorage.setItem('firstPracticeSessionCompleted', false)
-      toast({
-        position: 'top',
-        title: `Well Done! \n
-        You have completed the second practice session`,
-        status: 'success'
-      })
+            position: 'top',
+            title: `Well Done! \n
+            You have completed the first practice session`,
+            status: 'success'
+          })
+          localStorage.setItem('firstPracticeSessionCompleted', true)
+          navigate('/showcase')
+        }
+        else if(practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'){
+          toast({
+            position: 'top',
+            title: `Well Done! \n
+            You have completed the second practice session`,
+            status: 'success'
+          })
+          setCompletionCriteriaIndex(0);
+          localStorage.setItem('firstPracticeSessionCompleted', false)
       navigate('/showcase')
     }
+
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     localStorage.setItem('apphomelevel', type);
     try {
@@ -371,7 +372,7 @@ const Story = ({forceRerender, setForceRerender}) => {
               color='blue.500'
               size='xl'
             /></Center>
-          ) : posts?.length === 0 && practiceCompletionCriteria[completionCriteriaIndex].template == 'simple' ? (
+          ) : posts?.length === 0 && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'simple' ? (
             <>
               <Center h='50vh'>
                 <VStack>
@@ -445,7 +446,7 @@ const Story = ({forceRerender, setForceRerender}) => {
                 </Flex>
               </Center>
             </>
-          ) : posts && practiceCompletionCriteria[completionCriteriaIndex].template == 'simple' ? (
+          ) : posts && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -657,7 +658,7 @@ const Story = ({forceRerender, setForceRerender}) => {
                 </Box>
               </VStack>
             </>
-          ) : posts && practiceCompletionCriteria[completionCriteriaIndex].template == 'game' ?
+          ) : posts && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'game' ?
             <CharacterToWordMatchingGame
               sourceChars={sourceChars}
               targetWords={posts}
