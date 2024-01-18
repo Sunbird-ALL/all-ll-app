@@ -198,7 +198,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
               newIndex = checkInd + 1;
            
           }else if(res.data.data.sessionResult === 'fail'){
-            if(checkInd === 3){
+            if(checkInd >= 3){
               navigate('/Validate')
             }else {
               newIndex = checkInd - 1;

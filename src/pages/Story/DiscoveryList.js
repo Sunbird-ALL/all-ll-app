@@ -57,7 +57,7 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
     <>
       <Header active={0} forceRerender={forceRerender} setForceRerender={setForceRerender} />
       <div className='bg'>
-        <div style={{ padding: '100px 25px 5px 25px', maxWidth: '500px', margin: '0 auto' }}>
+        <div style={{ padding: '100px 25px 5px 25px', maxWidth: '45vh', margin: '0 auto' }}>
           {
             loading ? (
               <Center h='50vh'><Spinner
