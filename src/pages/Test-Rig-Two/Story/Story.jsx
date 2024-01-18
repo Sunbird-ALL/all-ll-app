@@ -313,7 +313,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     handleAddPointer(1);
     addLessonApi(
       'practice',
-      localStorage.getItem('userPracticeState'),
+      localStorage.getItem('userPracticeState') || 0,
       parseInt(progressPercent)
     );
     localStorage.setItem('lessonProgressPercent', parseInt(progressPercent));
