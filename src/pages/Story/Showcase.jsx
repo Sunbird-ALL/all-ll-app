@@ -394,7 +394,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             localStorage.removeItem('progressData');
             localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
-            navigate('/showcase')
+            fetchMileStone();
+            navigate('/practice')
           }
           fetchMileStone();
         });
