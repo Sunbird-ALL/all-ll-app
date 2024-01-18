@@ -63,7 +63,6 @@ export default function Login({setIsLoggedIn = false}) {
         navigate('/discoverylist')
 
         // localStorage.setItem('userPracticeState', 0)
-        localStorage.setItem('firstPracticeSessionCompleted', false)
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
       } else {
@@ -90,6 +89,7 @@ export default function Login({setIsLoggedIn = false}) {
     }).then((data)=>{
       let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
       if(milestone === 'showcase'){
+        localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
           navigate(`/showcase`)  
         }
         else if(milestone === 'practice'){

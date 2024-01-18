@@ -55,10 +55,10 @@ import { addPointerApi } from '../../../utils/api/PointerApi';
 
 const jsConfetti = new JSConfetti();
 
-const Story = ({forceRerender, setForceRerender}) => {
+const Story = ({ forceRerender, setForceRerender }) => {
   const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
   const [posts, setPosts] = useState([]);
-  const toast = useToast()
+  const toast = useToast();
   const [voiceText, setVoiceText] = useState('');
   const [showWellDone, setWellDone] = useState(false);
   const [isGame, setIsGame] = useState(true);
@@ -80,7 +80,9 @@ const Story = ({forceRerender, setForceRerender}) => {
   //     return 0;
   //   }
   // });
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
+    parseInt(localStorage.getItem('userPracticeState') || 0)
+  );
 
   const [currentLine, setCurrentLine] = useState(() => {
     const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -97,7 +99,10 @@ const Story = ({forceRerender, setForceRerender}) => {
   ];
   const { slug } = useParams();
   const max = practiceCompletionCriteria.length;
-  const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+  const progressPercent =
+    ((completionCriteriaIndex * maxAllowedContent + currentLine) /
+      (max * maxAllowedContent)) *
+    100;
 
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
@@ -118,7 +123,7 @@ const Story = ({forceRerender, setForceRerender}) => {
   }, [progressData]);
 
   const updateProgress = (sessionId, newData) => {
-    setProgressData((prevData) => ({
+    setProgressData(prevData => ({
       ...prevData,
       [sessionId]: { ...prevData[sessionId], ...newData },
     }));
@@ -137,42 +142,49 @@ const Story = ({forceRerender, setForceRerender}) => {
 
   const fetchApi = async () => {
     setLoading(true);
-    if(practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1'){
+    if (practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1') {
       toast({
-            position: 'top',
-            title: `Well Done! \n
+        position: 'top',
+        title: `Well Done! \n
             You have completed the first practice session`,
-            status: 'success'
-          })
-          localStorage.setItem('firstPracticeSessionCompleted', true)
-          navigate('/showcase')
-        }
-        else if(practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'){
-          toast({
-            position: 'top',
-            title: `Well Done! \n
+        status: 'success',
+      });
+      localStorage.setItem('firstPracticeSessionCompleted', true);
+      addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
+      navigate('/showcase');
+    } else if (
+      practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'
+    ) {
+      toast({
+        position: 'top',
+        title: `Well Done! \n
             You have completed the second practice session`,
-            status: 'success'
-          })
-          setCompletionCriteriaIndex(0);
-          localStorage.setItem('firstPracticeSessionCompleted', false)
-      navigate('/showcase')
+        status: 'success',
+      });
+      setCompletionCriteriaIndex(0);
+      localStorage.setItem('firstPracticeSessionCompleted', false);
+      addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
+      navigate('/showcase');
     }
 
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     localStorage.setItem('apphomelevel', type);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/${type}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
-          'apphomelang'
-        )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
+        `${
+          process.env.REACT_APP_LEARNER_AI_APP_HOST
+        }/lais/scores/GetContent/${type}/${localStorage.getItem(
+          'virtualID'
+        )}?language=${localStorage.getItem('apphomelang')}&contentlimit=${
+          localStorage.getItem('contentPracticeLimit') || 5
+        }&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
         .then(res => {
           return res.json();
         })
         .then(data => {
           const newPosts = data?.content || [];
-          setSourceChars(data?.getTargetChar)
+          setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
           setLoading(false);
@@ -184,19 +196,23 @@ const Story = ({forceRerender, setForceRerender}) => {
         position: 'top',
         title: `${err?.message}`,
         status: 'error',
-      })
+      });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
-  const handleAudioFile = async (base64Data) => {
+  const handleAudioFile = async base64Data => {
     if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
-      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId') === null ? localStorage.getItem('allAppContentSessionId') : localStorage.getItem('contentSessionId')}-${Date.now()}-${currentLine}.wav`;
+      var audioFileName = `${process.env.REACT_APP_CHANNEL}/${
+        localStorage.getItem('contentSessionId') === null
+          ? localStorage.getItem('allAppContentSessionId')
+          : localStorage.getItem('contentSessionId')
+      }-${Date.now()}-${currentLine}.wav`;
       const command = new PutObjectCommand({
         Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
         Key: audioFileName,
-        Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
-        ContentType: 'audio/wav'
+        Body: Uint8Array.from(window.atob(base64Data), c => c.charCodeAt(0)),
+        ContentType: 'audio/wav',
       });
       try {
         const response = await S3Client.send(command);
@@ -205,29 +221,34 @@ const Story = ({forceRerender, setForceRerender}) => {
           position: 'top',
           title: `${err?.message}`,
           status: 'error',
-        })
+        });
         error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
       }
     }
 
-    response({ // Required
-      "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
-      //"qid": "", // Required. Unique assessment/question id
-      "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-      "values": [
-        { "original_text": posts[currentLine]?.contentSourceData[0]?.text },
-        { "response_text": "" },
-        { "response_correct_words_array": [] },
-        { "response_incorrect_words_array": [] },
-        { "response_word_array_result": []},
-        { "response_word_result": "" },
-        { "accuracy_percentage": 0 },
-        { "duration": 0 }
-      ]
-    },
+    response(
+      {
+        // Required
+        target:
+          process.env.REACT_APP_CAPTURE_AUDIO === 'true'
+            ? `${audioFileName}`
+            : '', // Required. Target of the response
+        //"qid": "", // Required. Unique assessment/question id
+        type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+        values: [
+          { original_text: posts[currentLine]?.contentSourceData[0]?.text },
+          { response_text: '' },
+          { response_correct_words_array: [] },
+          { response_incorrect_words_array: [] },
+          { response_word_array_result: [] },
+          { response_word_result: '' },
+          { accuracy_percentage: 0 },
+          { duration: 0 },
+        ],
+      },
       'ET'
-    )
-  }
+    );
+  };
 
   React.useEffect(() => {
     learnAudio();
@@ -258,7 +279,7 @@ const Story = ({forceRerender, setForceRerender}) => {
   const handleSuccess = () => {
     handleStarAnimation();
     setWellDone(true);
-  }
+  };
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
@@ -267,7 +288,7 @@ const Story = ({forceRerender, setForceRerender}) => {
     }
   };
 
-  const addLessonApi = (percentage) => {
+  const addLessonApi = (milestone, lesson, progressPercentage) => {
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
     fetch(`${base64url}/lesson/addLesson`, {
@@ -278,19 +299,30 @@ const Story = ({forceRerender, setForceRerender}) => {
       body: JSON.stringify({
         userId: localStorage.getItem('virtualID'),
         sessionId: localStorage.getItem('virtualStorySessionID'),
-        milestone: 'practice',
-        lesson: localStorage.getItem('userPracticeState') || 0,
-        progress: percentage,
+        milestone: milestone,
+
+        // milestone: 'practice',
+        lesson: lesson,
+        // lesson: localStorage.getItem('userPracticeState') || 0,
+        progress: progressPercentage,
       }),
     });
   };
 
   const nextLine = count => {
     handleAddPointer(1);
-    addLessonApi(parseInt(progressPercent));
-    localStorage.setItem('lessonProgressPercent', parseInt(progressPercent))
+    addLessonApi(
+      'practice',
+      localStorage.getItem('userPracticeState'),
+      parseInt(progressPercent)
+    );
+    localStorage.setItem('lessonProgressPercent', parseInt(progressPercent));
     const sessionId = localStorage.getItem('virtualID');
-    const newData = { progressPercent: progressPercent, currentLine: currentLine, completionCriteriaIndex: completionCriteriaIndex };
+    const newData = {
+      progressPercent: progressPercent,
+      currentLine: currentLine,
+      completionCriteriaIndex: completionCriteriaIndex,
+    };
     updateProgress(sessionId, newData);
     setUserSpeak(false);
     if (currentLine >= posts?.length - 1) {
@@ -301,8 +333,7 @@ const Story = ({forceRerender, setForceRerender}) => {
     }
   };
 
-
-  const handleAddPointer = async (point) => {
+  const handleAddPointer = async point => {
     const requestBody = {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
@@ -311,21 +342,23 @@ const Story = ({forceRerender, setForceRerender}) => {
 
     try {
       const response = await addPointerApi(requestBody);
-      localStorage.setItem('totalSessionPoints', response.result.totalSessionPoints)
-      localStorage.setItem('totalUserPoints', response.result.totalUserPoints)
+      localStorage.setItem(
+        'totalSessionPoints',
+        response.result.totalSessionPoints
+      );
+      localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
     } catch (err) {
       toast({
         position: 'top',
         title: `${err?.message}`,
         status: 'error',
-      })
+      });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
 
-
   function saveIndb(base64Data) {
-    handleAudioFile(base64Data)
+    handleAudioFile(base64Data);
     setUserSpeak(true);
   }
 
@@ -347,34 +380,56 @@ const Story = ({forceRerender, setForceRerender}) => {
 
   return (
     <>
-
-      <Header active={2} forceRerender={forceRerender} setForceRerender={setForceRerender}/>
+      <Header
+        active={2}
+        forceRerender={forceRerender}
+        setForceRerender={setForceRerender}
+      />
       <Container mt={20} w={'75vw'} className="story-container">
-        <Center minH={'50vh'}
+        <Center
+          minH={'50vh'}
           style={{
-            backgroundColor: `${practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'word' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'simple' &&
+            backgroundColor: `${
+              practiceCompletionCriteria[completionCriteriaIndex]?.criteria ===
+                'word' &&
+              practiceCompletionCriteria[completionCriteriaIndex]?.template ===
+                'simple' &&
               posts?.length > 0
-              ? '#c9c4ff'
-              : practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'sentence' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'simple' && posts?.length > 0
+                ? '#c9c4ff'
+                : practiceCompletionCriteria[completionCriteriaIndex]
+                    ?.criteria === 'sentence' &&
+                  practiceCompletionCriteria[completionCriteriaIndex]
+                    ?.template === 'simple' &&
+                  posts?.length > 0
                 ? '#d3ffbb'
-                : practiceCompletionCriteria[completionCriteriaIndex]?.criteria === 'word' && practiceCompletionCriteria[completionCriteriaIndex]?.template === 'game' && posts?.length > 0 ? '#FFDAB9' : 'white'
-              }`,
+                : practiceCompletionCriteria[completionCriteriaIndex]
+                    ?.criteria === 'word' &&
+                  practiceCompletionCriteria[completionCriteriaIndex]
+                    ?.template === 'game' &&
+                  posts?.length > 0
+                ? '#FFDAB9'
+                : 'white'
+            }`,
             boxShadow: '2px 2px 15px 5px grey',
             borderRadius: '30px',
             width: 'inherit',
           }}
         >
           {loading ? (
-            <Center h='50vh'><Spinner
-              thickness='4px'
-              speed='0.65s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            /></Center>
-          ) : posts?.length === 0 && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'simple' ? (
+            <Center h="50vh">
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            </Center>
+          ) : posts?.length === 0 &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+              'simple' ? (
             <>
-              <Center h='50vh'>
+              <Center h="50vh">
                 <VStack>
                   <div>
                     <h1 style={{ fontSize: '20px', color: 'red' }}>
@@ -384,9 +439,7 @@ const Story = ({forceRerender, setForceRerender}) => {
                   <div>
                     <section className="c-section">
                       <Link to={'/discoveryList'}>
-                        <button className='btn btn-info'>
-                          Discover {'>'}
-                        </button>
+                        <button className="btn btn-info">Discover {'>'}</button>
                       </Link>
                     </section>
                   </div>
@@ -396,7 +449,7 @@ const Story = ({forceRerender, setForceRerender}) => {
             </>
           ) : showWellDone ? (
             <>
-              <Center h='50vh'>
+              <Center h="50vh">
                 <Flex>
                   <div
                     style={{
@@ -425,8 +478,15 @@ const Story = ({forceRerender, setForceRerender}) => {
                                   setCurrentLine(0);
                                   let index = completionCriteriaIndex + 1;
                                   setCompletionCriteriaIndex(index);
-                                  localStorage.setItem('userPracticeState', index)
-                                  addLessonApi(parseInt(progressPercent));
+                                  localStorage.setItem(
+                                    'userPracticeState',
+                                    index
+                                  );
+                                  addLessonApi(
+                                    'practice',
+                                    index,
+                                    parseInt(progressPercent)
+                                  );
                                   setWellDone(false);
                                 }}
                                 src={Next}
@@ -446,7 +506,9 @@ const Story = ({forceRerender, setForceRerender}) => {
                 </Flex>
               </Center>
             </>
-          ) : posts && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'simple' ? (
+          ) : posts &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+              'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -459,7 +521,6 @@ const Story = ({forceRerender, setForceRerender}) => {
                           className="story-box-container"
                           display={'flex'}
                           justifyContent={'center'}
-
                         >
                           <div
                             style={{
@@ -469,10 +530,11 @@ const Story = ({forceRerender, setForceRerender}) => {
                             }}
                           >
                             <Box p="4">
-                              <h1 style={{ textAlign: "center" }} className="story-line">
-                                {
-                                  post?.contentSourceData[0]?.text
-                                }
+                              <h1
+                                style={{ textAlign: 'center' }}
+                                className="story-line"
+                              >
+                                {post?.contentSourceData[0]?.text}
                               </h1>
                               {localStorage.setItem(
                                 'contentText',
@@ -543,8 +605,9 @@ const Story = ({forceRerender, setForceRerender}) => {
                               <img
                                 className="play_btn"
                                 style={{
-                                  height: '72px', width: '72px',
-                                  padding: '8px'
+                                  height: '72px',
+                                  width: '72px',
+                                  padding: '8px',
                                 }}
                                 onClick={nextLine}
                                 src={Next}
@@ -567,60 +630,59 @@ const Story = ({forceRerender, setForceRerender}) => {
                   ) : (
                     <div className="voice-recorder">
                       <HStack gap={'2rem'}>
-                        {posts?.[currentLine]?.contentSourceData[0]?.audioUrl !== ' '
+                        {posts?.[currentLine]?.contentSourceData[0]
+                          ?.audioUrl !== ' '
                           ? isAudioPlay !== 'recording' && (
-
-                            <VStack>
-                              <div>
-                                {flag ? (
-                                  <>
-                                    <img
-                                      className="play_btn"
-                                      src={Speaker}
-                                      style={{
-                                        height: '72px',
-                                        width: '72px',
-                                      }}
-                                      onClick={() => playTeacherAudio()}
-                                      alt="play_audio"
-                                    />
-                                    <h4
-                                      className="text-play m-0 "
-                                      style={{
-                                        position: 'relative',
-                                        textAlign: 'center',
-                                      }}
-                                    >
-                                      Listen
-                                    </h4>
-                                  </>
-                                ) : (
-                                  <>
-                                    <img
-                                      className="play_btn"
-                                      src={MuteSpeaker}
-                                      style={{
-                                        height: '72px',
-                                        width: '72px',
-                                      }}
-                                      onClick={() => pauseAudio()}
-                                      alt="pause_audio"
-                                    />
-                                    <h4
-                                      className="text-play m-0 "
-                                      style={{
-                                        position: 'relative',
-                                        textAlign: 'center',
-                                      }}
-                                    >
-                                      Mute
-                                    </h4>
-                                  </>
-                                )}
-                              </div>
-                            </VStack>
-
-                          )
+                              <VStack>
+                                <div>
+                                  {flag ? (
+                                    <>
+                                      <img
+                                        className="play_btn"
+                                        src={Speaker}
+                                        style={{
+                                          height: '72px',
+                                          width: '72px',
+                                        }}
+                                        onClick={() => playTeacherAudio()}
+                                        alt="play_audio"
+                                      />
+                                      <h4
+                                        className="text-play m-0 "
+                                        style={{
+                                          position: 'relative',
+                                          textAlign: 'center',
+                                        }}
+                                      >
+                                        Listen
+                                      </h4>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <img
+                                        className="play_btn"
+                                        src={MuteSpeaker}
+                                        style={{
+                                          height: '72px',
+                                          width: '72px',
+                                        }}
+                                        onClick={() => pauseAudio()}
+                                        alt="pause_audio"
+                                      />
+                                      <h4
+                                        className="text-play m-0 "
+                                        style={{
+                                          position: 'relative',
+                                          textAlign: 'center',
+                                        }}
+                                      >
+                                        Mute
+                                      </h4>
+                                    </>
+                                  )}
+                                </div>
+                              </VStack>
+                            )
                           : ''}
 
                         <VStack
@@ -654,20 +716,27 @@ const Story = ({forceRerender, setForceRerender}) => {
                       </HStack>
                     </div>
                   )}
-
                 </Box>
               </VStack>
             </>
-          ) : posts && practiceCompletionCriteria[completionCriteriaIndex]?.template == 'game' ?
+          ) : posts &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+              'game' ? (
             <CharacterToWordMatchingGame
               sourceChars={sourceChars}
               targetWords={posts}
               handleSuccess={() => handleSuccess()}
-
-            /> : ''}
+            />
+          ) : (
+            ''
+          )}
         </Center>
         <Box paddingTop={10}>
-          <Stepper size='md' colorScheme='green' index={completionCriteriaIndex}>
+          <Stepper
+            size="md"
+            colorScheme="green"
+            index={completionCriteriaIndex}
+          >
             {practiceCompletionCriteria.map((step, index) => (
               <Step key={index}>
                 <StepIndicator>
@@ -682,9 +751,8 @@ const Story = ({forceRerender, setForceRerender}) => {
           </Stepper>
           <Box p={10}>
             <Center>Progress: {parseInt(progressPercent)}%</Center>
-            <Progress colorScheme='green' size='sm' value={progressPercent} />
+            <Progress colorScheme="green" size="sm" value={progressPercent} />
           </Box>
-
         </Box>
       </Container>
 

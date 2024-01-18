@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Progress, Spinner, Step, StepIcon, StepIndicator, StepStatus, StepTitle, Stepper, Text, VStack, useToast } from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -52,7 +52,10 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const navigate = useNavigate()
   const [pageno, setPageNo] = useState(1);
   const toast = useToast()
-
+  const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
+  const max = practiceCompletionCriteria.length;
+  const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+  
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -168,7 +171,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
 
 
   const nextLine = count => {
-    addLessonApi()
+    const percentage = ((currentLine+1) / posts?.length) * 100;
+    addLessonApi(`showcase`,localStorage.getItem('userPracticeState'), percentage)
     setUserSpeak(!isUserSpeak)
     handleAddPointer(1)
     if (currentLine <= posts.length - 1) {
@@ -369,7 +373,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
               title: `You need to practice more to complete this level.`,
               status: 'error',
             })
-            localStorage.setItem('userPracticeState',parseInt(localStorage.getItem('userPracticeState'))+1)
+            localStorage.setItem('userPracticeState',parseInt(localStorage.getItem('userPracticeState'))+1)            
+            addLessonApi('practice',localStorage.getItem('userPracticeState'), parseInt(progressPercent));
             navigate('/practice')
           }else if(data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
             toast({
@@ -381,6 +386,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           
             localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
+            addLessonApi('practice',0, 0);
             navigate('/practice')
           }
           else{
@@ -396,6 +402,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             localStorage.setItem('firstPracticeSessionCompleted', false)
             localStorage.setItem('userCurrentLevel', data?.data?.data?.currentLevel)
             fetchMileStone();
+            addLessonApi('practice',0, 0);
             navigate('/practice')
           }
           fetchMileStone();
@@ -437,10 +444,9 @@ const Showcase = ({forceRerender, setForceRerender}) => {
 
   const location = useLocation();
 
-  const addLessonApi = ()=>{
+  const addLessonApi = (milestone,lesson, progressPercentage)=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
-    const percentage = ((currentLine+1) / posts?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -449,9 +455,9 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       body:JSON.stringify({
         userId : localStorage.getItem('virtualID'),
         sessionId : localStorage.getItem('virtualStorySessionID'),
-        milestone : `showcase`,
-        lesson : currentLine,
-        progress:percentage
+        milestone : milestone,
+        lesson : lesson,
+        progress: progressPercentage
         })
   })
  }
@@ -470,6 +476,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       <Header active={3} forceRerender={forceRerender} setForceRerender={setForceRerender} />
 
       <Center pt={'10vh'} className='bg'>
+        <Flex flexDirection={'column'}>
         <div
           style={{
             boxShadow: '2px 2px 15px 5px grey',
@@ -538,20 +545,20 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                             {localStorage.setItem(
                               'contentText',
                               posts[currentLine]?.contentSourceData[0].text
-                            )}
+                              )}
                           </div>
                           <div>
                             {
                               isUserSpeak ? <></> : <div>
                                 {currentLine === posts?.length ? (
                                   ''
-                                ) : (
+                                  ) : (
                                   <>
                                     <div className='voice-recorder'>
                                       <VStack>
                                         <VoiceCompair
-                                          setVoiceText={setVoiceText}
-                                          setRecordedAudio={setRecordedAudio}
+                                        setVoiceText={setVoiceText}
+                                        setRecordedAudio={setRecordedAudio}
                                           _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
                                           flag={true}
                                           setCurrentLine={setCurrentLine}
@@ -588,7 +595,35 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           )}
 
         </div>
-      </Center>
+      <Flex justifyContent={'center'} paddingTop={10}>
+          <Stepper size='md' colorScheme='yellow' index={completionCriteriaIndex}>
+            {practiceCompletionCriteria.map((step, index) => (
+                    <>
+                    {step.title ==='S1' && <Step key={index}>
+                      <StepIndicator>
+                        <StepStatus
+                          complete={<StepIcon />}
+                          incomplete={<StepTitle>{step.title}</StepTitle>}
+                          active={<StepTitle>{step.title}</StepTitle>}
+                          />
+                      </StepIndicator>
+                    </Step>}
+                    {step.title ==='S2' && <Step key={index}>
+                      <StepIndicator>
+                        <StepStatus
+                          complete={<StepIcon />}
+                          incomplete={<StepTitle>{step.title}</StepTitle>}
+                          active={<StepTitle>{step.title}</StepTitle>}
+                          />
+                      </StepIndicator>
+                    </Step>}
+                          </>
+            ))}
+          </Stepper>
+      </Flex>
+    </Flex>
+  </Center>
+       
 
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
 
