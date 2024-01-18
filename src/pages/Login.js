@@ -65,6 +65,7 @@ export default function Login({setIsLoggedIn = false}) {
         // localStorage.setItem('userPracticeState', 0)
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
+        localStorage.setItem('apphomelang', 'ta');
       } else {
         toast({
           position: 'top',
