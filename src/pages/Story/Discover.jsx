@@ -195,6 +195,9 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
             navigate('/Validate')
           }
           if(res.data.data.sessionResult === 'pass'){
+              if(res.data.data.currentLevel === 'm2'){
+                navigate('/Validate')
+              }
               newIndex = checkInd + 1;
            
           }else if(res.data.data.sessionResult === 'fail'){
