@@ -394,6 +394,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             localStorage.removeItem('progressData');
             localStorage.setItem('userPracticeState', 0)
             localStorage.setItem('firstPracticeSessionCompleted', false)
+            localStorage.setItem('userCurrentLevel', data?.data?.data?.currentLevel)
             fetchMileStone();
             navigate('/practice')
           }
