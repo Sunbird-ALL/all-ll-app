@@ -23,6 +23,7 @@ import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
 import { uniqueId } from '../../services/utilService';
+import completionCriteria from '../../config/practiceConfig';
 
 const jsConfetti = new JSConfetti();
 
@@ -39,6 +40,11 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
   const [contentType, setContentType] = useState('')
+  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
+  const practiceCompletionCriteria = [
+    ...(JSON.parse(localStorage.getItem('criteria')) || []),
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
+  ];
 
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
@@ -62,19 +68,26 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       'sub_session_id',uniqueId()
      );
     setLoading(true);
+
+
     try {
-      axios
-        .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {
-          "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
-          "language": localStorage.getItem('apphomelang')
-        })
+      const response = await fetch(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/${practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria || 'word'}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+          'apphomelang'
+        )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
+      )
         .then(res => {
-          setPosts(res?.data?.data[0]?.content);
+          return res.json();
+        })
+        .then(data => {
+          const newPosts = data?.content || [];
+          setPosts(newPosts);
           setLoading(false);
-          setContentType(res?.data?.data[0]?.category)
+          setContentType(practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria)
         });
+      setLoading(false);
+      setUserSpeak(false);
     } catch (err) {
-      setLoading(false)
       toast({
         position: 'top',
         title: `${err?.message}`,
@@ -82,6 +95,29 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
+
+
+
+    // try {
+    //   axios
+    //     .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {
+    //       "tags": ["ASER", localStorage.getItem('userCurrentLevel')],
+    //       "language": localStorage.getItem('apphomelang')
+    //     })
+    //     .then(res => {
+    //       setPosts(res?.data?.data[0]?.content);
+    //       setLoading(false);
+    //       setContentType(res?.data?.data[0]?.category)
+    //     });
+    // } catch (err) {
+    //   setLoading(false)
+    //   toast({
+    //     position: 'top',
+    //     title: `${err?.message}`,
+    //     status: 'error',
+    //   })
+    //   error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
+    // }
   };
 
   React.useEffect(() => {
