@@ -39,7 +39,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
-  const [contentType, setContentType] = useState('')
+  const [contentType, setContentType] = useState('word')
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
   const practiceCompletionCriteria = [
     ...(JSON.parse(localStorage.getItem('criteria')) || []),
@@ -83,7 +83,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           const newPosts = data?.content || [];
           setPosts(newPosts);
           setLoading(false);
-          setContentType(practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria)
+          setContentType(practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria || 'word')
         });
       setLoading(false);
       setUserSpeak(false);
