@@ -226,7 +226,7 @@ const handleSubmit = () => {
 }
 
   async function saveIndb(base64Data) {
-    let lang = localStorage.getItem('apphomelang');
+    let lang = localStorage.getItem('apphomelang') || 'ta';
     showLoading();
     // .replace(/[.',|!|?-']/g, '')
     let responseText = "";
