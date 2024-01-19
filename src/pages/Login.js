@@ -40,7 +40,7 @@ export default function Login({setIsLoggedIn = false}) {
     try {
       localStorage.removeItem('userPracticeState')
       const response = await fetch(
-        `https://www.telemetry-dev.theall.ai/v1/vid/generateVirtualID?username=${username}&password=${password}`
+        `${process.env.REACT_APP_HOST}/v1/vid/generateVirtualID?username=${username}&password=${password}`
         );
       if (response.ok) {
         startEvent();
