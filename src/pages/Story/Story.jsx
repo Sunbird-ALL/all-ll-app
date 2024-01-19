@@ -61,7 +61,7 @@ const Story = () => {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `https://telemetry-dev.theall.ai/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
+        `${process.env.REACT_APP_HOST}/content-service/v1/WordSentence/pagination?limit=10&type=Sentence&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
