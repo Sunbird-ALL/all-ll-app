@@ -75,7 +75,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/${practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria || 'word'}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/${practiceCompletionCriteria[completionCriteriaIndex]?.criteria || 'word'}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
           'apphomelang'
         )}&contentlimit=${localStorage.getItem('contentPracticeLimit') || 5}&gettargetlimit=${localStorage.getItem('contentTargetLimit') || 5}`
       )
@@ -86,7 +86,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
           const newPosts = data?.content || [];
           setPosts(newPosts);
           setLoading(false);
-          setContentType(practiceCompletionCriteria[completionCriteriaIndex + 1]?.criteria || 'word')
+          setContentType(practiceCompletionCriteria[completionCriteriaIndex]?.criteria || 'word')
         });
       setLoading(false);
       setUserSpeak(false);
