@@ -462,6 +462,21 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   })
  }
 
+ const calculateFontSize = (text) => {
+  const textLength = text ? text.length : 0;
+  const initialFontSize = 38;
+  const maxThresholdLength = 100;
+  const fontSizeDecrement = 0.1;
+  const minimumFontSize = 18;
+
+  const adjustedFontSize = Math.max(
+    initialFontSize - fontSizeDecrement * Math.max(textLength - maxThresholdLength, 0),
+    minimumFontSize
+  );
+
+  return adjustedFontSize;
+};
+
 
   useEffect(() => {
 
@@ -539,7 +554,14 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                       <Center w={'100%'}>
                         <VStack>
                           <div>
-                            <h1 style={{ textAlign: "center" }} className='story-line'>
+                            <h1 
+                              style={{
+                                textAlign: 'center',
+                                fontSize: `${calculateFontSize(posts[currentLine]?.contentSourceData[0]?.text)}px`,
+                                whiteSpace: 'break-spaces',
+                                wordWrap: 'break-word',
+                              }}
+                              className='story-line'>
                               {posts[currentLine]?.contentSourceData[0].text}
                             </h1>
                             {localStorage.setItem(

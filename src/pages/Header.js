@@ -17,6 +17,7 @@ import {
   StepTitle,
   StepDescription,
   StepSeparator,
+  useToast,
 } from '@chakra-ui/react'
 
 import React, { useState } from 'react'
@@ -63,9 +64,18 @@ export default function Header({ active,forceRerender=false,setForceRerender = (
     index: active,
     count: steps.length,
   })
+  const toast = useToast()
 
-  
   const setNavigationToRoute = function (a){
+    if((tabs[a].name === 'Discover' || tabs[a].name === 'Validate')  && localStorage.getItem('discoveryStatus') === 'disabled'){
+      toast({
+        position: 'top',
+        title: `Oops! You've already done the discovery. No need to do it again`,
+        status: 'warning',
+      })
+      return false;
+    }
+
     navigate(tabs[a].link);
     localStorage.setItem('tabIndex', a);
   }
@@ -80,7 +90,7 @@ export default function Header({ active,forceRerender=false,setForceRerender = (
           <Box p={3} w={'100vw'}>
             <Stepper size='lg' index={activeStep}>
               {steps.map((step, index) => (
-               <Step key={index}  onClick={() => active>=index?setNavigationToRoute(index):''}>
+               <Step key={index}  onClick={() => (active >= index) ? setNavigationToRoute(index) : ''}>
                   <StepIndicator>
                     <StepStatus
                       complete={`✅`} incomplete={`🚩`} active={`📍`}
