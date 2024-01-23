@@ -203,7 +203,7 @@ export default class AudioRecorderCompair extends Component {
       // console.log(base64Data);
       // getASROutput(base64Data, blob);
       localStorage.setItem('recordedAudio',temp_audioSrc)
-      if (!this.pathname === 'practice') {
+      if (this.pathname === 'practice') {
         this.props.saveIndb(base64Data);
       } else {
         if (this.state.soundDetected) {
