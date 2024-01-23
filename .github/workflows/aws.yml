@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-dev-rig
+    environment: all-prod-rig
 
     steps:
       - name: Checkout code
