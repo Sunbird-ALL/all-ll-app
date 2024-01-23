@@ -157,7 +157,7 @@ export default class AudioRecorderCompair extends Component {
           if (this.state.soundDetected) {
             this.props.saveIndb(base64Data);
           } else {
-            alert('Please make sure the sound is detected.');
+            alert('Please Speak again');
           }
         }
         };
@@ -209,7 +209,7 @@ export default class AudioRecorderCompair extends Component {
         if (this.state.soundDetected) {
           this.props.saveIndb(base64Data);
         } else {
-          alert('Please make sure the sound is detected.');
+          alert('Please Speak again');
         }
       }
     };
