@@ -26,7 +26,7 @@
 
 @media screen and (max-width: 580px) {
   .story-line {
-    font-size: 16px;
+    font-size: 16px!important;
     text-align: 'center';
   }
 
@@ -76,7 +76,7 @@
 
 @media screen and (max-width: 700px) {
   .story-line {
-    font-size: 28px;
+    font-size: 28px!important;
     text-align: 'center';
   }
 
