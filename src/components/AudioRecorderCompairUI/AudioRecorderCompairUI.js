@@ -5,10 +5,15 @@ import mic_on from '../../assests/Images/mic_on.png';
 import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
+  MIN_DECIBELS = -45;
+  pathname =  window.location.hash.split('/').pop();
+
   constructor(props) {
     super(props);
     this.state = {
       status: '',
+      soundDetected: false,
+      stopDetection: false, // New state variable
     };
   }
 
@@ -30,6 +35,88 @@ export default class AudioRecorderCompair extends Component {
       audioType: 'audio/wav',
     });
   }
+
+  handleMic(){
+    if(!(this.pathname === 'practice')){
+      this.setState({ soundDetected: false, stopDetection: false });
+      this.startSoundDetection();
+      document.getElementById('startaudio_compair').click();
+    }
+    else{
+      document.getElementById('startaudio_compair').click();
+    }
+  }
+
+  handleStop() {
+    if(!(this.pathname === 'practice')){
+    document.getElementById('stopaudio_compair').click();
+    this.setState({ stopDetection: true });
+    }else{
+      document.getElementById('stopaudio_compair').click();
+    }
+  }
+
+  startSoundDetection = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioStreamSource = audioContext.createMediaStreamSource(stream);
+      const analyser = audioContext.createAnalyser();
+      analyser.minDecibels = this.MIN_DECIBELS;
+      audioStreamSource.connect(analyser);
+
+      const bufferLength = analyser.fftSize;
+      const domainData = new Uint8Array(bufferLength);
+
+      const detectSound = () => {
+
+        if (this.state.stopDetection) {
+          return; // Stop detection if stopDetection is true
+        }
+        console.log(this.state.soundDetected, "detectSound");
+        if (this.state.soundDetected) {
+          return;
+        }
+
+        analyser.getByteTimeDomainData(domainData);
+
+        for (let i = 0; i < bufferLength; i++) {
+          const amplitude = (domainData[i] / 140.0) - 1.0; // Normalize to [-1, 1]
+
+          if (amplitude > 0.2) { // Adjust the threshold as needed
+            this.setState({ soundDetected: true });
+            // this.props.setIsEmptyAudio(true);
+            break;
+          }
+        }
+
+        requestAnimationFrame(detectSound);
+      };
+
+      requestAnimationFrame(detectSound);
+
+      const mediaRecorder = new MediaRecorder(stream);
+      const audioChunks = [];
+
+      mediaRecorder.addEventListener("dataavailable", event => {
+        audioChunks.push(event.data);
+      });
+
+      mediaRecorder.addEventListener("stop", () => {
+        const audioBlob = new Blob(audioChunks);
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+
+        // console.log({ soundDetected: this.state.soundDetected });
+      });
+
+      mediaRecorder.start();
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+    }
+  };
 
   render() {
     const { status, audioSrc, audioType } = this.state;
@@ -64,7 +151,15 @@ export default class AudioRecorderCompair extends Component {
         reader.onloadend = () => {
         var base64Data = reader.result.split(',')[1];
         localStorage.setItem('recordedAudio',temp_audioSrc)
-        this.props.saveIndb(base64Data)
+        if (this.pathname === 'practice') {
+          this.props.saveIndb(base64Data);
+        } else {
+          if (this.state.soundDetected) {
+            this.props.saveIndb(base64Data);
+          } else {
+            alert('Please make sure the sound is detected.');
+          }
+        }
         };
       },
       onRecordCallback: e => {
@@ -108,7 +203,15 @@ export default class AudioRecorderCompair extends Component {
       // console.log(base64Data);
       // getASROutput(base64Data, blob);
       localStorage.setItem('recordedAudio',temp_audioSrc)
-      this.props.saveIndb(base64Data)
+      if (!this.pathname === 'practice') {
+        this.props.saveIndb(base64Data);
+      } else {
+        if (this.state.soundDetected) {
+          this.props.saveIndb(base64Data);
+        } else {
+          alert('Please make sure the sound is detected.');
+        }
+      }
     };
         this.props.setRecordedAudio(temp_audioSrc);
       },
@@ -126,9 +229,8 @@ export default class AudioRecorderCompair extends Component {
     };
     return (
       <div>
-         <div className='custom-design'>
+        <div className='custom-design'>
             <div
-           
               className={status === 'recording' ? 'dis-visible' : 'dis-none'}
             >
               <AudioAnalyser {...(lang_code === 'kn' || lang_code ===  'ta' ? audioProps_tamil : audioProps)}></AudioAnalyser>
@@ -145,11 +247,11 @@ export default class AudioRecorderCompair extends Component {
                         src={mic_play}
                         style={{ height: '72px', width: '72px' }}
                         className="micimg mic_stop_record"
-                        onClick={() =>
-                          document.getElementById('stopaudio_compair').click()
-                        }
+                        onClick={() => {
+                          this.handleStop()
+                        }}
                       />
-                       {/* <h4 className="text-speak m-0">Stop</h4> */}
+                      {/* <h4 className="text-speak m-0">Stop</h4> */}
                     </>
                   ) : (
                     <>
@@ -160,11 +262,10 @@ export default class AudioRecorderCompair extends Component {
                         onClick={() =>
                           document.getElementById('stopaudio_compair').click()
                         }
-                      />  
-                     
+                      />
+                    
                     </>
                   )}
-         
                 </>
               );
             } else {
@@ -174,9 +275,9 @@ export default class AudioRecorderCompair extends Component {
                     src={mic}
                     style={{ height: '72px', width: '72px' }}
                     className={'micimg mic_record'}
-                    onClick={() =>
-                      document.getElementById('startaudio_compair').click()
-                    }
+                    onClick={() => {
+                      this.handleMic();
+                    }}
                   ></img>
 
                   {/* <h4 className="record_text text-speak m-0">Stop</h4> */}
