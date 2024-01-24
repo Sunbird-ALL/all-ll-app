@@ -71,7 +71,6 @@ export default class AudioRecorderCompair extends Component {
         if (this.state.stopDetection) {
           return; // Stop detection if stopDetection is true
         }
-        console.log(this.state.soundDetected, "detectSound");
         if (this.state.soundDetected) {
           return;
         }
@@ -106,7 +105,6 @@ export default class AudioRecorderCompair extends Component {
         const audio = new Audio(audioUrl);
         audio.play();
 
-        // console.log({ soundDetected: this.state.soundDetected });
       });
 
       mediaRecorder.start();

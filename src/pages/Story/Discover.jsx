@@ -439,7 +439,7 @@ const handleSubmit = () => {
               <>
                 {posts?.data?.map((post, ind) =>
                   currentLine === ind ? (
-                    <>
+                    <div key={ind}>
                       <div className='story-box-container' key={ind}>
                         <Center w={'100%'}>
                           <img
@@ -499,7 +499,7 @@ const handleSubmit = () => {
                           </VStack>
                         </Center>
                       </div>
-                    </>
+                    </div>
 
                   ) : (
                     ''
