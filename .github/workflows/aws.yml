@@ -3,7 +3,7 @@ name: ALL rig Deployment
 on:
   push:
     branches:
-      - all-rig-v1
+      - all-rig-v1-0.4
 
 jobs:
   deploy:
