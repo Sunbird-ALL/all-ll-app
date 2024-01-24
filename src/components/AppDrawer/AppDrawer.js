@@ -28,6 +28,7 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
+  Switch,
 } from '@chakra-ui/react'
 import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
@@ -46,6 +47,11 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const [validationSession, setValidationSession] = React.useState(localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID'))
   const [practiceSession, setPracticeSession] = React.useState(localStorage.getItem('practiceSession') || localStorage.getItem('virtualStorySessionID'))
   const [level, setLevel] = React.useState('');
+  const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
+
+  React.useEffect(() => {
+    localStorage.setItem('discoveryStatus', isDiscoveryEnabled ? 'enabled' : 'disabled');
+  }, [isDiscoveryEnabled]); 
 
   React.useEffect(() => {
     if (value) {
@@ -184,6 +190,15 @@ function AppDrawer({forceRerender, setForceRerender}) {
               <Divider />
               <FormControl>
                 <FormLabel><Text as={'b'} >Discovery </Text></FormLabel>
+                <HStack spacing='4' paddingBottom={4}>
+                <Text>Discovery {isDiscoveryEnabled ? 'Enabled' : 'Disabled'}</Text>
+                  <Switch
+                    isChecked={isDiscoveryEnabled}
+                    onChange={() => setDiscoveryStatus(!isDiscoveryEnabled)}
+                    colorScheme="teal"
+                    size="md"
+                  />
+                </HStack>
                 <RadioGroup onChange={setDiscoveryLimit} value={discoveryLimit}>
                   <HStack spacing='4'>
                     <span>Limit:</span>
