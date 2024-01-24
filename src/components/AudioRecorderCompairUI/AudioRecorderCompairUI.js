@@ -5,15 +5,13 @@ import mic_on from '../../assests/Images/mic_on.png';
 import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
-  MIN_DECIBELS = -45;
-  pathname =  window.location.hash.split('/').pop();
-
+  MIN_DECIBELS = -45;  
   constructor(props) {
     super(props);
     this.state = {
       status: '',
       soundDetected: false,
-      stopDetection: false, // New state variable
+      stopDetection: false,
     };
   }
 
@@ -35,9 +33,8 @@ export default class AudioRecorderCompair extends Component {
       audioType: 'audio/wav',
     });
   }
-
   handleMic(){
-    if(!(this.pathname === 'practice')){
+    if(this.props.isAudioPreprocessing){
       this.setState({ soundDetected: false, stopDetection: false });
       this.startSoundDetection();
       document.getElementById('startaudio_compair').click();
@@ -48,7 +45,7 @@ export default class AudioRecorderCompair extends Component {
   }
 
   handleStop() {
-    if(!(this.pathname === 'practice')){
+    if(this.props.isAudioPreprocessing){
     document.getElementById('stopaudio_compair').click();
     this.setState({ stopDetection: true });
     }else{
@@ -151,7 +148,7 @@ export default class AudioRecorderCompair extends Component {
         reader.onloadend = () => {
         var base64Data = reader.result.split(',')[1];
         localStorage.setItem('recordedAudio',temp_audioSrc)
-        if (this.pathname === 'practice') {
+        if (!this.props.isAudioPreprocessing) {
           this.props.saveIndb(base64Data);
         } else {
           if (this.state.soundDetected) {
@@ -203,7 +200,7 @@ export default class AudioRecorderCompair extends Component {
       // console.log(base64Data);
       // getASROutput(base64Data, blob);
       localStorage.setItem('recordedAudio',temp_audioSrc)
-      if (this.pathname === 'practice') {
+      if (!this.props.isAudioPreprocessing) {
         this.props.saveIndb(base64Data);
       } else {
         if (this.state.soundDetected) {

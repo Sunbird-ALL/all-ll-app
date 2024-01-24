@@ -370,6 +370,7 @@ const VoiceCompair = props => {
                   />
                 ) : ( */}
                   <AudioRecorderCompairUI
+                    isAudioPreprocessing={props.isAudioPreprocessing}
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
                     setUserSpeak = {props.setUserSpeak}

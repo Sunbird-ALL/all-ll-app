@@ -557,6 +557,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                                     <div className='voice-recorder'>
                                       <VStack>
                                         <VoiceCompair
+                                        isAudioPreprocessing = {true}
                                         setVoiceText={setVoiceText}
                                         setRecordedAudio={setRecordedAudio}
                                           _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
