@@ -378,6 +378,21 @@ const Story = ({ forceRerender, setForceRerender }) => {
     return lang_constants[languageCode] || lang_constants['en'];
   }
 
+  const calculateFontSize = (text) => {
+    const textLength = text ? text.length : 0;
+    const initialFontSize = 38;
+    const maxThresholdLength = 300;
+    const fontSizeDecrement = 0.1;
+    const minimumFontSize = 18;
+
+    const adjustedFontSize = Math.max(
+      initialFontSize - fontSizeDecrement * Math.max(textLength - maxThresholdLength, 0),
+      minimumFontSize
+    );
+  
+    return adjustedFontSize;
+  };
+
   return (
     <>
       <Header
@@ -530,12 +545,18 @@ const Story = ({ forceRerender, setForceRerender }) => {
                             }}
                           >
                             <Box p="4">
-                              <h1
-                                style={{ textAlign: 'center' }}
-                                className="story-line"
-                              >
-                                {post?.contentSourceData[0]?.text}
-                              </h1>
+                            <h1
+                              style={{
+                                textAlign: 'center',
+                                fontSize: `${calculateFontSize(post?.contentSourceData[0]?.text)}px`,
+                                whiteSpace: 'break-spaces',
+                                wordWrap: 'break-word',
+                              }}
+                              className="story-line"
+                            >
+                              {post?.contentSourceData[0]?.text}
+                            </h1>
+
                               {localStorage.setItem(
                                 'contentText',
                                 post?.contentSourceData[0]?.text
