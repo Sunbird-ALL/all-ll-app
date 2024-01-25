@@ -152,7 +152,12 @@ export default class AudioRecorderCompair extends Component {
           if (this.state.soundDetected) {
             this.props.saveIndb(base64Data);
           } else {
-            alert('Please Speak again');
+            this.props.toast({
+              position: 'top',
+              title: 'Please Speak Louder and Clear',
+              duration: 2000,
+              status: 'success'
+            })
           }
         }
         };
@@ -204,7 +209,12 @@ export default class AudioRecorderCompair extends Component {
         if (this.state.soundDetected) {
           this.props.saveIndb(base64Data);
         } else {
-          alert('Please Speak again');
+          this.props.toast({
+            position: 'top',
+            title: 'Please Speak Louder and Clear',
+            duration: 2000,
+            status: 'success'
+          })
         }
       }
     };

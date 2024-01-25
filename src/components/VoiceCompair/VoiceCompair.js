@@ -9,6 +9,7 @@ import { replaceAll, compareArrays } from '../../utils/helper';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import S3Client from '../../config/awsS3';
 import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -16,6 +17,8 @@ const VoiceCompair = props => {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
+
+  const toast = useToast();
 
   const ASR_REST_URLS = {
     bn: 'https://api.dhruva.ai4bharat.org',
@@ -72,6 +75,7 @@ const VoiceCompair = props => {
   }, [tamilRecordedText]);
 
   useEffect(() => {
+    
     if (recordedAudio !== '') {
       // showLoading();
       let uri = recordedAudio;
@@ -371,6 +375,7 @@ const VoiceCompair = props => {
                 ) : ( */}
                   <AudioRecorderCompairUI
                     isAudioPreprocessing={props.isAudioPreprocessing}
+                    toast={toast}
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
                     setUserSpeak = {props.setUserSpeak}
