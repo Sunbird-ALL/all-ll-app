@@ -76,7 +76,7 @@ export default function Login({setIsLoggedIn = false}) {
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
         status: 'error',
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
