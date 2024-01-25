@@ -194,7 +194,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
         status: 'error',
       });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
@@ -306,6 +306,13 @@ const Story = ({ forceRerender, setForceRerender }) => {
         // lesson: localStorage.getItem('userPracticeState') || 0,
         progress: progressPercentage,
       }),
+    }).catch(err => {
+      toast({
+        position: 'top',
+        title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
+        status: 'error',
+      });
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     });
   };
 
@@ -350,7 +357,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
         status: 'error',
       });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
