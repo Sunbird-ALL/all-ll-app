@@ -80,7 +80,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
         status: 'error',
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
@@ -215,8 +215,13 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         
       }
     })
-    .catch(error => {
-      console.error(error);
+    .catch(err => {
+      toast({
+        position: 'top',
+        title: `${err?.message}`,
+        status: 'error',
+      })
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     });
 }
 
