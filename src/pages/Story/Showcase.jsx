@@ -365,8 +365,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
     )
         .then(data => {
           setLoading(false);
+          if (data?.data?.data?.sessionResult === 'fail' && practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1'){
 
-          if ( data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'true'){
             toast({
               position: 'top',
               duration: '2000',
@@ -376,7 +376,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             localStorage.setItem('userPracticeState',parseInt(localStorage.getItem('userPracticeState'))+1)            
             addLessonApi('practice',localStorage.getItem('userPracticeState'), parseInt(progressPercent));
             navigate('/practice')
-          }else if(data?.data?.data?.sessionResult === 'fail' && localStorage.getItem('firstPracticeSessionCompleted') === 'false'){
+          }
+          else if(data?.data?.data?.sessionResult === 'fail' && practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'){
             toast({
               position: 'top',
               duration: '2000',
@@ -385,7 +386,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             })
           
             localStorage.setItem('userPracticeState', 0)
-            localStorage.setItem('firstPracticeSessionCompleted', false)
             addLessonApi('practice',0, 0);
             navigate('/practice')
           }
@@ -399,7 +399,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             })
             localStorage.removeItem('progressData');
             localStorage.setItem('userPracticeState', 0)
-            localStorage.setItem('firstPracticeSessionCompleted', false)
             localStorage.setItem('userCurrentLevel', data?.data?.data?.currentLevel)
             fetchMileStone();
             addLessonApi('practice',0, 0);
