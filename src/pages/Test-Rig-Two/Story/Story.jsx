@@ -149,7 +149,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
             You have completed the first practice session`,
         status: 'success',
       });
-      localStorage.setItem('firstPracticeSessionCompleted', true);
       addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
       navigate('/showcase');
     } else if (
@@ -162,7 +161,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
         status: 'success',
       });
       setCompletionCriteriaIndex(0);
-      localStorage.setItem('firstPracticeSessionCompleted', false);
       addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
       navigate('/showcase');
     }
