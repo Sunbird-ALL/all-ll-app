@@ -728,6 +728,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                           style={{ marginTop: '-13px', marginLeft: '0px' }}
                         >
                           <VoiceCompair
+                            isAudioPreprocessing = {false}
                             setVoiceText={setVoiceText}
                             setRecordedAudio={setRecordedAudio}
                             _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}

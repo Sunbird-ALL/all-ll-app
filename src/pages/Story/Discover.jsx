@@ -443,8 +443,7 @@ const handleSubmit = () => {
             ) : (
               <>
                 {posts?.data?.map((post, ind) =>
-                  currentLine === ind ? (
-                    <>
+                  currentLine === ind ? (               
                       <div className='story-box-container' key={ind}>
                         <Center w={'100%'}>
                           <img
@@ -475,6 +474,7 @@ const handleSubmit = () => {
                                     <div className='voice-recorder'>
                                       <VStack>
                                         <VoiceCompair
+                                          isAudioPreprocessing = {true}
                                           setVoiceText={setVoiceText}
                                           setRecordedAudio={setRecordedAudio}
                                           _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
@@ -503,7 +503,6 @@ const handleSubmit = () => {
                           </VStack>
                         </Center>
                       </div>
-                    </>
 
                   ) : (
                     ''

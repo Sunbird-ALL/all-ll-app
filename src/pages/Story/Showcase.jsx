@@ -541,7 +541,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
             <>
               {posts?.map((post, ind) =>
                 currentLine === ind ? (
-                  <>
                     <div className='story-box-container' key={ind}>
                       <Center w={'100%'}>
                         <img
@@ -579,6 +578,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                                     <div className='voice-recorder'>
                                       <VStack>
                                         <VoiceCompair
+                                        isAudioPreprocessing = {true}
                                         setVoiceText={setVoiceText}
                                         setRecordedAudio={setRecordedAudio}
                                           _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
@@ -607,8 +607,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                         </VStack>
                       </Center>
                     </div>
-                  </>
-
                 ) : (
                   ''
                 )
@@ -620,7 +618,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       <Flex justifyContent={'center'} paddingTop={10}>
           <Stepper size='md' colorScheme='yellow' index={completionCriteriaIndex}>
             {practiceCompletionCriteria.map((step, index) => (
-                    <>
+                    <Box key={index}>
                     {step.title ==='S1' && <Step key={index}>
                       <StepIndicator>
                         <StepStatus
@@ -639,7 +637,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
                           />
                       </StepIndicator>
                     </Step>}
-                          </>
+                          </Box>
             ))}
           </Stepper>
       </Flex>
