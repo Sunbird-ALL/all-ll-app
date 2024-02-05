@@ -5,7 +5,7 @@ import mic_on from '../../assests/Images/mic_on.png';
 import mic_play from '../../assests/Images/mic_play.svg';
 
 export default class AudioRecorderCompair extends Component {
-  MIN_DECIBELS = -45;  
+  MIN_DECIBELS = process.env.REACT_APP_MIN_DECIBELS;
   constructor(props) {
     super(props);
     this.state = {
