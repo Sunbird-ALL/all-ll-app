@@ -72,7 +72,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
-
+  const [template, SetTemplate] = useState('');
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
   //   if (storedData && localStorage.getItem('virtualID')) {
@@ -142,6 +142,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [forceRerender, completionCriteriaIndex]);
 
   const fetchApi = async () => {
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
     setLoading(true);
     if (practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1') {
       toast({
@@ -289,10 +290,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const handleSpellAndCheck = (callback) => {
-    callback();
-    console.log("spell and check called")
-    // handleStarAnimation();
-    // setWellDone(true);
+    SetTemplate('simple')
+    //callback();
   };
   const learnAudio = () => {
     if (temp_audio !== null) {
@@ -352,6 +351,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } else {
       setCurrentLine(currentLine + 1);
     }
+
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
   };
 
   const handleAddPointer = async point => {
@@ -543,7 +544,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
               </Center>
             </>
           ) : posts &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+          template ==
               'simple' ? (
             <>
               <VStack>
