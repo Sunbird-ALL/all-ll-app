@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SpellAndCheck.css';
+import { splitGraphemes } from 'split-graphemes';
 
 const SpellAndCheck = ({ targetWords = [], handleSuccess }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -7,11 +8,20 @@ const SpellAndCheck = ({ targetWords = [], handleSuccess }) => {
   const [failStack, setFailStack] = useState([]);
 
   const currentWord = targetWords[currentWordIndex];
-  const wordChars = currentWord.contentSourceData[0].text.split('');
+  const wordChars = splitGraphemes(currentWord.contentSourceData[0].text);
 
   const handleDragStart = (e, char) => {
     e.dataTransfer.setData('text/plain', char);
   };
+
+  useEffect(()=>{
+    if (matchedChars.length === currentWord.contentSourceData[0].text.length - 1) {
+      handleSuccess(function(){
+        handleNextWord()
+      });
+    }
+  },[matchedChars])
+  
 
   const handleDrop = (e, char) => {
     const draggedChar = e.dataTransfer.getData('text/plain');
@@ -19,11 +29,6 @@ const SpellAndCheck = ({ targetWords = [], handleSuccess }) => {
     if (draggedChar === char) {
       setMatchedChars(prevMatchedChars => [...prevMatchedChars, char]);
 
-      if (matchedChars.length === currentWord.contentSourceData[0].text.length - 1) {
-        handleSuccess(function(){
-          handleNextWord()
-        });
-      }
     } else {
       setFailStack(prevFailStack => [...prevFailStack, char]);
     }
