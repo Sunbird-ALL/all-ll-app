@@ -185,7 +185,8 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         contentType : contentType,
         session_id: localStorage.getItem('virtualStorySessionID'),
         user_id: localStorage.getItem('virtualID'),
-        collectionId: resultArray[checkInd].id
+        collectionId: resultArray[checkInd].id,
+        language: localStorage.getItem('apphomelang') || 'ta'
       }
     )
     .then(res => {

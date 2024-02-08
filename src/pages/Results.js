@@ -35,8 +35,8 @@ export default function Results() {
     fetch(
       `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetTargets/session/${localStorage.getItem(
         'virtualStorySessionID'
-      )}`
-    )
+      )}?language=${localStorage.getItem('apphomelang')}`
+    )    
       .then(response => response.text())
       .then(async result => {
         var apiResponse = JSON.parse(result);
