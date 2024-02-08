@@ -543,9 +543,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Flex>
               </Center>
             </>
-          ) : posts &&
-          template ==
-              'simple' ? (
+          ) : posts && template == 'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -567,17 +565,19 @@ const Story = ({ forceRerender, setForceRerender }) => {
                             }}
                           >
                             <Box p="4">
-                            <h1
-                              style={{
-                                textAlign: 'center',
-                                fontSize: `${calculateFontSize(post?.contentSourceData[0]?.text)}px`,
-                                whiteSpace: 'break-spaces',
-                                wordWrap: 'break-word',
-                              }}
-                              className="story-line"
-                            >
-                              {post?.contentSourceData[0]?.text}
-                            </h1>
+                              <h1
+                                style={{
+                                  textAlign: 'center',
+                                  fontSize: `${calculateFontSize(
+                                    post?.contentSourceData[0]?.text
+                                  )}px`,
+                                  whiteSpace: 'break-spaces',
+                                  wordWrap: 'break-word',
+                                }}
+                                className="story-line"
+                              >
+                                {post?.contentSourceData[0]?.text}
+                              </h1>
 
                               {localStorage.setItem(
                                 'contentText',
@@ -768,7 +768,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
             <SpellAndCheck
               sourceChars={sourceChars}
               targetWords={posts}
-              handleSuccess={(callback) => handleSpellAndCheck(callback)}
+              handleSuccess={callback => handleSpellAndCheck(callback)}
             />
           ) : (
             ''
