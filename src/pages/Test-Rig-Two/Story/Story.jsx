@@ -52,6 +52,7 @@ import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import SpellAndCheck from './SpellAndCheck.jsx';
 
 const jsConfetti = new JSConfetti();
 
@@ -287,9 +288,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
     }
   };
 
-  const handleSuccess = () => {
-    handleStarAnimation();
-    setWellDone(true);
+  const handleSpellAndCheck = (callback) => {
+    callback();
+    console.log("spell and check called")
+    // handleStarAnimation();
+    // setWellDone(true);
   };
   const learnAudio = () => {
     if (temp_audio !== null) {
@@ -760,11 +763,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
             </>
           ) : posts &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'game' ? (
-            <CharacterToWordMatchingGame
+              'word-match' ? (
+            <SpellAndCheck
               sourceChars={sourceChars}
               targetWords={posts}
-              handleSuccess={() => handleSuccess()}
+              handleSuccess={(callback) => handleSpellAndCheck(callback)}
             />
           ) : (
             ''
