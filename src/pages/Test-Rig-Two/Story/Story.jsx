@@ -52,6 +52,7 @@ import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import SpellAndCheck from './SpellAndCheck.jsx';
 
 const jsConfetti = new JSConfetti();
 
@@ -71,7 +72,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
-
+  const [template, SetTemplate] = useState('');
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
   //   if (storedData && localStorage.getItem('virtualID')) {
@@ -141,6 +142,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [forceRerender, completionCriteriaIndex]);
 
   const fetchApi = async () => {
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
     setLoading(true);
     if (practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1') {
       toast({
@@ -287,9 +289,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
     }
   };
 
-  const handleSuccess = () => {
-    handleStarAnimation();
-    setWellDone(true);
+  const handleSpellAndCheck = (callback) => {
+    SetTemplate('simple')
+    //callback();
   };
   const learnAudio = () => {
     if (temp_audio !== null) {
@@ -349,6 +351,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } else {
       setCurrentLine(currentLine + 1);
     }
+
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
   };
 
   const handleAddPointer = async point => {
@@ -540,7 +544,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
               </Center>
             </>
           ) : posts &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+          template ==
               'simple' ? (
             <>
               <VStack>
@@ -760,11 +764,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
             </>
           ) : posts &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'game' ? (
-            <CharacterToWordMatchingGame
+              'word-match' ? (
+            <SpellAndCheck
               sourceChars={sourceChars}
               targetWords={posts}
-              handleSuccess={() => handleSuccess()}
+              handleSuccess={(callback) => handleSpellAndCheck(callback)}
             />
           ) : (
             ''
