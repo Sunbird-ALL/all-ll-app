@@ -360,8 +360,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         sub_session_id: localStorage.getItem('sub_session_id'),
         contentType : contentType,
         session_id: localStorage.getItem('virtualStorySessionID'),
-        user_id: localStorage.getItem('virtualID'),
-        language: localStorage.getItem('apphomelang') || 'ta'
+        user_id: localStorage.getItem('virtualID')
       }
     )
         .then(data => {
