@@ -73,6 +73,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
   const [template, SetTemplate] = useState('');
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [isNext,setIsNext] = useState(false);
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
   //   if (storedData && localStorage.getItem('virtualID')) {
@@ -291,7 +293,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
 
   const handleSpellAndCheck = (callback) => {
     SetTemplate('simple')
-    //callback();
+    callback();
   };
   const learnAudio = () => {
     if (temp_audio !== null) {
@@ -765,11 +767,26 @@ const Story = ({ forceRerender, setForceRerender }) => {
           ) : posts &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
               'word-match' ? (
-            <SpellAndCheck
-              sourceChars={sourceChars}
-              targetWords={posts}
-              handleSuccess={callback => handleSpellAndCheck(callback)}
-            />
+            <>
+              <SpellAndCheck
+                sourceChars={sourceChars}
+                targetWords={posts}
+                handleSuccess={callback => handleSpellAndCheck(callback)}
+                currentWordIndex={currentWordIndex} 
+                nextLine={nextLine}
+                setCurrentWordIndex={setCurrentWordIndex}
+                isNext={isNext}
+                setIsNext={setIsNext}
+                contentType= {practiceCompletionCriteria[completionCriteriaIndex].criteria}
+                isUserSpeak={isUserSpeak}
+                isAudioPlay={isAudioPlay}
+                flag={flag}
+                playAudio={playAudio}
+                playTeacherAudio={playTeacherAudio}
+                pauseAudio={pauseAudio}
+                audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
+              />
+            </>
           ) : (
             ''
           )}
