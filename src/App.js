@@ -133,8 +133,7 @@
           <Route path="/content/add" element={<ContentCreate />} />
           <Route path="/content/:id" element={<ContentCreate />} />
 
-          <Route path={'/'} exact element={<StartV3/>} />
-          {/* <Route path={'/*'} element={<StartV3/>} /> */}
+          <Route path={'/'} exact element={<Login setIsLoggedIn={setIsLoggedIn} />}/>          {/* <Route path={'/*'} element={<StartV3/>} /> */}
           <Route path={'/exploreandlearn/score'} element={<Score3/>} />
           <Route path="/exploreandlearn" element={<StartV3/>} />
           <Route path={'/exploreandlearn/startlearn'} element={<StartLearn3/>} />
