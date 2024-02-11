@@ -52,6 +52,7 @@ import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import SpellAndCheck from './SpellAndCheck.jsx';
 
 const jsConfetti = new JSConfetti();
 
@@ -71,6 +72,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+
+  const [template, SetTemplate] = useState('');
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [isNext,setIsNext] = useState(false);
 
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -141,6 +146,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [forceRerender, completionCriteriaIndex]);
 
   const fetchApi = async () => {
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
     setLoading(true);
     if (practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1') {
       toast({
@@ -258,26 +264,52 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const playTeacherAudio = () => {
-    set_temp_audio(
-      new Audio(
-        posts?.[currentLine].data[0]?.[
-          localStorage.getItem('apphomelang')
-        ].audio
-      )
-    );
+    const contentId = posts?.[currentLine]?.contentId;
+    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+
+    audio.addEventListener('canplaythrough', () => {
+      set_temp_audio(
+        new Audio(
+          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+        )
+      );
+    });
+    audio.addEventListener('error', () => {
+      toast({
+        position: 'top',
+        title: 'Audio is not available',
+        duration: 2000,
+        status: 'error',
+      });
+    });
   };
 
   const pauseAudio = () => {
-    if (temp_audio !== null) {
-      temp_audio.pause();
-      setFlag(!false);
-    }
+    const contentId = posts?.[currentLine]?.contentId;
+    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+
+    audio.addEventListener('canplaythrough', () => {
+      set_temp_audio(
+        new Audio(
+          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+        )
+      );
+    });
+    audio.addEventListener('error', () => {
+      toast({
+        position: 'top',
+        title: 'Audio is not available',
+        duration: 2000,
+        status: 'error',
+      });
+    });
   };
 
-  const handleSuccess = () => {
-    handleStarAnimation();
-    setWellDone(true);
+  const handleSpellAndCheck = (callback) => {
+    SetTemplate('simple')
+    callback();
   };
+
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
@@ -329,6 +361,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } else {
       setCurrentLine(currentLine + 1);
     }
+
+    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
   };
 
   const handleAddPointer = async point => {
@@ -519,9 +553,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Flex>
               </Center>
             </>
-          ) : posts &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'simple' ? (
+          ) : posts && template == 'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -740,12 +772,27 @@ const Story = ({ forceRerender, setForceRerender }) => {
             </>
           ) : posts &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'game' ? (
-            <CharacterToWordMatchingGame
-              sourceChars={sourceChars}
-              targetWords={posts}
-              handleSuccess={() => handleSuccess()}
-            />
+            'word-match' ? (
+              <>
+                <SpellAndCheck
+                  sourceChars={sourceChars}
+                  targetWords={posts}
+                  handleSuccess={callback => handleSpellAndCheck(callback)}
+                  currentWordIndex={currentWordIndex} 
+                  nextLine={nextLine}
+                  setCurrentWordIndex={setCurrentWordIndex}
+                  isNext={isNext}
+                  setIsNext={setIsNext}
+                  contentType= {practiceCompletionCriteria[completionCriteriaIndex].criteria}
+                  isUserSpeak={isUserSpeak}
+                  isAudioPlay={isAudioPlay}
+                  flag={flag}
+                  playAudio={playAudio}
+                  playTeacherAudio={playTeacherAudio}
+                  pauseAudio={pauseAudio}
+                  audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
+                />
+              </>
           ) : (
             ''
           )}
