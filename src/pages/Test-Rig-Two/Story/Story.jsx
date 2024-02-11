@@ -98,10 +98,17 @@ const Story = ({ forceRerender, setForceRerender }) => {
     }
   });
 
-  const practiceCompletionCriteria = [
-    ...(JSON.parse(localStorage.getItem('criteria')) || []),
-    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
+  let practiceCompletionCriteria = [
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1']
   ];
+
+  practiceCompletionCriteria = [
+    ...(JSON.parse(localStorage.getItem('criteria')) || []),
+  ];
+
+  console.log(JSON.parse(localStorage.getItem('criteria')));
+  console.log(completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'])
+  console.log(practiceCompletionCriteria)
   const { slug } = useParams();
   const max = practiceCompletionCriteria.length;
   const progressPercent =
@@ -772,7 +779,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
             </>
           ) : posts &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-            'word-match' ? (
+            'spell-and-check' ? (
               <>
                 <SpellAndCheck
                   sourceChars={sourceChars}
@@ -783,7 +790,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
                   setCurrentWordIndex={setCurrentWordIndex}
                   isNext={isNext}
                   setIsNext={setIsNext}
-                  contentType= {practiceCompletionCriteria[completionCriteriaIndex].criteria}
+                  contentType= {(practiceCompletionCriteria[completionCriteriaIndex].criteria === 'char' || practiceCompletionCriteria[completionCriteriaIndex].criteria === 'paragraph') ? 'word': practiceCompletionCriteria[completionCriteriaIndex].criteria}
+                    
+                  
                   isUserSpeak={isUserSpeak}
                   isAudioPlay={isAudioPlay}
                   flag={flag}
