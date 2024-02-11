@@ -256,6 +256,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
           { response_word_array_result: [] },
           { response_word_result: '' },
           { accuracy_percentage: 0 },
+          { template: practiceCompletionCriteria[completionCriteriaIndex]?.template || ''},
           { duration: 0 },
         ],
       },
@@ -369,9 +370,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
       setWellDone(true);
     } else {
       setCurrentLine(currentLine + 1);
+      SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
     }
-
-    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
   };
 
   const handleAddPointer = async point => {
