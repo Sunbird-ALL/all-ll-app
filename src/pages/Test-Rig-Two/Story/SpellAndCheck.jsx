@@ -89,10 +89,10 @@ const SpellAndCheck = ({
     return wordChars.map((char, index) => (
       <div
         key={index}
-        className={`${matchedChars.includes(char) ? 'source-char-disable' : 'source-char'
+        className={`${matchedChars[index] ? 'source-char-disable' : 'source-char'
           }`}
         onClick={() =>
-          matchedChars.includes(char) ? null : handleCharacterClick(index)
+          matchedChars[index] ? null : handleCharacterClick(index)
         }
       >
         {char}
@@ -105,10 +105,10 @@ const SpellAndCheck = ({
       <div
         key={index}
         style={{ fontSize: '30px', textAlign: 'center' }}
-        className={`target-char ${matchedChars.includes(char) ? 'matched-char' : ''
+        className={`target-char ${matchedChars[index] ? 'matched-char' : ''
           }`}
       >
-        {matchedChars.includes(char) ? (
+        {matchedChars[index] ? (
           <div className="">{char}</div>
         ) : (
           <div className="empty-box" />
