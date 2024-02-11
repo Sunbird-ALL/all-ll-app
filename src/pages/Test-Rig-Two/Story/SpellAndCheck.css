@@ -43,8 +43,10 @@
 /* Source Character and Target Character */
 .source-char, .target-char {
   padding: 15px;
+  margin-right: 10px;
   border: 2px solid #3498db;
   border-radius: 8px;
+  height: 100px;
   background-color: #ecf0f1;
   color: #333;
   cursor: pointer;
@@ -59,6 +61,18 @@
   color: #333;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 50px;
+}
+
+.source-char-disable{
+  padding: 15px;
+  border: 2px solid #020202;
+  border-radius: 8px;
+  background-color: #cccccc; 
+  color: #333;
+  /* cursor: pointer; */
+  transition: background-color 0.3s ease;
+  font-size: 30px;
 }
 
 

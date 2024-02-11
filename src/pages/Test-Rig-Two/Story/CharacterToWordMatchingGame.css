@@ -31,6 +31,7 @@
   color: #333;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 35px;
 }
 
 .source-char:hover,
