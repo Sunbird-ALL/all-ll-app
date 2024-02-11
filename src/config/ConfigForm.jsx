@@ -48,7 +48,7 @@ const ConfigForm = () => {
                 onChange={(value) => handleInputChange(index, value)}
                 value={criteria[index]?.template || ''}
               >
-               <HStack> <Radio value='game'>Game</Radio>
+               <HStack> <Radio value='spell-and-check'>spell&check</Radio>
                 <Radio value='simple'>Simple</Radio></HStack>
               </RadioGroup>
               </HStack>
