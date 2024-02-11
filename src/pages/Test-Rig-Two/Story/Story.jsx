@@ -108,9 +108,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
     ];
   }
 
-  console.log(JSON.parse(localStorage.getItem('criteria')));
-  console.log(completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'])
-  console.log(practiceCompletionCriteria)
   const { slug } = useParams();
   const max = practiceCompletionCriteria.length;
   const progressPercent =
@@ -155,7 +152,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [forceRerender, completionCriteriaIndex]);
 
   const fetchApi = async () => {
-    SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
     setLoading(true);
     if (practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1') {
       toast({
@@ -200,6 +196,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
+          if(posts.length > 0){
+            SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
+          }
           setLoading(false);
         });
       setLoading(false);
@@ -368,6 +367,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     if (currentLine >= posts?.length - 1) {
       handleStarAnimation();
       setWellDone(true);
+      setCurrentWordIndex(0);
     } else {
       setCurrentLine(currentLine + 1);
       SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
@@ -779,7 +779,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Box>
               </VStack>
             </>
-          ) : posts &&
+          ) : posts?.length >= 0 &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
             'spell-and-check' ? (
               <>
