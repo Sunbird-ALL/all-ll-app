@@ -102,9 +102,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
     ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1']
   ];
 
-  practiceCompletionCriteria = [
-    ...(JSON.parse(localStorage.getItem('criteria')) || []),
-  ];
+  if(JSON.parse(localStorage.getItem('criteria'))) {
+    practiceCompletionCriteria = [
+      ...(JSON.parse(localStorage.getItem('criteria')) || []),
+    ];
+  }
 
   console.log(JSON.parse(localStorage.getItem('criteria')));
   console.log(completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'])
