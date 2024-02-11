@@ -31,15 +31,15 @@ const SpellAndCheck = ({
   const [isTryAgain, setIsTryAgain] = useState(false);
 
   const currentWord = targetWords[currentWordIndex];
-  let wordChars =
-    contentType === 'word'
-      ? splitGraphemes(currentWord?.contentSourceData[0]?.text).filter(
-          item => item !== '‌' && item !== '' && item !== ' '
-        )
+  let wordChars = [];
+  if (currentWord?.contentSourceData[0]?.text) {
+    wordChars = (contentType === 'word') ? splitGraphemes(currentWord?.contentSourceData[0]?.text).filter(
+      item => item !== '‌' && item !== '' && item !== ' '
+    )
       : currentWord?.contentSourceData[0]?.text
-          .split(' ')
-          .filter(item => item !== '‌' && item !== '' && item !== ' ');
-
+        .split(' ')
+        .filter(item => item !== '‌' && item !== '' && item !== ' ');
+  }
   const handleDragStart = (e, char) => {
     e.dataTransfer.setData('text/plain', char);
   };
@@ -89,9 +89,8 @@ const SpellAndCheck = ({
     return wordChars.map((char, index) => (
       <div
         key={index}
-        className={`${
-          matchedChars.includes(char) ? 'source-char-disable' : 'source-char'
-        }`}
+        className={`${matchedChars.includes(char) ? 'source-char-disable' : 'source-char'
+          }`}
         onClick={() =>
           matchedChars.includes(char) ? null : handleCharacterClick(index)
         }
@@ -102,13 +101,12 @@ const SpellAndCheck = ({
   };
 
   const renderTargetChars = () => {
-    return wordChars.map((char, index) => (
+    return wordChars && wordChars.map((char, index) => (
       <div
         key={index}
         style={{ fontSize: '30px', textAlign: 'center' }}
-        className={`target-char ${
-          matchedChars.includes(char) ? 'matched-char' : ''
-        }`}
+        className={`target-char ${matchedChars.includes(char) ? 'matched-char' : ''
+          }`}
       >
         {matchedChars.includes(char) ? (
           <div className="">{char}</div>
@@ -185,56 +183,56 @@ const SpellAndCheck = ({
             <HStack gap={'2rem'}>
               {audioUrl !== ' '
                 ? isAudioPlay !== 'recording' && (
-                    <VStack>
-                      <div>
-                        {flag ? (
-                          <>
-                            <img
-                              className="play_btn"
-                              src={Speaker}
-                              style={{
-                                height: '72px',
-                                width: '72px',
-                              }}
-                              onClick={() => playTeacherAudio()}
-                              alt="play_audio"
-                            />
-                            <h4
-                              className="text-play m-0 "
-                              style={{
-                                position: 'relative',
-                                textAlign: 'center',
-                              }}
-                            >
-                              Listen
-                            </h4>
-                          </>
-                        ) : (
-                          <>
-                            <img
-                              className="play_btn"
-                              src={MuteSpeaker}
-                              style={{
-                                height: '72px',
-                                width: '72px',
-                              }}
-                              onClick={() => pauseAudio()}
-                              alt="pause_audio"
-                            />
-                            <h4
-                              className="text-play m-0 "
-                              style={{
-                                position: 'relative',
-                                textAlign: 'center',
-                              }}
-                            >
-                              Mute
-                            </h4>
-                          </>
-                        )}
-                      </div>
-                    </VStack>
-                  )
+                  <VStack>
+                    <div>
+                      {flag ? (
+                        <>
+                          <img
+                            className="play_btn"
+                            src={Speaker}
+                            style={{
+                              height: '72px',
+                              width: '72px',
+                            }}
+                            onClick={() => playTeacherAudio()}
+                            alt="play_audio"
+                          />
+                          <h4
+                            className="text-play m-0 "
+                            style={{
+                              position: 'relative',
+                              textAlign: 'center',
+                            }}
+                          >
+                            Listen
+                          </h4>
+                        </>
+                      ) : (
+                        <>
+                          <img
+                            className="play_btn"
+                            src={MuteSpeaker}
+                            style={{
+                              height: '72px',
+                              width: '72px',
+                            }}
+                            onClick={() => pauseAudio()}
+                            alt="pause_audio"
+                          />
+                          <h4
+                            className="text-play m-0 "
+                            style={{
+                              position: 'relative',
+                              textAlign: 'center',
+                            }}
+                          >
+                            Mute
+                          </h4>
+                        </>
+                      )}
+                    </div>
+                  </VStack>
+                )
                 : ''}
             </HStack>
           </div>
