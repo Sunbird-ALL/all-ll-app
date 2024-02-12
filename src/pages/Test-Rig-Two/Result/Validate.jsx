@@ -53,7 +53,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       setLoading(true);
       axios
         .get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/${localStorage.getItem('virtualID') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
