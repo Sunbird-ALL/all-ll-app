@@ -260,13 +260,24 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const playTeacherAudio = () => {
-    set_temp_audio(
-      new Audio(
-        posts?.[currentLine].data[0]?.[
-          localStorage.getItem('apphomelang')
-        ].audio
-      )
-    );
+    const contentId = posts?.[currentLine]?.contentId;
+    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+
+    audio.addEventListener('canplaythrough', () => {
+      set_temp_audio(
+        new Audio(
+          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+        )
+      );
+    });
+    audio.addEventListener('error', () => {
+      toast({
+        position: 'top',
+        title: 'Audio is not available',
+        duration: 2000,
+        status: 'error',
+      });
+    });
   };
 
   const pauseAudio = () => {
