@@ -53,7 +53,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       setLoading(true);
       axios
         .get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/session/${localStorage.getItem('validationSession') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/${localStorage.getItem('virtualID') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);
@@ -234,7 +234,7 @@ export default function Validate({forceRerender, setForceRerender}) {
                     </button>}
                 </div>
                 <div style={{ textAlign: 'center', paddingBottom: '10px', width: '100vh' }}>
-                  {recommededWords[myCurrectChar].length > 0 &&
+                  {recommededWords[myCurrectChar]?.length > 0 &&
                     <span style={{ fontSize: '25px' }}>
                       {recommededWords[myCurrectChar].map((item, ind, arr) => (
                         <span key={ind}>

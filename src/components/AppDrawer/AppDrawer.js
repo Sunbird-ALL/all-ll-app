@@ -33,9 +33,11 @@ import {
 import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
 import ConfigForm from '../../config/ConfigForm';
+import { useNavigate } from 'react-router-dom';
 
 
 function AppDrawer({forceRerender, setForceRerender}) {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const [value, setValue] = React.useState(localStorage.getItem('apphomelang'))
@@ -102,7 +104,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
       )
         .then(res => {
           return res.json();
@@ -130,8 +132,31 @@ function AppDrawer({forceRerender, setForceRerender}) {
     }
   };
 
+  const checkMilestoneForLevel = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          setLevel(data?.data?.milestone_level);
+          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level)
+          if(data?.data?.milestone_level === 'm0'){
+             navigate('/discoverylist')
+          }
+          else{
+            navigate('/practice')
+          }
+        });
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
   const handleSave = () => {
     onClose();
+    checkMilestoneForLevel();
     setForceRerender(!forceRerender);
   };
   return (
