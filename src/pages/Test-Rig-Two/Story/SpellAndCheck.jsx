@@ -82,7 +82,9 @@ const SpellAndCheck = ({
 
   const handleCharacterClick = index => {
     const char = wordChars[index];
-    setMatchedChars(prevMatchedChars => [...prevMatchedChars, char]);
+    const newMatchedChars = [...matchedChars];
+    newMatchedChars[index] = char;
+    setMatchedChars(newMatchedChars);
   };
 
   const renderSourceChars = () => {
