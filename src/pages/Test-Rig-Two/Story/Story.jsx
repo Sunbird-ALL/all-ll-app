@@ -316,6 +316,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
         lesson: lesson,
         // lesson: localStorage.getItem('userPracticeState') || 0,
         progress: progressPercentage,
+        milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+        language:localStorage.getItem('apphomelang')|| 'ta'
       }),
     }).catch(err => {
       toast({
@@ -356,6 +358,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
+      milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+      language:localStorage.getItem('apphomelang')|| 'ta'
     };
 
     try {

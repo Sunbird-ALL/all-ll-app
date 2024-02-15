@@ -152,6 +152,8 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
+      milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+      language:localStorage.getItem('apphomelang')|| 'ta'
     };
 
     try {
@@ -458,7 +460,9 @@ const Showcase = ({forceRerender, setForceRerender}) => {
         sessionId : localStorage.getItem('virtualStorySessionID'),
         milestone : milestone,
         lesson : lesson,
-        progress: progressPercentage
+        progress: progressPercentage,
+        milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+        language:localStorage.getItem('apphomelang')|| 'ta'
         })
   })
  }
