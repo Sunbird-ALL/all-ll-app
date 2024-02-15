@@ -85,6 +85,8 @@ export default function Validate({forceRerender, setForceRerender}) {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
+      milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+      language:localStorage.getItem('apphomelang')|| 'ta'
     };
 
     try {
@@ -165,7 +167,9 @@ export default function Validate({forceRerender, setForceRerender}) {
         sessionId : localStorage.getItem('virtualStorySessionID'),
         milestone : 'validate',
         lesson : localStorage.getItem('validationSession'),
-        progress:percentage
+        progress:percentage,
+        milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+        language:localStorage.getItem('apphomelang')|| 'ta'
         })
   })
  }

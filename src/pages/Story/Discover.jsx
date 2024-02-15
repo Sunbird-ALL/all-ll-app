@@ -104,7 +104,9 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         // milestone : 'discovery',
         milestone : pathnameWithoutSlash,
         lesson : localStorage.getItem('storyTitle'),
-        progress:percentage
+        progress:percentage,
+        milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+        language:localStorage.getItem('apphomelang')|| 'ta'
         })
   })
  }
@@ -137,6 +139,8 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
+      milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
+      language:localStorage.getItem('apphomelang')|| 'ta'
     };
 
     try {
