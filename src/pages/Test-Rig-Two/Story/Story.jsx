@@ -82,20 +82,20 @@ const Story = ({ forceRerender, setForceRerender }) => {
   //   if (storedData && localStorage.getItem('virtualID')) {
   //     return storedData[localStorage.getItem('virtualID')]?.completionCriteriaIndex || 0;
   //   } else {
-  //     return 0;
-  //   }
-  // });
-  const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
-    parseInt(localStorage.getItem('userPracticeState') || 0)
-  );
+    //     return 0;
+    //   }
+    // });
+    const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
+      parseInt(localStorage.getItem('userPracticeState') || 0)
+      );
 
-  const [currentLine, setCurrentLine] = useState(() => {
-    const storedData = JSON.parse(localStorage.getItem('progressData'));
-    if (storedData && localStorage.getItem('virtualID')) {
-      return storedData[localStorage.getItem('virtualID')]?.currentLine || 0;
-    } else {
-      return 0;
-    }
+      const [currentLine, setCurrentLine] = useState(() => {
+        const storedData = JSON.parse(localStorage.getItem('progressData'));
+        if (storedData && localStorage.getItem('virtualID')) {
+          return storedData[localStorage.getItem('virtualID')]?.currentLine || 0;
+        } else {
+          return 0;
+        }
   });
 
   let practiceCompletionCriteria = [
@@ -111,9 +111,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const { slug } = useParams();
   const max = practiceCompletionCriteria.length;
   const progressPercent =
-    ((completionCriteriaIndex * maxAllowedContent + currentLine) /
-      (max * maxAllowedContent)) *
-    100;
+  ((completionCriteriaIndex * maxAllowedContent + currentLine) /
+  (max * maxAllowedContent)) *
+  100;
 
   localStorage.setItem('sentenceCounter', currentLine);
   const navigate = useNavigate();
@@ -196,14 +196,12 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
-          if(posts.length > 0){
             SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
-          }
           setLoading(false);
         });
-      setLoading(false);
-      setUserSpeak(false);
-    } catch (err) {
+        setLoading(false);
+        setUserSpeak(false);
+      } catch (err) {
       toast({
         position: 'top',
         title: `${err?.message}`,
@@ -217,8 +215,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
       var audioFileName = `${process.env.REACT_APP_CHANNEL}/${
         localStorage.getItem('contentSessionId') === null
-          ? localStorage.getItem('allAppContentSessionId')
-          : localStorage.getItem('contentSessionId')
+        ? localStorage.getItem('allAppContentSessionId')
+        : localStorage.getItem('contentSessionId')
       }-${Date.now()}-${currentLine}.wav`;
       const command = new PutObjectCommand({
         Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
@@ -242,15 +240,15 @@ const Story = ({ forceRerender, setForceRerender }) => {
       {
         // Required
         target:
-          process.env.REACT_APP_CAPTURE_AUDIO === 'true'
-            ? `${audioFileName}`
+        process.env.REACT_APP_CAPTURE_AUDIO === 'true'
+        ? `${audioFileName}`
             : '', // Required. Target of the response
-        //"qid": "", // Required. Unique assessment/question id
-        type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-        values: [
-          { original_text: posts[currentLine]?.contentSourceData[0]?.text },
-          { response_text: '' },
-          { response_correct_words_array: [] },
+            //"qid": "", // Required. Unique assessment/question id
+            type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            values: [
+              { original_text: posts[currentLine]?.contentSourceData[0]?.text },
+              { response_text: '' },
+              { response_correct_words_array: [] },
           { response_incorrect_words_array: [] },
           { response_word_array_result: [] },
           { response_word_result: '' },
@@ -301,11 +299,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
       set_temp_audio(
         new Audio(
           `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
-        )
-      );
-    });
-    audio.addEventListener('error', () => {
-      toast({
+          )
+          );
+        });
+        audio.addEventListener('error', () => {
+          toast({
         position: 'top',
         title: 'Audio is not available',
         duration: 2000,
@@ -386,9 +384,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
       localStorage.setItem(
         'totalSessionPoints',
         response.result.totalSessionPoints
-      );
-      localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
-    } catch (err) {
+        );
+        localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
+      } catch (err) {
       toast({
         position: 'top',
         title: `${err?.message}`,
