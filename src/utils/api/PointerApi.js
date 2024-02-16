@@ -2,7 +2,7 @@
 const baseURL = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/pointer`;
 
 export const fetchPointerApi = () => {
-    const url = `${baseURL}/getPointers/${localStorage.getItem('virtualID')}/${localStorage.getItem('virtualStorySessionID')}`;
+    const url = `${baseURL}/getPointers/${localStorage.getItem('virtualID')}/${localStorage.getItem('virtualStorySessionID')}/${localStorage.getItem('apphomelang')}`;
   
     return fetch(url)
       .then((res) => {
