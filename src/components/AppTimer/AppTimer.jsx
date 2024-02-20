@@ -71,6 +71,10 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
             'totalUserPoints',
             result.result.totalUserPoints
           );
+          localStorage.setItem(
+            'totalLanguagePoints',
+            result.result.totalLanguagePoints
+          );
         } else {
           console.error('Unexpected response structure:', result);
         }
@@ -78,8 +82,10 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         console.error('Error in component:', error);
       }
     };
+    if(isLoggedIn){
 
     fetchDataFromApi();
+    }
   }, [isLoggedIn]);
 
   const handleLogout = () => {
@@ -87,6 +93,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
     onClose();
     localStorage.setItem('totalSessionPoints', 0);
     localStorage.setItem('totalUserPoints', 0);
+    localStorage.setItem('totalLanguagePoints', 0);
     localStorage.removeItem('isAudioPreprocessing');
     const progressData = JSON.parse(localStorage.getItem('progressData'));
     localStorage.removeItem('virtualID');
@@ -177,6 +184,24 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         </ModalContent>
       </Modal>
       {isLoggedIn && (
+        <>
+       <Flex alignItems={'center'} gap={'2'}>
+       <Box 
+        style={{
+        position: 'absolute',
+        left: '15px',
+        top: '30px', 
+        display: 'flex', 
+        alignItems: 'center', 
+       }}
+        >
+        <h5 style={{ fontSize: '16px' }}>{localStorage.getItem('apphomelang') === 'en' ? 'English' : localStorage.getItem('apphomelang') === 'kn' ? 'Kannada' : 'Tamil'}</h5>
+        <Badge ml="1" fontSize="1.1em" colorScheme="green">
+        {localStorage.getItem('totalLanguagePoints')}
+        </Badge>
+        </Box>
+        </Flex>
+
         <Flex pos={'absolute'} right={0} w={'100%'}>
           <Box textAlign={'start'} pl={5}>
             {/* <Text>Total Points:- {localStorage.getItem('totalUserPoints')}</Text>
@@ -219,6 +244,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
             </Flex>
           </Box>
         </Flex>
+        </>
       )}
     </div>
   );
