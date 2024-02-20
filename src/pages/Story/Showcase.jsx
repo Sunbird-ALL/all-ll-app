@@ -196,6 +196,18 @@ const Showcase = ({forceRerender, setForceRerender}) => {
     return cleanString;
   }
 
+  function handleSpeechRecognition(spokenSentence) {
+    const spokenWords = spokenSentence.split(' ');
+    let existingIncorrectWords =
+      JSON.parse(localStorage.getItem('incorrectWords')) || [];
+    let updatedIncorrectWords = existingIncorrectWords.filter(
+      word => !spokenWords.includes(word)
+    );
+    localStorage.setItem(
+      'incorrectWords',
+      JSON.stringify(updatedIncorrectWords)
+    );
+  }
 
 
   async function saveIndb(base64Data) {
@@ -219,6 +231,7 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       })
       .then(async res => {
         responseText = res.data.responseText
+        handleSpeechRecognition(responseText)
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
           (responseEndTime - responseStartTime) / 1000
