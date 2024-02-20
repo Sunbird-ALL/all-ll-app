@@ -50,10 +50,31 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const [practiceSession, setPracticeSession] = React.useState(localStorage.getItem('practiceSession') || localStorage.getItem('virtualStorySessionID'))
   const [level, setLevel] = React.useState('');
   const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
+  const [isAudioPreprocessingEnabled, setAudioPreprocessingStatus] = React.useState(false);
+
+  React.useEffect(() => {
+    if (localStorage.getItem('isAudioPreprocessing') !== null) {
+      if (localStorage.getItem('isAudioPreprocessing') === 'true') {
+        setAudioPreprocessingStatus(true);
+      } else {
+        setAudioPreprocessingStatus(false);
+      }
+    } else {
+      if (process.env.REACT_APP_IS_AUDIOPREPROCESSING === 'true') {
+        setAudioPreprocessingStatus(true);
+      } else {
+        setAudioPreprocessingStatus(false);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     localStorage.setItem('discoveryStatus', isDiscoveryEnabled ? 'enabled' : 'disabled');
   }, [isDiscoveryEnabled]); 
+
+  React.useEffect(() => {
+    localStorage.setItem('isAudioPreprocessing', isAudioPreprocessingEnabled ? true : false);
+  }, [isAudioPreprocessingEnabled]); 
 
   React.useEffect(() => {
     if (value) {
@@ -214,6 +235,16 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </FormControl>
               <Divider />
               <FormControl>
+              <FormLabel><Text as={'b'} >Audio Preprocessing </Text></FormLabel>
+              <HStack spacing='4' paddingBottom={4}>
+                <Text>Audio Preprocessing {isAudioPreprocessingEnabled ? 'Enabled' : 'Disabled'}</Text>
+                  <Switch
+                    isChecked={isAudioPreprocessingEnabled}
+                    onChange={() => setAudioPreprocessingStatus(!isAudioPreprocessingEnabled)}
+                    colorScheme="teal"
+                    size="md"
+                  />
+                </HStack>
                 <FormLabel><Text as={'b'} >Discovery </Text></FormLabel>
                 <HStack spacing='4' paddingBottom={4}>
                 <Text>Discovery {isDiscoveryEnabled ? 'Enabled' : 'Disabled'}</Text>
