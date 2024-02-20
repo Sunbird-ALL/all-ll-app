@@ -45,7 +45,8 @@ const SpellAndCheck = ({
   };
 
   useEffect(() => {
-    if (matchedChars.length === wordChars.length) {
+    const filteredArr1Length = matchedChars.filter(element => element !== undefined).length;
+    if (filteredArr1Length === wordChars.length) {
       // handleSuccess(handleNextWord);
       setIsNext(true);
       setIsTryAgain(true);
