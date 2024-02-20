@@ -94,6 +94,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
     localStorage.setItem('totalSessionPoints', 0);
     localStorage.setItem('totalUserPoints', 0);
     localStorage.setItem('totalLanguagePoints', 0);
+    localStorage.removeItem('isAudioPreprocessing');
     const progressData = JSON.parse(localStorage.getItem('progressData'));
     localStorage.removeItem('virtualID');
     if (

@@ -80,6 +80,26 @@ const Story = ({ forceRerender, setForceRerender }) => {
   //     return 0;
   //   }
   // });
+  
+  function highlightWords(sentence) {
+    let storedIncorrectWords =
+      JSON.parse(localStorage.getItem('incorrectWords')) || [];
+    const words = sentence.split(' ');
+
+    const highlightedSentence = words.map((word, index) => {
+      if (storedIncorrectWords.includes(word)) {
+        return (
+          <span key={index} style={{ backgroundColor: 'red', color: 'white' }}>
+            {word}
+          </span>
+        );
+      } else {
+        return word + ' ';
+      }
+    });
+    return highlightedSentence;
+  }
+
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
     parseInt(localStorage.getItem('userPracticeState') || 0)
   );
@@ -568,17 +588,21 @@ const Story = ({ forceRerender, setForceRerender }) => {
                             }}
                           >
                             <Box p="4">
-                            <h1
-                              style={{
-                                textAlign: 'center',
-                                fontSize: `${calculateFontSize(post?.contentSourceData[0]?.text)}px`,
-                                whiteSpace: 'break-spaces',
-                                wordWrap: 'break-word',
-                              }}
-                              className="story-line"
-                            >
-                              {post?.contentSourceData[0]?.text}
-                            </h1>
+                              <h1
+                                style={{
+                                  textAlign: 'center',
+                                  fontSize: `${calculateFontSize(
+                                    post?.contentSourceData[0]?.text
+                                  )}px`,
+                                  whiteSpace: 'break-spaces',
+                                  wordWrap: 'break-word',
+                                }}
+                                className="story-line"
+                              >
+                                {highlightWords(
+                                  post?.contentSourceData[0]?.text
+                                )}
+                              </h1>
 
                               {localStorage.setItem(
                                 'contentText',

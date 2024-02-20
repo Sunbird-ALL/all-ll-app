@@ -236,11 +236,11 @@ const handleSubmit = () => {
     navigate(`/discoverylist/discovery/${collectionId}`)
 }
 
-  async function saveIndb(base64Data) {
-    let lang = localStorage.getItem('apphomelang') || 'ta';
-    showLoading();
-    // .replace(/[.',|!|?-']/g, '')
-    let responseText = "";
+async function saveIndb(base64Data) {
+  let lang = localStorage.getItem('apphomelang') || 'ta';
+  showLoading();
+  // .replace(/[.',|!|?-']/g, '')
+  let responseText = "";
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
     axios
@@ -282,39 +282,74 @@ const handleSubmit = () => {
         tempteacherText = replaceAll(tempteacherText, '?', '');
         const teacherTextArray = tempteacherText.split(' ');
 
-        let student_correct_words_result = [];
-        let student_incorrect_words_result = [];
+        let studentCorrectWordsResult = [];
+        let studentIncorrectWordsResult = [];
+        let incorrectWords = [];
+        let studentTextResult = [];
         let originalwords = teacherTextArray.length;
         let studentswords = studentTextArray.length;
-        let wrong_words = 0;
-        let correct_words = 0;
-        let result_per_words = 0;
-        let result_per_words1 = 0;
-        let occuracy_percentage = 0;
+        let wrongWords = 0;
+        let correctWords = 0;
+        let resultPerWords = 0;
+        let resultPerWords1 = 0;
+        let occuracyPercentage = 0;
+        let existingIncorrectWords = JSON.parse(localStorage.getItem('incorrectWords')) || [];
+
+        for (let i = 0; i < studentTextArray?.length; i++) {
+          if (teacherTextArray[i] === studentTextArray[i]) {
+            correctWords++;
+            studentTextResult.push(
+              <>
+                {' '}
+                <font className="correct_text_remove">{studentTextArray[i]}</font>
+              </>
+            );
+          } else if (teacherTextArray.includes(studentTextArray[i])) {
+            studentTextResult.push(
+              <>
+                {' '}
+                <font className="correct_seq_wrong">{studentTextArray[i]}</font>
+              </>
+            );
+          } else {
+            wrongWords++;
+            if(teacherTextArray[i])incorrectWords.push(teacherTextArray[i]);
+            studentTextResult.push(
+              <>
+                {' '}
+                <font className="inc_text">{studentTextArray[i]}</font>
+              </>
+            );
+          }
+        }
+        let mergedArray = existingIncorrectWords.concat(incorrectWords);
+        let uniqueWordsSet = new Set(mergedArray);
+        let uniqueWordsArray = Array.from(uniqueWordsSet);
+        localStorage.setItem('incorrectWords', JSON.stringify(uniqueWordsArray));
 
         let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
         for (let i = 0; i < studentTextArray.length; i++) {
           if (teacherTextArray.includes(studentTextArray[i])) {
-            correct_words++;
-            student_correct_words_result.push(
+            correctWords++;
+            studentCorrectWordsResult.push(
               studentTextArray[i]
             );
           } else {
-            wrong_words++;
-            student_incorrect_words_result.push(
+            wrongWords++;
+            studentIncorrectWordsResult.push(
               studentTextArray[i]
             );
           }
         }
         //calculation method
         if (originalwords >= studentswords) {
-          result_per_words = Math.round(
-            Number((correct_words / originalwords) * 100)
+          resultPerWords = Math.round(
+            Number((correctWords / originalwords) * 100)
           );
         } else {
-          result_per_words = Math.round(
-            Number((correct_words / studentswords) * 100)
+          resultPerWords = Math.round(
+            Number((correctWords / studentswords) * 100)
           );
         }
 
@@ -354,8 +389,8 @@ const handleSubmit = () => {
           "values": [
             { "original_text": posts?.data[currentLine]?.contentSourceData[0]?.text },
             { "response_text": responseText },
-            { "response_correct_words_array": student_correct_words_result },
-            { "response_incorrect_words_array": student_incorrect_words_result },
+            { "response_correct_words_array": studentCorrectWordsResult },
+            { "response_incorrect_words_array": studentIncorrectWordsResult },
             { "response_word_array_result": word_result_array },
             { "response_word_result": word_result },
             { "accuracy_percentage": finalScore },
@@ -400,156 +435,209 @@ const handleSubmit = () => {
       //setPageNo(pageno + 1)
     }
   }, [currentLine])
-
   return (
     <>
-      <Header active={0}  forceRerender={forceRerender} setForceRerender={setForceRerender}/>
-      
-        <Center pt={'10vh'} className='bg'>
-          <div
-            style={{
-              boxShadow: '2px 2px 15px 5px grey',
-              borderRadius: '30px',
-              width: '75vw',
-            }}
-            className="story-item"
-          >
+      <Header
+        active={0}
+        forceRerender={forceRerender}
+        setForceRerender={setForceRerender}
+      />
 
-            {loading ? (
-              <Center h='50vh'><Spinner
-              thickness='4px'
-              speed='0.65s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            /></Center>
-            ) : isUserSpeak ? (
-              <>
-
-
-                <VStack>
-                  <div>
-                    {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
-                  </div>
-                  <div style={{ display: 'flex', margin: '20px', }}>
-                    <HStack>
-                      <div style={{ margin: '20px', textAlign: "center" }}>
-                        <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
-                        <p style={{ fontSize: '18px' }}>Try Next</p>
-                      </div>
-                      <div style={{ margin: '20px', textAlign: "center" }}>
-                        <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
-                        <p style={{ fontSize: '18px' }}>Try Again</p>
-                      </div>
-                    </HStack>
-                  </div>
-                </VStack>
-
-              </>
-            ) : (
-              <>
-                {posts?.data?.map((post, ind) =>
-                  currentLine === ind ? (               
-                      <div className='story-box-container' key={ind}>
-                        <Center w={'100%'}>
-                          <img
-                            className="story-image"
-                            src={localStorage.getItem('apphomelang') === 'kn' ? KnPlaceHolder : PlaceHolder
-                            }
-                            alt={post?.name}
-                          />
-                        </Center>
-                        <Center w={'100%'}>
-                          <VStack>
-                          <div>
-                            <h1 style={{ textAlign: "center" }} className='story-line'>
-                              {posts?.data[currentLine]?.contentSourceData[0].text}
-                            </h1>
-                            {localStorage.setItem(
-                              'contentText',
-                              posts?.data[currentLine]?.contentSourceData[0].text
-                            )}
-                          </div>
-                          <div>
-                            {
-                              isUserSpeak ? <></> : <div>
-                                {currentLine === posts?.data?.length ? (
-                                  ''
-                                ) : (
-                                  <>
-                                    <div className='voice-recorder'>
-                                      <VStack>
-                                        <VoiceCompair
-                                          setVoiceText={setVoiceText}
-                                          setRecordedAudio={setRecordedAudio}
-                                          _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
-                                          flag={true}
-                                          setCurrentLine={setCurrentLine}
-                                          setStoryBase64Data={setStoryBase64Data}
-                                          saveIndb={saveIndb}
-                                          setUserSpeak={setUserSpeak}
-                                        />
-                                        {isAudioPlay === 'recording' ? (
-                                          <h4 className="text-speak m-0">
-                                            Stop
-                                          </h4>
-                                        ) : (
-                                          <h4 className="text-speak m-0">
-                                            Speak
-                                          </h4>
-                                        )}
-                                      </VStack>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            }
-                          </div>
-                          </VStack>
-                        </Center>
-                      </div>
-
+      <Center pt={'10vh'} className="bg">
+        <div
+          style={{
+            boxShadow: '2px 2px 15px 5px grey',
+            borderRadius: '30px',
+            width: '75vw',
+          }}
+          className="story-item"
+        >
+          {loading ? (
+          <Center h='50vh'><Spinner
+          thickness='4px'
+          speed='0.65s'
+          emptyColor='gray.200'
+          color='blue.500'
+          size='xl'
+        /></Center>
+          ) : isUserSpeak ? (
+            <>
+              <VStack>
+                <div>
+                  {currentLine === 1 ? (
+                    <h1
+                      style={{
+                        fontSize: '60px',
+                        marginTop: '40px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Very Good
+                    </h1>
+                  ) : currentLine === 2 ? (
+                    <h1
+                      style={{
+                        fontSize: '60px',
+                        marginTop: '40px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Nice Try
+                    </h1>
+                  ) : currentLine === 3 ? (
+                    <h1
+                      style={{
+                        fontSize: '60px',
+                        marginTop: '40px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      WoW
+                    </h1>
                   ) : (
-                    ''
-                  )
-                )}
-              </>
-            )}
+                    <h1
+                      style={{
+                        fontSize: '60px',
+                        marginTop: '60px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      Well Done
+                    </h1>
+                  )}
+                </div>
+                <div>
+                </div>
+                <div style={{ display: 'flex', margin: '20px' }}>
+                  <HStack>
+                    <div style={{ margin: '20px', textAlign: 'center' }}>
+                      <img
+                        style={{ height: '40px', cursor: 'pointer' }}
+                        onClick={nextLine}
+                        src={Next}
+                        alt="next-button"
+                      />
+                      <p style={{ fontSize: '18px' }}>Try Next</p>
+                    </div>
+                    <div style={{ margin: '20px', textAlign: 'center' }}>
+                      <img
+                        style={{ height: '40px', cursor: 'pointer' }}
+                        onClick={prevLine}
+                        src={retry}
+                        alt="retry-again"
+                      />
+                      <p style={{ fontSize: '18px' }}>Try Again</p>
+                    </div>
+                  </HStack>
+                </div>
+              </VStack>
+            </>
+          ) : (
+            <>
+              {posts?.data?.map((post, ind) =>
+                currentLine === ind ? (
+                  <div className="story-box-container" key={ind}>
+                    <Center w={'100%'}>
+                      <img
+                        className="story-image"
+                        src={
+                          localStorage.getItem('apphomelang') === 'kn'
+                            ? KnPlaceHolder
+                            : PlaceHolder
+                        }
+                        alt={post?.name}
+                      />
+                    </Center>
+                    <Center w={'100%'}>
+                      <VStack>
+                        <div>
+                          <h1
+                            style={{ textAlign: 'center' }}
+                            className="story-line"
+                          >
+                            {
+                              posts?.data[currentLine]?.contentSourceData[0]
+                                .text
+                            }
+                          </h1>
+                          {localStorage.setItem(
+                            'contentText',
+                            posts?.data[currentLine]?.contentSourceData[0].text
+                          )}
+                        </div>
+                        <div>
+                          {isUserSpeak ? (
+                            <></>
+                          ) : (
+                            <div>
+                              {currentLine === posts?.data?.length ? (
+                                ''
+                              ) : (
+                                <>
+                                  <div className="voice-recorder">
+                                    <VStack>
+                                      <VoiceCompair
+                                        setVoiceText={setVoiceText}
+                                        setRecordedAudio={setRecordedAudio}
+                                        _audio={{
+                                          isAudioPlay: e => setIsAudioPlay(e),
+                                        }}
+                                        flag={true}
+                                        setCurrentLine={setCurrentLine}
+                                        setStoryBase64Data={setStoryBase64Data}
+                                        saveIndb={saveIndb}
+                                        setUserSpeak={setUserSpeak}
+                                      />
+                                      {isAudioPlay === 'recording' ? (
+                                        <h4 className="text-speak m-0">Stop</h4>
+                                      ) : (
+                                        <h4 className="text-speak m-0">
+                                          Speak
+                                        </h4>
+                                      )}
+                                    </VStack>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </VStack>
+                    </Center>
+                  </div>
+                ) : (
+                  ''
+                )
+              )}
+            </>
+          )}
+        </div>
+      </Center>
+      {currentLine === posts?.data?.length ? (
+        <AlertDialog motionPreset="slideInBottom" isOpen={true} isCentered>
+          <AlertDialogOverlay />
 
-          </div>
-        </Center>
-        {currentLine === posts?.data?.length ? (
-  <AlertDialog
-    motionPreset='slideInBottom'
-    isOpen={true}
-    isCentered
-  >
-    <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              {sessionResult === 'pass' ? 'Well Done !' : 'Good Job !'}
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              {sessionResult === 'pass'
+                ? 'Discover More For Level Up'
+                : 'Keep trying to Improve Level'}
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="linkedin" ml={3} onClick={handleSubmit}>
+                {'OK'}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ) : (
+        ''
+      )}
 
-    <AlertDialogContent>
-      <AlertDialogHeader>
-        {sessionResult === 'pass'
-          ? 'Well Done !'
-          : 'Good Job !'}
-      </AlertDialogHeader>
-      <AlertDialogBody>
-        {sessionResult === 'pass'
-          ? "Discover More For Level Up"
-          : "Keep trying to Improve Level"}
-      </AlertDialogBody>
-      <AlertDialogFooter>
-        <Button colorScheme='linkedin' ml={3} onClick={handleSubmit}>
-          {'OK'}
-        </Button>
-      </AlertDialogFooter>
-    </AlertDialogContent>
-  </AlertDialog>
-) : (
-  ''
-)}
-      
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}
-
     </>
   );
 };
