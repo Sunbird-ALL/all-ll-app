@@ -231,7 +231,6 @@ const Showcase = ({forceRerender, setForceRerender}) => {
       })
       .then(async res => {
         responseText = res.data.responseText
-        console.log("responseText:- ", responseText);
         handleSpeechRecognition(responseText)
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(

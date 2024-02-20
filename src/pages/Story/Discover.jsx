@@ -281,39 +281,39 @@ async function saveIndb(base64Data) {
         tempteacherText = replaceAll(tempteacherText, '?', '');
         const teacherTextArray = tempteacherText.split(' ');
 
-        let student_correct_words_result = [];
-        let student_incorrect_words_result = [];
+        let studentCorrectWordsResult = [];
+        let studentIncorrectWordsResult = [];
         let incorrectWords = [];
-        let student_text_result = [];
+        let studentTextResult = [];
         let originalwords = teacherTextArray.length;
         let studentswords = studentTextArray.length;
-        let wrong_words = 0;
-        let correct_words = 0;
-        let result_per_words = 0;
-        let result_per_words1 = 0;
-        let occuracy_percentage = 0;
+        let wrongWords = 0;
+        let correctWords = 0;
+        let resultPerWords = 0;
+        let resultPerWords1 = 0;
+        let occuracyPercentage = 0;
         let existingIncorrectWords = JSON.parse(localStorage.getItem('incorrectWords')) || [];
 
         for (let i = 0; i < studentTextArray?.length; i++) {
           if (teacherTextArray[i] === studentTextArray[i]) {
-            correct_words++;
-            student_text_result.push(
+            correctWords++;
+            studentTextResult.push(
               <>
                 {' '}
                 <font className="correct_text_remove">{studentTextArray[i]}</font>
               </>
             );
           } else if (teacherTextArray.includes(studentTextArray[i])) {
-            student_text_result.push(
+            studentTextResult.push(
               <>
                 {' '}
                 <font className="correct_seq_wrong">{studentTextArray[i]}</font>
               </>
             );
           } else {
-            wrong_words++;
+            wrongWords++;
             if(teacherTextArray[i])incorrectWords.push(teacherTextArray[i]);
-            student_text_result.push(
+            studentTextResult.push(
               <>
                 {' '}
                 <font className="inc_text">{studentTextArray[i]}</font>
@@ -330,25 +330,25 @@ async function saveIndb(base64Data) {
 
         for (let i = 0; i < studentTextArray.length; i++) {
           if (teacherTextArray.includes(studentTextArray[i])) {
-            correct_words++;
-            student_correct_words_result.push(
+            correctWords++;
+            studentCorrectWordsResult.push(
               studentTextArray[i]
             );
           } else {
-            wrong_words++;
-            student_incorrect_words_result.push(
+            wrongWords++;
+            studentIncorrectWordsResult.push(
               studentTextArray[i]
             );
           }
         }
         //calculation method
         if (originalwords >= studentswords) {
-          result_per_words = Math.round(
-            Number((correct_words / originalwords) * 100)
+          resultPerWords = Math.round(
+            Number((correctWords / originalwords) * 100)
           );
         } else {
-          result_per_words = Math.round(
-            Number((correct_words / studentswords) * 100)
+          resultPerWords = Math.round(
+            Number((correctWords / studentswords) * 100)
           );
         }
 
@@ -388,8 +388,8 @@ async function saveIndb(base64Data) {
           "values": [
             { "original_text": posts?.data[currentLine]?.contentSourceData[0]?.text },
             { "response_text": responseText },
-            { "response_correct_words_array": student_correct_words_result },
-            { "response_incorrect_words_array": student_incorrect_words_result },
+            { "response_correct_words_array": studentCorrectWordsResult },
+            { "response_incorrect_words_array": studentIncorrectWordsResult },
             { "response_word_array_result": word_result_array },
             { "response_word_result": word_result },
             { "accuracy_percentage": finalScore },
