@@ -369,6 +369,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
         response.result.totalSessionPoints
       );
       localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
+      localStorage.setItem( 'totalLanguagePoints', response.result.totalLanguagePoints);
     } catch (err) {
       toast({
         position: 'top',

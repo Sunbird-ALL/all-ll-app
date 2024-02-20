@@ -34,7 +34,7 @@ import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
 import ConfigForm from '../../config/ConfigForm';
 import { useNavigate } from 'react-router-dom';
-
+import { fetchPointerApi } from '../../utils/api/PointerApi';
 
 function AppDrawer({forceRerender, setForceRerender}) {
   const navigate = useNavigate()
@@ -132,6 +132,32 @@ function AppDrawer({forceRerender, setForceRerender}) {
     }
   };
 
+    const fetchDataFromApi = async () => {
+        try {
+          const result = await fetchPointerApi();
+  
+          if (result && result.result) {
+            localStorage.setItem(
+              'totalSessionPoints',
+              result.result.totalSessionPoints
+            );
+            localStorage.setItem(
+              'totalUserPoints',
+              result.result.totalUserPoints
+            );
+            localStorage.setItem(
+              'totalLanguagePoints',
+              result.result.totalLanguagePoints
+            );
+          } else {
+            console.error('Unexpected response structure:', result);
+          }
+        } catch (error) {
+          console.error('Error in component:', error);
+        }
+      };
+   
+
   const checkMilestoneForLevel = async () => {
     try {
       const response = await fetch(
@@ -158,6 +184,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
     onClose();
     checkMilestoneForLevel();
     setForceRerender(!forceRerender);
+    fetchDataFromApi();
   };
   return (
     <>

@@ -93,6 +93,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       const response = await addPointerApi(requestBody);
       localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
       localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      localStorage.setItem( 'totalLanguagePoints', response.result.totalLanguagePoints);
       // You can update your component state or take other actions as needed
     } catch (err) {
       toast({

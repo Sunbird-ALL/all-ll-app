@@ -88,21 +88,23 @@ export default function Login({setIsLoggedIn = false}) {
     .then((res)=>{
       return res.json();
     }).then((data)=>{
-      let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
-      if(milestone === 'showcase'){
-        localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
-          navigate(`/showcase`)  
-        }
-        else if(milestone === 'practice'){
+      if(data?.result?.result){
+        let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
+        if(milestone === 'showcase'){
           localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
-          navigate(`/practice`)  
+            navigate(`/showcase`)  
+          }
+          else if(milestone === 'practice'){
+            localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
+            navigate(`/practice`)  
+          }
+          else if (milestone === 'validate'){
+            localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
+            navigate(`/validate`)
+          }
+        else{
+          navigate(`/${milestone}`)
         }
-        else if (milestone === 'validate'){
-          localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
-          navigate(`/validate`)
-        }
-      else{
-        navigate(`/${milestone}`)
       }
     })
   }
