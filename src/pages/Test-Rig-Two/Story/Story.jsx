@@ -196,7 +196,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
+          if(posts.length > 0){
             SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
+          }
           setLoading(false);
         });
         setLoading(false);
