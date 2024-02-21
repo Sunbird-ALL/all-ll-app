@@ -285,43 +285,20 @@ async function saveIndb(base64Data) {
         let studentCorrectWordsResult = [];
         let studentIncorrectWordsResult = [];
         let incorrectWords = [];
-        let studentTextResult = [];
         let originalwords = teacherTextArray.length;
         let studentswords = studentTextArray.length;
         let wrongWords = 0;
         let correctWords = 0;
         let resultPerWords = 0;
-        let resultPerWords1 = 0;
-        let occuracyPercentage = 0;
         let existingIncorrectWords = JSON.parse(localStorage.getItem('incorrectWords')) || [];
 
-        for (let i = 0; i < studentTextArray?.length; i++) {
-          if (teacherTextArray[i] === studentTextArray[i]) {
-            correctWords++;
-            studentTextResult.push(
-              <>
-                {' '}
-                <font className="correct_text_remove">{studentTextArray[i]}</font>
-              </>
-            );
-          } else if (teacherTextArray.includes(studentTextArray[i])) {
-            studentTextResult.push(
-              <>
-                {' '}
-                <font className="correct_seq_wrong">{studentTextArray[i]}</font>
-              </>
-            );
-          } else {
-            wrongWords++;
-            if(teacherTextArray[i])incorrectWords.push(teacherTextArray[i]);
-            studentTextResult.push(
-              <>
-                {' '}
-                <font className="inc_text">{studentTextArray[i]}</font>
-              </>
-            );
-          }
-        }
+
+
+        teacherTextArray.forEach(word => {
+            if (!studentTextArray.includes(word)) {
+              existingIncorrectWords.push(word);
+            }
+        });
         let mergedArray = existingIncorrectWords.concat(incorrectWords);
         let uniqueWordsSet = new Set(mergedArray);
         let uniqueWordsArray = Array.from(uniqueWordsSet);
@@ -329,7 +306,7 @@ async function saveIndb(base64Data) {
 
         let word_result_array = compareArrays(teacherTextArray, studentTextArray);
 
-        for (let i = 0; i < studentTextArray.length; i++) {
+        for (let i = 0; i < studentTextArray?.length; i++) {
           if (teacherTextArray.includes(studentTextArray[i])) {
             correctWords++;
             studentCorrectWordsResult.push(

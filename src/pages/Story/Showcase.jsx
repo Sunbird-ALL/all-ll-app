@@ -198,11 +198,11 @@ const Showcase = ({forceRerender, setForceRerender}) => {
   }
 
   function handleSpeechRecognition(spokenSentence) {
-    const spokenWords = spokenSentence.split(' ');
+    const spokenWords = spokenSentence.toLowerCase().split(' ');
     let existingIncorrectWords =
       JSON.parse(localStorage.getItem('incorrectWords')) || [];
     let updatedIncorrectWords = existingIncorrectWords.filter(
-      word => !spokenWords.includes(word)
+      word => !spokenWords.includes(word.toLowerCase())
     );
     localStorage.setItem(
       'incorrectWords',
