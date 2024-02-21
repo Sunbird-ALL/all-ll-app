@@ -290,13 +290,14 @@ const Story = ({ forceRerender, setForceRerender }) => {
         )
       );
     });
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', (err) => {
       toast({
         position: 'top',
         title: 'Audio is not available',
         duration: 2000,
         status: 'error',
       });
+      error('', { err: 'Audio is not available', errtype: 'CONTENT' }, 'ET', contentId);
     });
   };
 

@@ -135,12 +135,12 @@ export const impression = (currentPage, telemetryMode) => {
   }
 };
 
-export const error = (error, data,telemetryMode) => {
+export const error = (error, data,telemetryMode,contentId) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
       edata: {
-        pageid: url,
+        pageid: contentId ? contentId :url,
         err: data.err,
         errtype: data.errtype,
         stacktrace: error.toString() || '',

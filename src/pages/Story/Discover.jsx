@@ -49,6 +49,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   const [contentType, setContentType] = useState('')
   const location = useLocation();
   const [collectionId, setCollectionId] = useState(slug)
+  const [percentage,setPercentage] = useState('')
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -197,6 +198,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     .then(res => {
       if(res.data.status === "success"){
         setSessionResult(res.data.data.sessionResult);
+        setPercentage(res.data.data.percentage)
           if(res.data.data.currentLevel === 'm1'){
             navigate('/Validate')
           }
@@ -419,7 +421,7 @@ async function saveIndb(base64Data) {
         forceRerender={forceRerender}
         setForceRerender={setForceRerender}
       />
-
+      {!(currentLine === posts?.data?.length) &&
       <Center pt={'10vh'} className="bg">
         <div
           style={{
@@ -590,21 +592,44 @@ async function saveIndb(base64Data) {
           )}
         </div>
       </Center>
+      }
       {currentLine === posts?.data?.length ? (
         <AlertDialog motionPreset="slideInBottom" isOpen={true} isCentered>
           <AlertDialogOverlay />
 
           <AlertDialogContent>
-            <AlertDialogHeader>
+            <AlertDialogHeader  fontSize="22px" fontWeight="bold" textAlign="center">
               {sessionResult === 'pass' ? 'Well Done !' : 'Good Job !'}
             </AlertDialogHeader>
-            <AlertDialogBody>
+            <AlertDialogBody textAlign="center">
               {sessionResult === 'pass'
                 ? 'Discover More For Level Up'
                 : 'Keep trying to Improve Level'}
+          <br />
+          <br />
+          <div style={{ textAlign: 'center' }}>
+            <b>{"You've achieved"}</b>
+            <h1
+              style={{
+                fontSize: '3em',
+                fontWeight: 'bold',
+                marginTop: '10px',
+                color:
+                  percentage >= 0 && percentage <= 30
+                    ? 'red'
+                    : percentage > 30 && percentage <= 60
+                    ? 'yellow'
+                    : percentage > 60 && percentage <= 100
+                    ? 'green'
+                    : 'black',
+              }}
+            >
+              {`${percentage}%`}
+            </h1>
+          </div>
             </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button colorScheme="linkedin" ml={3} onClick={handleSubmit}>
+            <AlertDialogFooter justifyContent="center">
+              <Button colorScheme="linkedin"  onClick={handleSubmit}>
                 {'OK'}
               </Button>
             </AlertDialogFooter>
