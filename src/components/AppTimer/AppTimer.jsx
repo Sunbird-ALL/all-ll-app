@@ -22,6 +22,9 @@ import TimerLogo from '../../assests/Images/timer.png';
 import PowerLogo from '../../assests/Images/power_logo.png';
 import { fetchPointerApi } from '../../utils/api/PointerApi';
 import MoneyBag from '../../assests/Images/Points.png';
+import EngIcon from '../../assests/Images/english-icon.svg'
+import TamilIcon from '../../assests/Images/tamil-icon.svg'
+import KanndaIcon from '../../assests/Images/kannada-icon.svg'
 
 const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
   const [timer, setTimer] = useState(0);
@@ -195,7 +198,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         alignItems: 'center', 
        }}
         >
-        <h5 style={{ fontSize: '16px' }}>{localStorage.getItem('apphomelang') === 'en' ? 'English' : localStorage.getItem('apphomelang') === 'kn' ? 'Kannada' : 'Tamil'}</h5>
+       <h5>{localStorage.getItem('apphomelang') === 'en' ? <Image h={12} src={EngIcon} /> : localStorage.getItem('apphomelang') === 'kn' ?  <Image h={12} src={KanndaIcon} /> :  <Image h={12} src={TamilIcon} />}</h5>
         <Badge ml="1" fontSize="1.1em" colorScheme="green">
         {localStorage.getItem('totalLanguagePoints')}
         </Badge>
@@ -228,7 +231,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
               <p style={timerStyles}>{formatTime(timer)}</p>
             </div>
             <Flex alignItems={'center'} gap={'2'}>
-              <Image h={7} src={MoneyBag} />
+              <Image h={10} src={MoneyBag} />
               <Badge ml="1" fontSize="1.1em" colorScheme="green">
                 {localStorage.getItem('totalUserPoints')}
               </Badge>
