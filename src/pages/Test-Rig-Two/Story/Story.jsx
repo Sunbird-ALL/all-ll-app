@@ -82,14 +82,21 @@ const Story = ({ forceRerender, setForceRerender }) => {
   // });
   
   function highlightWords(sentence, matchedChar) {
+    let isFirstImageDisplayed = false; 
     const words = sentence.split(' ');
-    const isMatchedArray = [];
     const highlightedSentence = words.map((word, index) => {
+        // Check if any substring of the word matches with any element in matchedChar
         const isMatched = matchedChar.some(char => word.includes(char));
-        isMatchedArray.push(isMatched);
+
         if (isMatched) {
             return (
                 <React.Fragment key={index}>
+                   {/* <Image
+                  className="finger-pointer"
+                  h={12}
+                  src={require('../../../assests/Images/hand-pointer.png')}
+                  alt={''}
+                /> */}
                 <span key={index} style={{ backgroundColor: 'yellow' }}>
                     {word}
                 </span>
@@ -97,10 +104,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </React.Fragment>
             );
         } else {
-            return <React.Fragment key={index}>{word + ' '}</React.Fragment>;
+            return <span key={index}>{word + ' '}</span>;
         }
     });
-    return { highlightedSentence, isMatchedArray }; 
+    return highlightedSentence;
 }
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
@@ -591,25 +598,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                               justifyContent: 'center',
                             }}
                           >
-                            <Flex
-                              flexDirection={'column'}
-                              alignItems={'center'}
-                              p="4"
-                            >
-                              {highlightWords(
-                                post?.contentSourceData[0]?.text,
-                                post?.matchedChar
-                              )?.isMatchedArray?.some(
-                                value => value === true
-                              ) && (
-                                <Image
-                                  className="finger-pointer"
-                                  h={12}
-                                  src={require('../../../assests/Images/hand-pointer.png')}
-                                  alt={''}
-                                  textAlign={'center'}
-                                />
-                              )}
+                            <Box p="4">
                               <h1
                                 style={{
                                   textAlign: 'center',
@@ -621,19 +610,16 @@ const Story = ({ forceRerender, setForceRerender }) => {
                                 }}
                                 className="story-line relative-pos"
                               >
-                                {
-                                  highlightWords(
-                                    post?.contentSourceData[0]?.text,
-                                    post?.matchedChar
-                                  ).highlightedSentence
-                                }
+                                {highlightWords(
+                                    post?.contentSourceData[0]?.text,post?.matchedChar
+                                )}
                               </h1>
 
                               {localStorage.setItem(
                                 'contentText',
                                 post?.contentSourceData[0]?.text
                               )}
-                            </Flex>
+                            </Box>
                           </div>
                         </Flex>
                       </Center>
