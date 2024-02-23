@@ -81,24 +81,34 @@ const Story = ({ forceRerender, setForceRerender }) => {
   //   }
   // });
   
-  function highlightWords(sentence) {
-    let storedIncorrectWords =
-      JSON.parse(localStorage.getItem('incorrectWords')) || [];
+  function highlightWords(sentence, matchedChar) {
+    let isFirstImageDisplayed = false; 
     const words = sentence.split(' ');
-
     const highlightedSentence = words.map((word, index) => {
-      if (storedIncorrectWords.includes(word)) {
-        return (
-          <span key={index} style={{ backgroundColor: 'red', color: 'white' }}>
-            {word}
-          </span>
-        );
-      } else {
-        return word + ' ';
-      }
+        // Check if any substring of the word matches with any element in matchedChar
+        const isMatched = matchedChar.some(char => word.includes(char));
+
+        if (isMatched) {
+            return (
+                <React.Fragment key={index}>
+                   {/* <Image
+                  className="finger-pointer"
+                  h={12}
+                  src={require('../../../assests/Images/hand-pointer.png')}
+                  alt={''}
+                /> */}
+                <span key={index} style={{ backgroundColor: 'yellow' }}>
+                    {word}
+                </span>
+                <>{' '}</>
+                </React.Fragment>
+            );
+        } else {
+            return <span key={index}>{word + ' '}</span>;
+        }
     });
     return highlightedSentence;
-  }
+}
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
     parseInt(localStorage.getItem('userPracticeState') || 0)
@@ -598,10 +608,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
                                   whiteSpace: 'break-spaces',
                                   wordWrap: 'break-word',
                                 }}
-                                className="story-line"
+                                className="story-line relative-pos"
                               >
                                 {highlightWords(
-                                  post?.contentSourceData[0]?.text
+                                    post?.contentSourceData[0]?.text,post?.matchedChar
                                 )}
                               </h1>
 
