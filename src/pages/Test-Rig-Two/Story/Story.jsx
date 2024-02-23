@@ -81,24 +81,27 @@ const Story = ({ forceRerender, setForceRerender }) => {
   //   }
   // });
   
-  function highlightWords(sentence) {
-    let storedIncorrectWords =
-      JSON.parse(localStorage.getItem('incorrectWords')) || [];
+  function highlightWords(sentence, matchedChar) {
     const words = sentence.split(' ');
-
+    const isMatchedArray = [];
     const highlightedSentence = words.map((word, index) => {
-      if (storedIncorrectWords.includes(word)) {
-        return (
-          <span key={index} style={{ backgroundColor: 'red', color: 'white' }}>
-            {word}
-          </span>
-        );
-      } else {
-        return word + ' ';
-      }
+        const isMatched = matchedChar.some(char => word.includes(char));
+        isMatchedArray.push(isMatched);
+        if (isMatched) {
+            return (
+                <React.Fragment key={index}>
+                <span key={index} style={{ backgroundColor: 'yellow' }}>
+                    {word}
+                </span>
+                <>{' '}</>
+                </React.Fragment>
+            );
+        } else {
+            return <React.Fragment key={index}>{word + ' '}</React.Fragment>;
+        }
     });
-    return highlightedSentence;
-  }
+    return { highlightedSentence, isMatchedArray }; 
+}
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
     parseInt(localStorage.getItem('userPracticeState') || 0)
@@ -588,7 +591,25 @@ const Story = ({ forceRerender, setForceRerender }) => {
                               justifyContent: 'center',
                             }}
                           >
-                            <Box p="4">
+                            <Flex
+                              flexDirection={'column'}
+                              alignItems={'center'}
+                              p="4"
+                            >
+                              {highlightWords(
+                                post?.contentSourceData[0]?.text,
+                                post?.matchedChar
+                              )?.isMatchedArray?.some(
+                                value => value === true
+                              ) && (
+                                <Image
+                                  className="finger-pointer"
+                                  h={12}
+                                  src={require('../../../assests/Images/hand-pointer.png')}
+                                  alt={''}
+                                  textAlign={'center'}
+                                />
+                              )}
                               <h1
                                 style={{
                                   textAlign: 'center',
@@ -598,18 +619,21 @@ const Story = ({ forceRerender, setForceRerender }) => {
                                   whiteSpace: 'break-spaces',
                                   wordWrap: 'break-word',
                                 }}
-                                className="story-line"
+                                className="story-line relative-pos"
                               >
-                                {highlightWords(
-                                  post?.contentSourceData[0]?.text
-                                )}
+                                {
+                                  highlightWords(
+                                    post?.contentSourceData[0]?.text,
+                                    post?.matchedChar
+                                  ).highlightedSentence
+                                }
                               </h1>
 
                               {localStorage.setItem(
                                 'contentText',
                                 post?.contentSourceData[0]?.text
                               )}
-                            </Box>
+                            </Flex>
                           </div>
                         </Flex>
                       </Center>
