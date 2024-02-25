@@ -52,6 +52,7 @@ import CharacterToWordMatchingGame from './CharacterToWordMatchingGame';
 import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import SpellAndCheck from './SpellAndCheck.jsx';
 
 const jsConfetti = new JSConfetti();
 
@@ -71,6 +72,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [loading, setLoading] = useState(true);
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
+
+  const [template, SetTemplate] = useState('');
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [isNext,setIsNext] = useState(false);
 
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -123,10 +128,16 @@ const Story = ({ forceRerender, setForceRerender }) => {
     }
   });
 
-  const practiceCompletionCriteria = [
-    ...(JSON.parse(localStorage.getItem('criteria')) || []),
-    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
+  let practiceCompletionCriteria = [
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1']
   ];
+
+  if(JSON.parse(localStorage.getItem('criteria'))) {
+    practiceCompletionCriteria = [
+      ...(JSON.parse(localStorage.getItem('criteria')) || []),
+    ];
+  }
+
   const { slug } = useParams();
   const max = practiceCompletionCriteria.length;
   const progressPercent =
@@ -179,7 +190,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
             You have completed the first practice session`,
         status: 'success',
       });
-      localStorage.setItem('firstPracticeSessionCompleted', true);
       addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
       navigate('/showcase');
     } else if (
@@ -192,7 +202,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
         status: 'success',
       });
       setCompletionCriteriaIndex(0);
-      localStorage.setItem('firstPracticeSessionCompleted', false);
       addLessonApi('showcase', localStorage.getItem('userPracticeState'), 0);
       navigate('/showcase');
     }
@@ -217,6 +226,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
+          if(posts.length > 0){
+            SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
+          }
           setLoading(false);
         });
       setLoading(false);
@@ -273,6 +285,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
           { response_word_array_result: [] },
           { response_word_result: '' },
           { accuracy_percentage: 0 },
+          { template: practiceCompletionCriteria[completionCriteriaIndex]?.template || ''},
           { duration: 0 },
         ],
       },
@@ -312,16 +325,31 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const pauseAudio = () => {
-    if (temp_audio !== null) {
-      temp_audio.pause();
-      setFlag(!false);
-    }
+    const contentId = posts?.[currentLine]?.contentId;
+    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+
+    audio.addEventListener('canplaythrough', () => {
+      set_temp_audio(
+        new Audio(
+          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+        )
+      );
+    });
+    audio.addEventListener('error', () => {
+      toast({
+        position: 'top',
+        title: 'Audio is not available',
+        duration: 2000,
+        status: 'error',
+      });
+    });
   };
 
-  const handleSuccess = () => {
-    handleStarAnimation();
-    setWellDone(true);
+  const handleSpellAndCheck = (callback) => {
+    SetTemplate('simple')
+    callback();
   };
+
   const learnAudio = () => {
     if (temp_audio !== null) {
       temp_audio.play();
@@ -379,8 +407,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
     if (currentLine >= posts?.length - 1) {
       handleStarAnimation();
       setWellDone(true);
+      setCurrentWordIndex(0);
     } else {
       setCurrentLine(currentLine + 1);
+      SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
     }
   };
 
@@ -575,9 +605,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Flex>
               </Center>
             </>
-          ) : posts &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'simple' ? (
+          ) : posts && template == 'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -798,14 +826,31 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Box>
               </VStack>
             </>
-          ) : posts &&
+          ) : posts?.length >= 0 &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-              'game' ? (
-            <CharacterToWordMatchingGame
-              sourceChars={sourceChars}
-              targetWords={posts}
-              handleSuccess={() => handleSuccess()}
-            />
+            'spell-and-check' ? (
+              <>
+                <SpellAndCheck
+                  sourceChars={sourceChars}
+                  targetWords={posts}
+                  handleSuccess={callback => handleSpellAndCheck(callback)}
+                  currentWordIndex={currentWordIndex} 
+                  nextLine={nextLine}
+                  setCurrentWordIndex={setCurrentWordIndex}
+                  isNext={isNext}
+                  setIsNext={setIsNext}
+                  contentType= {(practiceCompletionCriteria[completionCriteriaIndex].criteria === 'char' || practiceCompletionCriteria[completionCriteriaIndex].criteria === 'paragraph') ? 'word': practiceCompletionCriteria[completionCriteriaIndex].criteria}
+                    
+                  
+                  isUserSpeak={isUserSpeak}
+                  isAudioPlay={isAudioPlay}
+                  flag={flag}
+                  playAudio={playAudio}
+                  playTeacherAudio={playTeacherAudio}
+                  pauseAudio={pauseAudio}
+                  audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
+                />
+              </>
           ) : (
             ''
           )}
