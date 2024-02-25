@@ -1,4 +1,4 @@
-name: ALL rig dev Deployment
+name: ALL rig dev Deployment 0.4
 
 on:
   push:
