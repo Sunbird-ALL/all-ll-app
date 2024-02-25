@@ -1934,7 +1934,7 @@ p.chakra-text.css-1r7spse {
   position: absolute;
   top: -64px;
   text-align: center;
-  /* left: 30%; */
+  left: 0%;
   transform: translate(-50%, -50%);
   animation: moveFinger 1s infinite;
   rotate: 180deg;
