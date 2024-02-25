@@ -29,8 +29,8 @@ import Mario from './Mario/Mario';
 const jsConfetti = new JSConfetti();
 
 const Showcase = ({ forceRerender, setForceRerender }) => {
-  const [dragonPosition, setDragonPosition] = useState(100);
-  const [marioPosition, setMarioPosition] = useState(0);
+  const [dragonPosition, setDragonPosition] = useState(98);
+  const [marioPosition, setMarioPosition] = useState(-2);
   const [gameOver, setGameOver] = useState(false);
 
   const [posts, setPosts] = useState([]);
