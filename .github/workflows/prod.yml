@@ -1,9 +1,9 @@
-name: ALL rig dev Deployment
+name: ALL rig Deployment
 
 on:
   push:
     branches:
-      - all-rig-v1-0.4
+      - all-rig-v1
 
 jobs:
   deploy:
@@ -58,7 +58,7 @@ jobs:
           REACT_APP_AWS_S3_REGION=ap-south-1 \
           REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} \
           REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} \
-          REACT_APP_AWS_S3_BUCKET_CONTENT_URL=https://all-dev-content-service.s3.ap-south-1.amazonaws.com \
+          REACT_APP_AWS_S3_BUCKET_CONTENT_URL=https://all-prod-content-service.s3.ap-south-1.amazonaws.com \
           REACT_APP_MIN_DECIBELS=-75 \
           REACT_APP_IS_AUDIOPREPROCESSING=false \
           npm run build
