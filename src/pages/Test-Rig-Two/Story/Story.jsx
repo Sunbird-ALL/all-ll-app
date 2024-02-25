@@ -91,13 +91,13 @@ const Story = ({ forceRerender, setForceRerender }) => {
         if (isMatched) {
             return (
                 <React.Fragment key={index}>
-                   {/* <Image
+                <span key={index} style={{ backgroundColor: 'yellow', position: 'relative'}}>
+                  {!isFirstImageDisplayed && <><Image
                   className="finger-pointer"
                   h={12}
                   src={require('../../../assests/Images/hand-pointer.png')}
                   alt={''}
-                /> */}
-                <span key={index} style={{ backgroundColor: 'yellow' }}>
+                /> {isFirstImageDisplayed = true} </>}
                     {word}
                 </span>
                 <>{' '}</>
