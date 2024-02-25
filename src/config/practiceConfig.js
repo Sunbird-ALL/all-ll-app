@@ -51,14 +51,14 @@ const completionCriteria = {
   "m4": [
     { title: 'P1', criteria: 'word', template: 'spell-and-check' },
     { title: 'P2', criteria: 'word', template: 'spell-and-check' },
-    { title: 'P3', criteria: 'sentence', template: 'simple' },
-    { title: 'P4', criteria: 'sentence', template: 'simple' },
-    { title: 'S1', criteria: 'sentence', template: 'simple' },
-    { title: 'P5', criteria: 'sentence', template: 'spell-and-check' },
-    { title: 'P6', criteria: 'sentence', template: 'spell-and-check' },
-    { title: 'P7', criteria: 'sentence', template: 'simple' },
-    { title: 'P8', criteria: 'sentence', template: 'simple' },
-    { title: 'S2', criteria: 'sentence', template: 'simple' }
+    { title: 'P3', criteria: 'word', template: 'simple' },
+    { title: 'P4', criteria: 'word', template: 'simple' },
+    { title: 'S1', criteria: 'word', template: 'simple' },
+    { title: 'P5', criteria: 'word', template: 'spell-and-check' },
+    { title: 'P6', criteria: 'word', template: 'spell-and-check' },
+    { title: 'P7', criteria: 'word', template: 'simple' },
+    { title: 'P8', criteria: 'word', template: 'simple' },
+    { title: 'S2', criteria: 'word', template: 'simple' }
   ],
   "m5": [
     { title: 'P1', criteria: 'sentence', template: 'simple' },
@@ -75,14 +75,14 @@ const completionCriteria = {
   "m6": [
     { title: 'P1', criteria: 'sentence', template: 'simple' },
     { title: 'P2', criteria: 'sentence', template: 'simple' },
-    { title: 'P3', criteria: 'paragraph', template: 'simple' },
-    { title: 'P4', criteria: 'paragraph', template: 'simple' },
-    { title: 'S1', criteria: 'paragraph', template: 'simple' },
+    { title: 'P3', criteria: 'sentence', template: 'simple' },
+    { title: 'P4', criteria: 'sentence', template: 'simple' },
+    { title: 'S1', criteria: 'sentence', template: 'simple' },
     { title: 'P5', criteria: 'sentence', template: 'simple' },
-    { title: 'P6', criteria: 'paragraph', template: 'simple' },
-    { title: 'P7', criteria: 'paragraph', template: 'simple' },
-    { title: 'P8', criteria: 'paragraph', template: 'simple' },
-    { title: 'S2', criteria: 'paragraph', template: 'simple' }
+    { title: 'P6', criteria: 'sentence', template: 'simple' },
+    { title: 'P7', criteria: 'sentence', template: 'simple' },
+    { title: 'P8', criteria: 'sentence', template: 'simple' },
+    { title: 'S2', criteria: 'sentence', template: 'simple' }
   ],
   "m7": [
     { title: 'P1', criteria: 'sentence', template: 'simple' },

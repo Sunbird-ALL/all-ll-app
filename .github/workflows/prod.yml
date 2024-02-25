@@ -1,7 +1,9 @@
 name: ALL rig Deployment
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - all-rig-v1
 
 jobs:
   deploy:
