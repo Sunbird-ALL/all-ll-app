@@ -9,7 +9,7 @@ const Mario = ({dragonPosition, marioPosition, gameOver}) => {
   
 
   return (
-    <div className="game-container">
+    <div className="mario-game-container">
       <div className="progress-bar" style={progressStyle}>
         <div className="start-icon">📍</div>
         <div className="dragon-progress" style={{ left: `${dragonPosition}%` }}></div>
