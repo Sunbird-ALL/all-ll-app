@@ -1,0 +1,41 @@
+.animated-message {
+    color: rgb(219, 32, 32);
+    font-size: 26px;
+    animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  .buttonStyle {
+    margin-top: 25px;
+    background-color: #38a169; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buttonStyle:hover {
+    /* 22543D */
+    background-color: #407de0; 
+  }
+  .well-done-heading {
+    color: #3182ce;
+    font-size: 60px;
+  }
+  .badge-heading{
+    font-size: 68px;
+  }
