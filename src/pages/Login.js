@@ -89,17 +89,17 @@ export default function Login({setIsLoggedIn = false}) {
       return res.json();
     }).then((data)=>{
       if(data?.result?.result){
-        let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
+        let milestone = data?.result?.result?.milestone || 'discoveryList';
         if(milestone === 'showcase'){
-          localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
+          localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
             navigate(`/showcase`)  
           }
           else if(milestone === 'practice'){
-            localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
+            localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
             navigate(`/practice`)  
           }
           else if (milestone === 'validate'){
-            localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
+            localStorage.setItem('validationSession', data?.result?.result?.lesson)
             navigate(`/validate`)
           }
         else{
