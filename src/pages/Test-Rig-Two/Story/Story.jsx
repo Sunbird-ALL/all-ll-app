@@ -94,7 +94,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
     if (type=='char' || type =='word') {  // type=='char' || type =='word'
         const singleword = splitGraphemes(words[0]).filter(
           item => item !== '‌' && item !== '' && item !== ' ');
-        console.log(singleword);
         const highlightWord = singleword.map((ch,index) =>{
           const ischarMatched = matchedChar.some(char => ch.includes(char));
           if(ischarMatched) {
