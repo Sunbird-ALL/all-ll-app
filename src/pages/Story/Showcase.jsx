@@ -25,6 +25,9 @@ import { addPointerApi } from '../../utils/api/PointerApi';
 import { uniqueId } from '../../services/utilService';
 import completionCriteria from '../../config/practiceConfig';
 import Mario from './Mario/Mario';
+import marioImg from './Mario/images/mario.png';
+import dinoImg from './Mario/images/dragon.png';
+
 
 const jsConfetti = new JSConfetti();
 
@@ -60,6 +63,8 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   const maxAllowedContent = localStorage.getItem('contentPracticeLimit') || 5;
   const max = practiceCompletionCriteria.length;
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
+  const [totalConfidenceScoresLength, setTotalConfidenceScoresLength] = useState(0);
+  const [totalMissingTokenScoresLength, setTotalMissingTokenScoresLength] = useState(0);
 
   React.useEffect(() => {
     if (voiceText == '-') {
@@ -184,22 +189,32 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     }, 500);
   };
 
+  const animateDragon = () => {
+    const marioElement = document.querySelector('.dragon-progress');
+    marioElement.classList.add('dragon-fly');
+    setTimeout(() => {
+      marioElement.classList.remove('dragon-fly');
+    }, 500);
+  };
+
   const handleDragonMove = (error) => {
     let newDragonPosition = 0;
     if (!gameOver && dragonPosition > 0) {
       if (error) {
         newDragonPosition = Math.max(dragonPosition - error, 0);
         setDragonPosition(newDragonPosition);
+        animateDragon();
       } else {
         newDragonPosition = Math.max(marioPosition + 10, 0);
         setMarioPosition(newDragonPosition);
+        animateMario();
       }
 
       if (newDragonPosition === 0) {
         alert('Dragon catches Mario! Game Over!');
         setGameOver(true);
       }
-      animateMario();
+      
     }
   }
 
@@ -264,6 +279,10 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
         responseText = res.data.responseText
 
         if (res?.data?.createScoreData) {
+          const confidenceScoresLength = res.data.createScoreData.session.confidence_scores.length;
+          const missingTokenScoresLength = res.data.createScoreData.session.missing_token_scores.length;
+          setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
+          setTotalMissingTokenScoresLength(prevTotalMissingTokenScoresLength => prevTotalMissingTokenScoresLength + missingTokenScoresLength);
           handleDragonMove(res?.data?.createScoreData?.session?.missing_token_scores?.length);
         }
         handleSpeechRecognition(responseText)
@@ -588,7 +607,36 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
               <>
                 <VStack>
                   <div>
-                    {currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>}
+                  { (currentLine === (posts?.length - 1)) ? 
+               <>
+               {totalConfidenceScoresLength >= totalMissingTokenScoresLength && (
+                 <>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <h1 style={{ fontSize: '100px', marginTop: '60px', textAlign: 'center', marginRight: '20px', color:'green'}}>
+                 Great Job 
+                 </h1>
+                 <div style={{marginTop : '20px'}}>
+                 <Image h={120} className="left-image" src={marioImg} alt="Mario Image" />
+                </div>
+                </div>
+                 </>
+               )}
+               {totalMissingTokenScoresLength > totalConfidenceScoresLength && (
+                 <>
+                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <h1 style={{ fontSize: '100px', marginTop: '60px', textAlign: 'center', marginRight: '20px', color:'red'}}>
+                  GAME OVER
+                 </h1>
+                 <div style={{marginTop : '20px'}}>
+                 <Image h={120} className="left-image" src={dinoImg} alt="Dinosaur Image" />
+                </div>
+                </div>
+                 </>
+               )}
+             </>          
+  : 
+     currentLine === 1 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Very Good</h1> : currentLine === 2 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>Nice Try</h1> : currentLine === 3 ? <h1 style={{ fontSize: '60px', marginTop: '40px', textAlign: 'center' }}>WoW</h1> : <h1 style={{ fontSize: '60px', marginTop: '60px', textAlign: 'center' }}>Well Done</h1>
+}
                   </div>
                   <div style={{ display: 'flex', margin: '20px', }}>
                     <HStack>

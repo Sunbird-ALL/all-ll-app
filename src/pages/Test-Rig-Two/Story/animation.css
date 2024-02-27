@@ -1,19 +1,24 @@
-.animated-message {
-    color: rgb(219, 32, 32);
-    font-size: 26px;
-    animation: pulse 1s infinite;
+.game-message {
+    background-color: #4caf50;
+    border: 2px solid #388e3c; 
+    border-radius: 10px; 
+    padding: 20px; 
+    font-family: "Arial", sans-serif; 
+    font-size: 22px; 
+    text-align: center; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+    width: 60%; 
+    max-width: 400px; 
+    margin: 20px auto; 
+    cursor: pointer;
   }
   
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
+  .game-message:hover {
+    background-color: #2d7e32; 
+  }
+  
+  .game-message b {
+    color: #fff;
   }
   .buttonStyle {
     margin-top: 25px;
@@ -29,12 +34,11 @@
   }
   
   .buttonStyle:hover {
-    /* 22543D */
     background-color: #407de0; 
   }
   .well-done-heading {
     color: #3182ce;
-    font-size: 60px;
+    font-size: 72px;
   }
   .badge-heading{
     font-size: 68px;

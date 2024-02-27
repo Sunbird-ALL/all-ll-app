@@ -590,12 +590,12 @@ const Story = ({ forceRerender, setForceRerender }) => {
                               <p className="badge-heading">🥇</p>
                               <h1 className="well-done-heading">Well Done</h1>
                              
-                              <div className="animated-message">
-                             <b>{"Are you ready for the challenge?"}</b>
+                              <div className="game-message">
+                             <b onClick={onPracticeNext}>{"START GAME"}</b>
                             </div>
-                            </div>
+                            </div> 
                            
-                            <button className="buttonStyle" onClick={onPracticeNext} ><b>Accept</b></button>
+                            {/* <button className="buttonStyle" onClick={onPracticeNext} ><b>Accept</b></button> */}
                            </>
                             ) : (
                              <>
