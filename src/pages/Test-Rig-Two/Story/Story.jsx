@@ -54,6 +54,7 @@ import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
 import SpellAndCheck from './SpellAndCheck.jsx';
 import animation from './animation.css'
+import { splitGraphemes } from 'split-graphemes';
 const jsConfetti = new JSConfetti();
 
 const Story = ({ forceRerender, setForceRerender }) => {
@@ -89,9 +90,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   function highlightWords(sentence, matchedChar) {
     let isFirstImageDisplayed = false;
     const words = sentence.split(' ');
-    let type = localStorage.getItem('apphomelevel');
+    let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     if (type=='char' || type =='word') {  // type=='char' || type =='word'
-        const singleword = words[0].split('');
+        const singleword = splitGraphemes(words[0]).filter(
+          item => item !== '‌' && item !== '' && item !== ' ');
         console.log(singleword);
         const highlightWord = singleword.map((ch,index) =>{
           const ischarMatched = matchedChar.some(char => ch.includes(char));
