@@ -53,7 +53,7 @@ import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
 import SpellAndCheck from './SpellAndCheck.jsx';
-
+import animation from './animation.css'
 const jsConfetti = new JSConfetti();
 
 const Story = ({ forceRerender, setForceRerender }) => {
@@ -475,6 +475,23 @@ const Story = ({ forceRerender, setForceRerender }) => {
     return adjustedFontSize;
   };
 
+  const onPracticeNext = () => {
+    fetchApi();
+    setCurrentLine(0);
+    let index = completionCriteriaIndex + 1;
+    setCompletionCriteriaIndex(index);
+    localStorage.setItem(
+    'userPracticeState',
+    index
+    );
+    addLessonApi(
+    'practice',
+    index,
+    parseInt(progressPercent)
+     );
+   setWellDone(false);
+  }
+
   return (
     <>
       <Header
@@ -558,11 +575,30 @@ const Story = ({ forceRerender, setForceRerender }) => {
                       // left: '40px',
                     }}
                   >
+                      {/* {jsConfetti.addConfetti({
+          emojis: ['⭐', '✨', '🌟', '👏', '🎉', '🥳', '🎊', '🙌', '🎈', '🏆', '🎆', '🥇'],
+        })} */}
                     <Box p="4">
                       <div style={{ textAlign: 'center' }}>
                         <br />
                         <Box p="4">
                           <VStack>
+                           {((completionCriteriaIndex === practiceCompletionCriteria.findIndex(criteria => criteria.title === 'S1') - 1) || 
+                            (completionCriteriaIndex === practiceCompletionCriteria.findIndex(criteria => criteria.title === 'S2') - 1)) ? (
+                          <>
+                             <div style={{ textAlign: 'center' }}>
+                              <p className="badge-heading">🥇</p>
+                              <h1 className="well-done-heading">Well Done</h1>
+                             
+                              <div className="game-message">
+                             <b onClick={onPracticeNext}>{"START GAME"}</b>
+                            </div>
+                            </div> 
+                           
+                            {/* <button className="buttonStyle" onClick={onPracticeNext} ><b>Accept</b></button> */}
+                           </>
+                            ) : (
+                             <>
                             <div style={{ textAlign: 'center' }}>
                               <h1 style={{ fontSize: '60px' }}>Well Done </h1>
                               <br />
@@ -570,30 +606,16 @@ const Story = ({ forceRerender, setForceRerender }) => {
                             <div>
                               <img
                                 style={{ height: '40px', cursor: 'pointer' }}
-                                onClick={() => {
-                                  fetchApi();
-                                  setCurrentLine(0);
-                                  let index = completionCriteriaIndex + 1;
-                                  setCompletionCriteriaIndex(index);
-                                  localStorage.setItem(
-                                    'userPracticeState',
-                                    index
-                                  );
-                                  addLessonApi(
-                                    'practice',
-                                    index,
-                                    parseInt(progressPercent)
-                                  );
-                                  setWellDone(false);
-                                }}
+                                onClick={onPracticeNext}
                                 src={Next}
                                 alt="try_new"
                               />
                             </div>
                             <div>
                               <p>Practice More</p>
-                              {/* <button>No</button> */}
                             </div>
+                           </>
+                          )}
                           </VStack>
                         </Box>
                         {/* <button>No</button> */}

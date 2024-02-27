@@ -1,0 +1,45 @@
+.game-message {
+    background-color: #4caf50;
+    border: 2px solid #388e3c; 
+    border-radius: 10px; 
+    padding: 20px; 
+    font-family: "Arial", sans-serif; 
+    font-size: 22px; 
+    text-align: center; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+    width: 60%; 
+    max-width: 400px; 
+    margin: 20px auto; 
+    cursor: pointer;
+  }
+  
+  .game-message:hover {
+    background-color: #2d7e32; 
+  }
+  
+  .game-message b {
+    color: #fff;
+  }
+  .buttonStyle {
+    margin-top: 25px;
+    background-color: #38a169; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buttonStyle:hover {
+    background-color: #407de0; 
+  }
+  .well-done-heading {
+    color: #3182ce;
+    font-size: 72px;
+  }
+  .badge-heading{
+    font-size: 68px;
+  }
