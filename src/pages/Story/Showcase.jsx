@@ -49,10 +49,15 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   const [storycase64Data, setStoryBase64Data] = useState('');
   const [contentType, setContentType] = useState('word')
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(parseInt(localStorage.getItem('userPracticeState') || 0));
-  const practiceCompletionCriteria = [
-    ...(JSON.parse(localStorage.getItem('criteria')) || []),
-    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
+  let practiceCompletionCriteria = [
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1']
   ];
+
+  if(JSON.parse(localStorage.getItem('criteria'))) {
+    practiceCompletionCriteria = [
+      ...(JSON.parse(localStorage.getItem('criteria')) || []),
+    ];
+  }
 
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
