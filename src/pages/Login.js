@@ -152,6 +152,7 @@ export default function Login({setIsLoggedIn = false}) {
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
+                    style={{ top: '-20px' }}
                     onClick={() =>
                       setShowPassword((showPassword) => !showPassword)
                     }
