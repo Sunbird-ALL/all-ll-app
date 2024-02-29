@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Mario.css';
 
-const Mario = ({dragonPosition, marioPosition, gameOver,winner}) => {
+const Mario = ({dragonPosition, marioPosition, gameOver, winner}) => {
 
   const progressStyle = {
     background: `linear-gradient(to right, #309b4e ${marioPosition}%, #ad1818 ${100 - dragonPosition}%)`
