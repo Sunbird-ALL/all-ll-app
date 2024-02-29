@@ -94,39 +94,48 @@ const Story = ({ forceRerender, setForceRerender }) => {
     let isFirstImageDisplayed = false;
     const words = sentence.split(' ');
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
-    if (type=='char' || type =='word') {  // type=='char' || type =='word'
-        const singleword = splitGraphemes(words[0]).filter(
-          item => item !== '‌' && item !== '' && item !== ' ');
-        const highlightWord = singleword.map((ch,index) =>{
-          const ischarMatched = matchedChar.some(char => ch.includes(char));
-          if(ischarMatched) {
-            return(
-              <React.Fragment key={index}>
-                        <span key={index} style={{ backgroundColor: 'yellow', position: 'relative'}}>
-                            {!isFirstImageDisplayed && 
-                                <>
-                                    <Image
-                                        className="finger-pointer"
+    if(type=='char' || type =='word') {
+      console.log(sentence,matchedChar);
+      const word =words[0];
+      let highlightedString = [];
+      for (let i = 0; i < word.length; i++) {
+          let matchFound = false;
+          for (let j = 0; j < matchedChar.length; j++) {
+              const substr = word.substring(i, i + matchedChar[j].length);
+              if (substr === matchedChar[j]) {
+                  highlightedString.push(
+                    <React.Fragment key ={i}>
+                      <span key={i} style={{ backgroundColor: 'yellow',position :'relative'}}>
+                         {!isFirstImageDisplayed && 
+                          <React.Fragment>
+                                    <Image className="finger-pointer-word"
                                         h={12}
                                         src={require('../../../assests/Images/hand-pointer.png')}
                                         alt={''}
                                     /> 
                                     {isFirstImageDisplayed = true} 
-                                </>
-                            }
-                            {ch}
-                        </span>
-                        {''}
+                                </React.Fragment>
+                                
+                          } 
+                          {substr}
+                      </span>
                     </React.Fragment>
+                      
+                  );
+                  i += matchedChar[j].length - 1;
+                  matchFound = true;
+                  break;
+              }
+          }
 
-            );
+          if (!matchFound) {
+              highlightedString.push(word[i]);
           }
-          else {
-            return <span key={index}>{ch}</span>;
-          }
-        });
-        return highlightWord;
-    } 
+      }
+
+      return highlightedString;
+    }
+
     
     else {
         const highlightedSentence = words.map((word, index) => {
