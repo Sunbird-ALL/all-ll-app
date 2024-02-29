@@ -97,7 +97,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
     const words = sentence.split(' ');
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     if (type == 'char' || type == 'word') {
-      // type=='char' || type =='word'
       const singleword = splitGraphemes(words[0]).filter(
         item => item !== '‌' && item !== '' && item !== ' '
       );
@@ -356,7 +355,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [temp_audio]);
 
   const playAudio = () => {
-    interactCall('playAudio', '', 'DT', 'play');
+    interactCall('playAudio', 'practice', 'DT', 'PLAY');
     const myAudio = localStorage.getItem('recordedAudio');
     set_temp_audio(new Audio(myAudio));
   };
@@ -391,7 +390,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const pauseAudio = () => {
-    interactCall('pauseAudio', '', 'DT', 'pause');
+    interactCall('pauseAudio', 'practice', 'DT', 'PAUSE');
     const contentId = posts?.[currentLine]?.contentId;
     var audio = new Audio(
       `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`

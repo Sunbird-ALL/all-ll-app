@@ -42,14 +42,13 @@ const HangmanGame = ({
   const [hint, setHint] = useState(0);
   const [currentLine, setCurrentLine] = useState(0);
 
-  const [showSplashScreen, setShowSplashScreen] = useState(
-    localStorage.getItem('hasShownSplashScreen') === 'true' ? true : false
-  );
+  const [showSplashScreen, setShowSplashScreen] = useState(false);
 
   useEffect(() => {
     targetWords.map((word, index) => {
       return (
         <React.Fragment key={index}>
+          {' '}
           {words.push(word?.contentSourceData[0]?.text)}
         </React.Fragment>
       );
@@ -72,7 +71,8 @@ const HangmanGame = ({
             item !== '' &&
             item !== ' ' &&
             item !== '-' &&
-            item !== '.'
+            item !== '.' &&
+            item !== ' ﻿'
         )?.length
       ).fill('_')
     );
@@ -107,7 +107,13 @@ const HangmanGame = ({
 
   const provideHint = () => {
     const hints = splitGraphemes(word).filter(
-      item => item !== '‌' && item !== '' && item !== ' ' && item !== '-'
+      item =>
+        item !== '‌' &&
+        item !== '' &&
+        item !== ' ' &&
+        item !== '-' &&
+        item !== '.' &&
+        item !== ' ﻿'
     );
 
     if (currentLine < hints.length - 1) {
@@ -172,7 +178,8 @@ const HangmanGame = ({
         item !== '' &&
         item !== ' ' &&
         item !== '-' &&
-        item !== '.'
+        item !== '.' &&
+        item !== ' ﻿'
     );
 
     alphabet.splice(middleIndex, 0, ...filterWord);
@@ -225,13 +232,20 @@ const HangmanGame = ({
       {!showSplashScreen ? (
         <div className="splash-screen">
           <h1>Welcome to Hangman Game</h1>
+          <Image
+            h={40}
+            mb={20}
+            src={require('../../../../assests/Images/hangman.jpg')}
+          />
+
           <Button
+            className="btn btn-info"
             onClick={() => {
-              localStorage.setItem('hasShownSplashScreen', true);
               setShowSplashScreen(true);
             }}
+            mt={-10}
           >
-            Start Game
+            Start Game {'>'}
           </Button>
         </div>
       ) : (
@@ -336,7 +350,7 @@ const HangmanGame = ({
               <Flex
                 onClick={() => {
                   provideHint();
-                  interactCall('provideHint', '', 'DT', 'hint');
+                  interactCall('HangmanHint', 'practice', 'DT', 'HINT');
                 }}
                 mt={3}
                 flexDirection={'column'}
