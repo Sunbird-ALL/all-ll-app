@@ -44,7 +44,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
   /* Ensure it's above other content */
   /* color: white; */
   /* Text color */
