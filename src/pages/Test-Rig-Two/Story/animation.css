@@ -1,45 +1,53 @@
-.game-message {
-    background-color: #4caf50;
-    border: 2px solid #388e3c; 
-    border-radius: 10px; 
-    padding: 20px; 
-    font-family: "Arial", sans-serif; 
-    font-size: 22px; 
-    text-align: center; 
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
-    width: 60%; 
-    max-width: 400px; 
-    margin: 20px auto; 
-    cursor: pointer;
-  }
-  
-  .game-message:hover {
-    background-color: #2d7e32; 
-  }
-  
-  .game-message b {
-    color: #fff;
-  }
-  .buttonStyle {
-    margin-top: 25px;
-    background-color: #38a169; 
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .buttonStyle:hover {
-    background-color: #407de0; 
-  }
-  .well-done-heading {
-    color: #3182ce;
-    font-size: 72px;
-  }
-  .badge-heading{
-    font-size: 68px;
-  }
+.game-poster-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px; 
+  margin: 0 auto; 
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.left-section{
+  flex: 0 0 auto;
+  margin-right: 50px;
+}
+.right-section {
+  flex: 0 0 auto;
+  margin-left: 50px;
+
+}
+
+.center-section {
+  flex-grow: 1; 
+  text-align: center;
+}
+
+.game-title {
+  font-weight: 600;
+  font-size: 36px;
+  color: #ff5f6d; 
+  margin-bottom: 10px;
+}
+
+.badge-heading {
+  font-size: 50px;
+  color: #ffac33; 
+}
+
+.star-font{
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.start-button {
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.start-button:hover {
+  background-color: #0077cc;
+}
+.game-message{
+  margin-top: 20px;
+}

@@ -35,6 +35,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   const [dragonPosition, setDragonPosition] = useState(98);
   const [marioPosition, setMarioPosition] = useState(-2);
   const [gameOver, setGameOver] = useState(false);
+  const [winner, setWinner] = useState(null);
 
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
@@ -237,6 +238,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   };
 
   const prevLine = count => {
+    setWinner(null)
     setUserSpeak(!isUserSpeak)
   };
 
@@ -288,6 +290,15 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
           const missingTokenScoresLength = res.data.createScoreData.session.missing_token_scores.length;
           setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
           setTotalMissingTokenScoresLength(prevTotalMissingTokenScoresLength => prevTotalMissingTokenScoresLength + missingTokenScoresLength);
+          if((currentLine === (posts?.length - 1))){
+            let winner;
+            if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
+                winner = 'mario';
+            } else { 
+                winner = 'dragon';
+            }
+            setWinner(winner);
+          }
           handleDragonMove(res?.data?.createScoreData?.session?.missing_token_scores?.length);
         }
         handleSpeechRecognition(responseText)
@@ -582,7 +593,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
       <Center pt={'10vh'} className='bg'>
 
         <Flex flexDirection={'column'}>
-          <Mario dragonPosition={dragonPosition} marioPosition={marioPosition} gameOver={gameOver} />
+          <Mario dragonPosition={dragonPosition} marioPosition={marioPosition} gameOver={gameOver} winner={winner}/>
           <div
             style={{
               boxShadow: '2px 2px 15px 5px grey',
