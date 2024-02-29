@@ -48,7 +48,6 @@ const HangmanGame = ({
     targetWords.map((word, index) => {
       return (
         <React.Fragment key={index}>
-          {' '}
           {words.push(word?.contentSourceData[0]?.text)}
         </React.Fragment>
       );

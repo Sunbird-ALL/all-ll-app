@@ -99,15 +99,6 @@ export const end = data => {
   });
 };
 
-// export const interact = (telemetryMode) => {
-//   if (checkTelemetryMode(telemetryMode)) {
-//     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
-//       options: getEventOptions(),
-//       edata: { type: 'TOUCH', subtype: '', pageid: url },
-//     });
-//   }
-// };
-
 export const interact = (id, url, telemetryMode, currentPage) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
