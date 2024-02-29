@@ -55,6 +55,9 @@ import { addPointerApi } from '../../../utils/api/PointerApi';
 import SpellAndCheck from './SpellAndCheck.jsx';
 import animation from './animation.css'
 import { splitGraphemes } from 'split-graphemes';
+import marioImg from '../../Story/Mario/images/mario.png';
+import dinoImg from '../../Story/Mario/images//dragon.png';
+
 const jsConfetti = new JSConfetti();
 
 const Story = ({ forceRerender, setForceRerender }) => {
@@ -626,17 +629,30 @@ const Story = ({ forceRerender, setForceRerender }) => {
                           <VStack>
                            {((completionCriteriaIndex === practiceCompletionCriteria.findIndex(criteria => criteria.title === 'S1') - 1) || 
                             (completionCriteriaIndex === practiceCompletionCriteria.findIndex(criteria => criteria.title === 'S2') - 1)) ? (
-                          <>
-                             <div style={{ textAlign: 'center' }}>
-                              <p className="badge-heading">🥇</p>
-                              <h1 className="well-done-heading">Well Done</h1>
-                             
-                              <div className="game-message">
-                             <b onClick={onPracticeNext}>{"START GAME"}</b>
+                              <>
+                              <div className="game-poster-container">
+                                <div className="left-section">
+                                <Image h={300} src={marioImg} alt="Mario Image" />
+                                </div>  
+                                <div className="center-section"> 
+                                  {/* <h1 className="game-title">Welcome to the Game !</h1> */}
+                                  <span className='star-font'>⭐</span><span className="badge-heading">🏆</span><span className='star-font'>⭐</span>
+
+                                  <div className="game-message">
+                                  <button className='btn btn-info start-button' 
+                                   onClick={onPracticeNext}
+                                   >
+                                    
+                                    Start Game {'>'}
+                                  </button>
+                                    {/* <button onClick={onPracticeNext} className="start-button">Start Game</button> */}
                             </div>
-                            </div> 
+                                </div>
+                                <div className="right-section">
+                                     <Image h={300} src={dinoImg} alt="Dinosaur Image" />
                            
-                            {/* <button className="buttonStyle" onClick={onPracticeNext} ><b>Accept</b></button> */}
+                                </div>
+                              </div>
                            </>
                             ) : (
                              <>
