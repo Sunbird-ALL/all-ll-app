@@ -61,7 +61,6 @@ const HangmanGame = ({
   const resetGame = () => {
     const randomWord = words[currentWordIndex];
     setWord(randomWord?.toLowerCase());
-    // const guessWordSplit = randomWord?.split('');
     setGuessedWord(
       Array(
         splitGraphemes(randomWord)?.filter(
@@ -101,7 +100,6 @@ const HangmanGame = ({
 
   const handleNextWord = () => {
     setCurrentWordIndex(prevIndex => prevIndex + 1);
-    // setCurrentLine(prevIndex => prevIndex + 1);
   };
 
   const provideHint = () => {
