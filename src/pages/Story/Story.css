@@ -228,14 +228,3 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
-.trophy-icon-with {
-  width: 50px;
-  height: 50px;
-  background-color: gold;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  color: white;
-}
