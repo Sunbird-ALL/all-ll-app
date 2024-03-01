@@ -94,70 +94,77 @@ const Story = ({ forceRerender, setForceRerender }) => {
     let isFirstImageDisplayed = false;
     const words = sentence.split(' ');
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
-    if (type=='char' || type =='word') {  // type=='char' || type =='word'
-        const singleword = splitGraphemes(words[0]).filter(
-          item => item !== '‌' && item !== '' && item !== ' ');
-        const highlightWord = singleword.map((ch,index) =>{
-          const ischarMatched = matchedChar.some(char => ch.includes(char));
-          if(ischarMatched) {
-            return(
-              <React.Fragment key={index}>
-                        <span key={index} style={{ backgroundColor: 'yellow', position: 'relative'}}>
-                            {!isFirstImageDisplayed && 
-                                <>
-                                    <Image
-                                        className="finger-pointer"
-                                        h={12}
-                                        src={require('../../../assests/Images/hand-pointer.png')}
-                                        alt={''}
-                                    /> 
-                                    {isFirstImageDisplayed = true} 
-                                </>
-                            }
-                            {ch}
-                        </span>
-                        {''}
+    if (type == 'char' || type == 'word') {
+      const word = words[0];
+      let highlightedString = [];
+      for (let i = 0; i < word.length; i++) {
+        let matchFound = false;
+        for (let j = 0; j < matchedChar.length; j++) {
+          const substr = word.substring(i, i + matchedChar[j].length);
+          if (substr === matchedChar[j]) {
+            highlightedString.push(
+              <React.Fragment key={i}>
+                <span
+                  key={i}
+                  style={{ backgroundColor: 'yellow', position: 'relative' }}
+                >
+                  {!isFirstImageDisplayed && (
+                    <React.Fragment>
+                      <Image
+                        className="finger-pointer-word"
+                        h={12}
+                        src={require('../../../assests/Images/hand-pointer.png')}
+                        alt={''}
+                      />
+                      {(isFirstImageDisplayed = true)}
                     </React.Fragment>
-
+                  )}
+                  {substr}
+                </span>
+              </React.Fragment>
             );
+            i += matchedChar[j].length - 1;
+            matchFound = true;
+            break;
           }
-          else {
-            return <span key={index}>{ch}</span>;
-          }
-        });
-        return highlightWord;
-    } 
-    
-    else {
-        const highlightedSentence = words.map((word, index) => {
-            const isMatched = matchedChar.some(char => word.includes(char));
-            if (isMatched) {
-                return (
-                    <React.Fragment key={index}>
-                        <span key={index} style={{ backgroundColor: 'yellow', position: 'relative'}}>
-                            {!isFirstImageDisplayed && 
-                                <>
-                                    <Image
-                                        className="finger-pointer"
-                                        h={12}
-                                        src={require('../../../assests/Images/hand-pointer.png')}
-                                        alt={''}
-                                    /> 
-                                    {isFirstImageDisplayed = true} 
-                                </>
-                            }
-                            {word}
-                        </span>
-                        {' '}
-                    </React.Fragment>
-                );
-            } else {
-                return <span key={index}>{word+ ' '}</span>;
-            }
-        });
-        return highlightedSentence;
+        }
+        if (!matchFound) {
+          highlightedString.push(word[i]);
+        }
       }
-}
+      return highlightedString;
+    } else {
+      const highlightedSentence = words.map((word, index) => {
+        const isMatched = matchedChar.some(char => word.includes(char));
+        if (isMatched) {
+          return (
+            <React.Fragment key={index}>
+              <span
+                key={index}
+                style={{ backgroundColor: 'yellow', position: 'relative' }}
+              >
+                {!isFirstImageDisplayed && (
+                  <>
+                    <Image
+                      className="finger-pointer"
+                      h={12}
+                      src={require('../../../assests/Images/hand-pointer.png')}
+                      alt={''}
+                    />
+                    {(isFirstImageDisplayed = true)}
+                  </>
+                )}
+                {word}
+              </span>{' '}
+            </React.Fragment>
+          );
+        } else {
+          return <span key={index}>{word + ' '}</span>;
+        }
+      });
+      return highlightedSentence;
+    }
+  }
 
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
     parseInt(localStorage.getItem('userPracticeState') || 0)
