@@ -261,7 +261,27 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
       JSON.stringify(updatedIncorrectWords)
     );
   }
+  async function setWinnerTrophy() {
+    if (currentLine === posts?.length - 1) {
+      let winner;
+      if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
+        winner = 'mario';
+      } else {
+        winner = 'dragon';
+      }
+      setWinner(winner);
+    }
+  }
 
+  useEffect(() => {
+    if (
+      totalConfidenceScoresLength !== null &&
+      totalMissingTokenScoresLength !== null &&
+      currentLine === posts?.length - 1
+    ) {
+      setWinnerTrophy();
+    }
+  }, [totalConfidenceScoresLength, totalMissingTokenScoresLength]);
 
   async function saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
@@ -290,15 +310,6 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
           const missingTokenScoresLength = res.data.createScoreData.session.missing_token_scores.length;
           setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
           setTotalMissingTokenScoresLength(prevTotalMissingTokenScoresLength => prevTotalMissingTokenScoresLength + missingTokenScoresLength);
-          if((currentLine === (posts?.length - 1))){
-            let winner;
-            if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
-                winner = 'mario';
-            } else { 
-                winner = 'dragon';
-            }
-            setWinner(winner);
-          }
           handleDragonMove(res?.data?.createScoreData?.session?.missing_token_scores?.length);
         }
         handleSpeechRecognition(responseText)
