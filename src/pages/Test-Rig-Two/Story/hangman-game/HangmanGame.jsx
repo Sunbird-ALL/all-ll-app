@@ -43,6 +43,7 @@ const HangmanGame = ({
   const [hintCharArray, setHintCharArray] = useState('');
   const [hint, setHint] = useState(0);
   const [currentLine, setCurrentLine] = useState(0);
+  const [keyBoard, setKeyBoard] = useState([]);
 
   useEffect(() => {
     targetWords.map((word, index) => {
@@ -57,6 +58,10 @@ const HangmanGame = ({
   useEffect(() => {
     resetGame();
   }, []);
+
+  useEffect(() => {
+    renderAlphabet();
+  }, [word]);
 
   const resetGame = () => {
     const randomWord = words[currentWordIndex];
@@ -151,10 +156,26 @@ const HangmanGame = ({
     </HStack>
   );
 
+  function addCharsRandomPosition(arr, chars) {
+    const combinedArray = [...arr, ...chars];
+
+    for (let i = combinedArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [combinedArray[i], combinedArray[j]] = [
+        combinedArray[j],
+        combinedArray[i],
+      ];
+    }
+    const shuffledArr = combinedArray.slice(0, arr.length);
+    const shuffledChars = combinedArray.slice(arr.length);
+
+    return shuffledArr.concat(shuffledChars);
+  }
+  console.log(keyBoard);
   const renderAlphabet = () => {
-    const alphabetRowsEnglish = ['qweiop'];
-    const alphabetRowsTamil = ['அஆஇஎஐ'];
-    const alphabetRowsKannada = ['ಅಆಎಏಐ'];
+    const alphabetRowsEnglish = ['qwertyuiopasdfghjklzxcvbnm'];
+    const alphabetRowsTamil = ['அஆஇஈஉஎஏஐகஙசஞடணதநபமயரலவழளறன'];
+    const alphabetRowsKannada = ['ಅಆಇಈಉಎಏಐಕಖಗಘಙಚಛಜಝಟಠಡಢಣತಥದಧನಪಫಬಭಮ'];
 
     const lang = localStorage.getItem('apphomelang');
     const alphabetRows =
@@ -176,29 +197,18 @@ const HangmanGame = ({
         item !== '.' &&
         item !== ' ﻿'
     );
+    const keyboardChars = alphabet
+      .filter((char, index) => index < word.length)
+      .join('');
 
-    alphabet.splice(middleIndex, 0, ...filterWord);
+    let finalArray = addCharsRandomPosition(
+      keyboardChars.split(''),
+      filterWord
+    );
 
-    const uniqueAlphabet = Array.from(new Set(alphabet)).join('');
+    const uniqueAlphabet = Array.from(new Set(finalArray)).join('');
 
-    return [uniqueAlphabet].map((row, rowIndex) => (
-      <HStack key={rowIndex} spacing="1">
-        {splitGraphemes(row).map((letter, colIndex) => (
-          <Button
-            key={letter}
-            onClick={() => {
-              handleGuess(letter);
-              setHintText('');
-              setHintCharArray('');
-            }}
-            bg={colIndex % 2 === 0 ? 'blue.100' : 'blue.300'}
-            isDisabled={guessedWord.includes(letter) || gameWon || gameLost}
-          >
-            {letter}
-          </Button>
-        ))}
-      </HStack>
-    ));
+    setKeyBoard(uniqueAlphabet);
   };
 
   const hangmanGraphics = [
@@ -288,7 +298,29 @@ const HangmanGame = ({
           <VStack spacing="0" mb={5} mt={'-5px'}>
             {renderWord()}
           </VStack>
-          <VStack spacing="2">{renderAlphabet()}</VStack>
+          <HStack spacing="2">
+            {keyBoard.length > 0 &&
+              splitGraphemes(keyBoard)?.map((row, rowIndex) => (
+                <HStack key={rowIndex} spacing="1">
+                  {splitGraphemes(row).map((letter, colIndex) => (
+                    <Button
+                      key={letter}
+                      onClick={() => {
+                        handleGuess(letter);
+                        setHintText('');
+                        setHintCharArray('');
+                      }}
+                      bg={colIndex % 2 === 0 ? 'blue.100' : 'blue.300'}
+                      isDisabled={
+                        guessedWord.includes(letter) || gameWon || gameLost
+                      }
+                    >
+                      {letter}
+                    </Button>
+                  ))}
+                </HStack>
+              ))}
+          </HStack>
           <HStack gap={5}>
             {isAudioPlay !== 'recording' && (
               <div style={{ display: 'flex', justifyContent: 'center' }}>
