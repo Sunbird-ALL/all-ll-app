@@ -19,6 +19,7 @@ export default function Validate({forceRerender, setForceRerender}) {
   const [recommededWords, setRecommendedWords] = useState("")
   const [loding, setLoading] = useState(true);
   const [myCurrectChar, setMyCurrentChar] = useState('')
+  const [targetChar, setTargetChar] = useState([])
   const [chars, setCharacter] = useState([])
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const toast = useToast()
@@ -61,6 +62,7 @@ export default function Validate({forceRerender, setForceRerender}) {
           setCharacter(targetChars);
           setCurrentCharIndex(0);
           setMyCurrentChar(targetChars[0]);
+          setTargetChar(targetChars)
           setRecommendedWords(res.data.contentForToken || []);
         })
         .catch(err => {
@@ -264,7 +266,7 @@ export default function Validate({forceRerender, setForceRerender}) {
               </button>
             </Link>
           </section>
-        </VStack> : !loding && 
+        </VStack> : !loding && localStorage.getItem('userCurrentLevel') === 'm0' && targetChar.length > 0 && 
           <>
             <Center>
               No character available to validate

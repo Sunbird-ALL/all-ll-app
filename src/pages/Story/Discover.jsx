@@ -50,6 +50,10 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   const location = useLocation();
   const [collectionId, setCollectionId] = useState(slug)
   const [percentage,setPercentage] = useState('')
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const [isDataOfLesson , setDataOfLesson] = useState('');
+  const [isResultArray,setResultArray] = useState('');
+  const [isCheckInd,setCheckInd] = useState('');
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -90,10 +94,14 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   };
 
 
-  const addLessonApi = ()=>{
+  const addLessonApi = (validate)=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
-    const pathnameWithoutSlash = location.pathname.slice(1);
-    const percentage = ((currentLine+1) / posts?.data?.length) * 100;
+    const pathnameWithoutSlash =
+      validate === 'validate' ? 'Validate' : location.pathname.slice(1);
+    const percentage =
+      validate === 'validate'
+        ? 0
+        : ((currentLine + 1) / posts?.data?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -181,7 +189,6 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     var allCollectionId =  JSON.parse(localStorage.getItem('AllCollectionId'))
     const resultArray = allCollectionId.map(item => ({ id: item.collectionId, tags: item.tags[1] }));
     const checkInd = resultArray.findIndex(element => element.id === slug);
-    var newIndex = null;
   
     axios
     .post(
@@ -195,32 +202,13 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
         language:localStorage.getItem('apphomelang')|| 'ta'
       }
     )
-    .then(res => {
+    .then(async res => {
       if(res.data.status === "success"){
         setSessionResult(res.data.data.sessionResult);
         setPercentage(res.data.data.percentage)
-          if(res.data.data.currentLevel === 'm1'){
-            navigate('/Validate')
-          }
-          if(res.data.data.sessionResult === 'pass'){
-              if(res.data.data.currentLevel === 'm2'){
-                navigate('/Validate')
-              }
-              newIndex = checkInd + 1;
-           
-          }else if(res.data.data.sessionResult === 'fail'){
-            if(checkInd >= 3){
-              navigate('/Validate')
-            }else {
-              newIndex = checkInd - 1;
-            }
-          }
-          if(resultArray[newIndex]){
-            setCollectionId(resultArray[newIndex].id)
-          }else{
-            navigate('/Validate')
-          }
-        
+        setDataOfLesson(res.data.data);
+        setResultArray(resultArray);
+        setCheckInd(checkInd);  
       }
     })
     .catch(err => {
@@ -233,10 +221,40 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     });
 }
 
-const handleSubmit = () => {
+const addLessonCheck = async (res, resultArray, checkInd) => {
+  var newIndex = null;
+  await addLessonApi('validate');
+  if(res.currentLevel === 'm1'){
+    navigate('/Validate');
+  }
+
+  if(res.sessionResult === 'pass'){
+    if(res.currentLevel === 'm2'){
+      navigate('/Validate');
+    }
+    newIndex = checkInd + 1;
+  } else if(res.sessionResult === 'fail'){
+    if(checkInd >= 3){
+      navigate('/Validate');
+    } else {
+      newIndex = checkInd - 1;
+    }
+  }
+
+  if(resultArray[newIndex]){
+    const newCollectionId = resultArray[newIndex].id;
+    setCollectionId(newCollectionId);
     setCurrentLine(0)
-    navigate(`/discoverylist/discovery/${collectionId}`)
+    navigate(`/discoverylist/discovery/${newCollectionId}`)
+  } else {
+    navigate('/Validate');
+  }
+ 
 }
+
+const handleOkClick = () => {
+  setIsDialogOpen(false); 
+};
 
 async function saveIndb(base64Data) {
   let lang = localStorage.getItem('apphomelang') || 'ta';
@@ -407,13 +425,21 @@ async function saveIndb(base64Data) {
   }
 
   useEffect(() => {
-
     if (currentLine && currentLine === posts?.data?.length) {
-       checkSetResult();
-      localStorage.setItem('tabIndex', parseInt(localStorage.getItem('tabIndex')) + 1) 
+      checkSetResult();
+      localStorage.setItem(
+        'tabIndex',
+        parseInt(localStorage.getItem('tabIndex')) + 1
+      );
       //setPageNo(pageno + 1)
     }
-  }, [currentLine])
+  }, [currentLine]);
+
+  useEffect(() => {
+    if (!isDialogOpen) {
+      addLessonCheck(isDataOfLesson, isResultArray, isCheckInd);
+    }
+  }, [isDialogOpen, isDataOfLesson, isResultArray, isCheckInd]);
   return (
     <>
       <Header
@@ -593,8 +619,8 @@ async function saveIndb(base64Data) {
         </div>
       </Center>
       }
-      {currentLine === posts?.data?.length ? (
-        <AlertDialog motionPreset="slideInBottom" isOpen={true} isCentered>
+      {isDialogOpen && currentLine === posts?.data?.length && (
+        <AlertDialog motionPreset="slideInBottom" isOpen={isDialogOpen} isCentered>
           <AlertDialogOverlay />
 
           <AlertDialogContent>
@@ -618,7 +644,7 @@ async function saveIndb(base64Data) {
                   percentage >= 0 && percentage <= 30
                     ? 'red'
                     : percentage > 30 && percentage <= 60
-                    ? 'yellow'
+                    ? 'orange'
                     : percentage > 60 && percentage <= 100
                     ? 'green'
                     : 'black',
@@ -629,14 +655,12 @@ async function saveIndb(base64Data) {
           </div>
             </AlertDialogBody>
             <AlertDialogFooter justifyContent="center">
-              <Button colorScheme="linkedin"  onClick={handleSubmit}>
+              <Button colorScheme="linkedin"  onClick={handleOkClick}>
                 {'OK'}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      ) : (
-        ''
       )}
 
       {/* <Text>Session Id: {localStorage.getItem('virtualStorySessionID')}</Text> */}

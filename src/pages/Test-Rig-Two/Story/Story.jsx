@@ -82,6 +82,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [template, SetTemplate] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isNext, setIsNext] = useState(false);
+  const [showSplashScreen, setShowSplashScreen] = useState(false);
 
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -97,39 +98,44 @@ const Story = ({ forceRerender, setForceRerender }) => {
     const words = sentence.split(' ');
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     if (type == 'char' || type == 'word') {
-      const singleword = splitGraphemes(words[0]).filter(
-        item => item !== '‌' && item !== '' && item !== ' '
-      );
-      const highlightWord = singleword.map((ch, index) => {
-        const ischarMatched = matchedChar.some(char => ch.includes(char));
-        if (ischarMatched) {
-          return (
-            <React.Fragment key={index}>
-              <span
-                key={index}
-                style={{ backgroundColor: 'yellow', position: 'relative' }}
-              >
-                {!isFirstImageDisplayed && (
-                  <>
-                    <Image
-                      className="finger-pointer"
-                      h={12}
-                      src={require('../../../assests/Images/hand-pointer.png')}
-                      alt={''}
-                    />
-                    {(isFirstImageDisplayed = true)}
-                  </>
-                )}
-                {ch}
-              </span>
-              {''}
-            </React.Fragment>
-          );
-        } else {
-          return <span key={index}>{ch}</span>;
+      const word = words[0];
+      let highlightedString = [];
+      for (let i = 0; i < word.length; i++) {
+        let matchFound = false;
+        for (let j = 0; j < matchedChar.length; j++) {
+          const substr = word.substring(i, i + matchedChar[j].length);
+          if (substr === matchedChar[j]) {
+            highlightedString.push(
+              <React.Fragment key={i}>
+                <span
+                  key={i}
+                  style={{ backgroundColor: 'yellow', position: 'relative' }}
+                >
+                  {!isFirstImageDisplayed && (
+                    <React.Fragment>
+                      <Image
+                        className="finger-pointer-word"
+                        h={12}
+                        src={require('../../../assests/Images/hand-pointer.png')}
+                        alt={''}
+                      />
+                      {(isFirstImageDisplayed = true)}
+                    </React.Fragment>
+                  )}
+                  {substr}
+                </span>
+              </React.Fragment>
+            );
+            i += matchedChar[j].length - 1;
+            matchFound = true;
+            break;
+          }
         }
-      });
-      return highlightWord;
+        if (!matchFound) {
+          highlightedString.push(word[i]);
+        }
+      }
+      return highlightedString;
     } else {
       const highlightedSentence = words.map((word, index) => {
         const isMatched = matchedChar.some(char => word.includes(char));
@@ -718,7 +724,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
                                       height: '40px',
                                       cursor: 'pointer',
                                     }}
-                                    onClick={onPracticeNext}
+                                    onClick={() => {
+                                      onPracticeNext();
+                                      setShowSplashScreen(false);
+                                    }}
                                     src={Next}
                                     alt="try_new"
                                   />
@@ -995,6 +1004,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
               'hangman-game' ? (
             <HangmanGame
               sourceChars={sourceChars}
+              showSplashScreen={showSplashScreen}
+              setShowSplashScreen={setShowSplashScreen}
               targetWords={posts}
               isAudioPlay={isAudioPlay}
               currentWordIndex={currentWordIndex}

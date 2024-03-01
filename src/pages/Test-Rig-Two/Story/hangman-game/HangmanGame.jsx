@@ -28,6 +28,8 @@ const HangmanGame = ({
   currentWordIndex,
   setCurrentWordIndex,
   handleSuccess,
+  showSplashScreen,
+  setShowSplashScreen,
 }) => {
   const toast = useToast();
   const words = [];
@@ -41,8 +43,6 @@ const HangmanGame = ({
   const [hintCharArray, setHintCharArray] = useState('');
   const [hint, setHint] = useState(0);
   const [currentLine, setCurrentLine] = useState(0);
-
-  const [showSplashScreen, setShowSplashScreen] = useState(false);
 
   useEffect(() => {
     targetWords.map((word, index) => {
@@ -131,8 +131,6 @@ const HangmanGame = ({
     setHintCharArray(hints);
   };
 
-  // Function to merge two arrays and shuffle the result
-
   useEffect(() => {
     if (guessedWord.join('') !== '' && guessedWord.join('') === word) {
       setGameWon(true);
@@ -217,7 +215,7 @@ const HangmanGame = ({
       strokeWidth="3"
       fill="white"
     />, // Head
-    <line x1="85" y1="127" x2="85" y2="190" stroke="black" strokeWidth="15" />, // Body
+    <line x1="85" y1="127" x2="85" y2="190" stroke="black" strokeWidth="10" />, // Body
     <line x1="85" y1="160" x2="35" y2="110" stroke="black" strokeWidth="3" />, // Left Arm
     <line x1="85" y1="160" x2="150" y2="110" stroke="black" strokeWidth="3" />, // Right Arm
     <line x1="85" y1="185" x2="25" y2="280" stroke="black" strokeWidth="3" />, // Left Leg
@@ -227,10 +225,9 @@ const HangmanGame = ({
   const hangmanDisplay = hangmanGraphics?.slice(0, incorrectGuesses);
 
   return (
-    <VStack spacing="1" align="center" w={'100%'}>
+    <VStack pos={'relative'} spacing="1" align="center" w={'100%'}>
       {!showSplashScreen ? (
         <div className="splash-screen">
-          <h1>Welcome to Hangman Game</h1>
           <Image
             h={40}
             mb={20}
@@ -252,38 +249,42 @@ const HangmanGame = ({
           <Text fontSize={24} fontWeight={600}>
             Hangman Game
           </Text>
-          {gameLost ? (
-            <Text fontSize={'24px'} fontWeight={'600'} color="red.500">
-              You lost! The word was: {word} <br />
-            </Text>
-          ) : null}
-          {gameWon ? (
-            <Text fontSize={'24px'} fontWeight={'600'} color="green.500">
-              You won! The word is: {word} <br />
-            </Text>
-          ) : null}
-          {!(gameLost || gameWon) && hintCharArray && (
-            <Box
-              bgColor={'orange'}
-              p={2}
-              borderRadius={5}
-              shadow={'1px 1px 3px 2px orange '}
-            >
-              <Text fontSize={'20px'} fontWeight={'600'}>
-                {hintCharArray && ` Hint is: ${hintCharArray}`}
-              </Text>
+          <HStack pos={'relative'} justifyContent="end" top={'-2'} w={'90%'}>
+            <Box pos={'absolute'}>
+              {!(gameLost || gameWon) && hintCharArray && (
+                <Box
+                  bgColor={'orange'}
+                  p={1}
+                  borderRadius={5}
+                  shadow={'1px 1px 3px 2px orange '}
+                >
+                  <Text fontSize={'20px'} fontWeight={'600'}>
+                    {hintCharArray && ` Hint is: ${hintCharArray}`}
+                  </Text>
+                </Box>
+              )}
             </Box>
-          )}
+          </HStack>
+          <Box pos={'absolute'} top={10}>
+            {gameLost ? (
+              <Text fontSize={'24px'} fontWeight={'600'} color="red.500">
+                You lost! The word was: {word} <br />
+              </Text>
+            ) : null}
+            {gameWon ? (
+              <Text fontSize={'24px'} fontWeight={'600'} color="green.500">
+                You won! The word is: {word} <br />
+              </Text>
+            ) : null}
+          </Box>
 
           <Flex justifyContent={'center'} w={'100%'}>
             <Flex justifyContent={'start'} w={'80%'}>
-              {incorrectGuesses != 0 && (
-                <Box shadow={'1px 1px 3px 3px #f1f1f1'}>
-                  <svg width="200" height="270">
-                    {hangmanDisplay}
-                  </svg>
-                </Box>
-              )}
+              <Box>
+                <svg width="200" height="270">
+                  {hangmanDisplay}
+                </svg>
+              </Box>
             </Flex>
           </Flex>
           <VStack spacing="0" mb={5} mt={'-5px'}>

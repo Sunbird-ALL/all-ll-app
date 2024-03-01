@@ -352,7 +352,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
                   <h2>
                     <AccordionButton>
                       <Box as="span" flex='1' textAlign='left'>
-                        <Text as={'b'} >Practice config </Text>
+                        <Text as={'b'}>Practice config </Text>
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
