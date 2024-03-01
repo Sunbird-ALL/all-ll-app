@@ -96,8 +96,12 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
 
   const addLessonApi = (validate)=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
-    const pathnameWithoutSlash = validate === 'validate'? 'Validate' : location.pathname.slice(1);
-    const percentage =  validate === 'validate'? 0 :((currentLine+1) / posts?.data?.length) * 100;
+    const pathnameWithoutSlash =
+      validate === 'validate' ? 'Validate' : location.pathname.slice(1);
+    const percentage =
+      validate === 'validate'
+        ? 0
+        : ((currentLine + 1) / posts?.data?.length) * 100;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -248,7 +252,7 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
  
 }
 
-const handleOKClick = () => {
+const handleOkClick = () => {
   setIsDialogOpen(false); 
 };
 
@@ -421,20 +425,21 @@ async function saveIndb(base64Data) {
   }
 
   useEffect(() => {
-
     if (currentLine && currentLine === posts?.data?.length) {
-       checkSetResult();
-      localStorage.setItem('tabIndex', parseInt(localStorage.getItem('tabIndex')) + 1) 
+      checkSetResult();
+      localStorage.setItem(
+        'tabIndex',
+        parseInt(localStorage.getItem('tabIndex')) + 1
+      );
       //setPageNo(pageno + 1)
     }
-  }, [currentLine])
-  
-  useEffect(() => {
+  }, [currentLine]);
 
+  useEffect(() => {
     if (!isDialogOpen) {
-      addLessonCheck(isDataOfLesson,isResultArray,isCheckInd);
+      addLessonCheck(isDataOfLesson, isResultArray, isCheckInd);
     }
-  }, [isDialogOpen,isDataOfLesson,isResultArray,isCheckInd])
+  }, [isDialogOpen, isDataOfLesson, isResultArray, isCheckInd]);
   return (
     <>
       <Header
@@ -650,7 +655,7 @@ async function saveIndb(base64Data) {
           </div>
             </AlertDialogBody>
             <AlertDialogFooter justifyContent="center">
-              <Button colorScheme="linkedin"  onClick={handleOKClick}>
+              <Button colorScheme="linkedin"  onClick={handleOkClick}>
                 {'OK'}
               </Button>
             </AlertDialogFooter>
