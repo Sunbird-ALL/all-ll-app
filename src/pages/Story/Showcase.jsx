@@ -25,8 +25,8 @@ import { addPointerApi } from '../../utils/api/PointerApi';
 import { uniqueId } from '../../services/utilService';
 import completionCriteria from '../../config/practiceConfig';
 import Mario from './Mario/Mario';
-import marioImg from './Mario/images/mario.png';
-import dinoImg from './Mario/images/dragon.png';
+import marioImg from './Mario/images/mario-trophy.png';
+import dinoImg from './Mario/images/dragon-trophy.png';
 
 
 const jsConfetti = new JSConfetti();
@@ -261,7 +261,27 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
       JSON.stringify(updatedIncorrectWords)
     );
   }
+  async function setWinnerTrophy() {
+    if (currentLine === posts?.length - 1) {
+      let winner;
+      if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
+        winner = 'mario';
+      } else {
+        winner = 'dragon';
+      }
+      setWinner(winner);
+    }
+  }
 
+  useEffect(() => {
+    if (
+      totalConfidenceScoresLength !== null &&
+      totalMissingTokenScoresLength !== null &&
+      currentLine === posts?.length - 1
+    ) {
+      setWinnerTrophy();
+    }
+  }, [totalConfidenceScoresLength, totalMissingTokenScoresLength]);
 
   async function saveIndb(base64Data) {
     let lang = localStorage.getItem('apphomelang');
@@ -290,15 +310,6 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
           const missingTokenScoresLength = res.data.createScoreData.session.missing_token_scores.length;
           setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
           setTotalMissingTokenScoresLength(prevTotalMissingTokenScoresLength => prevTotalMissingTokenScoresLength + missingTokenScoresLength);
-          if((currentLine === (posts?.length - 1))){
-            let winner;
-            if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
-                winner = 'mario';
-            } else { 
-                winner = 'dragon';
-            }
-            setWinner(winner);
-          }
           handleDragonMove(res?.data?.createScoreData?.session?.missing_token_scores?.length);
         }
         handleSpeechRecognition(responseText)
@@ -632,7 +643,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                  Great Job 
                  </h1>
                  <div style={{marginTop : '20px'}}>
-                 <Image h={120} className="left-image" src={marioImg} alt="Mario Image" />
+                 <Image h={250} className="left-image" src={marioImg} alt="Mario Image" />
                 </div>
                 </div>
                  </>
@@ -644,7 +655,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                   GAME OVER
                  </h1>
                  <div style={{marginTop : '20px'}}>
-                 <Image h={120} className="left-image" src={dinoImg} alt="Dinosaur Image" />
+                 <Image h={250} className="left-image" src={dinoImg} alt="Dinosaur Image" />
                 </div>
                 </div>
                  </>
@@ -656,6 +667,16 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                   </div>
                   <div style={{ display: 'flex', margin: '20px', }}>
                     <HStack>
+                      {(currentLine === (posts?.length - 1)) ?
+                        <>
+                          <button className='btn btn-info start-button' 
+                          onClick={nextLine}
+                          >
+                          Practice {'>'}
+                          </button>
+                        </>
+                        : 
+                        <>
                       <div style={{ margin: '20px', textAlign: "center" }}>
                         <img style={{ height: '40px', cursor: 'pointer', }} onClick={nextLine} src={Next} alt='next-button' />
                         <p style={{ fontSize: '18px' }}>Try Next</p>
@@ -664,6 +685,8 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                         <img style={{ height: '40px', cursor: 'pointer', }} onClick={prevLine} src={retry} alt="retry-again" />
                         <p style={{ fontSize: '18px' }}>Try Again</p>
                       </div>
+                      </>
+                       }
                     </HStack>
                   </div>
                 </VStack>
