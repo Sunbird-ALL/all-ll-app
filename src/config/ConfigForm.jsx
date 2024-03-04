@@ -37,15 +37,26 @@ const ConfigForm = () => {
   const handleSubmit = event => {
     event.preventDefault();
     // Save criteria to localStorage
-    localStorage.setItem('criteria', JSON.stringify(criteria));
-    toast({
-      position: 'top',
-      title: 'Practice Configuration Applied',
-      description:
-        'Remember to click "Save" to apply and save the configuration.',
-      duration: 2000,
-      status: 'success',
-    });
+    try {
+      localStorage.setItem('criteria', JSON.stringify(criteria));
+      toast({
+        position: 'top',
+        title: 'Practice Configuration Applied',
+        description:
+          'Remember to click "Save" to apply and save the configuration.',
+        duration: 2000,
+        status: 'success',
+      });
+    } catch (error) {
+      toast({
+        position: 'top',
+        title: 'Error saving configuration',
+        description:
+          'There was an error saving your configuration. Please try again.',
+        duration: 2000,
+        status: 'error',
+      });
+    }
   };
 
   return (

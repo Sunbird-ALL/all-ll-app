@@ -33,20 +33,14 @@
 
 
 .splash-screen {
-  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* background-color: rgba(0, 0, 0, 0.8); */
-  /* Semi-transparent black background */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Ensure it's above other content */
-  /* color: white; */
-  /* Text color */
 }
 
 .splash-screen h1 {
@@ -57,9 +51,7 @@
 .splash-screen button {
   padding: 10px 20px;
   background-color: #007bff;
-  /* Blue button color */
   color: white;
-  /* Button text color */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -68,5 +60,4 @@
 
 .splash-screen button:hover {
   background-color: #0056b3;
-  /* Darker blue on hover */
 }
