@@ -70,12 +70,12 @@ const HangmanGame = ({
       Array(
         splitGraphemes(randomWord)?.filter(
           item =>
+            item.trim() !== '' &&
             item !== '‌' &&
-            item !== '' &&
-            item !== ' ' &&
+            item !== '​' &&
             item !== '-' &&
             item !== '.' &&
-            item !== ' ﻿'
+            item !== '﻿'
         )?.length
       ).fill('_')
     );
@@ -98,7 +98,7 @@ const HangmanGame = ({
           )
         );
       } else {
-        setIncorrectGuesses(prevIncorrectGuesses => prevIncorrectGuesses + 1);
+        setIncorrectGuesses(prevValue => prevValue + 9 / filterWord.length);
       }
     }
   };
@@ -110,12 +110,12 @@ const HangmanGame = ({
   const provideHint = () => {
     const hints = splitGraphemes(word).filter(
       item =>
+        item.trim() !== '' &&
         item !== '‌' &&
-        item !== '' &&
-        item !== ' ' &&
+        item !== '​' &&
         item !== '-' &&
         item !== '.' &&
-        item !== ' ﻿'
+        item !== '﻿'
     );
 
     if (currentLine < hints.length - 1) {
@@ -135,7 +135,19 @@ const HangmanGame = ({
   };
 
   useEffect(() => {
-    if (guessedWord.join('') !== '' && guessedWord.join('') === word) {
+    const filterWord = splitGraphemes(word).filter(
+      item =>
+        item.trim() !== '' &&
+        item !== '‌' &&
+        item !== '​' &&
+        item !== '-' &&
+        item !== '.' &&
+        item !== '﻿'
+    );
+    if (
+      guessedWord.join('') !== '' &&
+      guessedWord.join('') === filterWord.join('')
+    ) {
       setGameWon(true);
     } else if (incorrectGuesses + 1 >= maxIncorrectGuesses) {
       setGameLost(true);
@@ -171,12 +183,97 @@ const HangmanGame = ({
 
     return shuffledArr.concat(shuffledChars);
   }
-  console.log(keyBoard);
   const renderAlphabet = () => {
-    const alphabetRowsEnglish = ['qwertyuiopasdfghjklzxcvbnm'];
-    const alphabetRowsTamil = ['அஆஇஈஉஎஏஐகஙசஞடணதநபமயரலவழளறன'];
-    const alphabetRowsKannada = ['ಅಆಇಈಉಎಏಐಕಖಗಘಙಚಛಜಝಟಠಡಢಣತಥದಧನಪಫಬಭಮ'];
-
+    const alphabetRowsEnglish = [
+      'q',
+      'w',
+      'e',
+      'r',
+      't',
+      'y',
+      'u',
+      'i',
+      'o',
+      'p',
+      'a',
+      's',
+      'd',
+      'f',
+      'g',
+      'h',
+      'j',
+      'k',
+      'l',
+      'z',
+      'x',
+      'c',
+      'v',
+      'b',
+      'n',
+      'm',
+    ];
+    const alphabetRowsTamil = [
+      'அ',
+      'ஆ',
+      'இ',
+      'ஈ',
+      'உ',
+      'எ',
+      'ஏ',
+      'ஐ',
+      'க',
+      'ங',
+      'ச',
+      'ஞ',
+      'ட',
+      'ண',
+      'த',
+      'ந',
+      'ப',
+      'ம',
+      'ய',
+      'ர',
+      'ல',
+      'வ',
+      'ழ',
+      'ள',
+      'ற',
+      'ன',
+    ];
+    const alphabetRowsKannada = [
+      'ಅ',
+      'ಆ',
+      'ಇ',
+      'ಈ',
+      'ಉ',
+      'ಎ',
+      'ಏ',
+      'ಐ',
+      'ಕ',
+      'ಖ',
+      'ಗ',
+      'ಘ',
+      'ಙ',
+      'ಚ',
+      'ಛ',
+      'ಜ',
+      'ಝ',
+      'ಟ',
+      'ಠ',
+      'ಡ',
+      'ಢ',
+      'ಣ',
+      'ತ',
+      'ಥ',
+      'ದ',
+      'ಧ',
+      'ನ',
+      'ಪ',
+      'ಫ',
+      'ಬ',
+      'ಭ',
+      'ಮ',
+    ];
     const lang = localStorage.getItem('apphomelang');
     const alphabetRows =
       lang === 'en'
@@ -185,24 +282,24 @@ const HangmanGame = ({
         ? alphabetRowsTamil
         : alphabetRowsKannada;
 
-    const middleIndex = Math.floor(splitGraphemes(alphabetRows[0]).length / 2);
-    let alphabet = splitGraphemes(alphabetRows[0]);
+    let alphabet = alphabetRows;
 
-    let filterWord = splitGraphemes(word).filter(
+    const filterWord = splitGraphemes(word).filter(
       item =>
+        item.trim() !== '' &&
         item !== '‌' &&
-        item !== '' &&
-        item !== ' ' &&
+        item !== '​' &&
         item !== '-' &&
         item !== '.' &&
-        item !== ' ﻿'
+        item !== '﻿'
     );
+
     const keyboardChars = alphabet
-      .filter((char, index) => index < word.length)
+      .filter((char, index) => index < splitGraphemes(word).length)
       .join('');
 
     let finalArray = addCharsRandomPosition(
-      keyboardChars.split(''),
+      splitGraphemes(keyboardChars),
       filterWord
     );
 
@@ -230,7 +327,26 @@ const HangmanGame = ({
     <line x1="85" y1="185" x2="150" y2="300" stroke="black" strokeWidth="3" />, // Right Leg
   ];
 
+  const filterWord = splitGraphemes(word).filter(
+    item =>
+      item.trim() !== '' &&
+      item !== '‌' &&
+      item !== '​' &&
+      item !== '-' &&
+      item !== '.' &&
+      item !== '﻿'
+  );
+
   const hangmanDisplay = hangmanGraphics?.slice(0, incorrectGuesses);
+
+  function showWinLoose(msg, answer, status) {
+    toast({
+      position: 'top',
+      title: msg + ' ' + answer,
+      duration: 2000,
+      status: status,
+    });
+  }
 
   return (
     <VStack pos={'relative'} spacing="1" align="center" w={'100%'}>
@@ -239,7 +355,7 @@ const HangmanGame = ({
           <Image
             h={40}
             mb={20}
-            src={require('../../../../assests/Images/hangman.jpg')}
+            src={require('../../../../assests/Images/hangman.gif')}
           />
 
           <Button
@@ -254,11 +370,8 @@ const HangmanGame = ({
         </div>
       ) : (
         <>
-          <Text fontSize={24} fontWeight={600}>
-            Hangman Game
-          </Text>
-          <HStack pos={'relative'} justifyContent="end" top={'-2'} w={'90%'}>
-            <Box pos={'absolute'}>
+          <HStack pos={'relative'} justifyContent="end" w={'90%'}>
+            <Box pos={'absolute'} top={'-7px'}>
               {!(gameLost || gameWon) && hintCharArray && (
                 <Box
                   bgColor={'orange'}
@@ -274,53 +387,71 @@ const HangmanGame = ({
             </Box>
           </HStack>
           <Box pos={'absolute'} top={10}>
-            {gameLost ? (
-              <Text fontSize={'24px'} fontWeight={'600'} color="red.500">
-                You lost! The word was: {word} <br />
-              </Text>
-            ) : null}
-            {gameWon ? (
-              <Text fontSize={'24px'} fontWeight={'600'} color="green.500">
-                You won! The word is: {word} <br />
-              </Text>
-            ) : null}
+            {gameLost && (
+              <Box pos={'absolute'} top={10}>
+                {showWinLoose(' You lost! The word was:', word, 'warning')}
+              </Box>
+            )}
+            {gameWon && (
+              <Box pos={'absolute'} top={10}>
+                {showWinLoose('You won! The word is:', word, 'success')}
+              </Box>
+            )}
           </Box>
 
-          <Flex justifyContent={'center'} w={'100%'}>
-            <Flex justifyContent={'start'} w={'80%'}>
+          <Flex justifyContent={'space-around'} w={'90%'}>
+            <Flex flex={1}>
               <Box>
                 <svg width="200" height="270">
                   {hangmanDisplay}
                 </svg>
               </Box>
             </Flex>
-          </Flex>
-          <VStack spacing="0" mb={5} mt={'-5px'}>
-            {renderWord()}
-          </VStack>
-          <HStack spacing="2">
-            {keyBoard.length > 0 &&
-              splitGraphemes(keyBoard)?.map((row, rowIndex) => (
-                <HStack key={rowIndex} spacing="1">
-                  {splitGraphemes(row).map((letter, colIndex) => (
-                    <Button
-                      key={letter}
-                      onClick={() => {
-                        handleGuess(letter);
-                        setHintText('');
-                        setHintCharArray('');
-                      }}
-                      bg={colIndex % 2 === 0 ? 'blue.100' : 'blue.300'}
-                      isDisabled={
-                        guessedWord.includes(letter) || gameWon || gameLost
-                      }
-                    >
-                      {letter}
-                    </Button>
+
+            <VStack flex={1}>
+              <VStack spacing="0" mb={5} mt={10}>
+                {renderWord()}
+              </VStack>
+              <Flex flexWrap="wrap" justifyContent="center">
+                {keyBoard.length > 0 &&
+                  splitGraphemes(keyBoard)?.map((row, rowIndex) => (
+                    <HStack key={rowIndex} spacing={{ base: 4, md: 5 }} mb={2}>
+                      {splitGraphemes(row).map((letter, colIndex) => (
+                        <Button
+                          key={`${rowIndex}-${colIndex}`}
+                          m={1}
+                          onClick={() => {
+                            handleGuess(letter);
+                            setHintText('');
+                            setHintCharArray('');
+                          }}
+                          bg={
+                            rowIndex % 2 === 0
+                              ? colIndex === 0
+                                ? 'yellow.400'
+                                : colIndex % 2 === 0
+                                ? 'yellow.300'
+                                : 'yellow.400'
+                              : colIndex % 2 === 0
+                              ? 'yellow.300'
+                              : 'yellow.400'
+                          }
+                          isDisabled={
+                            guessedWord.includes(letter) || gameWon || gameLost
+                          }
+                          size={{ base: 'sm', md: 'md' }}
+                          flex="1"
+                          maxW="calc(25% - 4px)"
+                        >
+                          {letter}
+                        </Button>
+                      ))}
+                    </HStack>
                   ))}
-                </HStack>
-              ))}
-          </HStack>
+              </Flex>
+            </VStack>
+            <VStack flex={1}></VStack>
+          </Flex>
           <HStack gap={5}>
             {isAudioPlay !== 'recording' && (
               <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -393,16 +524,20 @@ const HangmanGame = ({
             )}
             {(gameLost || gameWon) && (
               <Box
-                mt={5}
+                pos={'relative'}
+                top={'6px'}
                 flexDirection={'column'}
                 alignItems={'center'}
                 cursor={'pointer'}
                 textAlign={'center'}
               >
                 <Image
-                  h={12}
+                  style={{
+                    height: '72px',
+                    width: '72px',
+                    padding: '8px',
+                  }}
                   src={Next}
-                  mb={1}
                   onClick={() => {
                     resetGame();
                     handleSuccess(handleNextWord);
