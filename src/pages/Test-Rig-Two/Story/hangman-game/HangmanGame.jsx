@@ -408,12 +408,12 @@ const HangmanGame = ({
               </Box>
             </Flex>
 
-            <VStack flex={1}>
-              <VStack spacing="0" mb={5} mt={10}>
+            <VStack flex={1} justifyContent={'end'}>
+              <VStack spacing="0" mb={5}>
                 {renderWord()}
               </VStack>
               <Flex flexWrap="wrap" justifyContent="center">
-                {keyBoard.length > 0 &&
+                {keyBoard?.length > 0 &&
                   splitGraphemes(keyBoard)?.map((row, rowIndex) => (
                     <HStack key={rowIndex} spacing={{ base: 4, md: 5 }} mb={2}>
                       {splitGraphemes(row).map((letter, colIndex) => (
@@ -518,7 +518,7 @@ const HangmanGame = ({
                 alignItems={'center'}
                 cursor={'pointer'}
               >
-                <Image h={14} src={hintSvg} alt="hint" />
+                <Image   style={{ height: '72px', width: '72px' }} src={hintSvg} alt="hint" />
                 <Text color={'orange'}>Hint</Text>
               </Flex>
             )}
