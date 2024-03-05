@@ -70,8 +70,9 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   const max = practiceCompletionCriteria.length;
   const progressPercent = ((completionCriteriaIndex * maxAllowedContent + currentLine) / (max * maxAllowedContent)) * 100;
   const [totalConfidenceScoresLength, setTotalConfidenceScoresLength] = useState(0);
-  const [totalMissingTokenScoresLength, setTotalMissingTokenScoresLength] = useState(0);
-
+  let [totalMissingTokenScoresLength, setTotalMissingTokenScoresLength] = useState(0);
+  const [isRetry,setIsRetry] = useState(false);
+  const [previousData,setPreviousData] = useState('')
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -204,14 +205,16 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   };
 
   const handleDragonMove = (error) => {
+    const totalTrackLength = 100;
+    const jumpLength = Math.round(totalTrackLength / posts.length);
     let newDragonPosition = 0;
     if (!gameOver && dragonPosition > 0) {
       if (error) {
-        newDragonPosition = Math.max(dragonPosition - error, 0);
+        newDragonPosition = Math.max((dragonPosition - jumpLength), 0);
         setDragonPosition(newDragonPosition);
         animateDragon();
       } else {
-        newDragonPosition = Math.max(marioPosition + 10, 0);
+        newDragonPosition = Math.max((marioPosition + jumpLength) , 0);
         setMarioPosition(newDragonPosition);
         animateMario();
       }
@@ -235,11 +238,13 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
       fetchCurrentLevel()
       setCurrentLine(0)
     }
+    setIsRetry(false)
   };
 
   const prevLine = count => {
     setWinner(null)
     setUserSpeak(!isUserSpeak)
+    setIsRetry(true)
   };
 
   function findRegex(str) {
@@ -261,13 +266,37 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
       JSON.stringify(updatedIncorrectWords)
     );
   }
+   const calculateWinner = (totalMissingTokenScoresLength, totalConfidenceScoresLength) => {
+    const DRAGON_WIN_THRESHOLD = 30;
+    const MARIO_WIN_THRESHOLD = 70;
+    const totalLength = totalMissingTokenScoresLength + totalConfidenceScoresLength;
+    const missingTokenPercentage = (totalMissingTokenScoresLength / totalLength) * 100;
+    const confidencePercentage = (totalConfidenceScoresLength / totalLength) * 100;
+
+    if (missingTokenPercentage > DRAGON_WIN_THRESHOLD) {
+        return "Dragon_win";
+    } else if (confidencePercentage > MARIO_WIN_THRESHOLD) {
+        return "Mario_win";
+    } else {
+        // If percentages are equal or do not meet any condition
+        if (missingTokenPercentage >= confidencePercentage) {
+            return "Dragon_win";
+        } else {
+            return "Mario_win";
+        }
+    }
+}
+
   async function setWinnerTrophy() {
     if (currentLine === posts?.length - 1) {
       let winner;
-      if (totalConfidenceScoresLength >= totalMissingTokenScoresLength) {
+     const final_winner = calculateWinner(totalMissingTokenScoresLength,totalConfidenceScoresLength)
+      if (final_winner === 'Mario_win') {
         winner = 'mario';
-      } else {
+        setDragonPosition(103)
+      } else if(final_winner === 'Dragon_win'){
         winner = 'dragon';
+        setMarioPosition(-6)
       }
       setWinner(winner);
     }
@@ -308,9 +337,23 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
         if (res?.data?.createScoreData) {
           const confidenceScoresLength = res.data.createScoreData.session.confidence_scores.length;
           const missingTokenScoresLength = res.data.createScoreData.session.missing_token_scores.length;
+          const previousSessionData = res?.data?.createScoreData.session;
+        
+          if (!isRetry) {
+          setPreviousData(previousSessionData)
           setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
           setTotalMissingTokenScoresLength(prevTotalMissingTokenScoresLength => prevTotalMissingTokenScoresLength + missingTokenScoresLength);
-          handleDragonMove(res?.data?.createScoreData?.session?.missing_token_scores?.length);
+          }
+          if (isRetry) {
+            if(previousData.confidence_scores.length === 0 && confidenceScoresLength){
+              totalMissingTokenScoresLength = totalMissingTokenScoresLength - previousData.missing_token_scores.length ;
+              setTotalConfidenceScoresLength(prevTotalConfidenceScoresLength => prevTotalConfidenceScoresLength + confidenceScoresLength);
+              setTotalMissingTokenScoresLength(totalMissingTokenScoresLength);
+              handleDragonMove(missingTokenScoresLength);
+            }
+          }else {
+            handleDragonMove(missingTokenScoresLength);
+          }
         }
         handleSpeechRecognition(responseText)
         const responseEndTime = new Date().getTime();
@@ -636,7 +679,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                   <div>
                   { (currentLine === (posts?.length - 1)) ? 
                <>
-               {totalConfidenceScoresLength >= totalMissingTokenScoresLength && (
+               {winner === 'mario' && (
                  <>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <h1 style={{ fontSize: '100px', marginTop: '60px', textAlign: 'center', marginRight: '20px', color:'green'}}>
@@ -648,7 +691,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                 </div>
                  </>
                )}
-               {totalMissingTokenScoresLength > totalConfidenceScoresLength && (
+               { winner === 'dragon' && (
                  <>
                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <h1 style={{ fontSize: '100px', marginTop: '60px', textAlign: 'center', marginRight: '20px', color:'red'}}>

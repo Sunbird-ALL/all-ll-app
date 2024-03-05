@@ -179,31 +179,35 @@ function AppDrawer({forceRerender, setForceRerender}) {
       };
    
 
-  const checkMilestoneForLevel = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
-      )
-        .then(res => {
-          return res.json();
+    const handleGetLesson = (virtualID)=>{
+        fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`)
+        .then((res)=>{
+          return res.json();  
+        }).then((data)=>{
+          if(data?.result?.result){
+            let milestone = data?.result?.result?.milestone || 'discoveryList';
+            localStorage.setItem('userPracticeState', data?.result?.result?.lesson || 0)
+            if(milestone === 'showcase'){
+                navigate(`/showcase`)  
+              }
+              else if(milestone === 'practice'){
+                navigate(`/practice`)  
+              }
+              else if (milestone === 'validate'){
+                localStorage.setItem('validationSession', data?.result?.result?.lesson)
+                navigate(`/validate`)
+              }
+            else{
+              navigate(`/${milestone}`)
+            }
+          }else if(data.result){
+            navigate(`/discoverylist`)
+          }
         })
-        .then(data => {
-          setLevel(data?.data?.milestone_level);
-          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level)
-          if(data?.data?.milestone_level === 'm0'){
-             navigate('/discoverylist')
-          }
-          else{
-            navigate('/practice')
-          }
-        });
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+      }
   const handleSave = () => {
     onClose();
-    checkMilestoneForLevel();
+    handleGetLesson();
     setForceRerender(!forceRerender);
     fetchDataFromApi();
   };
