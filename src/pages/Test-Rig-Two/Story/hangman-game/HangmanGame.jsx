@@ -16,6 +16,7 @@ import play from '../../../../assests/Images/Speaker.png';
 import pause from '../../../../assests/Images/speakerMute.png';
 import hintSvg from '../../../../assests/Images/hint.svg';
 import Next from '../../../../assests/Images/next.png';
+import TryAgain from '../../../../assests/Images/retry.svg'
 import { interactCall } from '../../../../services/callTelemetryIntract';
 
 const HangmanGame = ({
@@ -408,12 +409,12 @@ const HangmanGame = ({
               </Box>
             </Flex>
 
-            <VStack flex={1}>
-              <VStack spacing="0" mb={5} mt={10}>
+            <VStack flex={1} justifyContent={'end'}>
+              <VStack spacing="0" mb={5}>
                 {renderWord()}
               </VStack>
               <Flex flexWrap="wrap" justifyContent="center">
-                {keyBoard.length > 0 &&
+                {keyBoard?.length > 0 &&
                   splitGraphemes(keyBoard)?.map((row, rowIndex) => (
                     <HStack key={rowIndex} spacing={{ base: 4, md: 5 }} mb={2}>
                       {splitGraphemes(row).map((letter, colIndex) => (
@@ -453,7 +454,7 @@ const HangmanGame = ({
             <VStack flex={1}></VStack>
           </Flex>
           <HStack gap={5}>
-            {isAudioPlay !== 'recording' && (
+            {!(gameLost || gameWon)? isAudioPlay !== 'recording' && (
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <HStack
                   style={{ display: 'flex' }}
@@ -506,7 +507,30 @@ const HangmanGame = ({
                   </Flex>
                 </HStack>
               </div>
-            )}
+            ):<>
+              <Box
+                pos={'relative'}
+                top={'6px'}
+                flexDirection={'column'}
+                alignItems={'center'}
+                cursor={'pointer'}
+                textAlign={'center'}
+              >
+                <Image
+                  style={{
+                    height: '72px',
+                    width: '72px',
+                    padding: '8px',
+                  }}
+                  src={TryAgain}
+                  onClick={() => {
+                    resetGame();
+                  }}
+                  alt="Try Again Img"
+                />
+                <Text>Try Again</Text>
+              </Box>
+            </>}
             {!(gameLost || gameWon) && (
               <Flex
                 onClick={() => {
@@ -518,7 +542,7 @@ const HangmanGame = ({
                 alignItems={'center'}
                 cursor={'pointer'}
               >
-                <Image h={14} src={hintSvg} alt="hint" />
+                <Image style={{ height: '72px', width: '72px' }} src={hintSvg} alt="hint" />
                 <Text color={'orange'}>Hint</Text>
               </Flex>
             )}
