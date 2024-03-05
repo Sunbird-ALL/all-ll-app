@@ -186,7 +186,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
         }).then((data)=>{
           if(data?.result?.result){
             let milestone = data?.result?.result?.milestone || 'discoveryList';
-            localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
+            localStorage.setItem('userPracticeState', data?.result?.result?.lesson || 0)
             if(milestone === 'showcase'){
                 navigate(`/showcase`)  
               }
