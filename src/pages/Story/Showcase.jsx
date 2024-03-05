@@ -205,7 +205,8 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
   };
 
   const handleDragonMove = (error) => {
-    const jumpLength = Math.round(100 / posts.length);
+    const totalTrackLength = 100;
+    const jumpLength = Math.round(totalTrackLength / posts.length);
     let newDragonPosition = 0;
     if (!gameOver && dragonPosition > 0) {
       if (error) {
@@ -266,13 +267,15 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     );
   }
    const calculateWinner = (totalMissingTokenScoresLength, totalConfidenceScoresLength) => {
+    const DRAGON_WIN_THRESHOLD = 30;
+    const MARIO_WIN_THRESHOLD = 70;
     const totalLength = totalMissingTokenScoresLength + totalConfidenceScoresLength;
     const missingTokenPercentage = (totalMissingTokenScoresLength / totalLength) * 100;
     const confidencePercentage = (totalConfidenceScoresLength / totalLength) * 100;
 
-    if (missingTokenPercentage > 30) {
+    if (missingTokenPercentage > DRAGON_WIN_THRESHOLD) {
         return "Dragon_win";
-    } else if (confidencePercentage > 70) {
+    } else if (confidencePercentage > MARIO_WIN_THRESHOLD) {
         return "Mario_win";
     } else {
         // If percentages are equal or do not meet any condition
