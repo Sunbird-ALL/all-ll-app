@@ -52,6 +52,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
   const [isAudioPreprocessingEnabled, setAudioPreprocessingStatus] = React.useState(false);
   const [lessonRec,setLessonRec] = React.useState('discoverylist')
+  const [lesson,setLesson] = React.useState(0)
 
   React.useEffect(() => {
     if (localStorage.getItem('isAudioPreprocessing') !== null) {
@@ -182,12 +183,12 @@ function AppDrawer({forceRerender, setForceRerender}) {
 
       const handleNavigate = () => {
         if (lessonRec) {
-          if (lessonRec?.milestone === 'showcase') {
+          if (lessonRec === 'showcase') {
             navigate(`/showcase`);
-          } else if (lessonRec?.milestone === 'practice') {
+          } else if (lessonRec === 'practice') {
             navigate(`/practice`);
-          } else if (lessonRec?.milestone === 'validate') {
-            localStorage.setItem('validationSession', lessonRec?.lesson);
+          } else if (lessonRec === 'validate') {
+            localStorage.setItem('validationSession', lesson);
             navigate(`/validate`);
           } else {
             navigate(`/${lessonRec}`);
@@ -207,7 +208,8 @@ function AppDrawer({forceRerender, setForceRerender}) {
             return res.json();
           })
           .then(data => {
-            setLessonRec(data?.result?.result || 'discoverylist');
+            setLessonRec(data?.result?.result?.milestone || 'discoverylist');
+            setLesson(data?.result?.result?.lesson || 0)
             localStorage.setItem(
               'userPracticeState',
               data?.result?.result?.lesson || 0

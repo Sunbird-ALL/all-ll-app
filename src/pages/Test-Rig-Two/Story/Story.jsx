@@ -481,6 +481,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
     });
   };
 
+  React.useEffect(() => {
+    addLessonApi();
+  },[]);
+
   const nextLine = count => {
     handleAddPointer(1);
     addLessonApi(

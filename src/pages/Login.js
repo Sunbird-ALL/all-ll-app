@@ -48,8 +48,6 @@ export default function Login({setIsLoggedIn = false}) {
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
-        handleGetLesson(virtualID)
-        await fetchMileStone();
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -82,6 +80,8 @@ export default function Login({setIsLoggedIn = false}) {
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
+    await fetchMileStone();
+    await handleGetLesson(virtualID)
   };
   const fetchMileStone = async () => {
     try {
