@@ -1,10 +1,10 @@
 // config.js
 const completionCriteria = {
   "m0": [
-    { title: 'P1', criteria: 'char', template: 'simple' },
-    { title: 'P2', criteria: 'char', template: 'simple' },
-    { title: 'P3', criteria: 'char', template: 'simple' },
-    { title: 'P4', criteria: 'char', template: 'simple' },
+    { title: 'P1', criteria: 'word', template: 'simple' },
+    { title: 'P2', criteria: 'word', template: 'simple' },
+    { title: 'P3', criteria: 'word', template: 'simple' },
+    { title: 'P4', criteria: 'word', template: 'simple' },
     { title: 'S1', criteria: 'word', template: 'simple' },
     { title: 'P5', criteria: 'word', template: 'simple' },
     { title: 'P6', criteria: 'word', template: 'simple' },
@@ -13,9 +13,9 @@ const completionCriteria = {
     { title: 'S2', criteria: 'word', template: 'simple' },
   ],
   "m1": [
-    { title: 'P1', criteria: 'char', template: 'simple' },
-    { title: 'P2', criteria: 'char', template: 'simple' },
-    { title: 'P3', criteria: 'char', template: 'simple' },
+    { title: 'P1', criteria: 'word', template: 'simple' },
+    { title: 'P2', criteria: 'word', template: 'simple' },
+    { title: 'P3', criteria: 'word', template: 'simple' },
     { title: 'P4', criteria: 'word', template: 'simple' },
     { title: 'S1', criteria: 'word', template: 'simple' },
     { title: 'P5', criteria: 'word', template: 'simple' },
@@ -25,8 +25,8 @@ const completionCriteria = {
     { title: 'S2', criteria: 'word', template: 'simple' },
   ],
   "m2": [
-    { title: 'P1', criteria: 'char', template: 'simple' },
-    { title: 'P2', criteria: 'char', template: 'simple' },
+    { title: 'P1', criteria: 'word', template: 'simple' },
+    { title: 'P2', criteria: 'word', template: 'simple' },
     { title: 'P3', criteria: 'word', template: 'simple' },
     { title: 'P4', criteria: 'word', template: 'simple' },
     { title: 'S1', criteria: 'word', template: 'simple' },
