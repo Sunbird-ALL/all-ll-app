@@ -51,13 +51,13 @@ const completionCriteria = {
   "m4": [
     { title: 'P1', criteria: 'word', template: 'spell-and-check' },
     { title: 'P2', criteria: 'word', template: 'spell-and-check' },
-    { title: 'P3', criteria: 'word', template: 'hangman-game' },
-    { title: 'P4', criteria: 'word', template: 'hangman-game' },
+    { title: 'P3', criteria: 'word', template: 'simple' },
+    { title: 'P4', criteria: 'word', template: 'simple' },
     { title: 'S1', criteria: 'word', template: 'simple' },
     { title: 'P5', criteria: 'word', template: 'spell-and-check' },
     { title: 'P6', criteria: 'word', template: 'spell-and-check' },
-    { title: 'P7', criteria: 'word', template: 'hangman-game' },
-    { title: 'P8', criteria: 'word', template: 'hangman-game' },
+    { title: 'P7', criteria: 'word', template: 'simple' },
+    { title: 'P8', criteria: 'word', template: 'simple' },
     { title: 'S2', criteria: 'word', template: 'simple' }
   ],
   "m5": [
