@@ -53,6 +53,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
   const [isAudioPreprocessingEnabled, setAudioPreprocessingStatus] = React.useState(false);
   const [isLargerThan865] = useMediaQuery('(min-width: 865px)');
+  const [lessonRec,setLessonRec] = React.useState('discoverylist')
 
   React.useEffect(() => {
     if (localStorage.getItem('isAudioPreprocessing') !== null) {
@@ -81,6 +82,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   React.useEffect(() => {
     if (value) {
       localStorage.setItem('apphomelang', value);
+      handleGetLesson();
     }
   }, [value]);
 
@@ -155,61 +157,73 @@ function AppDrawer({ forceRerender, setForceRerender }) {
     }
   };
 
-  const fetchDataFromApi = async () => {
-    try {
-      const result = await fetchPointerApi();
-
-      if (result && result.result) {
-        localStorage.setItem(
-          'totalSessionPoints',
-          result.result.totalSessionPoints
-        );
-        localStorage.setItem(
-          'totalUserPoints',
-          result.result.totalUserPoints
-        );
-        localStorage.setItem(
-          'totalLanguagePoints',
-          result.result.totalLanguagePoints
-        );
-      } else {
-        console.error('Unexpected response structure:', result);
-      }
-    } catch (error) {
-      console.error('Error in component:', error);
-    }
-  };
-
-
-  const handleGetLesson = (virtualID)=>{
-    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`)
-    .then((res)=>{
-      return res.json();  
-    }).then((data)=>{
-      if(data?.result?.result){
-        let milestone = data?.result?.result?.milestone || 'discoveryList';
-        localStorage.setItem('userPracticeState', data?.result?.result?.lesson || 0)
-        if(milestone === 'showcase'){
-            navigate(`/showcase`)  
+    const fetchDataFromApi = async () => {
+        try {
+          const result = await fetchPointerApi();
+  
+          if (result && result.result) {
+            localStorage.setItem(
+              'totalSessionPoints',
+              result.result.totalSessionPoints
+            );
+            localStorage.setItem(
+              'totalUserPoints',
+              result.result.totalUserPoints
+            );
+            localStorage.setItem(
+              'totalLanguagePoints',
+              result.result.totalLanguagePoints
+            );
+          } else {
+            console.error('Unexpected response structure:', result);
           }
-          else if(milestone === 'practice'){
-            navigate(`/practice`)  
-          }
-          else if (milestone === 'validate'){
-            localStorage.setItem('validationSession', data?.result?.result?.lesson)
-            navigate(`/validate`)
-          }
-        else{
-          navigate(`/${milestone}`)
+        } catch (error) {
+          console.error('Error in component:', error);
         }
-      }else if(data.result){
-        navigate(`/discoverylist`)
-      }
-    })
-  }
+      };
+
+      const handleNavigate = () => {
+        if (lessonRec) {
+          if (lessonRec?.milestone === 'showcase') {
+            navigate(`/showcase`);
+          } else if (lessonRec?.milestone === 'practice') {
+            navigate(`/practice`);
+          } else if (lessonRec?.milestone === 'validate') {
+            localStorage.setItem('validationSession', lessonRec?.lesson);
+            navigate(`/validate`);
+          } else {
+            navigate(`/${lessonRec}`);
+          }
+        }
+      };
+
+      const handleGetLesson = () => {
+        fetch(
+          `${
+            process.env.REACT_APP_LEARNER_AI_APP_HOST
+          }/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem(
+            'virtualID'
+          )}?language=${localStorage.getItem('apphomelang')}`
+        )
+          .then(res => {
+            return res.json();
+          })
+          .then(data => {
+            setLessonRec(data?.result?.result || 'discoverylist');
+            localStorage.setItem(
+              'userPracticeState',
+              data?.result?.result?.lesson || 0
+            );
+            localStorage.setItem(
+              'lessonProgressPercent',
+              data?.result?.result?.progress || 0
+            );
+          });
+      };
+
   const handleSave = () => {
     onClose();
-    handleGetLesson();
+    handleNavigate();
     setForceRerender(!forceRerender);
     fetchDataFromApi();
   };

@@ -91,16 +91,15 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
 
     }
   };
+  useEffect(()=>{
+    addLessonApi();
+  },[location])
 
 
-  const addLessonApi = (validate)=>{
+  const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
-    const pathnameWithoutSlash =
-      validate === 'validate' ? 'Validate' : location.pathname.slice(1);
-    const percentage =
-      validate === 'validate'
-        ? 0
-        : ((currentLine + 1) / posts?.data?.length) * 100;
+    const pathnameWithoutSlash = location.pathname.slice(1);
+    const percentage = ((currentLine + 1) / posts?.data?.length) * 100 ? ((currentLine + 1) / posts?.data?.length) * 100 : 0;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -227,36 +226,35 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
       });
   }
 
-  const addLessonCheck = async (res, resultArray, checkInd) => {
-    var newIndex = null;
-    await addLessonApi('validate');
-    if(res.currentLevel === 'm1'){
-      navigate('/Validate');
-    }
-  
-    if(res.sessionResult === 'pass'){
-      if(res.currentLevel === 'm2'){
-        navigate('/Validate');
-      }
-      newIndex = checkInd + 1;
-    } else if(res.sessionResult === 'fail'){
-      if(checkInd >= 3){
-        navigate('/Validate');
-      } else {
-        newIndex = checkInd - 1;
-      }
-    }
-  
-    if(resultArray[newIndex]){
-      const newCollectionId = resultArray[newIndex].id;
-      setCollectionId(newCollectionId);
-      setCurrentLine(0)
-      navigate(`/discoverylist/discovery/${newCollectionId}`)
-    } else {
-      navigate('/Validate');
-    }
-   
+const addLessonCheck = async (res, resultArray, checkInd) => {
+  var newIndex = null;
+  if(res.currentLevel === 'm1'){
+    navigate('/validate');
   }
+
+  if(res.sessionResult === 'pass'){
+    if(res.currentLevel === 'm2'){
+      navigate('/validate');
+    }
+    newIndex = checkInd + 1;
+  } else if(res.sessionResult === 'fail'){
+    if(checkInd >= 3){
+      navigate('/validate');
+    } else {
+      newIndex = checkInd - 1;
+    }
+  }
+
+  if(resultArray[newIndex]){
+    const newCollectionId = resultArray[newIndex].id;
+    setCollectionId(newCollectionId);
+    setCurrentLine(0)
+    navigate(`/discoverylist/discovery/${newCollectionId}`)
+  } else {
+    navigate('/validate');
+  }
+ 
+}
 
   const handleOkClick = () => {
     setIsDialogOpen(false);
@@ -545,7 +543,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
                   <div></div>
                   <div style={{ display: 'flex', margin: '20px' }}>
                     <HStack>
-                      <div style={{ margin: '20px', textAlign: 'center' }}>
+                      <div style={{ display:'flex', flexDirection:'column', alignItems:'center',margin: '20px', textAlign: 'center' }}>
                         <img
                           style={{ height: '40px', cursor: 'pointer' }}
                           onClick={nextLine}
@@ -554,7 +552,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
                         />
                         <p style={{ fontSize: '18px' }}>Try Next</p>
                       </div>
-                      <div style={{ margin: '20px', textAlign: 'center' }}>
+                      <div  style={{ display:'flex', flexDirection:'column', alignItems:'center', margin: '20px', textAlign: 'center' }}>
                         <img
                           style={{ height: '40px', cursor: 'pointer' }}
                           onClick={prevLine}

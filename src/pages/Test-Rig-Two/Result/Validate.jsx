@@ -155,11 +155,14 @@ export default function Validate({forceRerender, setForceRerender}) {
 
   const location = useLocation();
 
+  useEffect(() => {
+    addLessonApi();
+  }, []);
   
   const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
-    const percentage = ((currentCharIndex+1) / chars.length) * 100;
+    const percentage = chars.length === 0 ? 0 : ((currentCharIndex+1) / chars.length) * 100;
    fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -261,7 +264,7 @@ export default function Validate({forceRerender, setForceRerender}) {
           </Container>
           <section className="c-section">
             <Link to={'/practice'}>
-              <button className='btn btn-info'>
+            <button onClick={() => localStorage.setItem('userPracticeState',0)} className='btn btn-info'>
                 Practice {'>'}
               </button>
             </Link>

@@ -49,6 +49,7 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
         handleGetLesson(virtualID)
+        await fetchMileStone();
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -79,6 +80,34 @@ export default function Login({setIsLoggedIn = false}) {
         title: `${err?.message === "Failed to fetch" ? "Please Check Your Internet Connection" : err?.message}`,
         status: 'error',
       })
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
+    }
+  };
+  const fetchMileStone = async () => {
+    try {
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_LEARNER_AI_APP_HOST
+        }/lais/scores/getMilestone/user/${localStorage.getItem(
+          'virtualID'
+        )}?language=${localStorage.getItem('apphomelang')}`
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level);
+        });
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${
+          err?.message === 'Failed to fetch'
+            ? 'Please Check Your Internet Connection'
+            : err?.message
+        }`,
+        status: 'error',
+      });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
   };
