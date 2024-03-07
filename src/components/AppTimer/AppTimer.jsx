@@ -22,9 +22,9 @@ import TimerLogo from '../../assests/Images/timer.png';
 import PowerLogo from '../../assests/Images/power_logo.png';
 import { fetchPointerApi } from '../../utils/api/PointerApi';
 import MoneyBag from '../../assests/Images/Points.png';
-import EngIcon from '../../assests/Images/english-icon.svg'
-import TamilIcon from '../../assests/Images/tamil-icon.svg'
-import KanndaIcon from '../../assests/Images/kannada-icon.svg'
+import EngIcon from '../../assests/Images/english-icon.svg';
+import TamilIcon from '../../assests/Images/tamil-icon.svg';
+import KanndaIcon from '../../assests/Images/kannada-icon.svg';
 
 const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
   const [timer, setTimer] = useState(0);
@@ -85,9 +85,8 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         console.error('Error in component:', error);
       }
     };
-    if(isLoggedIn){
-
-    fetchDataFromApi();
+    if (isLoggedIn) {
+      fetchDataFromApi();
     }
   }, [isLoggedIn]);
 
@@ -150,12 +149,15 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
     <div
       style={{
         position: 'absolute',
-        top: '55px',
+        top: '75px',
         textAlign: 'right',
         fontSize: '24px',
         fontWeight: 'bold',
-        padding: '10px',
+        // padding: '10px',
         width: '100%',
+        padding: ' 0 10px',
+        borderRadius: '10px',
+        overflow: 'hidden',
       }}
     >
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -174,7 +176,6 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
 
           <ModalFooter>
             <Button
-              border="2px"
               borderColor="red.500"
               color={'red'}
               onClick={handleLogout}
@@ -187,33 +188,13 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         </ModalContent>
       </Modal>
       {isLoggedIn && (
-        <>
-       <Flex alignItems={'center'} gap={'2'}>
-       <Box 
-        style={{
-        position: 'absolute',
-        left: '15px',
-        top: '30px', 
-        display: 'flex', 
-        alignItems: 'center', 
-       }}
-        >
-       <h5>{localStorage.getItem('apphomelang') === 'en' ? <Image h={12} src={EngIcon} /> : localStorage.getItem('apphomelang') === 'kn' ?  <Image h={12} src={KanndaIcon} /> :  <Image h={12} src={TamilIcon} />}</h5>
-        <Badge ml="1" fontSize="1.1em" colorScheme="green">
-        {localStorage.getItem('totalLanguagePoints')}
-        </Badge>
-        </Box>
-        </Flex>
-
-        <Flex pos={'absolute'} right={0} w={'100%'}>
-          <Box textAlign={'start'} pl={5}>
-            {/* <Text>Total Points:- {localStorage.getItem('totalUserPoints')}</Text>
-        <Text>Current Points:- {localStorage.getItem('totalSessionPoints')}</Text> */}
-          </Box>
-          <Box
-            style={{ position: 'absolute', textAlign: 'center', right: '0' }}
-          >
-            <div
+        <Flex h={20} w={'100%'} justifyContent={'space-between'}>
+          <Flex alignItems={'center'} gap={'2'}>
+            <Flex
+              px={3}
+              py={1}
+              boxShadow={'rgb(236, 236, 236) 2px 2px 15px 5px'}
+              borderRadius={10}
               style={{
                 visibility:
                   formatTime(timer).slice(0, 2) >= 25 &&
@@ -228,26 +209,75 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
               }}
             >
               <Image src={TimerLogo} height={'35px'} alt="timer_logo" />
-              <p style={timerStyles}>{formatTime(timer)}</p>
-            </div>
-            <Flex alignItems={'center'} gap={'2'}>
-              <Image h={10} src={MoneyBag} />
-              <Badge ml="1" fontSize="1.1em" colorScheme="green">
-                {localStorage.getItem('totalUserPoints')}
-              </Badge>
-              <Box display={'flex'} gap={5}>
-                <Image
-                  height={'35px'}
-                  src={PowerLogo}
-                  onClick={handleLogout}
-                  cursor={'pointer'}
-                  alt=""
-                />
-              </Box>
+              <Text
+                fontSize={{ base: '16px', md: '20px', lg: '22px' }}
+                style={timerStyles}
+              >
+                {formatTime(timer)}
+              </Text>
             </Flex>
-          </Box>
+          </Flex>
+
+          <>
+            <Flex alignItems={'center'} gap={2}>
+              <Flex
+                boxShadow={'rgb(236, 236, 236) 2px 2px 15px 5px'}
+                px={3}
+                py={1}
+                borderRadius={10}
+                gap={5}
+              >
+                <Flex alignItems={'center'} gap={2}>
+                  <Image
+                    h={{ base: 8, sm: 10, md: 10 }}
+                    src={
+                      localStorage.getItem('apphomelang') === 'en'
+                        ? EngIcon
+                        : localStorage.getItem('apphomelang') === 'kn'
+                        ? KanndaIcon
+                        : TamilIcon
+                    }
+                  />
+                  <Badge
+                    ml="1"
+                    fontSize={{ base: '16px', md: '22px', lg: '24px' }}
+                    colorScheme="green"
+                  >
+                    {localStorage.getItem('totalLanguagePoints')}
+                  </Badge>
+                </Flex>
+                <Flex alignItems={'center'} gap={2}>
+                  <Image h={{ base: 8, sm: 10, md: 10 }} src={MoneyBag} />
+                  <Badge
+                    ml="1"
+                    fontSize={{ base: '16px', md: '22px', lg: '24px' }}
+                    colorScheme="green"
+                  >
+                    {localStorage.getItem('totalUserPoints')}
+                  </Badge>
+                </Flex>
+              </Flex>
+
+              <Flex
+                h={{ base: 6, sm: 8, md: 10 }}
+                justifyContent={'space-between'}
+                borderRadius={10}
+                px={3}
+                alignItems={'center'}
+                gap={2}
+                cursor={'pointer'}
+                onClick={handleLogout}
+                _hover={{ bg: 'red.200', borderColor: 'red.300' }}
+              >
+                <Image
+                  h={{ base: 6, sm: 6, md: 9 }}
+                  src={PowerLogo}
+                  alt="logout"
+                />
+              </Flex>
+            </Flex>
+          </>
         </Flex>
-        </>
       )}
     </div>
   );

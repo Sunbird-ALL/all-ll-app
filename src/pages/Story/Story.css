@@ -26,15 +26,13 @@
 
 @media screen and (max-width: 580px) {
   .story-line {
-    font-size: 16px!important;
+    font-size: 16px !important;
     text-align: 'center';
   }
-
 
   .story-box-container {
     display: flex;
     flex-direction: column;
-
   }
 
   .story-container {
@@ -73,13 +71,11 @@
   }
 }
 
-
 @media screen and (max-width: 700px) {
   .story-line {
-    font-size: 28px!important;
+    font-size: 28px !important;
     text-align: 'center';
   }
-
 
   .story-box-container {
     display: flex;
@@ -109,9 +105,6 @@
   }
 }
 
-
-
-
 .story {
   font-size: 16px;
 }
@@ -125,9 +118,7 @@
 .next-btn-visible {
   background-color: greenyellow;
   padding: 5px;
-
 }
-
 
 .next-btn-hidden {
   display: none;
@@ -148,7 +139,7 @@
   border-radius: 5px;
   background-color: #f9f9f9;
   /* background: linear-gradient(#5ef899, #eecf69); */
-  border: 3px solid #d9d2d2;
+  border: 3px solid #efeeee;
   padding: 20px;
 }
 
@@ -188,7 +179,7 @@
 
 .custom-button {
   padding: 10px 20px;
-  background-color: #007BFF;
+  background-color: #007bff;
   /* Button background color */
   color: #fff;
   /* Button text color */

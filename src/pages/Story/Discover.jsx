@@ -10,23 +10,23 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { compareArrays, replaceAll } from '../../utils/helper';
 import Header from '../Header';
-import PlaceHolder from '../../assests/Images/hackthon-images/collections.png'
-import KnPlaceHolder from '../../assests/Images/hackthon-images/fox.png'
+import PlaceHolder from '../../assests/Images/hackthon-images/collections.png';
+import KnPlaceHolder from '../../assests/Images/hackthon-images/fox.png';
 // import Modal from '../../components/Modal/Modal';
-import Animation from '../../components/Animation/Animation'
+import Animation from '../../components/Animation/Animation';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import S3Client from '../../config/awsS3'
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import S3Client from '../../config/awsS3';
 import { response } from '../../services/telementryService';
-import retry from '../../assests/Images/retry.svg'
-import JSConfetti from 'js-confetti'
+import retry from '../../assests/Images/retry.svg';
+import JSConfetti from 'js-confetti';
 import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
-import { error } from '../../services/telementryService'
+import { error } from '../../services/telementryService';
 import { uniqueId } from '../../services/utilService';
 const jsConfetti = new JSConfetti();
 
-const Discovery = ( {forceRerender, setForceRerender}) => {
+const Discovery = ({ forceRerender, setForceRerender }) => {
   const [posts, setPosts] = useState([]);
   const [voiceText, setVoiceText] = useState('');
   localStorage.setItem('voiceText', voiceText.replace(/[.',|!|?']/g, ''));
@@ -39,7 +39,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
   const toast = useToast();
-  
+
   const { slug } = useParams();
   const [currentLine, setCurrentLine] = useState(0);
   localStorage.setItem("sentenceCounter", currentLine)
@@ -63,7 +63,6 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   React.useEffect(() => {
     fetchApi(slug);
   }, [forceRerender,location]);
-
 
   const fetchApi = async (slug) => {
     localStorage.setItem(
@@ -143,26 +142,31 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     }
   };
 
-  const handleAddPointer = async (point) => {
+  const handleAddPointer = async point => {
     const requestBody = {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
-      milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
-      language:localStorage.getItem('apphomelang')|| 'ta'
+      milestoneLevel: localStorage.getItem('userCurrentLevel') || 'm0',
+      language: localStorage.getItem('apphomelang') || 'ta',
     };
 
     try {
       const response = await addPointerApi(requestBody);
-      localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
-      localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
-      localStorage.setItem( 'totalLanguagePoints', response.result.totalLanguagePoints);
+      localStorage.setItem(
+        'totalSessionPoints',
+        response.result.totalSessionPoints
+      );
+      localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
+      localStorage.setItem(
+        'totalLanguagePoints',
+        response.result.totalLanguagePoints
+      );
       // You can update your component state or take other actions as needed
     } catch (error) {
       console.error('Error adding pointer:', error);
     }
   };
-
 
   const nextLine = count => {
     setUserSpeak(!isUserSpeak);
@@ -174,7 +178,7 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
   };
 
   const prevLine = count => {
-    setUserSpeak(!isUserSpeak)
+    setUserSpeak(!isUserSpeak);
   };
 
   function findRegex(str) {
@@ -184,99 +188,106 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
     return cleanString;
   }
 
-
-  const checkSetResult =() => {
-    var allCollectionId =  JSON.parse(localStorage.getItem('AllCollectionId'))
-    const resultArray = allCollectionId.map(item => ({ id: item.collectionId, tags: item.tags[1] }));
+  const checkSetResult = () => {
+    var allCollectionId = JSON.parse(localStorage.getItem('AllCollectionId'));
+    const resultArray = allCollectionId.map(item => ({
+      id: item.collectionId,
+      tags: item.tags[1],
+    }));
     const checkInd = resultArray.findIndex(element => element.id === slug);
-  
+
     axios
-    .post(
-      `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
-      {
-        sub_session_id: localStorage.getItem('sub_session_id'),
-        contentType : contentType,
-        session_id: localStorage.getItem('virtualStorySessionID'),
-        user_id: localStorage.getItem('virtualID'),
-        collectionId: resultArray[checkInd]?.id,
-        language:localStorage.getItem('apphomelang')|| 'ta'
-      }
-    )
-    .then(async res => {
-      if(res.data.status === "success"){
-        setSessionResult(res.data.data.sessionResult);
-        setPercentage(res.data.data.percentage)
-        setDataOfLesson(res.data.data);
-        setResultArray(resultArray);
-        setCheckInd(checkInd);  
-      }
-    })
-    .catch(err => {
-      toast({
-        position: 'top',
-        title: `${err?.message}`,
-        status: 'error',
+      .post(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
+        {
+          sub_session_id: localStorage.getItem('sub_session_id'),
+          contentType: contentType,
+          session_id: localStorage.getItem('virtualStorySessionID'),
+          user_id: localStorage.getItem('virtualID'),
+          collectionId: resultArray[checkInd]?.id,
+          language: localStorage.getItem('apphomelang') || 'ta',
+        }
+      )
+      .then(async res => {
+        if (res.data.status === 'success') {
+          setSessionResult(res.data.data.sessionResult);
+          setPercentage(res.data.data.percentage);
+          setDataOfLesson(res.data.data);
+          setResultArray(resultArray);
+          setCheckInd(checkInd);
+        }
       })
-      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
-    });
-}
-
-const addLessonCheck = async (res, resultArray, checkInd) => {
-  var newIndex = null;
-  await addLessonApi('validate');
-  if(res.currentLevel === 'm1'){
-    navigate('/Validate');
+      .catch(err => {
+        toast({
+          position: 'top',
+          title: `${err?.message}`,
+          status: 'error',
+        })
+        error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
+      });
   }
 
-  if(res.sessionResult === 'pass'){
-    if(res.currentLevel === 'm2'){
+  const addLessonCheck = async (res, resultArray, checkInd) => {
+    var newIndex = null;
+    await addLessonApi('validate');
+    if(res.currentLevel === 'm1'){
       navigate('/Validate');
     }
-    newIndex = checkInd + 1;
-  } else if(res.sessionResult === 'fail'){
-    if(checkInd >= 3){
-      navigate('/Validate');
+  
+    if(res.sessionResult === 'pass'){
+      if(res.currentLevel === 'm2'){
+        navigate('/Validate');
+      }
+      newIndex = checkInd + 1;
+    } else if(res.sessionResult === 'fail'){
+      if(checkInd >= 3){
+        navigate('/Validate');
+      } else {
+        newIndex = checkInd - 1;
+      }
+    }
+  
+    if(resultArray[newIndex]){
+      const newCollectionId = resultArray[newIndex].id;
+      setCollectionId(newCollectionId);
+      setCurrentLine(0)
+      navigate(`/discoverylist/discovery/${newCollectionId}`)
     } else {
-      newIndex = checkInd - 1;
+      navigate('/Validate');
     }
+   
   }
 
-  if(resultArray[newIndex]){
-    const newCollectionId = resultArray[newIndex].id;
-    setCollectionId(newCollectionId);
-    setCurrentLine(0)
-    navigate(`/discoverylist/discovery/${newCollectionId}`)
-  } else {
-    navigate('/Validate');
-  }
- 
-}
+  const handleOkClick = () => {
+    setIsDialogOpen(false);
+  };
 
-const handleOkClick = () => {
-  setIsDialogOpen(false); 
-};
-
-async function saveIndb(base64Data) {
-  let lang = localStorage.getItem('apphomelang') || 'ta';
-  showLoading();
-  // .replace(/[.',|!|?-']/g, '')
-  let responseText = "";
+  async function saveIndb(base64Data) {
+    let lang = localStorage.getItem('apphomelang') || 'ta';
+    showLoading();
+    // .replace(/[.',|!|?-']/g, '')
+    let responseText = '';
     const utcDate = new Date().toISOString().split('T')[0];
     const responseStartTime = new Date().getTime();
     axios
-      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`, {
-        audio: base64Data,
-        user_id: localStorage.getItem('virtualID'),
-        session_id: localStorage.getItem('virtualStorySessionID'),
-        date: utcDate,
-        original_text: findRegex(posts?.data[currentLine]?.contentSourceData[0]?.text),
-        language: lang,
-        sub_session_id: localStorage.getItem('sub_session_id'),
-        contentId:slug,
-        contentType : contentType
-      })
+      .post(
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`,
+        {
+          audio: base64Data,
+          user_id: localStorage.getItem('virtualID'),
+          session_id: localStorage.getItem('virtualStorySessionID'),
+          date: utcDate,
+          original_text: findRegex(
+            posts?.data[currentLine]?.contentSourceData[0]?.text
+          ),
+          language: lang,
+          sub_session_id: localStorage.getItem('sub_session_id'),
+          contentId: slug,
+          contentType: contentType,
+        }
+      )
       .then(async res => {
-        responseText = res.data.responseText
+        responseText = res.data.responseText;
         const responseEndTime = new Date().getTime();
         const responseDuration = Math.round(
           (responseEndTime - responseStartTime) / 1000
@@ -291,7 +302,8 @@ async function saveIndb(base64Data) {
         texttemp = replaceAll(texttemp, '?', '');
         const studentTextArray = texttemp.split(' ');
 
-        let tempteacherText = posts?.data[currentLine]?.contentSourceData[0]?.text.toLowerCase();
+        let tempteacherText =
+          posts?.data[currentLine]?.contentSourceData[0]?.text.toLowerCase();
         tempteacherText = tempteacherText.replace(/\u00A0/g, ' ');
         tempteacherText = tempteacherText.trim();
         tempteacherText = replaceAll(tempteacherText, '.', '');
@@ -310,33 +322,34 @@ async function saveIndb(base64Data) {
         let wrongWords = 0;
         let correctWords = 0;
         let resultPerWords = 0;
-        let existingIncorrectWords = JSON.parse(localStorage.getItem('incorrectWords')) || [];
-
-
+        let existingIncorrectWords =
+          JSON.parse(localStorage.getItem('incorrectWords')) || [];
 
         teacherTextArray.forEach(word => {
-            if (!studentTextArray.includes(word)) {
-              existingIncorrectWords.push(word);
-            }
+          if (!studentTextArray.includes(word)) {
+            existingIncorrectWords.push(word);
+          }
         });
         let mergedArray = existingIncorrectWords.concat(incorrectWords);
         let uniqueWordsSet = new Set(mergedArray);
         let uniqueWordsArray = Array.from(uniqueWordsSet);
-        localStorage.setItem('incorrectWords', JSON.stringify(uniqueWordsArray));
+        localStorage.setItem(
+          'incorrectWords',
+          JSON.stringify(uniqueWordsArray)
+        );
 
-        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+        let word_result_array = compareArrays(
+          teacherTextArray,
+          studentTextArray
+        );
 
         for (let i = 0; i < studentTextArray?.length; i++) {
           if (teacherTextArray.includes(studentTextArray[i])) {
             correctWords++;
-            studentCorrectWordsResult.push(
-              studentTextArray[i]
-            );
+            studentCorrectWordsResult.push(studentTextArray[i]);
           } else {
             wrongWords++;
-            studentIncorrectWordsResult.push(
-              studentTextArray[i]
-            );
+            studentIncorrectWordsResult.push(studentTextArray[i]);
           }
         }
         //calculation method
@@ -355,17 +368,23 @@ async function saveIndb(base64Data) {
 
         finalScore = finalScore < 0 ? 0 : finalScore;
 
-        let word_result = (finalScore === 100) ? "correct" : "incorrect";
+        let word_result = finalScore === 100 ? 'correct' : 'incorrect';
 
         if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
           let getContentId = currentLine;
-          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('virtualStorySessionID')}-${Date.now()}-${getContentId}.wav`;
+          var audioFileName = `${
+            process.env.REACT_APP_CHANNEL
+          }/${localStorage.getItem(
+            'virtualStorySessionID'
+          )}-${Date.now()}-${getContentId}.wav`;
 
           const command = new PutObjectCommand({
             Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
             Key: audioFileName,
-            Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
-            ContentType: 'audio/wav'
+            Body: Uint8Array.from(window.atob(base64Data), c =>
+              c.charCodeAt(0)
+            ),
+            ContentType: 'audio/wav',
           });
           try {
             const response = await S3Client.send(command);
@@ -374,30 +393,37 @@ async function saveIndb(base64Data) {
               position: 'top',
               title: `${err?.message}`,
               status: 'error',
-            })
+            });
             error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
-
           }
         }
-        response({ // Required
-          "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
-          //"qid": "", // Required. Unique assessment/question id
-          "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-          "values": [
-            { "original_text": posts?.data[currentLine]?.contentSourceData[0]?.text },
-            { "response_text": responseText },
-            { "response_correct_words_array": studentCorrectWordsResult },
-            { "response_incorrect_words_array": studentIncorrectWordsResult },
-            { "response_word_array_result": word_result_array },
-            { "response_word_result": word_result },
-            { "accuracy_percentage": finalScore },
-            { "duration": responseDuration }
-          ]
-        },
+        response(
+          {
+            // Required
+            target:
+              process.env.REACT_APP_CAPTURE_AUDIO === 'true'
+                ? `${audioFileName}`
+                : '', // Required. Target of the response
+            //"qid": "", // Required. Unique assessment/question id
+            type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            values: [
+              {
+                original_text:
+                  posts?.data[currentLine]?.contentSourceData[0]?.text,
+              },
+              { response_text: responseText },
+              { response_correct_words_array: studentCorrectWordsResult },
+              { response_incorrect_words_array: studentIncorrectWordsResult },
+              { response_word_array_result: word_result_array },
+              { response_word_result: word_result },
+              { accuracy_percentage: finalScore },
+              { duration: responseDuration },
+            ],
+          },
           'ET'
-        )
+        );
         stopLoading();
-        setUserSpeak(true)
+        setUserSpeak(true);
         handleStarAnimation();
       })
       .catch(err => {
@@ -405,7 +431,7 @@ async function saveIndb(base64Data) {
           position: 'top',
           title: `${err?.message}`,
           status: 'error',
-        })
+        });
         error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
 
         stopLoading();
@@ -414,15 +440,15 @@ async function saveIndb(base64Data) {
 
   const handleStarAnimation = () => {
     jsConfetti.addConfetti({
-      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
-    })
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟'],
+    });
     jsConfetti.addConfetti({
-      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
-    })
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟'],
+    });
     jsConfetti.addConfetti({
-      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟',],
-    })
-  }
+      emojis: ['⭐', '✨', '🌟', '⭐', '✨', '🌟'],
+    });
+  };
 
   useEffect(() => {
     if (currentLine && currentLine === posts?.data?.length) {
@@ -440,6 +466,7 @@ async function saveIndb(base64Data) {
       addLessonCheck(isDataOfLesson, isResultArray, isCheckInd);
     }
   }, [isDialogOpen, isDataOfLesson, isResultArray, isCheckInd]);
+
   return (
     <>
       <Header
@@ -447,215 +474,231 @@ async function saveIndb(base64Data) {
         forceRerender={forceRerender}
         setForceRerender={setForceRerender}
       />
-      {!(currentLine === posts?.data?.length) &&
-      <Center pt={'10vh'} className="bg">
-        <div
-          style={{
-            boxShadow: '2px 2px 15px 5px grey',
-            borderRadius: '30px',
-            width: '75vw',
-          }}
-          className="story-item"
-        >
-          {loading ? (
-          <Center h='50vh'><Spinner
-          thickness='4px'
-          speed='0.65s'
-          emptyColor='gray.200'
-          color='blue.500'
-          size='xl'
-        /></Center>
-          ) : isUserSpeak ? (
-            <>
-              <VStack>
-                <div>
-                  {currentLine === 1 ? (
-                    <h1
-                      style={{
-                        fontSize: '60px',
-                        marginTop: '40px',
-                        textAlign: 'center',
-                      }}
-                    >
-                      Very Good
-                    </h1>
-                  ) : currentLine === 2 ? (
-                    <h1
-                      style={{
-                        fontSize: '60px',
-                        marginTop: '40px',
-                        textAlign: 'center',
-                      }}
-                    >
-                      Nice Try
-                    </h1>
-                  ) : currentLine === 3 ? (
-                    <h1
-                      style={{
-                        fontSize: '60px',
-                        marginTop: '40px',
-                        textAlign: 'center',
-                      }}
-                    >
-                      WoW
-                    </h1>
-                  ) : (
-                    <h1
-                      style={{
-                        fontSize: '60px',
-                        marginTop: '60px',
-                        textAlign: 'center',
-                      }}
-                    >
-                      Well Done
-                    </h1>
-                  )}
-                </div>
-                <div>
-                </div>
-                <div style={{ display: 'flex', margin: '20px' }}>
-                  <HStack>
-                    <div style={{ margin: '20px', textAlign: 'center' }}>
-                      <img
-                        style={{ height: '40px', cursor: 'pointer' }}
-                        onClick={nextLine}
-                        src={Next}
-                        alt="next-button"
-                      />
-                      <p style={{ fontSize: '18px' }}>Try Next</p>
-                    </div>
-                    <div style={{ margin: '20px', textAlign: 'center' }}>
-                      <img
-                        style={{ height: '40px', cursor: 'pointer' }}
-                        onClick={prevLine}
-                        src={retry}
-                        alt="retry-again"
-                      />
-                      <p style={{ fontSize: '18px' }}>Try Again</p>
-                    </div>
-                  </HStack>
-                </div>
-              </VStack>
-            </>
-          ) : (
-            <>
-              {posts?.data?.map((post, ind) =>
-                currentLine === ind ? (
-                  <div className="story-box-container" key={ind}>
-                    <Center w={'100%'}>
-                      <img
-                        className="story-image"
-                        src={
-                          localStorage.getItem('apphomelang') === 'kn'
-                            ? KnPlaceHolder
-                            : PlaceHolder
-                        }
-                        alt={post?.name}
-                      />
-                    </Center>
-                    <Center w={'100%'}>
-                      <VStack>
-                        <div>
-                          <h1
-                            style={{ textAlign: 'center' }}
-                            className="story-line"
-                          >
-                            {
+      {!(currentLine === posts?.data?.length) && (
+        <Center pt={'10vh'} className="bg">
+          <div
+            style={{
+              marginTop: '5%',
+              boxShadow: '2px 2px 15px 5px #ececec',
+              borderRadius: '30px',
+              width: '75vw',
+              backgroundColor: 'white',
+            }}
+            className="story-item"
+          >
+            {loading ? (
+              <Center h="50vh">
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="blue.500"
+                  size="xl"
+                />
+              </Center>
+            ) : isUserSpeak ? (
+              <>
+                <VStack>
+                  <div>
+                    {currentLine === 1 ? (
+                      <h1
+                        style={{
+                          fontSize: '60px',
+                          marginTop: '40px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Very Good
+                      </h1>
+                    ) : currentLine === 2 ? (
+                      <h1
+                        style={{
+                          fontSize: '60px',
+                          marginTop: '40px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Nice Try
+                      </h1>
+                    ) : currentLine === 3 ? (
+                      <h1
+                        style={{
+                          fontSize: '60px',
+                          marginTop: '40px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        WoW
+                      </h1>
+                    ) : (
+                      <h1
+                        style={{
+                          fontSize: '60px',
+                          marginTop: '60px',
+                          textAlign: 'center',
+                        }}
+                      >
+                        Well Done
+                      </h1>
+                    )}
+                  </div>
+                  <div></div>
+                  <div style={{ display: 'flex', margin: '20px' }}>
+                    <HStack>
+                      <div style={{ margin: '20px', textAlign: 'center' }}>
+                        <img
+                          style={{ height: '40px', cursor: 'pointer' }}
+                          onClick={nextLine}
+                          src={Next}
+                          alt="next-button"
+                        />
+                        <p style={{ fontSize: '18px' }}>Try Next</p>
+                      </div>
+                      <div style={{ margin: '20px', textAlign: 'center' }}>
+                        <img
+                          style={{ height: '40px', cursor: 'pointer' }}
+                          onClick={prevLine}
+                          src={retry}
+                          alt="retry-again"
+                        />
+                        <p style={{ fontSize: '18px' }}>Try Again</p>
+                      </div>
+                    </HStack>
+                  </div>
+                </VStack>
+              </>
+            ) : (
+              <>
+                {posts?.data?.map((post, ind) =>
+                  currentLine === ind ? (
+                    <div className="story-box-container" key={ind}>
+                      <Center w={'100%'}>
+                        <img
+                          className="story-image"
+                          src={
+                            localStorage.getItem('apphomelang') === 'kn'
+                              ? KnPlaceHolder
+                              : PlaceHolder
+                          }
+                          alt={post?.name}
+                        />
+                      </Center>
+                      <Center w={'100%'}>
+                        <VStack>
+                          <div>
+                            <h1
+                              style={{ textAlign: 'center' }}
+                              className="story-line"
+                            >
+                              {
+                                posts?.data[currentLine]?.contentSourceData[0]
+                                  .text
+                              }
+                            </h1>
+                            {localStorage.setItem(
+                              'contentText',
                               posts?.data[currentLine]?.contentSourceData[0]
                                 .text
-                            }
-                          </h1>
-                          {localStorage.setItem(
-                            'contentText',
-                            posts?.data[currentLine]?.contentSourceData[0].text
-                          )}
-                        </div>
-                        <div>
-                          {isUserSpeak ? (
-                            <></>
-                          ) : (
-                            <div>
-                              {currentLine === posts?.data?.length ? (
-                                ''
-                              ) : (
-                                <>
-                                  <div className="voice-recorder">
-                                    <VStack>
-                                      <VoiceCompair
-                                        setVoiceText={setVoiceText}
-                                        setRecordedAudio={setRecordedAudio}
-                                        _audio={{
-                                          isAudioPlay: e => setIsAudioPlay(e),
-                                        }}
-                                        flag={true}
-                                        setCurrentLine={setCurrentLine}
-                                        setStoryBase64Data={setStoryBase64Data}
-                                        saveIndb={saveIndb}
-                                        setUserSpeak={setUserSpeak}
-                                      />
-                                      {isAudioPlay === 'recording' ? (
-                                        <h4 className="text-speak m-0">Stop</h4>
-                                      ) : (
-                                        <h4 className="text-speak m-0">
-                                          Speak
-                                        </h4>
-                                      )}
-                                    </VStack>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </VStack>
-                    </Center>
-                  </div>
-                ) : (
-                  ''
-                )
-              )}
-            </>
-          )}
-        </div>
-      </Center>
-      }
+                            )}
+                          </div>
+                          <div>
+                            {isUserSpeak ? (
+                              <></>
+                            ) : (
+                              <div>
+                                {currentLine === posts?.data?.length ? (
+                                  ''
+                                ) : (
+                                  <>
+                                    <div className="voice-recorder">
+                                      <VStack>
+                                        <VoiceCompair
+                                          setVoiceText={setVoiceText}
+                                          setRecordedAudio={setRecordedAudio}
+                                          _audio={{
+                                            isAudioPlay: e => setIsAudioPlay(e),
+                                          }}
+                                          flag={true}
+                                          setCurrentLine={setCurrentLine}
+                                          setStoryBase64Data={
+                                            setStoryBase64Data
+                                          }
+                                          saveIndb={saveIndb}
+                                          setUserSpeak={setUserSpeak}
+                                        />
+                                        {isAudioPlay === 'recording' ? (
+                                          <h4 className="text-speak m-0">
+                                            Stop
+                                          </h4>
+                                        ) : (
+                                          <h4 className="text-speak m-0">
+                                            Speak
+                                          </h4>
+                                        )}
+                                      </VStack>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </VStack>
+                      </Center>
+                    </div>
+                  ) : (
+                    ''
+                  )
+                )}
+              </>
+            )}
+          </div>
+        </Center>
+      )}
       {isDialogOpen && currentLine === posts?.data?.length && (
-        <AlertDialog motionPreset="slideInBottom" isOpen={isDialogOpen} isCentered>
+        <AlertDialog
+          motionPreset="slideInBottom"
+          isOpen={isDialogOpen}
+          isCentered
+        >
           <AlertDialogOverlay />
 
           <AlertDialogContent>
-            <AlertDialogHeader  fontSize="22px" fontWeight="bold" textAlign="center">
+            <AlertDialogHeader
+              fontSize="22px"
+              fontWeight="bold"
+              textAlign="center"
+            >
               {sessionResult === 'pass' ? 'Well Done !' : 'Good Job !'}
             </AlertDialogHeader>
             <AlertDialogBody textAlign="center">
               {sessionResult === 'pass'
                 ? 'Discover More For Level Up'
                 : 'Keep trying to Improve Level'}
-          <br />
-          <br />
-          <div style={{ textAlign: 'center' }}>
-            <b>{"You've achieved"}</b>
-            <h1
-              style={{
-                fontSize: '3em',
-                fontWeight: 'bold',
-                marginTop: '10px',
-                color:
-                  percentage >= 0 && percentage <= 30
-                    ? 'red'
-                    : percentage > 30 && percentage <= 60
-                    ? 'orange'
-                    : percentage > 60 && percentage <= 100
-                    ? 'green'
-                    : 'black',
-              }}
-            >
-              {`${percentage}%`}
-            </h1>
-          </div>
+              <br />
+              <br />
+              <div style={{ textAlign: 'center' }}>
+                <b>{"You've achieved"}</b>
+                <h1
+                  style={{
+                    fontSize: '3em',
+                    fontWeight: 'bold',
+                    marginTop: '10px',
+                    color:
+                      percentage >= 0 && percentage <= 30
+                        ? 'red'
+                        : percentage > 30 && percentage <= 60
+                        ? 'orange'
+                        : percentage > 60 && percentage <= 100
+                        ? 'green'
+                        : 'black',
+                  }}
+                >
+                  {`${percentage}%`}
+                </h1>
+              </div>
             </AlertDialogBody>
             <AlertDialogFooter justifyContent="center">
-              <Button colorScheme="linkedin"  onClick={handleOkClick}>
+              <Button colorScheme="linkedin" onClick={handleOkClick}>
                 {'OK'}
               </Button>
             </AlertDialogFooter>

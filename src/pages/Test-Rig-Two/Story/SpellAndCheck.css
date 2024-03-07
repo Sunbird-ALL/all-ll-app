@@ -41,21 +41,23 @@
 }
 
 /* Source Character and Target Character */
-.source-char, .target-char {
-  padding: 15px;
+
+.target-char {
+  /* padding: 15px; */
   margin-right: 10px;
   border: 2px solid #3498db;
   border-radius: 8px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: #ecf0f1;
   color: #333;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.source-char .matched-char {
+.matched-char {
   padding: 15px;
-  border: 2px solid #3498db;
+  /* border: 2px solid #3498db; */
   border-radius: 8px;
   background-color: #ecf0f1;
   color: #333;
@@ -63,30 +65,38 @@
   transition: background-color 0.3s ease;
   font-size: 50px;
 }
-
-.source-char-disable{
+.source-char {
   padding: 15px;
-  border: 2px solid #020202;
+  border: 2px solid #3498db;
   border-radius: 8px;
-  background-color: #cccccc; 
+  background-color: #ecf0f1;
   color: #333;
-  /* cursor: pointer; */
+  cursor: pointer;
   transition: background-color 0.3s ease;
   font-size: 30px;
 }
-
+.source-char-disable {
+  border: 2px solid #020202;
+  background-color: #cccccc;
+  padding: 15px;
+  border-radius: 8px;
+  color: #333;
+  cursor: pointer;
+  font-size: 30px;
+  transition: background-color 0.3s ease;
+}
 
 /* Hover Effect for Source Character and Target Character */
-.source-char:hover, .target-char:hover {
+.source-char:hover,
+.target-char:hover {
   background-color: #3498db;
   color: #fff;
 }
 
 /* Empty Box */
 .empty-box {
-  width: 40px; /* Fixed width */
-  height: 40px; /* Fixed height */
-  margin: 5px; /* Adjust margin as needed */
+  height: 85%;
+  margin: 5px;
   border: 2px dashed #3498db;
   border-radius: 8px;
 }

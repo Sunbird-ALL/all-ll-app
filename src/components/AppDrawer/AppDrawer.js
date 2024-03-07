@@ -29,14 +29,15 @@ import {
   EditablePreview,
   EditableInput,
   Switch,
-} from '@chakra-ui/react'
+  useMediaQuery,
+} from '@chakra-ui/react';
 import React from 'react';
-import Children from '../../assests/Images/children-thumbnail.png'
+import Children from '../../assests/Images/children-thumbnail.png';
 import ConfigForm from '../../config/ConfigForm';
 import { useNavigate } from 'react-router-dom';
 import { fetchPointerApi } from '../../utils/api/PointerApi';
 
-function AppDrawer({forceRerender, setForceRerender}) {
+function AppDrawer({ forceRerender, setForceRerender }) {
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
@@ -51,6 +52,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const [level, setLevel] = React.useState('');
   const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
   const [isAudioPreprocessingEnabled, setAudioPreprocessingStatus] = React.useState(false);
+  const [isLargerThan865] = useMediaQuery('(min-width: 865px)');
 
   React.useEffect(() => {
     if (localStorage.getItem('isAudioPreprocessing') !== null) {
@@ -153,58 +155,58 @@ function AppDrawer({forceRerender, setForceRerender}) {
     }
   };
 
-    const fetchDataFromApi = async () => {
-        try {
-          const result = await fetchPointerApi();
-  
-          if (result && result.result) {
-            localStorage.setItem(
-              'totalSessionPoints',
-              result.result.totalSessionPoints
-            );
-            localStorage.setItem(
-              'totalUserPoints',
-              result.result.totalUserPoints
-            );
-            localStorage.setItem(
-              'totalLanguagePoints',
-              result.result.totalLanguagePoints
-            );
-          } else {
-            console.error('Unexpected response structure:', result);
-          }
-        } catch (error) {
-          console.error('Error in component:', error);
-        }
-      };
-   
+  const fetchDataFromApi = async () => {
+    try {
+      const result = await fetchPointerApi();
 
-    const handleGetLesson = (virtualID)=>{
-        fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`)
-        .then((res)=>{
-          return res.json();  
-        }).then((data)=>{
-          if(data?.result?.result){
-            let milestone = data?.result?.result?.milestone || 'discoveryList';
-            localStorage.setItem('userPracticeState', data?.result?.result?.lesson || 0)
-            if(milestone === 'showcase'){
-                navigate(`/showcase`)  
-              }
-              else if(milestone === 'practice'){
-                navigate(`/practice`)  
-              }
-              else if (milestone === 'validate'){
-                localStorage.setItem('validationSession', data?.result?.result?.lesson)
-                navigate(`/validate`)
-              }
-            else{
-              navigate(`/${milestone}`)
-            }
-          }else if(data.result){
-            navigate(`/discoverylist`)
-          }
-        })
+      if (result && result.result) {
+        localStorage.setItem(
+          'totalSessionPoints',
+          result.result.totalSessionPoints
+        );
+        localStorage.setItem(
+          'totalUserPoints',
+          result.result.totalUserPoints
+        );
+        localStorage.setItem(
+          'totalLanguagePoints',
+          result.result.totalLanguagePoints
+        );
+      } else {
+        console.error('Unexpected response structure:', result);
       }
+    } catch (error) {
+      console.error('Error in component:', error);
+    }
+  };
+
+
+  const handleGetLesson = (virtualID)=>{
+    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`)
+    .then((res)=>{
+      return res.json();  
+    }).then((data)=>{
+      if(data?.result?.result){
+        let milestone = data?.result?.result?.milestone || 'discoveryList';
+        localStorage.setItem('userPracticeState', data?.result?.result?.lesson || 0)
+        if(milestone === 'showcase'){
+            navigate(`/showcase`)  
+          }
+          else if(milestone === 'practice'){
+            navigate(`/practice`)  
+          }
+          else if (milestone === 'validate'){
+            localStorage.setItem('validationSession', data?.result?.result?.lesson)
+            navigate(`/validate`)
+          }
+        else{
+          navigate(`/${milestone}`)
+        }
+      }else if(data.result){
+        navigate(`/discoverylist`)
+      }
+    })
+  }
   const handleSave = () => {
     onClose();
     handleGetLesson();
@@ -213,37 +215,39 @@ function AppDrawer({forceRerender, setForceRerender}) {
   };
   return (
     <>
-      <Button className='btn btn-success'
+      <Button
+        className="btn btn-success"
         variant={'solid'}
         colorScheme={'teal'}
         onClick={onOpen}
-        mr={4} ref={btnRef}
-        rightIcon={<Avatar
-          size={'sm'}
-          src={
-            Children
-          }
-        />}
+        mr={4}
+        ref={btnRef}
+        rightIcon={<Avatar size={'sm'} src={Children} />}
       >
-        My Profile : {localStorage.getItem('virtualID')}
+        {isLargerThan865
+          ? `My Profile : ${localStorage.getItem('virtualID')}`
+          : `P : ${localStorage.getItem('virtualID')}`}
       </Button>
       <Drawer
         isOpen={isOpen}
-        placement='right'
+        placement="right"
         onClose={onClose}
         size={'md'}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton top={'-2'} size='sm' />
-          <DrawerHeader borderBottomWidth='1px'>Profile</DrawerHeader>
+          <DrawerCloseButton top={'-2'} size="sm" />
+          <DrawerHeader borderBottomWidth="1px">Profile</DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing='4'>
-              <Text textTransform={'capitalize'} fontSize='lg' fontWeight='bold'>
-                Hello, {localStorage.getItem('virtualID')} 
-                [{level}]
+            <Stack spacing="4">
+              <Text
+                textTransform={'capitalize'}
+                fontSize="lg"
+                fontWeight="bold"
+              >
+                Hello, {localStorage.getItem('virtualID')}[{level}]
                 {/* <Editable defaultValue={level}>
                   <EditablePreview />
                   <EditableInput onChange={(event) => setLevel(event.target.value)}/>
@@ -251,34 +255,53 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </Text>
               <Divider />
               <FormControl>
-                <FormLabel><Text as={'b'} >Session ID</Text></FormLabel>
-                <Input variant='filled' value={localStorage.getItem('virtualStorySessionID')} isReadOnly />
+                <FormLabel>
+                  <Text as={'b'}>Session ID</Text>
+                </FormLabel>
+                <Input
+                  variant="filled"
+                  value={localStorage.getItem('virtualStorySessionID')}
+                  isReadOnly
+                />
               </FormControl>
               <FormControl>
-                <FormLabel><Text as={'b'} >Language </Text></FormLabel>
+                <FormLabel>
+                  <Text as={'b'}>Language </Text>
+                </FormLabel>
                 <RadioGroup onChange={setValue} value={value}>
-                  <HStack spacing='4'>
-                    <Radio value='en'>English</Radio>
-                    <Radio value='kn'>ಕನ್ನಡ</Radio>
-                    <Radio value='ta'>தமிழ்</Radio>
+                  <HStack spacing="4">
+                    <Radio value="en">English</Radio>
+                    <Radio value="kn">ಕನ್ನಡ</Radio>
+                    <Radio value="ta">தமிழ்</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
               <Divider />
               <FormControl>
-              <FormLabel><Text as={'b'} >Audio Preprocessing </Text></FormLabel>
-              <HStack spacing='4' paddingBottom={4}>
-                <Text>Audio Preprocessing {isAudioPreprocessingEnabled ? 'Enabled' : 'Disabled'}</Text>
+                <FormLabel>
+                  <Text as={'b'}>Audio Preprocessing </Text>
+                </FormLabel>
+                <HStack spacing="4" paddingBottom={4}>
+                  <Text>
+                    Audio Preprocessing{' '}
+                    {isAudioPreprocessingEnabled ? 'Enabled' : 'Disabled'}
+                  </Text>
                   <Switch
                     isChecked={isAudioPreprocessingEnabled}
-                    onChange={() => setAudioPreprocessingStatus(!isAudioPreprocessingEnabled)}
+                    onChange={() =>
+                      setAudioPreprocessingStatus(!isAudioPreprocessingEnabled)
+                    }
                     colorScheme="teal"
                     size="md"
                   />
                 </HStack>
-                <FormLabel><Text as={'b'} >Discovery </Text></FormLabel>
-                <HStack spacing='4' paddingBottom={4}>
-                <Text>Discovery {isDiscoveryEnabled ? 'Enabled' : 'Disabled'}</Text>
+                <FormLabel>
+                  <Text as={'b'}>Discovery </Text>
+                </FormLabel>
+                <HStack spacing="4" paddingBottom={4}>
+                  <Text>
+                    Discovery {isDiscoveryEnabled ? 'Enabled' : 'Disabled'}
+                  </Text>
                   <Switch
                     isChecked={isDiscoveryEnabled}
                     onChange={() => setDiscoveryStatus(!isDiscoveryEnabled)}
@@ -287,9 +310,9 @@ function AppDrawer({forceRerender, setForceRerender}) {
                   />
                 </HStack>
                 <RadioGroup onChange={setDiscoveryLimit} value={discoveryLimit}>
-                  <HStack spacing='4'>
+                <HStack spacing='4'>
                     <span>Limit:</span>
-                    <Radio value='5'>5</Radio>
+                      <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
                     <Radio value='15'>15</Radio>
                   </HStack>
@@ -297,9 +320,9 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </FormControl>
               <Divider />
               <FormControl>
-                <FormLabel><Text as={'b'} >Validation </Text></FormLabel>
+              <FormLabel><Text as={'b'} >Validation </Text></FormLabel>
                 <RadioGroup onChange={setValidateLimit} value={validateLimit}>
-                  <HStack spacing='4'>
+                <HStack spacing='4'>
                     <span>Limit:</span>
                     <Radio value='5'>5</Radio>
                     <Radio value='10'>10</Radio>
@@ -312,7 +335,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
                 <HStack>
                   <div>Session ID:</div>
                   <div>
-                    <Select placeholder='Select option' value={validationSession} onChange={(event) => setValidationSession(event.target.value)}>
+                  <Select placeholder='Select option' value={validationSession} onChange={(event) => setValidationSession(event.target.value)}>
                       {PreviousUserSessions?.map((session, ind) =>
                         <option key={ind} value={session}>{session}</option>
                       )}
@@ -322,7 +345,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </FormControl>
               <Divider />
               <FormControl>
-                <FormLabel><Text as={'b'} > Practice </Text></FormLabel>
+              <FormLabel><Text as={'b'} > Practice </Text></FormLabel>
                 <RadioGroup onChange={setContentPracticeLimit} value={contentPracticeLimit}>
                   <HStack spacing='4'>
                     <span>Content Limit:</span>
@@ -334,7 +357,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </FormControl>
 
               <FormControl>
-                <RadioGroup onChange={setContentTargetLimit} value={contentTargetLimit}>
+              <RadioGroup onChange={setContentTargetLimit} value={contentTargetLimit}>
                   <HStack spacing='4'>
                     <span>Target Limit:</span>
                     <Radio value='5'>5</Radio>
@@ -355,7 +378,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
                 <AccordionItem>
                   <h2>
                     <AccordionButton>
-                      <Box as="span" flex='1' textAlign='left'>
+                    <Box as="span" flex='1' textAlign='left'>
                         <Text as={'b'}>Practice config </Text>
                       </Box>
                       <AccordionIcon />
@@ -370,15 +393,16 @@ function AppDrawer({forceRerender, setForceRerender}) {
             </Stack>
           </DrawerBody>
 
-          <DrawerFooter borderTopWidth='1px'>
-            <Button variant='outline' mr={3} onClick={onClose}>
+          <DrawerFooter borderTopWidth="1px">
+            <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={() =>   handleSave()} colorScheme='blue'>Save</Button>
+            <Button onClick={() => handleSave()} colorScheme="blue">
+              Save
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-
     </>
   )
 }
