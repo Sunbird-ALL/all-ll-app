@@ -33,9 +33,11 @@ import {
 import React from 'react';
 import Children from '../../assests/Images/children-thumbnail.png'
 import ConfigForm from '../../config/ConfigForm';
-
+import { useNavigate } from 'react-router-dom';
+import { fetchPointerApi } from '../../utils/api/PointerApi';
 
 function AppDrawer({forceRerender, setForceRerender}) {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const [value, setValue] = React.useState(localStorage.getItem('apphomelang'))
@@ -48,14 +50,37 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const [practiceSession, setPracticeSession] = React.useState(localStorage.getItem('practiceSession') || localStorage.getItem('virtualStorySessionID'))
   const [level, setLevel] = React.useState('');
   const [isDiscoveryEnabled, setDiscoveryStatus] = React.useState(localStorage.getItem('userCurrentLevel') === 'm0' ? true : false );
+  const [isAudioPreprocessingEnabled, setAudioPreprocessingStatus] = React.useState(false);
+  const [lessonRec,setLessonRec] = React.useState('discoverylist')
+
+  React.useEffect(() => {
+    if (localStorage.getItem('isAudioPreprocessing') !== null) {
+      if (localStorage.getItem('isAudioPreprocessing') === 'true') {
+        setAudioPreprocessingStatus(true);
+      } else {
+        setAudioPreprocessingStatus(false);
+      }
+    } else {
+      if (process.env.REACT_APP_IS_AUDIOPREPROCESSING === 'true') {
+        setAudioPreprocessingStatus(true);
+      } else {
+        setAudioPreprocessingStatus(false);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     localStorage.setItem('discoveryStatus', isDiscoveryEnabled ? 'enabled' : 'disabled');
   }, [isDiscoveryEnabled]); 
 
   React.useEffect(() => {
+    localStorage.setItem('isAudioPreprocessing', isAudioPreprocessingEnabled ? true : false);
+  }, [isAudioPreprocessingEnabled]); 
+
+  React.useEffect(() => {
     if (value) {
       localStorage.setItem('apphomelang', value);
+      handleGetLesson();
     }
   }, [value]);
 
@@ -102,7 +127,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
       )
         .then(res => {
           return res.json();
@@ -130,9 +155,75 @@ function AppDrawer({forceRerender, setForceRerender}) {
     }
   };
 
+    const fetchDataFromApi = async () => {
+        try {
+          const result = await fetchPointerApi();
+  
+          if (result && result.result) {
+            localStorage.setItem(
+              'totalSessionPoints',
+              result.result.totalSessionPoints
+            );
+            localStorage.setItem(
+              'totalUserPoints',
+              result.result.totalUserPoints
+            );
+            localStorage.setItem(
+              'totalLanguagePoints',
+              result.result.totalLanguagePoints
+            );
+          } else {
+            console.error('Unexpected response structure:', result);
+          }
+        } catch (error) {
+          console.error('Error in component:', error);
+        }
+      };
+
+      const handleNavigate = () => {
+        if (lessonRec) {
+          if (lessonRec?.milestone === 'showcase') {
+            navigate(`/showcase`);
+          } else if (lessonRec?.milestone === 'practice') {
+            navigate(`/practice`);
+          } else if (lessonRec?.milestone === 'validate') {
+            localStorage.setItem('validationSession', lessonRec?.lesson);
+            navigate(`/validate`);
+          } else {
+            navigate(`/${lessonRec}`);
+          }
+        }
+      };
+
+      const handleGetLesson = () => {
+        fetch(
+          `${
+            process.env.REACT_APP_LEARNER_AI_APP_HOST
+          }/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem(
+            'virtualID'
+          )}?language=${localStorage.getItem('apphomelang')}`
+        )
+          .then(res => {
+            return res.json();
+          })
+          .then(data => {
+            setLessonRec(data?.result?.result || 'discoverylist');
+            localStorage.setItem(
+              'userPracticeState',
+              data?.result?.result?.lesson || 0
+            );
+            localStorage.setItem(
+              'lessonProgressPercent',
+              data?.result?.result?.progress || 0
+            );
+          });
+      };
+
   const handleSave = () => {
     onClose();
+    handleNavigate();
     setForceRerender(!forceRerender);
+    fetchDataFromApi();
   };
   return (
     <>
@@ -189,6 +280,16 @@ function AppDrawer({forceRerender, setForceRerender}) {
               </FormControl>
               <Divider />
               <FormControl>
+              <FormLabel><Text as={'b'} >Audio Preprocessing </Text></FormLabel>
+              <HStack spacing='4' paddingBottom={4}>
+                <Text>Audio Preprocessing {isAudioPreprocessingEnabled ? 'Enabled' : 'Disabled'}</Text>
+                  <Switch
+                    isChecked={isAudioPreprocessingEnabled}
+                    onChange={() => setAudioPreprocessingStatus(!isAudioPreprocessingEnabled)}
+                    colorScheme="teal"
+                    size="md"
+                  />
+                </HStack>
                 <FormLabel><Text as={'b'} >Discovery </Text></FormLabel>
                 <HStack spacing='4' paddingBottom={4}>
                 <Text>Discovery {isDiscoveryEnabled ? 'Enabled' : 'Disabled'}</Text>
@@ -269,7 +370,7 @@ function AppDrawer({forceRerender, setForceRerender}) {
                   <h2>
                     <AccordionButton>
                       <Box as="span" flex='1' textAlign='left'>
-                        <Text as={'b'} >Practice config </Text>
+                        <Text as={'b'}>Practice config </Text>
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>

@@ -15,17 +15,16 @@ if (localStorage.getItem('token') !== null) {
   var emis_username = userDetails.emis_username;
 }
 
-
 function checkTokenInLocalStorage() {
   const token = localStorage.getItem('buddyToken');
   return !!token; // Returns true if token is present, false if token is null or undefined
 }
 
-
 if (localStorage.getItem('contentSessionId') !== null) {
   contentSessionId = localStorage.getItem('contentSessionId');
 } else {
-  contentSessionId = localStorage.getItem('virtualStorySessionID') || uniqueId();
+  contentSessionId =
+    localStorage.getItem('virtualStorySessionID') || uniqueId();
   localStorage.setItem('allAppContentSessionId', contentSessionId);
 }
 
@@ -66,46 +65,45 @@ export const initialize = ({ context, config, metadata }) => {
 };
 
 export const start = duration => {
-    CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
-      options: getEventOptions(),
-      edata: {
-        type: 'content',
-        mode: 'play',
-        stageid: url,
-        duration: Number((duration / 1e3).toFixed(2)),
-      },
-    });
+  CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
+    options: getEventOptions(),
+    edata: {
+      type: 'content',
+      mode: 'play',
+      stageid: url,
+      duration: Number((duration / 1e3).toFixed(2)),
+    },
+  });
 };
 
 export const response = (context, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
-      CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
-        {
-          ...context,
-        },
-        getEventOptions()
-      );
-  }
-
-};
-
-export const end = (data) => {
-    CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
-      edata: {
-        type: 'content',
-        mode: 'play',
-        pageid: url,
-        summary: data?.summary || {},
-        duration: data?.duration || '000',
+    CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
+      {
+        ...context,
       },
-    });
+      getEventOptions()
+    );
+  }
 };
 
-export const interact = (telemetryMode) => {
+export const end = data => {
+  CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
+    edata: {
+      type: 'content',
+      mode: 'play',
+      pageid: url,
+      summary: data?.summary || {},
+      duration: data?.duration || '000',
+    },
+  });
+};
+
+export const interact = (id, url, telemetryMode, currentPage) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseInteractTelemetry({
       options: getEventOptions(),
-      edata: { type: 'TOUCH', subtype: '', pageid: url },
+      edata: { type: 'TOUCH', id: id, pageid: url, subtype: currentPage || '' },
     });
   }
 };
@@ -130,17 +128,22 @@ export const impression = (currentPage, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseImpressionTelemetry({
       options: getEventOptions(),
-      edata: { type: 'workflow', subtype: '', pageid: currentPage + '', uri: '' },
+      edata: {
+        type: 'workflow',
+        subtype: '',
+        pageid: currentPage + '',
+        uri: '',
+      },
     });
   }
 };
 
-export const error = (error, data,telemetryMode) => {
+export const error = (error, data, telemetryMode, contentId) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
       edata: {
-        pageid: url,
+        pageid: contentId ? contentId : url,
         err: data.err,
         errtype: data.errtype,
         stacktrace: error.toString() || '',
@@ -149,23 +152,27 @@ export const error = (error, data,telemetryMode) => {
   }
 };
 
-export const feedback = (data, contentId,telemetryMode) => {
+export const feedback = (data, contentId, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
-      CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
-        options: getEventOptions(),
-        edata: {
-          contentId: contentId,
-          rating: data,
-          comments: '',
-        },
-      });
+    CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
+      options: getEventOptions(),
+      edata: {
+        contentId: contentId,
+        rating: data,
+        comments: '',
+      },
+    });
   }
 };
 
-function checkTelemetryMode(currentMode ){
-
-return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||(process.env.REACT_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) || (process.env.REACT_APP_TELEMETRY_MODE === 'DT' && (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'));
-
+function checkTelemetryMode(currentMode) {
+  return (
+    (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||
+    (process.env.REACT_APP_TELEMETRY_MODE === 'NT' &&
+      (currentMode === 'ET' || currentMode === 'NT')) ||
+    (process.env.REACT_APP_TELEMETRY_MODE === 'DT' &&
+      (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'))
+  );
 }
 
 export const getEventOptions = () => {
@@ -184,9 +191,10 @@ export const getEventOptions = () => {
     buddyUserId = buddyUserDetails.emis_username;
   }
 
-
   const userType = isBuddyLogin ? 'Buddy User' : 'User';
-  const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'
+  const userId = isBuddyLogin
+    ? emis_username + '/' + buddyUserId
+    : emis_username || 'anonymous';
 
   return {
     object: {},
@@ -204,9 +212,12 @@ export const getEventOptions = () => {
           : emis_username || 'anonymous'
       }`,
       cdata: [
-        { id: localStorage.getItem('virtualStorySessionID')|| contentSessionId, type: 'ContentSession' },
+        {
+          id: localStorage.getItem('virtualStorySessionID') || contentSessionId,
+          type: 'ContentSession',
+        },
         { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType }
+        { id: userId, type: userType },
       ],
       rollup: {},
     },

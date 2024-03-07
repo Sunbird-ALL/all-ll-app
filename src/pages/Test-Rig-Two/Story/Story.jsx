@@ -53,6 +53,12 @@ import completionCriteria from '../../../config/practiceConfig';
 import AppTimer from '../../../components/AppTimer/AppTimer.jsx';
 import { addPointerApi } from '../../../utils/api/PointerApi';
 import SpellAndCheck from './SpellAndCheck.jsx';
+import HangmanGame from './hangman-game/HangmanGame.jsx';
+import animation from './animation.css';
+import { splitGraphemes } from 'split-graphemes';
+import { interactCall } from '../../../services/callTelemetryIntract.js';
+import marioImg from '../../Story/Mario/images/mario.png';
+import dinoImg from '../../Story/Mario/images//dragon.png';
 
 const jsConfetti = new JSConfetti();
 
@@ -75,7 +81,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
 
   const [template, SetTemplate] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [isNext,setIsNext] = useState(false);
+  const [isNext, setIsNext] = useState(false);
+  const [showSplashScreen, setShowSplashScreen] = useState(false);
 
   // const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(() => {
   //   const storedData = JSON.parse(localStorage.getItem('progressData'));
@@ -85,6 +92,87 @@ const Story = ({ forceRerender, setForceRerender }) => {
   //     return 0;
   //   }
   // });
+
+  function highlightWords(sentence, matchedChar) {
+    let isFirstImageDisplayed = false;
+    const words = sentence.split(' ');
+    matchedChar.sort(function(str1, str2) {
+      return str2.length - str1.length;
+      });
+    let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
+    if (type == 'char' || type == 'word') {
+      const word = splitGraphemes(words[0].toLowerCase()).filter(item => item !== '‌' && item !== '' && item !== ' ');
+      let highlightedString = [];
+      for (let i = 0; i < word.length; i++) {
+        let matchFound = false;
+        for (let j = 0; j < matchedChar.length; j++) {
+          let length=splitGraphemes(matchedChar[j]).filter(item => item !== '‌' && item !== '' && item !== ' ').length;
+          const substr = word.slice(i, (i + length)).join('');
+          if (substr.includes(matchedChar[j])) {
+            highlightedString.push(
+              <React.Fragment key={i}>
+                <span
+                  key={i}
+                  style={{ backgroundColor: 'yellow', position: 'relative' }}
+                >
+                  {!isFirstImageDisplayed && (
+                    <React.Fragment>
+                      <Image
+                        className="finger-pointer-word"
+                        h={12}
+                        src={require('../../../assests/Images/hand-pointer.png')}
+                        alt={''}
+                      />
+                      {(isFirstImageDisplayed = true)}
+                    </React.Fragment>
+                  )}
+                  {substr}
+                </span>
+              </React.Fragment>
+            );
+            i += length-1;
+            matchFound = true;
+            break;
+          }
+        }
+        if (!matchFound) {
+          highlightedString.push(word[i]);
+        }
+      }
+      return highlightedString;
+    } else {
+      const highlightedSentence = words.map((word, index) => {
+        const isMatched = matchedChar.some(char => word.toLowerCase().includes(char));
+        if (isMatched) {
+          return (
+            <React.Fragment key={index}>
+              <span
+                key={index}
+                style={{ backgroundColor: 'yellow', position: 'relative' }}
+              >
+                {!isFirstImageDisplayed && (
+                  <>
+                    <Image
+                      className="finger-pointer"
+                      h={12}
+                      src={require('../../../assests/Images/hand-pointer.png')}
+                      alt={''}
+                    />
+                    {(isFirstImageDisplayed = true)}
+                  </>
+                )}
+                {word}
+              </span>{' '}
+            </React.Fragment>
+          );
+        } else {
+          return <span key={index}>{word + ' '}</span>;
+        }
+      });
+      return highlightedSentence;
+    }
+  }
+
   const [completionCriteriaIndex, setCompletionCriteriaIndex] = useState(
     parseInt(localStorage.getItem('userPracticeState') || 0)
   );
@@ -99,10 +187,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   });
 
   let practiceCompletionCriteria = [
-    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1']
+    ...completionCriteria[localStorage.getItem('userCurrentLevel') || 'm1'],
   ];
 
-  if(JSON.parse(localStorage.getItem('criteria'))) {
+  if (JSON.parse(localStorage.getItem('criteria'))) {
     practiceCompletionCriteria = [
       ...(JSON.parse(localStorage.getItem('criteria')) || []),
     ];
@@ -132,6 +220,17 @@ const Story = ({ forceRerender, setForceRerender }) => {
   React.useEffect(() => {
     localStorage.setItem('progressData', JSON.stringify(progressData));
   }, [progressData]);
+  
+  useEffect(()=>{
+     try {
+        setCompletionCriteriaIndex(parseInt(localStorage.getItem('userPracticeState') || 0))
+      } catch (error) {
+        console.error(
+          "Error accessing localStorage for 'userPracticeState':",
+          error
+        );
+      }
+    },[forceRerender])
 
   const updateProgress = (sessionId, newData) => {
     setProgressData(prevData => ({
@@ -196,7 +295,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
-          SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || 'simple')
+          SetTemplate(
+            practiceCompletionCriteria[completionCriteriaIndex]?.template ||
+              'simple'
+          );
           setLoading(false);
         });
       setLoading(false);
@@ -204,7 +306,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${
+          err?.message === 'Failed to fetch'
+            ? 'Please Check Your Internet Connection'
+            : err?.message
+        }`,
         status: 'error',
       });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
@@ -253,7 +359,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
           { response_word_array_result: [] },
           { response_word_result: '' },
           { accuracy_percentage: 0 },
-          { template: practiceCompletionCriteria[completionCriteriaIndex]?.template || ''},
+          {
+            template:
+              practiceCompletionCriteria[completionCriteriaIndex]?.template ||
+              '',
+          },
           { duration: 0 },
         ],
       },
@@ -266,13 +376,16 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [temp_audio]);
 
   const playAudio = () => {
+    interactCall('playAudio', 'practice', 'DT', 'PLAY');
     const myAudio = localStorage.getItem('recordedAudio');
     set_temp_audio(new Audio(myAudio));
   };
 
   const playTeacherAudio = () => {
     const contentId = posts?.[currentLine]?.contentId;
-    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+    var audio = new Audio(
+      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+    );
 
     audio.addEventListener('canplaythrough', () => {
       set_temp_audio(
@@ -281,19 +394,28 @@ const Story = ({ forceRerender, setForceRerender }) => {
         )
       );
     });
-    audio.addEventListener('error', () => {
+    audio.addEventListener('error', err => {
       toast({
         position: 'top',
         title: 'Audio is not available',
         duration: 2000,
         status: 'error',
       });
+      error(
+        '',
+        { err: 'Audio is not available', errtype: 'CONTENT' },
+        'ET',
+        contentId
+      );
     });
   };
 
   const pauseAudio = () => {
+    interactCall('pauseAudio', 'practice', 'DT', 'PAUSE');
     const contentId = posts?.[currentLine]?.contentId;
-    var audio = new Audio( `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`)
+    var audio = new Audio(
+      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
+    );
 
     audio.addEventListener('canplaythrough', () => {
       set_temp_audio(
@@ -312,8 +434,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     });
   };
 
-  const handleSpellAndCheck = (callback) => {
-    SetTemplate('simple')
+  const handleSpellAndCheck = callback => {
+    SetTemplate('simple');
     callback();
   };
 
@@ -342,7 +464,20 @@ const Story = ({ forceRerender, setForceRerender }) => {
         lesson: lesson,
         // lesson: localStorage.getItem('userPracticeState') || 0,
         progress: progressPercentage,
+        milestoneLevel: localStorage.getItem('userCurrentLevel') || 'm0',
+        language: localStorage.getItem('apphomelang') || 'ta',
       }),
+    }).catch(err => {
+      toast({
+        position: 'top',
+        title: `${
+          err?.message === 'Failed to fetch'
+            ? 'Please Check Your Internet Connection'
+            : err?.message
+        }`,
+        status: 'error',
+      });
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     });
   };
 
@@ -368,7 +503,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
       setCurrentWordIndex(0);
     } else {
       setCurrentLine(currentLine + 1);
-      SetTemplate(practiceCompletionCriteria[completionCriteriaIndex]?.template || '')
+      SetTemplate(
+        practiceCompletionCriteria[completionCriteriaIndex]?.template || ''
+      );
     }
   };
 
@@ -377,6 +514,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
       userId: localStorage.getItem('virtualID'),
       sessionId: localStorage.getItem('virtualStorySessionID'),
       points: point,
+      milestoneLevel: localStorage.getItem('userCurrentLevel') || 'm0',
+      language: localStorage.getItem('apphomelang') || 'ta',
     };
 
     try {
@@ -386,10 +525,18 @@ const Story = ({ forceRerender, setForceRerender }) => {
         response.result.totalSessionPoints
       );
       localStorage.setItem('totalUserPoints', response.result.totalUserPoints);
+      localStorage.setItem(
+        'totalLanguagePoints',
+        response.result.totalLanguagePoints
+      );
     } catch (err) {
       toast({
         position: 'top',
-        title: `${err?.message}`,
+        title: `${
+          err?.message === 'Failed to fetch'
+            ? 'Please Check Your Internet Connection'
+            : err?.message
+        }`,
         status: 'error',
       });
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
@@ -417,7 +564,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     return lang_constants[languageCode] || lang_constants['en'];
   }
 
-  const calculateFontSize = (text) => {
+  const calculateFontSize = text => {
     const textLength = text ? text.length : 0;
     const initialFontSize = 38;
     const maxThresholdLength = 300;
@@ -425,11 +572,22 @@ const Story = ({ forceRerender, setForceRerender }) => {
     const minimumFontSize = 18;
 
     const adjustedFontSize = Math.max(
-      initialFontSize - fontSizeDecrement * Math.max(textLength - maxThresholdLength, 0),
+      initialFontSize -
+        fontSizeDecrement * Math.max(textLength - maxThresholdLength, 0),
       minimumFontSize
     );
-  
+
     return adjustedFontSize;
+  };
+
+  const onPracticeNext = () => {
+    fetchApi();
+    setCurrentLine(0);
+    let index = completionCriteriaIndex + 1;
+    setCompletionCriteriaIndex(index);
+    localStorage.setItem('userPracticeState', index);
+    addLessonApi('practice', index, parseInt(progressPercent));
+    setWellDone(false);
   };
 
   return (
@@ -515,42 +673,85 @@ const Story = ({ forceRerender, setForceRerender }) => {
                       // left: '40px',
                     }}
                   >
+                    {/* {jsConfetti.addConfetti({
+          emojis: ['⭐', '✨', '🌟', '👏', '🎉', '🥳', '🎊', '🙌', '🎈', '🏆', '🎆', '🥇'],
+        })} */}
                     <Box p="4">
                       <div style={{ textAlign: 'center' }}>
                         <br />
                         <Box p="4">
                           <VStack>
-                            <div style={{ textAlign: 'center' }}>
-                              <h1 style={{ fontSize: '60px' }}>Well Done </h1>
-                              <br />
-                            </div>
-                            <div>
-                              <img
-                                style={{ height: '40px', cursor: 'pointer' }}
-                                onClick={() => {
-                                  fetchApi();
-                                  setCurrentLine(0);
-                                  let index = completionCriteriaIndex + 1;
-                                  setCompletionCriteriaIndex(index);
-                                  localStorage.setItem(
-                                    'userPracticeState',
-                                    index
-                                  );
-                                  addLessonApi(
-                                    'practice',
-                                    index,
-                                    parseInt(progressPercent)
-                                  );
-                                  setWellDone(false);
-                                }}
-                                src={Next}
-                                alt="try_new"
-                              />
-                            </div>
-                            <div>
-                              <p>Practice More</p>
-                              {/* <button>No</button> */}
-                            </div>
+                            {completionCriteriaIndex ===
+                              practiceCompletionCriteria.findIndex(
+                                criteria => criteria.title === 'S1'
+                              ) -
+                                1 ||
+                            completionCriteriaIndex ===
+                              practiceCompletionCriteria.findIndex(
+                                criteria => criteria.title === 'S2'
+                              ) -
+                                1 ? (
+                              <>
+                                <div className="game-poster-container">
+                                  <div className="left-section">
+                                    <Image
+                                      h={300}
+                                      src={marioImg}
+                                      alt="Mario Image"
+                                    />
+                                  </div>
+                                  <div className="center-section">
+                                    {/* <h1 className="game-title">Welcome to the Game !</h1> */}
+                                    <span className="star-font">⭐</span>
+                                    <span className="badge-heading">🏆</span>
+                                    <span className="star-font">⭐</span>
+
+                                    <div className="game-message">
+                                      <button
+                                        className="btn btn-info start-button"
+                                        onClick={onPracticeNext}
+                                      >
+                                        Start Game {'>'}
+                                      </button>
+                                      {/* <button onClick={onPracticeNext} className="start-button">Start Game</button> */}
+                                    </div>
+                                  </div>
+                                  <div className="right-section">
+                                    <Image
+                                      h={300}
+                                      src={dinoImg}
+                                      alt="Dinosaur Image"
+                                    />
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div style={{ textAlign: 'center' }}>
+                                  <h1 style={{ fontSize: '60px' }}>
+                                    Well Done{' '}
+                                  </h1>
+                                  <br />
+                                </div>
+                                <div>
+                                  <img
+                                    style={{
+                                      height: '40px',
+                                      cursor: 'pointer',
+                                    }}
+                                    onClick={() => {
+                                      onPracticeNext();
+                                      setShowSplashScreen(false);
+                                    }}
+                                    src={Next}
+                                    alt="try_new"
+                                  />
+                                </div>
+                                <div>
+                                  <p>Practice More</p>
+                                </div>
+                              </>
+                            )}
                           </VStack>
                         </Box>
                         {/* <button>No</button> */}
@@ -582,17 +783,22 @@ const Story = ({ forceRerender, setForceRerender }) => {
                             }}
                           >
                             <Box p="4">
-                            <h1
-                              style={{
-                                textAlign: 'center',
-                                fontSize: `${calculateFontSize(post?.contentSourceData[0]?.text)}px`,
-                                whiteSpace: 'break-spaces',
-                                wordWrap: 'break-word',
-                              }}
-                              className="story-line"
-                            >
-                              {post?.contentSourceData[0]?.text}
-                            </h1>
+                              <h1
+                                style={{
+                                  textAlign: 'center',
+                                  fontSize: `${calculateFontSize(
+                                    post?.contentSourceData[0]?.text
+                                  )}px`,
+                                  whiteSpace: 'break-spaces',
+                                  wordWrap: 'break-word',
+                                }}
+                                className="story-line relative-pos"
+                              >
+                                {highlightWords(
+                                  post?.contentSourceData[0]?.text,
+                                  post?.matchedChar
+                                )}
+                              </h1>
 
                               {localStorage.setItem(
                                 'contentText',
@@ -779,29 +985,54 @@ const Story = ({ forceRerender, setForceRerender }) => {
             </>
           ) : posts?.length >= 0 &&
             practiceCompletionCriteria[completionCriteriaIndex]?.template ==
-            'spell-and-check' ? (
-              <>
-                <SpellAndCheck
-                  sourceChars={sourceChars}
-                  targetWords={posts}
-                  handleSuccess={callback => handleSpellAndCheck(callback)}
-                  currentWordIndex={currentWordIndex} 
-                  nextLine={nextLine}
-                  setCurrentWordIndex={setCurrentWordIndex}
-                  isNext={isNext}
-                  setIsNext={setIsNext}
-                  contentType= {(practiceCompletionCriteria[completionCriteriaIndex].criteria === 'char' || practiceCompletionCriteria[completionCriteriaIndex].criteria === 'paragraph') ? 'word': practiceCompletionCriteria[completionCriteriaIndex].criteria}
-                    
-                  
-                  isUserSpeak={isUserSpeak}
-                  isAudioPlay={isAudioPlay}
-                  flag={flag}
-                  playAudio={playAudio}
-                  playTeacherAudio={playTeacherAudio}
-                  pauseAudio={pauseAudio}
-                  audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
-                />
-              </>
+              'spell-and-check' ? (
+            <>
+              <SpellAndCheck
+                sourceChars={sourceChars}
+                targetWords={posts}
+                handleSuccess={callback => handleSpellAndCheck(callback)}
+                currentWordIndex={currentWordIndex}
+                nextLine={nextLine}
+                setCurrentWordIndex={setCurrentWordIndex}
+                isNext={isNext}
+                setIsNext={setIsNext}
+                contentType={
+                  practiceCompletionCriteria[completionCriteriaIndex]
+                    .criteria === 'char' ||
+                  practiceCompletionCriteria[completionCriteriaIndex]
+                    .criteria === 'paragraph'
+                    ? 'word'
+                    : practiceCompletionCriteria[completionCriteriaIndex]
+                        .criteria
+                }
+                isUserSpeak={isUserSpeak}
+                isAudioPlay={isAudioPlay}
+                flag={flag}
+                playAudio={playAudio}
+                playTeacherAudio={playTeacherAudio}
+                pauseAudio={pauseAudio}
+                audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
+              />
+            </>
+          ) : posts?.length >= 0 &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+              'hangman-game' ? (
+            <HangmanGame
+              sourceChars={sourceChars}
+              showSplashScreen={showSplashScreen}
+              setShowSplashScreen={setShowSplashScreen}
+              targetWords={posts}
+              isAudioPlay={isAudioPlay}
+              currentWordIndex={currentWordIndex}
+              setCurrentWordIndex={setCurrentWordIndex}
+              flag={flag}
+              nextLine={nextLine}
+              playAudio={playAudio}
+              playTeacherAudio={playTeacherAudio}
+              pauseAudio={pauseAudio}
+              audioUrl={posts?.[currentLine]?.contentSourceData[0]?.audioUrl}
+              handleSuccess={callback => handleSpellAndCheck(callback)}
+            />
           ) : (
             ''
           )}
