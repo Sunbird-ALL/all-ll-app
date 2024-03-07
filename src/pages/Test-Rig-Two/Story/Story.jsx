@@ -96,10 +96,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
   function highlightWords(sentence, matchedChar) {
     let isFirstImageDisplayed = false;
     const words = sentence.split(' ');
-    function compareLengthDesc(str1, str2) {
+    matchedChar.sort(function(str1, str2) {
       return str2.length - str1.length;
-    }
-  matchedChar.sort(compareLengthDesc);
+      });
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     if (type == 'char' || type == 'word') {
       const word = splitGraphemes(words[0].toLowerCase()).filter(item => item !== '‌' && item !== '' && item !== ' ');
