@@ -1,0 +1,53 @@
+.game-poster-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px; 
+  margin: 0 auto; 
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.left-section{
+  flex: 0 0 auto;
+  margin-right: 50px;
+}
+.right-section {
+  flex: 0 0 auto;
+  margin-left: 50px;
+
+}
+
+.center-section {
+  flex-grow: 1; 
+  text-align: center;
+}
+
+.game-title {
+  font-weight: 600;
+  font-size: 36px;
+  color: #ff5f6d; 
+  margin-bottom: 10px;
+}
+
+.badge-heading {
+  font-size: 50px;
+  color: #ffac33; 
+}
+
+.star-font{
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.start-button {
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.start-button:hover {
+  background-color: #0077cc;
+}
+.game-message{
+  margin-top: 20px;
+}

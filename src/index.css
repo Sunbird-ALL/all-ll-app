@@ -1912,5 +1912,46 @@ p.chakra-text.css-1r7spse {
   margin-top: 0px;
   text-align: center;
   cursor: pointer;
+
 }
+}
+
+@keyframes moveFinger {
+  0% {
+    transform: translateX(0) translateY(0); /* Initial position */
+  }
+  50% {
+    transform: translateX(0px) translateY(+25px); /* Move the finger pointer */
+  }
+  100% {
+    transform: translateX(0) translateY(0); /* Return to the original position */
+  }
+}
+
+
+/* Applying animation to the finger pointer image */
+.finger-pointer {
+  position: absolute;
+  top: -64px;
+  text-align: center;
+  left: 0%;
+  transform: translate(-50%, -50%);
+  animation: moveFinger 1s infinite;
+  rotate: 180deg;
+}
+.finger-pointer-word {
+  position: absolute;
+  display: flex;
+  top: -64px;
+  text-align: center;
+  left: -1.1rem;
+  height: 40px;
+  min-width: 0rem;
+  max-width: 2.4rem;
+  transform: translate(-50%, -50%);
+  animation: moveFinger 1s infinite;
+  rotate: 180deg;
+}
+.relative-pos{
+  position:  relative !important;
 }
