@@ -96,15 +96,19 @@ const Story = ({ forceRerender, setForceRerender }) => {
   function highlightWords(sentence, matchedChar) {
     let isFirstImageDisplayed = false;
     const words = sentence.split(' ');
+    matchedChar.sort(function(str1, str2) {
+      return str2.length - str1.length;
+      });
     let type = practiceCompletionCriteria[completionCriteriaIndex]?.criteria;
     if (type == 'char' || type == 'word') {
-      const word = words[0];
+      const word = splitGraphemes(words[0].toLowerCase()).filter(item => item !== '‌' && item !== '' && item !== ' ');
       let highlightedString = [];
       for (let i = 0; i < word.length; i++) {
         let matchFound = false;
         for (let j = 0; j < matchedChar.length; j++) {
-          const substr = word.substring(i, i + matchedChar[j].length);
-          if (substr === matchedChar[j]) {
+          let length=splitGraphemes(matchedChar[j]).filter(item => item !== '‌' && item !== '' && item !== ' ').length;
+          const substr = word.slice(i, (i + length)).join('');
+          if (substr.includes(matchedChar[j])) {
             highlightedString.push(
               <React.Fragment key={i}>
                 <span
@@ -126,7 +130,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </span>
               </React.Fragment>
             );
-            i += matchedChar[j].length - 1;
+            i += length-1;
             matchFound = true;
             break;
           }
@@ -138,7 +142,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
       return highlightedString;
     } else {
       const highlightedSentence = words.map((word, index) => {
-        const isMatched = matchedChar.some(char => word.includes(char));
+        const isMatched = matchedChar.some(char => word.toLowerCase().includes(char));
         if (isMatched) {
           return (
             <React.Fragment key={index}>
