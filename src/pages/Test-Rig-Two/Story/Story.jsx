@@ -216,6 +216,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   React.useEffect(() => {
     localStorage.setItem('progressData', JSON.stringify(progressData));
   }, [progressData]);
+  
+  useEffect(()=>{
+    setCompletionCriteriaIndex( parseInt(localStorage.getItem('userPracticeState') || 0))
+  },[forceRerender])
 
   const updateProgress = (sessionId, newData) => {
     setProgressData(prevData => ({

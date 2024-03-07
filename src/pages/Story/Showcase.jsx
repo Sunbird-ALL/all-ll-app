@@ -528,32 +528,58 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
             addLessonApi('practice', localStorage.getItem('userPracticeState'), parseInt(progressPercent));
             navigate('/practice')
           }
-          else if(data?.data?.data?.sessionResult === 'fail' && practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'){
+          else if (
+            data?.data?.data?.sessionResult === 'fail' &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S2'
+          ) {
             toast({
               position: 'top',
               duration: '2000',
               title: `Level Reset!! You need to practice more to complete this level.`,
               status: 'error',
-            })
+            });
 
-            localStorage.setItem('userPracticeState', 0)
-            addLessonApi('practice',0, 0);
-            navigate('/practice')
-          }
-          else {
+            localStorage.setItem('userPracticeState', 0);
+            addLessonApi('practice', 0, 0);
+            navigate('/practice');
+          } else if (
+            data?.data?.data?.sessionResult === 'pass' &&
+            practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1'
+          ) {
             toast({
               position: 'top',
               duration: '2000',
               title: `Congratulations! \n
               Your current level has been upgraded`,
-              status: 'success'
-            })
+              status: 'success',
+            });
+            localStorage.setItem(
+              'userPracticeState',
+              parseInt(localStorage.getItem('userPracticeState')) + 1
+            );
+            addLessonApi(
+              'practice',
+              localStorage.getItem('userPracticeState'),
+              parseInt(progressPercent)
+            );
+            navigate('/practice');
+          } else {
+            toast({
+              position: 'top',
+              duration: '2000',
+              title: `Congratulations! \n
+              Your current level has been upgraded`,
+              status: 'success',
+            });
             localStorage.removeItem('progressData');
-            localStorage.setItem('userPracticeState', 0)
-            localStorage.setItem('userCurrentLevel', data?.data?.data?.currentLevel)
+            localStorage.setItem('userPracticeState', 0);
+            localStorage.setItem(
+              'userCurrentLevel',
+              data?.data?.data?.currentLevel
+            );
             fetchMileStone();
             addLessonApi('practice', 0, 0);
-            navigate('/practice')
+            navigate('/practice');
           }
           fetchMileStone();
         });
@@ -572,7 +598,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
       )
         .then(res => {
           return res.json();

@@ -92,16 +92,15 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
 
     }
   };
+  useEffect(()=>{
+    addLessonApi();
+  },[location])
 
 
-  const addLessonApi = (validate)=>{
+  const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
-    const pathnameWithoutSlash =
-      validate === 'validate' ? 'Validate' : location.pathname.slice(1);
-    const percentage =
-      validate === 'validate'
-        ? 0
-        : ((currentLine + 1) / posts?.data?.length) * 100;
+    const pathnameWithoutSlash = location.pathname.slice(1);
+    const percentage = ((currentLine + 1) / posts?.data?.length) * 100 ? ((currentLine + 1) / posts?.data?.length) * 100 : 0;
   fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -223,19 +222,18 @@ const Discovery = ( {forceRerender, setForceRerender}) => {
 
 const addLessonCheck = async (res, resultArray, checkInd) => {
   var newIndex = null;
-  await addLessonApi('validate');
   if(res.currentLevel === 'm1'){
-    navigate('/Validate');
+    navigate('/validate');
   }
 
   if(res.sessionResult === 'pass'){
     if(res.currentLevel === 'm2'){
-      navigate('/Validate');
+      navigate('/validate');
     }
     newIndex = checkInd + 1;
   } else if(res.sessionResult === 'fail'){
     if(checkInd >= 3){
-      navigate('/Validate');
+      navigate('/validate');
     } else {
       newIndex = checkInd - 1;
     }
@@ -247,7 +245,7 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
     setCurrentLine(0)
     navigate(`/discoverylist/discovery/${newCollectionId}`)
   } else {
-    navigate('/Validate');
+    navigate('/validate');
   }
  
 }
