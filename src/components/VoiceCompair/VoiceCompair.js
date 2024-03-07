@@ -12,7 +12,11 @@ import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
 
 const VoiceCompair = props => {
-  const [isAudioPreprocessing,setIsAudioPreprocessing] = useState(process.env.REACT_APP_IS_AUDIOPREPROCESSING === 'true')
+
+  const [isAudioPreprocessing,setIsAudioPreprocessing] = useState(
+  localStorage.getItem('isAudioPreprocessing') === 'true' ? true : false
+);
+
   const [lang_code, set_lang_code] = useState(
     localStorage.getItem('apphomelang')
       ? localStorage.getItem('apphomelang')

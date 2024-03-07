@@ -48,7 +48,6 @@ export default function Login({setIsLoggedIn = false}) {
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
-        handleGetLesson(virtualID)
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -81,25 +80,54 @@ export default function Login({setIsLoggedIn = false}) {
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
+    await fetchMileStone();
+    await handleGetLesson(virtualID)
+  };
+  const fetchMileStone = async () => {
+    try {
+      const response = await fetch(
+        `${
+          process.env.REACT_APP_LEARNER_AI_APP_HOST
+        }/lais/scores/getMilestone/user/${localStorage.getItem(
+          'virtualID'
+        )}?language=${localStorage.getItem('apphomelang')}`
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          localStorage.setItem('userCurrentLevel', data?.data?.milestone_level);
+        });
+    } catch (err) {
+      toast({
+        position: 'top',
+        title: `${
+          err?.message === 'Failed to fetch'
+            ? 'Please Check Your Internet Connection'
+            : err?.message
+        }`,
+        status: 'error',
+      });
+      error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
+    }
   };
 
   const handleGetLesson = (virtualID)=>{
-    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}/${localStorage.getItem('apphomelang')}`)
+    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}?language=${localStorage.getItem('apphomelang')}`)
     .then((res)=>{
       return res.json();
     }).then((data)=>{
       if(data?.result?.result){
-        let milestone = data?.result?.result[0]?.milestone || 'discoveryList';
+        let milestone = data?.result?.result?.milestone || 'discoveryList';
+        localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
         if(milestone === 'showcase'){
-          localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
             navigate(`/showcase`)  
           }
           else if(milestone === 'practice'){
-            localStorage.setItem('userPracticeState', data?.result?.result[0]?.lesson)
             navigate(`/practice`)  
           }
           else if (milestone === 'validate'){
-            localStorage.setItem('validationSession', data?.result?.result[0]?.lesson)
+            localStorage.setItem('validationSession', data?.result?.result?.lesson)
             navigate(`/validate`)
           }
         else{
@@ -152,6 +180,7 @@ export default function Login({setIsLoggedIn = false}) {
                 <InputRightElement h={'full'}>
                   <Button
                     variant={'ghost'}
+                    style={{ top: '-20px' }}
                     onClick={() =>
                       setShowPassword((showPassword) => !showPassword)
                     }

@@ -19,6 +19,7 @@ export default function Validate({forceRerender, setForceRerender}) {
   const [recommededWords, setRecommendedWords] = useState("")
   const [loding, setLoading] = useState(true);
   const [myCurrectChar, setMyCurrentChar] = useState('')
+  const [targetChar, setTargetChar] = useState([])
   const [chars, setCharacter] = useState([])
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const toast = useToast()
@@ -61,6 +62,7 @@ export default function Validate({forceRerender, setForceRerender}) {
           setCharacter(targetChars);
           setCurrentCharIndex(0);
           setMyCurrentChar(targetChars[0]);
+          setTargetChar(targetChars)
           setRecommendedWords(res.data.contentForToken || []);
         })
         .catch(err => {
@@ -93,6 +95,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       const response = await addPointerApi(requestBody);
       localStorage.setItem('totalSessionPoints',response.result.totalSessionPoints)
       localStorage.setItem('totalUserPoints',response.result.totalUserPoints)
+      localStorage.setItem( 'totalLanguagePoints', response.result.totalLanguagePoints);
       // You can update your component state or take other actions as needed
     } catch (err) {
       toast({
@@ -152,11 +155,14 @@ export default function Validate({forceRerender, setForceRerender}) {
 
   const location = useLocation();
 
+  useEffect(() => {
+    addLessonApi();
+  }, []);
   
   const addLessonApi = ()=>{
     const base64url = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api`;
     const pathnameWithoutSlash = location.pathname.slice(1);
-    const percentage = ((currentCharIndex+1) / chars.length) * 100;
+    const percentage = chars.length === 0 ? 0 : ((currentCharIndex+1) / chars.length) * 100;
    fetch(`${base64url}/lesson/addLesson`,{
     method:'POST',
     headers:{
@@ -258,12 +264,12 @@ export default function Validate({forceRerender, setForceRerender}) {
           </Container>
           <section className="c-section">
             <Link to={'/practice'}>
-              <button className='btn btn-info'>
+            <button onClick={() => localStorage.setItem('userPracticeState',0)} className='btn btn-info'>
                 Practice {'>'}
               </button>
             </Link>
           </section>
-        </VStack> : !loding && 
+        </VStack> : !loding && localStorage.getItem('userCurrentLevel') === 'm0' && targetChar.length > 0 && 
           <>
             <Center>
               No character available to validate

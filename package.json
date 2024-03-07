@@ -36,6 +36,7 @@
     "react-speech-kit": "^3.0.1",
     "react-use-window-size": "^1.0.1",
     "reactjs-navbar": "^1.0.2",
+    "split-graphemes": "^0.5.0",
     "web-vitals": "^2.1.4",
     "write-json-file": "^5.0.0"
   },
