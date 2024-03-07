@@ -222,8 +222,15 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [progressData]);
   
   useEffect(()=>{
-    setCompletionCriteriaIndex( parseInt(localStorage.getItem('userPracticeState') || 0))
-  },[forceRerender])
+     try {
+        setCompletionCriteriaIndex(parseInt(localStorage.getItem('userPracticeState') || 0))
+      } catch (error) {
+        console.error(
+          "Error accessing localStorage for 'userPracticeState':",
+          error
+        );
+      }
+    },[forceRerender])
 
   const updateProgress = (sessionId, newData) => {
     setProgressData(prevData => ({

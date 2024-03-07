@@ -49,7 +49,7 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
         handleGetLesson(virtualID)
-        fetchMileStone();
+        await fetchMileStone();
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()

@@ -264,7 +264,7 @@ export default function Validate({forceRerender, setForceRerender}) {
           </Container>
           <section className="c-section">
             <Link to={'/practice'}>
-              <button onClick={ localStorage.setItem('userPracticeState',0)} className='btn btn-info'>
+            <button onClick={() => localStorage.setItem('userPracticeState',0)} className='btn btn-info'>
                 Practice {'>'}
               </button>
             </Link>

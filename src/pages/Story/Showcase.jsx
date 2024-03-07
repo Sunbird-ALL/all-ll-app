@@ -515,7 +515,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
             language: localStorage.getItem('apphomelang') || 'ta'
           }
         )
-        .then(data => {
+        .then( async data => {
           setLoading(false);
           if (data?.data?.data?.sessionResult === 'fail' && practiceCompletionCriteria[completionCriteriaIndex]?.title === 'S1'){
             toast({
@@ -577,11 +577,11 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
               'userCurrentLevel',
               data?.data?.data?.currentLevel
             );
-            fetchMileStone();
+            await  fetchMileStone();
             addLessonApi('practice', 0, 0);
             navigate('/practice');
           }
-          fetchMileStone();
+        await fetchMileStone();
         });
     } catch (err) {
       setLoading(false);
