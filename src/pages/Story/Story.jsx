@@ -277,7 +277,7 @@ const Story = () => {
   useEffect(() => {
 
     if (currentLine === posts?.data?.length) {
-      navigate('/Validate')
+      navigate('/validate')
       setPageNo(pageno + 1)
     }
   }, [currentLine])
