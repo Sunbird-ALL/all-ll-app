@@ -48,8 +48,6 @@ export default function Login({setIsLoggedIn = false}) {
         const virtualID = data.virtualID;
         localStorage.setItem('virtualID', virtualID);
         setVirtualID(virtualID);
-        handleGetLesson(virtualID)
-        await fetchMileStone();
         localStorage.setItem(
           'virtualStorySessionID',
           virtualID + '' + Date.now()
@@ -67,6 +65,8 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
         if (!localStorage.getItem('apphomelang')) localStorage.setItem('apphomelang', 'ta');
+        await fetchMileStone();
+        await handleGetLesson(virtualID)
       } else {
         toast({
           position: 'top',
@@ -119,11 +119,12 @@ export default function Login({setIsLoggedIn = false}) {
     }).then((data)=>{
       if(data?.result?.result){
         let milestone = data?.result?.result?.milestone || 'discoveryList';
-        localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
         if(milestone === 'showcase'){
+          localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
             navigate(`/showcase`)  
           }
           else if(milestone === 'practice'){
+            localStorage.setItem('userPracticeState', data?.result?.result?.lesson)
             navigate(`/practice`)  
           }
           else if (milestone === 'validate'){

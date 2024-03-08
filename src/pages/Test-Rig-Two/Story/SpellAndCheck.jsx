@@ -33,12 +33,14 @@ const SpellAndCheck = ({
   const currentWord = targetWords[currentWordIndex];
   let wordChars = [];
   if (currentWord?.contentSourceData[0]?.text) {
-    wordChars = (contentType === 'word') ? splitGraphemes(currentWord?.contentSourceData[0]?.text).filter(
-      item => item !== '‌' && item !== '' && item !== ' '
-    )
-      : currentWord?.contentSourceData[0]?.text
-        .split(' ')
-        .filter(item => item !== '‌' && item !== '' && item !== ' ');
+    wordChars =
+      contentType === 'word'
+        ? splitGraphemes(currentWord?.contentSourceData[0]?.text).filter(
+            item => item !== '‌' && item !== '' && item !== ' '
+          )
+        : currentWord?.contentSourceData[0]?.text
+            .split(' ')
+            .filter(item => item !== '‌' && item !== '' && item !== ' ');
   }
   const handleDragStart = (e, char) => {
     e.dataTransfer.setData('text/plain', char);
@@ -89,8 +91,9 @@ const SpellAndCheck = ({
     return wordChars.map((char, index) => (
       <div
         key={index}
-        className={`${matchedChars[index] ? 'source-char-disable' : 'source-char'
-          }`}
+        className={`${
+          matchedChars[index] ? 'source-char-disable' : 'source-char'
+        }`}
         onClick={() =>
           matchedChars[index] ? null : handleCharacterClick(index)
         }
@@ -101,20 +104,22 @@ const SpellAndCheck = ({
   };
 
   const renderTargetChars = () => {
-    return wordChars && wordChars.map((char, index) => (
-      <div
-        key={index}
-        style={{ fontSize: '30px', textAlign: 'center' }}
-        className={`target-char ${matchedChars[index] ? 'matched-char' : ''
-          }`}
-      >
-        {matchedChars[index] ? (
-          <div className="">{char}</div>
-        ) : (
-          <div className="empty-box" />
-        )}
-      </div>
-    ));
+    return (
+      wordChars &&
+      wordChars.map((char, index) => (
+        <div
+          key={index}
+          style={{ fontSize: '30px', textAlign: 'center' }}
+          className={`target-char ${matchedChars[index] ? 'matched-char' : ''}`}
+        >
+          {matchedChars[index] ? (
+            <div className="">{char}</div>
+          ) : (
+            <div className="empty-box" />
+          )}
+        </div>
+      ))
+    );
   };
 
   return (
@@ -183,56 +188,56 @@ const SpellAndCheck = ({
             <HStack gap={'2rem'}>
               {audioUrl !== ' '
                 ? isAudioPlay !== 'recording' && (
-                  <VStack>
-                    <div>
-                      {flag ? (
-                        <>
-                          <img
-                            className="play_btn"
-                            src={Speaker}
-                            style={{
-                              height: '72px',
-                              width: '72px',
-                            }}
-                            onClick={() => playTeacherAudio()}
-                            alt="play_audio"
-                          />
-                          <h4
-                            className="text-play m-0 "
-                            style={{
-                              position: 'relative',
-                              textAlign: 'center',
-                            }}
-                          >
-                            Listen
-                          </h4>
-                        </>
-                      ) : (
-                        <>
-                          <img
-                            className="play_btn"
-                            src={MuteSpeaker}
-                            style={{
-                              height: '72px',
-                              width: '72px',
-                            }}
-                            onClick={() => pauseAudio()}
-                            alt="pause_audio"
-                          />
-                          <h4
-                            className="text-play m-0 "
-                            style={{
-                              position: 'relative',
-                              textAlign: 'center',
-                            }}
-                          >
-                            Mute
-                          </h4>
-                        </>
-                      )}
-                    </div>
-                  </VStack>
-                )
+                    <VStack>
+                      <div>
+                        {flag ? (
+                          <>
+                            <img
+                              className="play_btn"
+                              src={Speaker}
+                              style={{
+                                height: '72px',
+                                width: '72px',
+                              }}
+                              onClick={() => playTeacherAudio()}
+                              alt="play_audio"
+                            />
+                            <h4
+                              className="text-play m-0 "
+                              style={{
+                                position: 'relative',
+                                textAlign: 'center',
+                              }}
+                            >
+                              Listen
+                            </h4>
+                          </>
+                        ) : (
+                          <>
+                            <img
+                              className="play_btn"
+                              src={MuteSpeaker}
+                              style={{
+                                height: '72px',
+                                width: '72px',
+                              }}
+                              onClick={() => pauseAudio()}
+                              alt="pause_audio"
+                            />
+                            <h4
+                              className="text-play m-0 "
+                              style={{
+                                position: 'relative',
+                                textAlign: 'center',
+                              }}
+                            >
+                              Mute
+                            </h4>
+                          </>
+                        )}
+                      </div>
+                    </VStack>
+                  )
                 : ''}
             </HStack>
           </div>
@@ -249,18 +254,24 @@ const SpellAndCheck = ({
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {isTryAgain && (
-          <Flex
-            flexDirection={'column'}
-            justifyContent={'center'}
-            alignItems={'center'}
-            textAlign={'center'}
-            onClick={handleTryAgainWord}
-          >
-            <Image height={'52px'} width={'52px'} src={TryAgain} alt="" />
-            <Text>Try Again</Text>
-          </Flex>
-        )}
+        <Flex
+          visibility={isTryAgain ? 'visible' : 'hidden'}
+          flexDirection={'column'}
+          justifyContent={'center'}
+          alignItems={'center'}
+          textAlign={'center'}
+          onClick={handleTryAgainWord}
+        >
+          <Image
+            height={'52px'}
+            width={'52px'}
+            src={TryAgain}
+            alt="Try Again"
+            cursor={'pointer'}
+          />
+          <Text>Try Again</Text>
+        </Flex>
+
         {isNext && (
           <Flex
             flexDirection={'column'}
@@ -274,7 +285,13 @@ const SpellAndCheck = ({
                 : null
             }
           >
-            <Image height={'52px'} width={'52px'} src={Next} alt="" />
+            <Image
+              height={'52px'}
+              width={'52px'}
+              src={Next}
+              alt="Next"
+              cursor={'pointer'}
+            />
             <Text>Next</Text>
           </Flex>
         )}

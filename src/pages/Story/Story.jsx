@@ -289,7 +289,7 @@ const Story = () => {
         <Center className="story-container">
           <div
             style={{
-              boxShadow: '2px 2px 15px 5px grey',
+              boxShadow: '2px 2px 15px 5px #ececec',
               borderRadius: '30px',
             }}
             className="story-item"
