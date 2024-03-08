@@ -50,7 +50,6 @@ export default function Validate({forceRerender, setForceRerender}) {
   };
 
   useEffect(() => {
-    if (!chars.length) {
       setLoading(true);
       axios
         .get(
@@ -74,7 +73,6 @@ export default function Validate({forceRerender, setForceRerender}) {
           })
           error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
         });
-    }
   }, [forceRerender]);
 
   const handleCharMopdal = () => {
@@ -182,7 +180,11 @@ export default function Validate({forceRerender, setForceRerender}) {
 
   return (
     <>
-      <Header active={1} />
+      <Header
+        active={1}
+        forceRerender={forceRerender}
+        setForceRerender={setForceRerender}
+      />
       {/* <button >click me</button> */}
       <div className="main-bg">
       {loding && <Center h='50vh'><Spinner
