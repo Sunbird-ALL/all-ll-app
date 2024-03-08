@@ -626,7 +626,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 ? '#FFDAB9'
                 : 'white'
             }`,
-            boxShadow: '2px 2px 15px 5px grey',
+            marginTop: '20%',
+            boxShadow: '2px 2px 15px 5px #ececec',
             borderRadius: '30px',
             width: 'inherit',
           }}
@@ -1061,7 +1062,15 @@ const Story = ({ forceRerender, setForceRerender }) => {
           </Stepper>
           <Box p={10}>
             <Center>Progress: {parseInt(progressPercent)}%</Center>
-            <Progress colorScheme="green" size="sm" value={progressPercent} />
+            <Progress
+              borderRadius="md"
+              overflow="hidden"
+              boxShadow="0px 4px 4px rgb(236, 236, 236)"
+              marginTop="10px"
+              colorScheme="green"
+              size="md"
+              value={progressPercent}
+            />
           </Box>
         </Box>
       </Container>
