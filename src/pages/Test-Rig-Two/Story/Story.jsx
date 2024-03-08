@@ -463,7 +463,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
         // milestone: 'practice',
         lesson: lesson,
         // lesson: localStorage.getItem('userPracticeState') || 0,
-        progress: progressPercentage,
+        progress: progressPercentage ? progressPercentage : 0,
         milestoneLevel: localStorage.getItem('userCurrentLevel') || 'm0',
         language: localStorage.getItem('apphomelang') || 'ta',
       }),
@@ -482,7 +482,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   React.useEffect(() => {
-    addLessonApi();
+    addLessonApi(
+      'practice',
+      localStorage.getItem('userPracticeState') || 0,
+      parseInt(progressPercent)
+    );
   },[]);
 
   const nextLine = count => {
@@ -1061,8 +1065,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
             ))}
           </Stepper>
           <Box p={10}>
-            <Center>Progress: {parseInt(progressPercent)}%</Center>
-            <Progress
+          <Center>Progress: {parseInt(progressPercent)}%</Center>
+          <Progress
               borderRadius="md"
               overflow="hidden"
               boxShadow="0px 4px 4px rgb(236, 236, 236)"
