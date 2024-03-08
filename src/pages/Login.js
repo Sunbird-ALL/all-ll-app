@@ -65,6 +65,8 @@ export default function Login({setIsLoggedIn = false}) {
         localStorage.setItem('validationSession', '')
         localStorage.setItem('practiceSession', '');
         if (!localStorage.getItem('apphomelang')) localStorage.setItem('apphomelang', 'ta');
+        await fetchMileStone();
+        await handleGetLesson(virtualID)
       } else {
         toast({
           position: 'top',
@@ -80,8 +82,6 @@ export default function Login({setIsLoggedIn = false}) {
       })
       error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
     }
-    await fetchMileStone();
-    await handleGetLesson(virtualID)
   };
   const fetchMileStone = async () => {
     try {
