@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Story.css';
-import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack ,useToast,AlertDialogContent,AlertDialog,AlertDialogOverlay,AlertDialogHeader,AlertDialogBody,AlertDialogFooter} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, HStack, Image, Spinner, Text, VStack ,useToast,AlertDialogContent,AlertDialog,AlertDialogOverlay,AlertDialogHeader,AlertDialogBody,AlertDialogFooter, useMediaQuery} from '@chakra-ui/react';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
 // import Storyjson from '../Story/story1.json';
 import play from '../../assests/Images/play-img.png';
@@ -54,6 +54,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
   const [isDataOfLesson , setDataOfLesson] = useState('');
   const [isResultArray,setResultArray] = useState('');
   const [isCheckInd,setCheckInd] = useState('');
+  const [is1366x768] = useMediaQuery("(min-width: 1000px) and (max-width: 1416px)");
   React.useEffect(() => {
     if (voiceText == '-') {
       alert("Sorry I couldn't hear a voice. Could you please speak again?");
@@ -474,9 +475,8 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
       />
       {!(currentLine === posts?.data?.length) && (
         <Center pt={'10vh'} className="bg">
-          <div
+          <Box mt={is1366x768? 4:20}
             style={{
-              marginTop: '5%',
               boxShadow: '2px 2px 15px 5px #ececec',
               borderRadius: '30px',
               width: '75vw',
@@ -649,7 +649,7 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
                 )}
               </>
             )}
-          </div>
+          </Box>
         </Center>
       )}
       {isDialogOpen && currentLine === posts?.data?.length && (
