@@ -22,6 +22,7 @@ import {
   Stepper,
   Text,
   VStack,
+  useMediaQuery,
   useToast,
 } from '@chakra-ui/react';
 import VoiceCompair from '../../../components/VoiceCompair/VoiceCompair';
@@ -598,6 +599,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
     setWellDone(false);
   };
 
+  const [is1366x768] = useMediaQuery("(min-width: 1000px) and (max-width: 1416px)");
+
   return (
     <>
       <Header
@@ -605,7 +608,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
         forceRerender={forceRerender}
         setForceRerender={setForceRerender}
       />
-      <Container mt={20} w={'75vw'} className="story-container">
+      <Container mt={is1366x768? 0:20} w={'75vw'} className="story-container">
         <Center
           minH={'50vh'}
           style={{
@@ -1046,7 +1049,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
             ''
           )}
         </Center>
-        <Box paddingTop={10}>
+        <Box paddingTop={is1366x768? 4:10}>
           <Stepper
             size="md"
             colorScheme="green"
@@ -1064,7 +1067,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
               </Step>
             ))}
           </Stepper>
-          <Box p={10}>
+          <Box p={is1366x768? 4:10}>
           <Center>Progress: {parseInt(progressPercent)}%</Center>
           <Progress
               borderRadius="md"

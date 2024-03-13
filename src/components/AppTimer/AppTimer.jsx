@@ -17,6 +17,7 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import TimerLogo from '../../assests/Images/timer.png';
 import PowerLogo from '../../assests/Images/power_logo.png';
@@ -145,16 +146,17 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
         : 'black',
   };
 
+  const [is1366x768] = useMediaQuery("(min-width: 1000px) and (max-width: 1416px)");
+
   return (
-    <div
+    <Box
+      w={is1366x768?"99%":"100%"}
       style={{
         position: 'absolute',
-        top: '75px',
+        top: '70px',
         textAlign: 'right',
         fontSize: '24px',
         fontWeight: 'bold',
-        // padding: '10px',
-        width: '100%',
         padding: ' 0 10px',
         borderRadius: '10px',
         overflow: 'hidden',
@@ -279,7 +281,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
           </>
         </Flex>
       )}
-    </div>
+    </Box>
   );
 };
 

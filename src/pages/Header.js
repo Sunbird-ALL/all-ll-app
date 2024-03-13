@@ -69,7 +69,8 @@ export default function Header({
     count: steps.length,
   });
   const toast = useToast();
-
+  const [is1366x768] = useMediaQuery("(min-width: 1000px) and (max-width: 1416px)");
+  
   const setNavigationToRoute = function (a) {
     if (
       (tabs[a].name === 'Discover' || tabs[a].name === 'Validate') &&
@@ -92,7 +93,7 @@ export default function Header({
     <>
       <Box
         h="100%"
-        w="100vw"
+        w={is1366x768?"99.5%":"100%"}
         style={{
           background: '#fff',
           background: '#fff',
@@ -103,7 +104,7 @@ export default function Header({
           {/* <Box p={1}>
             <TabCard naviagteTo={(a) => navigate(a)} />
           </Box> */}
-          <Box p={3} w={'100vw'}>
+          <Box p={3} w={is1366x768? '90vw':'100vw'}>
             <Stepper size="lg" index={activeStep}>
               {steps.map((step, index) => (
                 <Step
