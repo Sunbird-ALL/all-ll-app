@@ -153,7 +153,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
       w={is1366x768?"99%":"100%"}
       style={{
         position: 'absolute',
-        top: '75px',
+        top: '70px',
         textAlign: 'right',
         fontSize: '24px',
         fontWeight: 'bold',
