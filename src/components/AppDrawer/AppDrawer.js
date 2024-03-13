@@ -289,6 +289,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
                     <Radio value="en">English</Radio>
                     <Radio value="kn">ಕನ್ನಡ</Radio>
                     <Radio value="ta">தமிழ்</Radio>
+                    <Radio value="hi">हिंदी</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
