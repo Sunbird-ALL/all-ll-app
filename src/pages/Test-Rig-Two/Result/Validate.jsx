@@ -170,7 +170,7 @@ export default function Validate({forceRerender, setForceRerender}) {
         userId : localStorage.getItem('virtualID'),
         sessionId : localStorage.getItem('virtualStorySessionID'),
         milestone : 'validate',
-        lesson : localStorage.getItem('validationSession'),
+        lesson : 0,
         progress:percentage,
         milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
         language:localStorage.getItem('apphomelang')|| 'ta'

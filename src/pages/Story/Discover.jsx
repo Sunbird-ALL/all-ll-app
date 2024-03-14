@@ -110,7 +110,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
         sessionId : localStorage.getItem('virtualStorySessionID'),
         // milestone : 'discovery',
         milestone : pathnameWithoutSlash,
-        lesson : localStorage.getItem('storyTitle'),
+        lesson : 0,
         progress:percentage,
         milestoneLevel:localStorage.getItem('userCurrentLevel')|| 'm0',
         language:localStorage.getItem('apphomelang')|| 'ta'
