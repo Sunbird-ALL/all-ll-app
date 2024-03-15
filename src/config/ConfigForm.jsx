@@ -73,9 +73,9 @@ const ConfigForm = () => {
                 >
                   <HStack>
                     {' '}
-                    <Radio value="spell-and-check">spell&check</Radio>
+                    <Radio value="spell-and-check">Spell Check</Radio>
                     <Radio value="simple">Simple</Radio>
-                    <Radio value="hangman-game">hangman</Radio>
+                    <Radio value="hangman-game">Hangman</Radio>
                   </HStack>
                 </RadioGroup>
               </HStack>
