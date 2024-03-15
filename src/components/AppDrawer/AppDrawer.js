@@ -212,6 +212,8 @@ function AppDrawer({ forceRerender, setForceRerender }) {
           .then(data => {
             setLessonRec(data?.result?.result?.milestone || 'discoverylist');
             setLesson(data?.result?.result?.lesson || 0)
+            setLevel(data?.result?.result?.milestoneLevel || 'm0');
+            localStorage.setItem('userCurrentLevel', data?.result?.result?.milestoneLevel || 'm0')
             localStorage.setItem(
               'userPracticeState',
               data?.result?.result?.lesson || 0
@@ -226,7 +228,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   const handleSave = () => {
     onClose();
     handleNavigate();
-    setForceRerender(!forceRerender);
+    setForceRerender(!forceRerender); 
     fetchDataFromApi();
   };
   return (
