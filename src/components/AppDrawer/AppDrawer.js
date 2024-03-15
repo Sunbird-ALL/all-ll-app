@@ -212,6 +212,8 @@ function AppDrawer({ forceRerender, setForceRerender }) {
           .then(data => {
             setLessonRec(data?.result?.result?.milestone || 'discoverylist');
             setLesson(data?.result?.result?.lesson || 0)
+            setLevel(data?.result?.result?.milestoneLevel || 'm0');
+            localStorage.setItem('userCurrentLevel', data?.result?.result?.milestoneLevel || 'm0')
             localStorage.setItem(
               'userPracticeState',
               data?.result?.result?.lesson || 0
@@ -226,7 +228,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   const handleSave = () => {
     onClose();
     handleNavigate();
-    setForceRerender(!forceRerender);
+    setForceRerender(!forceRerender); 
     fetchDataFromApi();
   };
   return (
@@ -395,7 +397,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
                   <h2>
                     <AccordionButton>
                     <Box as="span" flex='1' textAlign='left'>
-                        <Text as={'b'}>Practice config </Text>
+                        <Text as={'b'}>Practice Config </Text>
                       </Box>
                       <AccordionIcon />
                     </AccordionButton>
