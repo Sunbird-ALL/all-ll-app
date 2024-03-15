@@ -413,28 +413,11 @@ const Story = ({ forceRerender, setForceRerender }) => {
 
   const pauseAudio = () => {
     interactCall('pauseAudio', 'practice', 'DT', 'PAUSE');
-    const contentId = posts?.[currentLine]?.contentId;
-    var audio = new Audio(
-      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
-    );
-
-    audio.addEventListener('canplaythrough', () => {
-      set_temp_audio(
-        new Audio(
-          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
-        )
-      );
-    });
-    audio.addEventListener('error', () => {
-      toast({
-        position: 'top',
-        title: 'Audio is not available',
-        duration: 2000,
-        status: 'error',
-      });
-    });
+  if (temp_audio !== null) {
+    temp_audio.pause();
+    setFlag(!false);
+    }
   };
-
   const handleSpellAndCheck = callback => {
     SetTemplate('simple');
     callback();
