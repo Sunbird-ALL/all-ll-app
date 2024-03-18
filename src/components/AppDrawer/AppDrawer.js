@@ -72,56 +72,40 @@ function AppDrawer({ forceRerender, setForceRerender }) {
     }
   }, []);
 
-  React.useEffect(() => {
-    localStorage.setItem('discoveryStatus', isDiscoveryEnabled ? 'enabled' : 'disabled');
-  }, [isDiscoveryEnabled]); 
-
-  React.useEffect(() => {
+  const handleLocalStorageValue = ()=>{
+    localStorage.setItem('apphomelang', value);
+    localStorage.setItem('validateLimit', validateLimit);
+    localStorage.setItem('discoveryLimit', discoveryLimit);
+    localStorage.setItem('contentPracticeLimit', contentPracticeLimit);
+    localStorage.setItem('contentTargetLimit', contentTargetLimit);
     localStorage.setItem('isAudioPreprocessing', isAudioPreprocessingEnabled ? true : false);
-  }, [isAudioPreprocessingEnabled]); 
+    localStorage.setItem('discoveryStatus', isDiscoveryEnabled ? 'enabled' : 'disabled');
+    localStorage.setItem('userCurrentLevel', level)
+    localStorage.setItem('validationSession', validationSession);
+    localStorage.setItem('practiceSession', practiceSession);
+    fetchDataFromApi(value);
+  }
+
+  const handleModalCloseWithoutSave = ()=>{
+    setValue(localStorage.getItem('apphomelang'))
+    setValidateLimit(localStorage.getItem('validateLimit'))
+    setDiscoveryLimit(localStorage.getItem('discoveryLimit'));
+    setContentPracticeLimit(localStorage.getItem('contentPracticeLimit'));
+    setContentTargetLimit(localStorage.getItem('contentTargetLimit'));
+    setAudioPreprocessingStatus(localStorage.getItem('isAudioPreprocessing') === 'true'?true:false);
+    setDiscoveryStatus(localStorage.getItem('discoveryStatus') === 'enabled'? true : false);
+    setLevel(localStorage.getItem('userCurrentLevel'));
+    setPracticeSession(localStorage.getItem('practiceSession'))
+    setValidationSession(localStorage.getItem('validationSession'));
+    fetchDataFromApi(value);
+  }
 
   React.useEffect(() => {
     if (value) {
-      localStorage.setItem('apphomelang', value);
       handleGetLesson();
+      fetchDataFromApi(value);
     }
   }, [value]);
-
-  React.useEffect(() => {
-    if (validateLimit) {
-      localStorage.setItem('validateLimit', validateLimit);
-    }
-  }, [validateLimit]);
-
-  React.useEffect(() => {
-    if (discoveryLimit) {
-      localStorage.setItem('discoveryLimit', discoveryLimit);
-    }
-  }, [discoveryLimit]);
-
-  React.useEffect(() => {
-    if (contentPracticeLimit) {
-      localStorage.setItem('contentPracticeLimit', contentPracticeLimit);
-    }
-  }, [contentPracticeLimit]);
-
-  React.useEffect(() => {
-    if (contentTargetLimit) {
-      localStorage.setItem('contentTargetLimit', contentTargetLimit);
-    }
-  }, [contentTargetLimit]);
-
-  React.useEffect(() => {
-    if (validationSession) {
-      localStorage.setItem('validationSession', validationSession);
-    }
-  }, [validationSession]);
-
-  React.useEffect(() => {
-    if (practiceSession) {
-      localStorage.setItem('practiceSession', practiceSession);
-    }
-  }, [practiceSession]);
 
   React.useEffect(() => {
     fetchApi();
@@ -130,7 +114,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${value}`
       )
         .then(res => {
           return res.json();
@@ -158,10 +142,9 @@ function AppDrawer({ forceRerender, setForceRerender }) {
     }
   };
 
-    const fetchDataFromApi = async () => {
+    const fetchDataFromApi = async (lang) => {
         try {
-          const result = await fetchPointerApi();
-  
+          const result = await fetchPointerApi(lang);
           if (result && result.result) {
             localStorage.setItem(
               'totalSessionPoints',
@@ -204,7 +187,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
             process.env.REACT_APP_LEARNER_AI_APP_HOST
           }/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem(
             'virtualID'
-          )}?language=${localStorage.getItem('apphomelang')}`
+          )}?language=${value}`
         )
           .then(res => {
             return res.json();
@@ -228,8 +211,8 @@ function AppDrawer({ forceRerender, setForceRerender }) {
   const handleSave = () => {
     onClose();
     handleNavigate();
-    setForceRerender(!forceRerender); 
-    fetchDataFromApi();
+    setForceRerender(!forceRerender);
+    handleLocalStorageValue()
   };
   return (
     <>
@@ -249,7 +232,10 @@ function AppDrawer({ forceRerender, setForceRerender }) {
       <Drawer
         isOpen={isOpen}
         placement="right"
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          handleModalCloseWithoutSave();
+        }}
         size={'md'}
         finalFocusRef={btnRef}
       >
@@ -328,24 +314,26 @@ function AppDrawer({ forceRerender, setForceRerender }) {
                   />
                 </HStack>
                 <RadioGroup onChange={setDiscoveryLimit} value={discoveryLimit}>
-                <HStack spacing='4'>
+                  <HStack spacing="4">
                     <span>Limit:</span>
-                      <Radio value='5'>5</Radio>
-                    <Radio value='10'>10</Radio>
-                    <Radio value='15'>15</Radio>
+                    <Radio value="5">5</Radio>
+                    <Radio value="10">10</Radio>
+                    <Radio value="15">15</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
               <Divider />
               <FormControl>
-              <FormLabel><Text as={'b'} >Validation </Text></FormLabel>
+                <FormLabel>
+                  <Text as={'b'}>Validation </Text>
+                </FormLabel>
                 <RadioGroup onChange={setValidateLimit} value={validateLimit}>
-                <HStack spacing='4'>
+                  <HStack spacing="4">
                     <span>Limit:</span>
-                    <Radio value='5'>5</Radio>
-                    <Radio value='10'>10</Radio>
-                    <Radio value='15'>15</Radio>
-                    <Radio value='0'>ALL</Radio>
+                    <Radio value="5">5</Radio>
+                    <Radio value="10">10</Radio>
+                    <Radio value="15">15</Radio>
+                    <Radio value="0">ALL</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
@@ -353,50 +341,74 @@ function AppDrawer({ forceRerender, setForceRerender }) {
                 <HStack>
                   <div>Session ID:</div>
                   <div>
-                  <Select placeholder='Select option' value={validationSession} onChange={(event) => setValidationSession(event.target.value)}>
-                      {PreviousUserSessions?.map((session, ind) =>
-                        <option key={ind} value={session}>{session}</option>
-                      )}
+                    <Select
+                      placeholder="Select option"
+                      value={validationSession}
+                      onChange={event =>
+                        setValidationSession(event.target.value)
+                      }
+                    >
+                      {PreviousUserSessions?.map((session, ind) => (
+                        <option key={ind} value={session}>
+                          {session}
+                        </option>
+                      ))}
                     </Select>
                   </div>
                 </HStack>
               </FormControl>
               <Divider />
               <FormControl>
-              <FormLabel><Text as={'b'} > Practice </Text></FormLabel>
-                <RadioGroup onChange={setContentPracticeLimit} value={contentPracticeLimit}>
-                  <HStack spacing='4'>
+                <FormLabel>
+                  <Text as={'b'}> Practice </Text>
+                </FormLabel>
+                <RadioGroup
+                  onChange={setContentPracticeLimit}
+                  value={contentPracticeLimit}
+                >
+                  <HStack spacing="4">
                     <span>Content Limit:</span>
-                    <Radio value='5'>5</Radio>
-                    <Radio value='10'>10</Radio>
-                    <Radio value='15'>15</Radio>
+                    <Radio value="5">5</Radio>
+                    <Radio value="10">10</Radio>
+                    <Radio value="15">15</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
 
               <FormControl>
-              <RadioGroup onChange={setContentTargetLimit} value={contentTargetLimit}>
-                  <HStack spacing='4'>
+                <RadioGroup
+                  onChange={setContentTargetLimit}
+                  value={contentTargetLimit}
+                >
+                  <HStack spacing="4">
                     <span>Target Limit:</span>
-                    <Radio value='5'>5</Radio>
-                    <Radio value='10'>10</Radio>
-                    <Radio value='15'>15</Radio>
+                    <Radio value="5">5</Radio>
+                    <Radio value="10">10</Radio>
+                    <Radio value="15">15</Radio>
                   </HStack>
                 </RadioGroup>
               </FormControl>
               <HStack>
                 <div>Session ID:</div>
-                <div><Select placeholder='Select option' value={practiceSession} onChange={(event) => setPracticeSession(event.target.value)}>
-                  {PreviousUserSessions?.map((session, ind) =>
-                    <option key={ind} value={session}>{session}</option>
-                  )}
-                </Select></div>
+                <div>
+                  <Select
+                    placeholder="Select option"
+                    value={practiceSession}
+                    onChange={event => setPracticeSession(event.target.value)}
+                  >
+                    {PreviousUserSessions?.map((session, ind) => (
+                      <option key={ind} value={session}>
+                        {session}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
               </HStack>
               <Accordion allowMultiple>
                 <AccordionItem>
                   <h2>
                     <AccordionButton>
-                    <Box as="span" flex='1' textAlign='left'>
+                      <Box as="span" flex="1" textAlign="left">
                         <Text as={'b'}>Practice Config </Text>
                       </Box>
                       <AccordionIcon />
@@ -406,13 +418,19 @@ function AppDrawer({ forceRerender, setForceRerender }) {
                     <ConfigForm />
                   </AccordionPanel>
                 </AccordionItem>
-
               </Accordion>
             </Stack>
           </DrawerBody>
 
           <DrawerFooter borderTopWidth="1px">
-            <Button variant="outline" mr={3} onClick={onClose}>
+            <Button
+              variant="outline"
+              mr={3}
+              onClick={() => {
+                onClose();
+                handleModalCloseWithoutSave();
+              }}
+            >
               Cancel
             </Button>
             <Button onClick={() => handleSave()} colorScheme="blue">
@@ -422,7 +440,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
         </DrawerContent>
       </Drawer>
     </>
-  )
+  );
 }
 
 export default AppDrawer;
