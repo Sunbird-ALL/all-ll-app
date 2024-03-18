@@ -64,7 +64,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     const fetchDataFromApi = async () => {
       try {
-        const result = await fetchPointerApi();
+        const result = await fetchPointerApi(localStorage.getItem('apphomelang'));
 
         if (result && result.result) {
           localStorage.setItem(
