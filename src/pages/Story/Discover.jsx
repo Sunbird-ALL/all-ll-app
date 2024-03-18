@@ -209,8 +209,9 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
         }
       )
       .then(async res => {
-        if (res.data.status === 'success') {
+        if (res.data.status === 'success') {     
           setSessionResult(res.data.data.sessionResult);
+          localStorage.setItem("userCurrentLevel",res.data.data.currentLevel)
           setPercentage(res.data.data.percentage);
           setDataOfLesson(res.data.data);
           setResultArray(resultArray);
