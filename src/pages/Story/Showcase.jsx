@@ -380,8 +380,8 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
             res.data.createScoreData.session.missing_token_scores.length;
           const previousSessionData = res?.data?.createScoreData.session;
 
+          setPreviousData(previousSessionData);
           if (!isRetry) {
-            setPreviousData(previousSessionData);
             setTotalConfidenceScoresLength(
               prevTotalConfidenceScoresLength =>
                 prevTotalConfidenceScoresLength + confidenceScoresLength
@@ -928,10 +928,11 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
                           </div>
                           <div style={{ margin: '20px', textAlign: 'center' }}>
                             <img
-                              style={{ height: '40px', cursor: 'pointer' }}
-                              onClick={prevLine}
-                              src={retry}
-                              alt="retry-again"
+                             className={previousData.confidence_scores.length > 0 ? 'disabled-img' : ''}
+                             style={{ height: '40px', cursor: 'pointer' }}
+                            onClick={previousData.confidence_scores.length === 0 ? prevLine : undefined}
+                            src={retry}
+                            alt="retry-again"
                             />
                             <p style={{ fontSize: '18px' }}>Try Again</p>
                           </div>
