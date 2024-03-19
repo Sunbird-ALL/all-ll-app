@@ -219,3 +219,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+.disabled-img {
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
