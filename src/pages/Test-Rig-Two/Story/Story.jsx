@@ -302,15 +302,15 @@ const Story = ({ forceRerender, setForceRerender }) => {
           );
           setLoading(false);
         });
-      setLoading(false);
-      setUserSpeak(false);
-    } catch (err) {
+        setLoading(false);
+        setUserSpeak(false);
+      } catch (err) {
       toast({
         position: 'top',
         title: `${
           err?.message === 'Failed to fetch'
-            ? 'Please Check Your Internet Connection'
-            : err?.message
+          ? 'Please Check Your Internet Connection'
+          : err?.message
         }`,
         status: 'error',
       });
@@ -756,7 +756,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Flex>
               </Center>
             </>
-          ) : posts && template == 'simple' ? (
+          ) : posts && practiceCompletionCriteria[completionCriteriaIndex]?.template ===
+          'simple' ? (
             <>
               <VStack>
                 <Box>
