@@ -22,7 +22,7 @@ import { interactCall } from '../../../../services/callTelemetryIntract';
 const HangmanGame = ({
   sourceChars = [],
   targetWords = [],
-  playAudio,
+  playTeacherAudio,
   pauseAudio,
   flag,
   isAudioPlay,
@@ -468,7 +468,7 @@ const HangmanGame = ({
                         <>
                           <img
                             className="play_btn"
-                            onClick={() => pauseAudio()}
+                            onClick={() => playTeacherAudio()}
                             src={play}
                             style={{ height: '72px', width: '72px' }}
                             alt="play_audio"
@@ -489,7 +489,7 @@ const HangmanGame = ({
                             className="play_btn"
                             src={pause}
                             style={{ height: '72px', width: '72px' }}
-                            onClick={() => playAudio()}
+                            onClick={() => pauseAudio()}
                             alt="pause_audio"
                           />
                           <h4

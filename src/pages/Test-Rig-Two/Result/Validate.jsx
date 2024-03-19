@@ -114,7 +114,7 @@ export default function Validate({forceRerender, setForceRerender}) {
         position: 'top',
         title: `Bingo! \n
         ${(currentCharIndex >= chars.length - 1)? 'Lets Practice More!' : 'Your Character recognition skills are on point. Way to go!'} `,
-        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 500,
+        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 1500,
         status: 'success'
       })
     }
@@ -123,7 +123,7 @@ export default function Validate({forceRerender, setForceRerender}) {
         position: 'top',
         title: `No problem at all -  \n
         ${(currentCharIndex >= chars.length - 1)? 'Lets Practice More!' : 'Character recognition can be tricky, but you are learning!'} `,
-        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 500,
+        duration: (currentCharIndex >= chars.length - 1) ? 2000 : 1500,
         status: 'info'
       })
     }
