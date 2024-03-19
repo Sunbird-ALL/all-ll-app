@@ -29,6 +29,7 @@ const SpellAndCheck = ({
   const [matchedChars, setMatchedChars] = useState([]);
   const [failStack, setFailStack] = useState([]);
   const [isTryAgain, setIsTryAgain] = useState(false);
+  const [hightlightChar,setHightlightChar] = useState(0)
 
   const currentWord = targetWords[currentWordIndex];
   let wordChars = [];
@@ -47,7 +48,8 @@ const SpellAndCheck = ({
   };
 
   useEffect(() => {
-    if (matchedChars.length === wordChars.length) {
+    const filteredArr1Length = matchedChars.filter(element => element !== undefined).length;
+    if (filteredArr1Length === wordChars.length) {
       // handleSuccess(handleNextWord);
       setIsNext(true);
       setIsTryAgain(true);
@@ -73,18 +75,25 @@ const SpellAndCheck = ({
     // nextLine();
     setMatchedChars([]);
     setFailStack([]);
+    setHightlightChar(0)
   };
-
+  
   const handleTryAgainWord = () => {
     setMatchedChars([]);
     setFailStack([]);
     setIsTryAgain(false);
     setIsNext(false);
+    setHightlightChar(0)
   };
-
+  
   const handleCharacterClick = index => {
-    const char = wordChars[index];
-    setMatchedChars(prevMatchedChars => [...prevMatchedChars, char]);
+    if (index === matchedChars.length) {
+      setHightlightChar(matchedChars.length+1)
+      const char = wordChars[index];
+      const newMatchedChars = [...matchedChars];
+      newMatchedChars[index] = char;
+      setMatchedChars(newMatchedChars);
+    }
   };
 
   const renderSourceChars = () => {
@@ -92,7 +101,7 @@ const SpellAndCheck = ({
       <div
         key={index}
         className={`${
-          matchedChars[index] ? 'source-char-disable' : 'source-char'
+          matchedChars[index] ? 'source-char-disable' : hightlightChar === index? 'source-char':'hightlight-source-char'
         }`}
         onClick={() =>
           matchedChars[index] ? null : handleCharacterClick(index)
@@ -188,56 +197,56 @@ const SpellAndCheck = ({
             <HStack gap={'2rem'}>
               {audioUrl !== ' '
                 ? isAudioPlay !== 'recording' && (
-                    <VStack>
-                      <div>
-                        {flag ? (
-                          <>
-                            <img
-                              className="play_btn"
-                              src={Speaker}
-                              style={{
-                                height: '72px',
-                                width: '72px',
-                              }}
-                              onClick={() => playTeacherAudio()}
-                              alt="play_audio"
-                            />
-                            <h4
-                              className="text-play m-0 "
-                              style={{
-                                position: 'relative',
-                                textAlign: 'center',
-                              }}
-                            >
-                              Listen
-                            </h4>
-                          </>
-                        ) : (
-                          <>
-                            <img
-                              className="play_btn"
-                              src={MuteSpeaker}
-                              style={{
-                                height: '72px',
-                                width: '72px',
-                              }}
-                              onClick={() => pauseAudio()}
-                              alt="pause_audio"
-                            />
-                            <h4
-                              className="text-play m-0 "
-                              style={{
-                                position: 'relative',
-                                textAlign: 'center',
-                              }}
-                            >
-                              Mute
-                            </h4>
-                          </>
-                        )}
-                      </div>
-                    </VStack>
-                  )
+                  <VStack>
+                  <div>
+                    {flag ? (
+                      <>
+                        <img
+                          className="play_btn"
+                          src={Speaker}
+                          style={{
+                            height: '72px',
+                            width: '72px',
+                          }}
+                          onClick={() => playTeacherAudio()}
+                          alt="play_audio"
+                        />
+                        <h4
+                          className="text-play m-0 "
+                          style={{
+                            position: 'relative',
+                            textAlign: 'center',
+                          }}
+                        >
+                          Listen
+                        </h4>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          className="play_btn"
+                          src={MuteSpeaker}
+                          style={{
+                            height: '72px',
+                            width: '72px',
+                          }}
+                          onClick={() => pauseAudio()}
+                          alt="pause_audio"
+                        />
+                        <h4
+                          className="text-play m-0 "
+                          style={{
+                            position: 'relative',
+                            textAlign: 'center',
+                          }}
+                        >
+                          Mute
+                        </h4>
+                      </>
+                    )}
+                  </div>
+                </VStack>
+              )
                 : ''}
             </HStack>
           </div>
