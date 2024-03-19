@@ -429,8 +429,9 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
       .catch(err => {
         toast({
           position: 'top',
-          title: `${err?.message}`,
-          status: 'error',
+          title: "Please speak louder and clear",
+          status: 'success',
+          duration: 1000,
         });
         error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
 
