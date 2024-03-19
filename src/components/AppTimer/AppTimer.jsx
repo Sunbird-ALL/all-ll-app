@@ -26,6 +26,7 @@ import MoneyBag from '../../assests/Images/Points.png';
 import EngIcon from '../../assests/Images/english-icon.svg';
 import TamilIcon from '../../assests/Images/tamil-icon.svg';
 import KanndaIcon from '../../assests/Images/kannada-icon.svg';
+import HindiIcon from '../../assests/Images/hindi-icon.svg';
 
 const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
   const [timer, setTimer] = useState(0);
@@ -150,7 +151,7 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
 
   return (
     <Box
-      w={is1366x768?"99%":"100%"}
+      w={is1366x768 ? '99%' : '100%'}
       style={{
         position: 'absolute',
         top: '70px',
@@ -237,6 +238,8 @@ const AppTimer = ({ isLoggedIn, setIsLoggedIn }) => {
                         ? EngIcon
                         : localStorage.getItem('apphomelang') === 'kn'
                         ? KanndaIcon
+                        : localStorage.getItem('apphomelang') === 'hi'
+                        ? HindiIcon
                         : TamilIcon
                     }
                   />
