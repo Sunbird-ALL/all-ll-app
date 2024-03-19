@@ -573,7 +573,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const onPracticeNext = () => {
-    fetchApi();
     setCurrentLine(0);
     let index = completionCriteriaIndex + 1;
     setCompletionCriteriaIndex(index);
