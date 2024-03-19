@@ -83,7 +83,6 @@ function AppDrawer({ forceRerender, setForceRerender }) {
     localStorage.setItem('userCurrentLevel', level)
     localStorage.setItem('validationSession', validationSession);
     localStorage.setItem('practiceSession', practiceSession);
-    fetchDataFromApi(value);
   }
 
   const handleModalCloseWithoutSave = ()=>{
@@ -97,15 +96,8 @@ function AppDrawer({ forceRerender, setForceRerender }) {
     setLevel(localStorage.getItem('userCurrentLevel'));
     setPracticeSession(localStorage.getItem('practiceSession'))
     setValidationSession(localStorage.getItem('validationSession'));
-    fetchDataFromApi(value);
   }
 
-  React.useEffect(() => {
-    if (value) {
-      handleGetLesson();
-      fetchDataFromApi(value);
-    }
-  }, [value]);
 
   React.useEffect(() => {
     fetchApi();
@@ -166,7 +158,7 @@ function AppDrawer({ forceRerender, setForceRerender }) {
         }
       };
 
-      const handleNavigate = () => {
+      const handleNavigate = (lessonRec) => {
         if (lessonRec) {
           if (lessonRec === 'showcase') {
             navigate(`/showcase`);
@@ -205,12 +197,14 @@ function AppDrawer({ forceRerender, setForceRerender }) {
               'lessonProgressPercent',
               data?.result?.result?.progress || 0
             );
+            handleNavigate(data?.result?.result?.milestone || 'discoverylist')
+            fetchDataFromApi(value)
           });
       };
 
   const handleSave = () => {
     onClose();
-    handleNavigate();
+    handleGetLesson()
     setForceRerender(!forceRerender);
     handleLocalStorageValue()
   };
