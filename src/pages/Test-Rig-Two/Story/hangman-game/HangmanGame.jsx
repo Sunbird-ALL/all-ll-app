@@ -65,7 +65,7 @@ const HangmanGame = ({
   }, [word]);
 
   const resetGame = () => {
-    const randomWord = words[currentWordIndex];
+    const randomWord = words?.[currentWordIndex];
     setWord(randomWord?.toLowerCase());
     setGuessedWord(
       Array(
@@ -78,7 +78,7 @@ const HangmanGame = ({
             item !== '.' &&
             item !== '﻿'
         )?.length
-      ).fill('_')
+      )?.fill('_')
     );
 
     setHint(randomWord?.length - 1);

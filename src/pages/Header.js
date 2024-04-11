@@ -61,6 +61,9 @@ export default function Header({
   active,
   forceRerender = false,
   setForceRerender = () => {},
+  completionCriteriaIndex,
+  setCompletionCriteriaIndex,
+  setCurrentWordIndex,
 }) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -148,9 +151,12 @@ export default function Header({
           </Box>
           <Spacer />
           <Box p={1}>
-            <AppDrawer
+          <AppDrawer
               forceRerender={forceRerender}
               setForceRerender={setForceRerender}
+              completionCriteriaIndex={completionCriteriaIndex?completionCriteriaIndex:0} 
+              setCompletionCriteriaIndex={setCompletionCriteriaIndex? setCompletionCriteriaIndex:()=>{}}
+              setCurrentWordIndex={setCurrentWordIndex? setCurrentWordIndex:()=>{}}
             />
           </Box>
         </Flex>

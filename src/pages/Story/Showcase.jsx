@@ -743,6 +743,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
         active={3}
         forceRerender={forceRerender}
         setForceRerender={setForceRerender}
+        completionCriteriaIndex={completionCriteriaIndex}
       />
 
       <Center></Center>
