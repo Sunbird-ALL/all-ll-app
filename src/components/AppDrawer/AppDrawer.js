@@ -37,7 +37,7 @@ import ConfigForm from '../../config/ConfigForm';
 import { useNavigate } from 'react-router-dom';
 import { fetchPointerApi } from '../../utils/api/PointerApi';
 
-function AppDrawer({ forceRerender, setForceRerender }) {
+function AppDrawer({ forceRerender, setForceRerender, setCurrentWordIndex ,setCompletionCriteriaIndex }) {
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
@@ -189,6 +189,8 @@ function AppDrawer({ forceRerender, setForceRerender }) {
             setLesson(data?.result?.result?.lesson || 0)
             setLevel(data?.result?.result?.milestoneLevel || 'm0');
             localStorage.setItem('userCurrentLevel', data?.result?.result?.milestoneLevel || 'm0')
+            setCompletionCriteriaIndex(parseInt(data?.result?.result?.lesson) || 0)
+            setCurrentWordIndex(0) 
             localStorage.setItem(
               'userPracticeState',
               data?.result?.result?.lesson || 0
