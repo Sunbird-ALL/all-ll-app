@@ -80,7 +80,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
 
-  const [template, SetTemplate] = useState('');
+  const [template, setTemplate] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [showSplashScreen, setShowSplashScreen] = useState(false);
@@ -223,13 +223,10 @@ const Story = ({ forceRerender, setForceRerender }) => {
   }, [progressData]);
   
   useEffect(()=>{
-     try {
+    try {
         setCompletionCriteriaIndex(parseInt(localStorage.getItem('userPracticeState') || 0))
-      } catch (error) {
-        console.error(
-          "Error accessing localStorage for 'userPracticeState':",
-          error
-        );
+    } catch (error) {
+      console.error("Error accessing localStorage for 'userPracticeState':", error.message);
       }
     },[forceRerender])
 
@@ -296,21 +293,21 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
-          SetTemplate(
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ||
-              'simple'
-          );
+            setTemplate(
+              practiceCompletionCriteria[completionCriteriaIndex]?.template ||
+                'simple'
+            );
           setLoading(false);
         });
-      setLoading(false);
-      setUserSpeak(false);
-    } catch (err) {
+        setLoading(false);
+        setUserSpeak(false);
+      } catch (err) {
       toast({
         position: 'top',
         title: `${
           err?.message === 'Failed to fetch'
-            ? 'Please Check Your Internet Connection'
-            : err?.message
+          ? 'Please Check Your Internet Connection'
+          : err?.message
         }`,
         status: 'error',
       });
@@ -413,30 +410,13 @@ const Story = ({ forceRerender, setForceRerender }) => {
 
   const pauseAudio = () => {
     interactCall('pauseAudio', 'practice', 'DT', 'PAUSE');
-    const contentId = posts?.[currentLine]?.contentId;
-    var audio = new Audio(
-      `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
-    );
-
-    audio.addEventListener('canplaythrough', () => {
-      set_temp_audio(
-        new Audio(
-          `${process.env.REACT_APP_AWS_S3_BUCKET_CONTENT_URL}/Audio/${contentId}.wav`
-        )
-      );
-    });
-    audio.addEventListener('error', () => {
-      toast({
-        position: 'top',
-        title: 'Audio is not available',
-        duration: 2000,
-        status: 'error',
-      });
-    });
+  if (temp_audio !== null) {
+    temp_audio.pause();
+    setFlag(!false);
+    }
   };
-
   const handleSpellAndCheck = callback => {
-    SetTemplate('simple');
+    setTemplate('simple');
     callback();
   };
 
@@ -512,7 +492,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
       setCurrentWordIndex(0);
     } else {
       setCurrentLine(currentLine + 1);
-      SetTemplate(
+      setTemplate(
         practiceCompletionCriteria[completionCriteriaIndex]?.template || ''
       );
     }
@@ -590,7 +570,6 @@ const Story = ({ forceRerender, setForceRerender }) => {
   };
 
   const onPracticeNext = () => {
-    fetchApi();
     setCurrentLine(0);
     let index = completionCriteriaIndex + 1;
     setCompletionCriteriaIndex(index);
@@ -607,6 +586,9 @@ const Story = ({ forceRerender, setForceRerender }) => {
         active={2}
         forceRerender={forceRerender}
         setForceRerender={setForceRerender}
+        completionCriteriaIndex={completionCriteriaIndex} 
+        setCompletionCriteriaIndex={setCompletionCriteriaIndex}
+        setCurrentWordIndex={setCurrentWordIndex}
       />
       <Container mt={is1366x768? 0:20} w={'75vw'} className="story-container">
         <Center
@@ -773,7 +755,8 @@ const Story = ({ forceRerender, setForceRerender }) => {
                 </Flex>
               </Center>
             </>
-          ) : posts && template == 'simple' ? (
+          ) : posts && template ===
+          'simple' ? (
             <>
               <VStack>
                 <Box>
@@ -996,7 +979,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
               </VStack>
             </>
           ) : posts?.length >= 0 &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+            template ==
               'spell-and-check' ? (
             <>
               <SpellAndCheck
@@ -1027,7 +1010,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
               />
             </>
           ) : posts?.length >= 0 &&
-            practiceCompletionCriteria[completionCriteriaIndex]?.template ==
+            template ==
               'hangman-game' ? (
             <HangmanGame
               sourceChars={sourceChars}

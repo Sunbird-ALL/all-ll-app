@@ -209,8 +209,9 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
         }
       )
       .then(async res => {
-        if (res.data.status === 'success') {
+        if (res.data.status === 'success') {     
           setSessionResult(res.data.data.sessionResult);
+          localStorage.setItem("userCurrentLevel",res.data.data.currentLevel)
           setPercentage(res.data.data.percentage);
           setDataOfLesson(res.data.data);
           setResultArray(resultArray);
@@ -428,8 +429,9 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
       .catch(err => {
         toast({
           position: 'top',
-          title: `${err?.message}`,
-          status: 'error',
+          title: "Please speak louder and clear",
+          status: 'success',
+          duration: 1000,
         });
         error(err, { err: err.name, errtype: 'CONTENT' }, 'ET');
 

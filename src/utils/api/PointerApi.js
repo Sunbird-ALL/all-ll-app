@@ -1,9 +1,8 @@
 
 const baseURL = `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/pointer`;
 
-export const fetchPointerApi = () => {
-    const url = `${baseURL}/getPointers/${localStorage.getItem('virtualID')}/${localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}`;
-  
+export const fetchPointerApi = (lang) => {
+    const url = `${baseURL}/getPointers/${localStorage.getItem('virtualID')}/${localStorage.getItem('virtualStorySessionID')}?language=${lang}`;
     return fetch(url)
       .then((res) => {
         if (!res.ok) {
@@ -12,6 +11,18 @@ export const fetchPointerApi = () => {
         return res.json();
       })
       .then((data) => {
+        localStorage.setItem(
+          'totalSessionPoints',
+          data.result.totalSessionPoints
+        );
+        localStorage.setItem(
+          'totalUserPoints',
+          data.result.totalUserPoints
+        );
+        localStorage.setItem(
+          'totalLanguagePoints',
+          data.result.totalLanguagePoints
+        );
         return data;
       })
       .catch((error) => {
