@@ -154,9 +154,9 @@ export default function Header({
           <AppDrawer
               forceRerender={forceRerender}
               setForceRerender={setForceRerender}
-              completionCriteriaIndex={completionCriteriaIndex?completionCriteriaIndex:0} 
-              setCompletionCriteriaIndex={setCompletionCriteriaIndex? setCompletionCriteriaIndex:()=>{}}
-              setCurrentWordIndex={setCurrentWordIndex? setCurrentWordIndex:()=>{}}
+              completionCriteriaIndex={completionCriteriaIndex || 0} 
+              setCompletionCriteriaIndex={setCompletionCriteriaIndex || (() => {})}
+              setCurrentWordIndex={setCurrentWordIndex || (() => {})}
             />
           </Box>
         </Flex>

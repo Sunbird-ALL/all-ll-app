@@ -80,7 +80,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
   const [isUserSpeak, setUserSpeak] = useState(false);
   const [storycase64Data, setStoryBase64Data] = useState('');
 
-  const [template, SetTemplate] = useState('');
+  const [template, setTemplate] = useState('');
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [showSplashScreen, setShowSplashScreen] = useState(false);
@@ -226,10 +226,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     try {
         setCompletionCriteriaIndex(parseInt(localStorage.getItem('userPracticeState') || 0))
     } catch (error) {
-      console.error(
-          "Error accessing localStorage for 'userPracticeState':",
-          error
-        );
+      console.error("Error accessing localStorage for 'userPracticeState':", error.message);
       }
     },[forceRerender])
 
@@ -296,7 +293,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
           setSourceChars(data?.getTargetChar);
           setPosts(newPosts);
           setCurrentLine(0);
-            SetTemplate(
+            setTemplate(
               practiceCompletionCriteria[completionCriteriaIndex]?.template ||
                 'simple'
             );
@@ -419,7 +416,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
     }
   };
   const handleSpellAndCheck = callback => {
-    SetTemplate('simple');
+    setTemplate('simple');
     callback();
   };
 
@@ -495,7 +492,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
       setCurrentWordIndex(0);
     } else {
       setCurrentLine(currentLine + 1);
-      SetTemplate(
+      setTemplate(
         practiceCompletionCriteria[completionCriteriaIndex]?.template || ''
       );
     }
