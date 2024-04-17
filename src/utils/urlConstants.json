@@ -1,0 +1,16 @@
+{
+    "URLS": {
+        "GET_VIRTUAL_ID": "api/virtualId/generateVirtualID",
+        "GET_MILESTONE": "lais/scores/getMilestone/user",
+        "GET_POINTER": "api/pointer/getPoints",
+        "GET_ASSESSMENT": "content-service/v1/content/getAssessment",
+        "ADD_POINTER": "api/pointer/addPoints",
+        "ADD_LESSON": "api/lesson/addLesson",
+        "GET_SET_RESULT": "lais/scores/getSetResult",
+        "GET_PAGINATION": "content-service/v1/content/pagination",
+        "UPDATE_LEARNER_PROFILE": "lais/scores/updateLearnerProfile",
+        "GET_CONTENT": "lais/scores/GetContent",
+        "GET_LESSON_PROGRESS_BY_ID": "api/lesson/getLessonProgressByUserId",
+        "CREATE_LEARNER_PROGRESS": "api/learnerProgress/createLearnerProgress"
+    }
+}

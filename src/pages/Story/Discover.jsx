@@ -24,6 +24,7 @@ import calcCER from 'character-error-rate';
 import { addPointerApi } from '../../utils/api/PointerApi';
 import { error } from '../../services/telementryService';
 import { uniqueId } from '../../services/utilService';
+import config from '../../utils/urlConstants'
 const jsConfetti = new JSConfetti();
 
 const Discovery = ({ forceRerender, setForceRerender }) => {
@@ -72,7 +73,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/pagination?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_PAGINATION}?page=1&limit=${localStorage.getItem('discoveryLimit') || 5}&collectionId=${slug}`
       )
         .then(res => {
           return res.json();
@@ -198,7 +199,7 @@ const Discovery = ({ forceRerender, setForceRerender }) => {
 
     axios
       .post(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
         {
           sub_session_id: localStorage.getItem('sub_session_id'),
           contentType: contentType,
@@ -271,7 +272,7 @@ const addLessonCheck = async (res, resultArray, checkInd) => {
     const responseStartTime = new Date().getTime();
     axios
       .post(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`,
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
         {
           audio: base64Data,
           user_id: localStorage.getItem('virtualID'),

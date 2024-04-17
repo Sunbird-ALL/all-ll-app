@@ -60,6 +60,7 @@ import { splitGraphemes } from 'split-graphemes';
 import { interactCall } from '../../../services/callTelemetryIntract.js';
 import marioImg from '../../Story/Mario/images/mario.png';
 import dinoImg from '../../Story/Mario/images//dragon.png';
+import config from '../../../utils/urlConstants'
 
 const jsConfetti = new JSConfetti();
 
@@ -279,7 +280,7 @@ const Story = ({ forceRerender, setForceRerender }) => {
       const response = await fetch(
         `${
           process.env.REACT_APP_LEARNER_AI_APP_HOST
-        }/lais/scores/GetContent/${type}/${localStorage.getItem(
+        }/${config.URLS.GET_CONTENT}/${type}/${localStorage.getItem(
           'virtualID'
         )}?language=${localStorage.getItem('apphomelang')}&contentlimit=${
           localStorage.getItem('contentPracticeLimit') || 5

@@ -22,6 +22,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { startEvent } from '../services/callTelemetryIntract'
 import { minSafeInteger } from '@chakra-ui/utils'
 import {error} from '../services/telementryService';
+import config from '../utils/urlConstants'
 export default function Login({setIsLoggedIn = false}) {
   useEffect(() => {
     setIsLoggedIn(false);
@@ -88,7 +89,7 @@ export default function Login({setIsLoggedIn = false}) {
       const response = await fetch(
         `${
           process.env.REACT_APP_LEARNER_AI_APP_HOST
-        }/lais/scores/getMilestone/user/${localStorage.getItem(
+        }/${config.URLS.GET_MILESTONE}/${localStorage.getItem(
           'virtualID'
         )}?language=${localStorage.getItem('apphomelang')}`
       )
@@ -113,7 +114,7 @@ export default function Login({setIsLoggedIn = false}) {
   };
 
   const handleGetLesson = (virtualID)=>{
-    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/api/lesson/getLessonProgressByUserId/${virtualID}?language=${localStorage.getItem('apphomelang')}`)
+    fetch(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lp-tracker/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${virtualID}?language=${localStorage.getItem('apphomelang')}`)
     .then((res)=>{
       return res.json();
     }).then((data)=>{

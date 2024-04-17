@@ -11,6 +11,7 @@ import thumbsup from '../../../assests/Images/Thumbs_up.svg'
 import thumbsdown from '../../../assests/Images/Thumbs_Down.svg'
 import { Center, Container, Flex, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 import { addPointerApi } from '../../../utils/api/PointerApi';
+import config from '../../../utils/urlConstants'
 import { error } from '../../../services/telementryService'
 
 export default function Validate({forceRerender, setForceRerender}) {
@@ -53,7 +54,7 @@ export default function Validate({forceRerender, setForceRerender}) {
       setLoading(true);
       axios
         .get(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/word/${localStorage.getItem('virtualID') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/word/${localStorage.getItem('virtualID') || localStorage.getItem('virtualStorySessionID')}?language=${localStorage.getItem('apphomelang')}&contentlimit=${localStorage.getItem('validateLimit')}&gettargetlimit=${localStorage.getItem('validateLimit')}`,
         )
         .then(res => {
           setLoading(false);

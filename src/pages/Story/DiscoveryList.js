@@ -7,6 +7,7 @@ import kannadaPlaceholder from '../../assests/Images/hackthon-images/knCol.png';
 import Header from '../Header';
 import axios from 'axios';
 import { stopLoading } from '../../utils/Helper/SpinnerHandle';
+import config from '../../utils/urlConstants'
 import {error} from '../../services/telementryService'
 const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const [posts, setPosts] = useState([]);
@@ -23,7 +24,7 @@ const DiscoveryList = ({forceRerender, setForceRerender}) => {
   const fetchApi = async () => {
     setLoading(true)
     axios
-      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/content-service/v1/content/getAssessment`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_ASSESSMENT}`, {
         "tags": ["ASER"],
         "language": localStorage.getItem('apphomelang') || 'ta'
       })

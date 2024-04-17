@@ -21,6 +21,7 @@ import { response } from '../../services/telementryService';
 import retry from '../../assests/Images/retry.svg'
 import JSConfetti from 'js-confetti'
 import calcCER from 'character-error-rate';
+import config from '../../utils/urlConstants'
 
 const jsConfetti = new JSConfetti();
 
@@ -136,7 +137,7 @@ const Story = () => {
     const responseStartTime = new Date().getTime();
     // console.log(posts?.data[currentLine]?.data[0]?.[lang]?.text);
     axios
-      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`, {
+      .post(`${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`, {
         audio: base64Data,
         user_id: localStorage.getItem('virtualID'),
         session_id: localStorage.getItem('virtualStorySessionID'),
