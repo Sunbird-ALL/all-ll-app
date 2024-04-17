@@ -27,6 +27,7 @@ import completionCriteria from '../../config/practiceConfig';
 import Mario from './Mario/Mario';
 import marioImg from './Mario/images/mario-trophy.png';
 import dinoImg from './Mario/images/dragon-trophy.png';
+import config from '../../utils/urlConstants'
 
 const jsConfetti = new JSConfetti();
 
@@ -95,7 +96,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/GetContent/${
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_CONTENT}/${
           practiceCompletionCriteria[completionCriteriaIndex]?.criteria ||
           'word'
         }/${localStorage.getItem('virtualID')}?language=${localStorage.getItem(
@@ -355,7 +356,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     const responseStartTime = new Date().getTime();
     axios
       .post(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/updateLearnerProfile/${lang}`,
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.UPDATE_LEARNER_PROFILE}/${lang}`,
         {
           audio: base64Data,
           user_id: localStorage.getItem('virtualID'),
@@ -576,7 +577,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     try {
       axios
         .post(
-          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getSetResult`,
+          `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_SET_RESULT}`,
           {
             sub_session_id: localStorage.getItem('sub_session_id'),
             contentType: contentType,
@@ -668,7 +669,7 @@ const Showcase = ({ forceRerender, setForceRerender }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${localStorage.getItem('virtualID')}?language=${localStorage.getItem('apphomelang')}`
       )
         .then(res => {
           return res.json();

@@ -36,6 +36,7 @@ import Children from '../../assests/Images/children-thumbnail.png';
 import ConfigForm from '../../config/ConfigForm';
 import { useNavigate } from 'react-router-dom';
 import { fetchPointerApi } from '../../utils/api/PointerApi';
+import config from '../../utils/urlConstants';
 
 function AppDrawer({ forceRerender, setForceRerender, setCurrentWordIndex ,setCompletionCriteriaIndex }) {
   const navigate = useNavigate()
@@ -106,7 +107,7 @@ function AppDrawer({ forceRerender, setForceRerender, setCurrentWordIndex ,setCo
   const fetchApi = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/lais/scores/getMilestone/user/${localStorage.getItem('virtualID')}?language=${value}`
+        `${process.env.REACT_APP_LEARNER_AI_APP_HOST}/${config.URLS.GET_MILESTONE}/${localStorage.getItem('virtualID')}?language=${value}`
       )
         .then(res => {
           return res.json();
@@ -177,7 +178,7 @@ function AppDrawer({ forceRerender, setForceRerender, setCurrentWordIndex ,setCo
         fetch(
           `${
             process.env.REACT_APP_LEARNER_AI_APP_HOST
-          }/lp-tracker/api/lesson/getLessonProgressByUserId/${localStorage.getItem(
+          }/lp-tracker/${config.URLS.GET_LESSON_PROGRESS_BY_ID}/${localStorage.getItem(
             'virtualID'
           )}?language=${value}`
         )
