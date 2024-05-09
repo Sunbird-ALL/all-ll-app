@@ -16,6 +16,7 @@ import pause from '../../../assests/Images/pause-img.png';
 import { replaceAll } from '../../../utils/helper';
 import NewTopHomeNextBar from '../../../components/NewTopHomeNextBar/NewTopHomeNextBar';
 import { feedback } from '../../../services/telementryService';
+import { isProfanityWord } from '../../../utils/helper';
 
 function Score() {
   const navigate = useNavigate();
@@ -94,6 +95,12 @@ function Score() {
       scroll_to_top('smooth');
     }
   }, [load_cnt]);
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
 
   const [recordedAudio, setRecordedAudio] = useState(
     localStorage.getItem('recordedAudio')

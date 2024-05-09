@@ -14,8 +14,8 @@ import { findRegex } from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { interactCall } from '../../services/callTelemetryIntract';
 import play from '../../assests/Images/play-img.png';
-
 import pause from '../../assests/Images/pause-img.png';
+import { isProfanityWord } from '../../utils/helper';
 
 /*chakra*/
 import { feedback } from '../../services/telementryService';
@@ -102,6 +102,12 @@ function Score() {
       : 'en'
   );
 
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    } 
+  },[])
+
   useEffect(() => {
     if (load_cnt == 0) {
       set_content(content_list[content_id]);
@@ -132,6 +138,7 @@ function Score() {
       checkVoice(voiceText);
     }
   }, [voiceText]);
+
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
