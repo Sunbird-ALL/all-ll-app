@@ -12,6 +12,7 @@ import { HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
 import { getParameter } from '../../../utils/helper';
 import AppFooter from '../../../components/AppFooter/AppFooter';
+import { filterBadWords } from '../../../utils/helper';
 
 function StartLearn() {
   const location = useLocation();
@@ -181,7 +182,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');

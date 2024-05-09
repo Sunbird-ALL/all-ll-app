@@ -10,7 +10,7 @@ import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import AppFooter from '../../components/AppFooter/AppFooter';
-
+import { filterBadWords } from '../../utils/helper';
 import { interactCall } from '../../services/callTelemetryIntract';
 import axios from 'axios';
 
@@ -222,7 +222,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
