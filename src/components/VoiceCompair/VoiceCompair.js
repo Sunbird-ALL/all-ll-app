@@ -356,6 +356,7 @@ const VoiceCompair = props => {
                 ) : ( */}
                   <AudioRecorderCompairUI
                     setIsEmptyAudio = {setIsEmptyAudio}
+                    setIsAudioPlay={props.setIsAudioPlay}
                     setRecordedAudio={setRecordedAudio}
                     flag={props.flag}
                     setTamilRecordedAudio={setTamilRecordedAudio}

@@ -273,6 +273,7 @@ function StartLearn() {
                   setVoiceText={setVoiceText}
                   setRecordedAudio={setRecordedAudio}
                   _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                  setIsAudioPlay={setIsAudioPlay}
                   flag={true}
 
                   />
