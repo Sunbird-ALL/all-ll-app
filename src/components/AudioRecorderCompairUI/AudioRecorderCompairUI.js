@@ -15,7 +15,7 @@ const AudioRecorderCompair = (props) => {
   }, []);
 
 
-  const controlAudio = async (status) => {
+  const handleAudioControl = async (status) => {
     if (status === "recording") {
       props.setIsAudioPlay('recording')
       await startDetection();
@@ -27,15 +27,8 @@ const AudioRecorderCompair = (props) => {
   };
 
   useEffect(()=>{
-    if(audioDetected){
       if(props.setIsEmptyAudio){
-        props.setIsEmptyAudio(true);
-      }
-    }
-    else{
-      if(props.setIsEmptyAudio){
-        props.setIsEmptyAudio(false);
-      }
+        props.setIsEmptyAudio(audioDetected);
     }
   },[audioDetected])
 
@@ -148,14 +141,14 @@ const AudioRecorderCompair = (props) => {
             <button
               className="btn"
               id="startaudio_compair"
-              onClick={() => controlAudio('recording')}
+              onClick={() => handleAudioControl('recording')}
             >
               Start
             </button>
             <button
               className="btn"
               id="stopaudio_compair"
-              onClick={() => controlAudio('inactive')}
+              onClick={() => handleAudioControl('inactive')}
             >
               Stop
             </button>

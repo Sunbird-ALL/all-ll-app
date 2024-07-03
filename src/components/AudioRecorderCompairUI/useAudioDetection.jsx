@@ -12,7 +12,7 @@ const useAudioDetection = () => {
   const startDetection = async () => {
     try {
       // Initialize audio context and analyser
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext)();
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.fftSize = 2048;
 
@@ -32,14 +32,14 @@ const useAudioDetection = () => {
       scriptProcessorRef.current.onaudioprocess = (event) => {
         const inputData = event.inputBuffer.getChannelData(0);
         const inputDataLength = inputData.length;
-        let total = 0;
+        let sumOfSquares = 0;
 
         for (let i = 0; i < inputDataLength; i++) {
-          total += Math.abs(inputData[i]);
+          sumOfSquares += Math.abs(inputData[i]);
         }
 
-        const average = total / inputDataLength;
-        const currentIsSilent = average < 0.04; // Threshold for silence
+        const rms = Math.sqrt(sumOfSquares / inputDataLength);
+        const currentIsSilent = rms < 0.04; // Threshold for silence
 
         if (!currentIsSilent) {
           setAudioDetected(true);
@@ -50,7 +50,7 @@ const useAudioDetection = () => {
 
       setIsRunning(true);
     } catch (error) {
-      console.error('Error accessing microphone:', error);
+      alert('Error accessing microphone. Please check your microphone settings.');
     }
   };
 
