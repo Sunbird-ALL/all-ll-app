@@ -17,7 +17,10 @@ const useAudioDetection = () => {
       analyserRef.current.fftSize = 2048;
 
       // Get user media
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true }).catch(error => {
+        console.error('Error accessing user media:', error);
+        throw error;
+      });
       microphoneRef.current = audioContextRef.current.createMediaStreamSource(stream);
 
       // Create script processor
