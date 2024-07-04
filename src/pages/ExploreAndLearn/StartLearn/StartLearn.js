@@ -25,7 +25,7 @@ function StartLearn() {
     interactCall("playAudio", "startlearn","DT", "play");
       set_temp_audio(new Audio(content[sel_lang].audio));
   };
-
+  
   const pauseAudio = () => {
     interactCall("pauseAudio", "startlearn","DT", "pause");
     if (temp_audio !== null) {
@@ -274,6 +274,7 @@ function StartLearn() {
                         setVoiceText={setVoiceText}
                         setRecordedAudio={setRecordedAudio}
                         _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                        setIsAudioPlay={setIsAudioPlay}
                         flag={true}
                       />
                       {isAudioPlay === 'recording' ? (
