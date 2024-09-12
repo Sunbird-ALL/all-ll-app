@@ -349,7 +349,7 @@ function Score() {
       window.parent.postMessage({
         score: currentScore,
         message: 'all-app-score',
-      });
+      }, "*");
     }
   };
 
