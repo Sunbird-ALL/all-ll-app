@@ -6,9 +6,8 @@ import { response, interact } from '../../services/telementryService';
 import { showLoading, stopLoading } from '../../utils/Helper/SpinnerHandle';
 import { replaceAll, compareArrays } from '../../utils/helper';
 
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import S3Client from '../../config/awsS3';
-
 
 const VoiceCompair = props => {
   const [lang_code, set_lang_code] = useState(
@@ -16,10 +15,6 @@ const VoiceCompair = props => {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
-
-  const [isEmptyAudio, setIsEmptyAudio] = useState(
-    false
-  )
 
   const ASR_REST_URLS = {
     bn: 'https://api.dhruva.ekstep.ai',
@@ -43,8 +38,10 @@ const VoiceCompair = props => {
 
   const DEFAULT_ASR_LANGUAGE_CODE = 'ai4bharat/whisper--gpu-t4';
   const HINDI_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-hi--gpu-t4';
-  const KANNADA_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
-  const TAMIL_ASR_LANGUAGE_CODE = 'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
+  const KANNADA_ASR_LANGUAGE_CODE =
+    'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
+  const TAMIL_ASR_LANGUAGE_CODE =
+    'ai4bharat/conformer-multilingual-dravidian--gpu-t4';
   const [recordedAudio, setRecordedAudio] = useState('');
   const [recordedAudioBase64, setRecordedAudioBase64] = useState('');
 
@@ -52,23 +49,25 @@ const VoiceCompair = props => {
   const [tamilRecordedAudio, setTamilRecordedAudio] = useState('');
   const [tamilRecordedText, setTamilRecordedText] = useState('');
 
-  const [asr_language_code, set_asr_language_code] = useState(DEFAULT_ASR_LANGUAGE_CODE);
+  const [asr_language_code, set_asr_language_code] = useState(
+    DEFAULT_ASR_LANGUAGE_CODE
+  );
 
   useEffect(() => {
-	switch (lang_code) {
-	case 'kn':
-		set_asr_language_code(KANNADA_ASR_LANGUAGE_CODE);
-		break;
-  case 'ta':
-    set_asr_language_code(TAMIL_ASR_LANGUAGE_CODE);
-  break;
-  case 'hi':
-    set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
-    break;
-	default:
-		set_asr_language_code(DEFAULT_ASR_LANGUAGE_CODE);
-		break;
-	}
+    switch (lang_code) {
+      case 'kn':
+        set_asr_language_code(KANNADA_ASR_LANGUAGE_CODE);
+        break;
+      case 'ta':
+        set_asr_language_code(TAMIL_ASR_LANGUAGE_CODE);
+        break;
+      case 'hi':
+        set_asr_language_code(HINDI_ASR_LANGUAGE_CODE);
+        break;
+      default:
+        set_asr_language_code(DEFAULT_ASR_LANGUAGE_CODE);
+        break;
+    }
   }, []);
 
   useEffect(() => {
@@ -103,14 +102,7 @@ const VoiceCompair = props => {
   const [ai4bharat, setAi4bharat] = useState('');
   useEffect(() => {
     if (recordedAudioBase64 !== '') {
-      if(!isEmptyAudio){
-        alert("Please Speak again");
-        stopLoading()
-      }else{
-        fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
-        // alert("Sound Detected");
-        setIsEmptyAudio(false)
-      }
+      fetchASROutput(localStorage.getItem('apphomelang'), recordedAudioBase64);
     }
   }, [recordedAudioBase64]);
 
@@ -155,7 +147,7 @@ const VoiceCompair = props => {
       headers: myHeaders,
       body: payload,
       redirect: 'follow',
-      signal: abortController.signal
+      signal: abortController.signal,
     };
 
     const apiURL = `${ASR_REST_URLS[sourceLanguage]}/services/inference/asr?serviceId=${asr_language_code}`;
@@ -187,7 +179,7 @@ const VoiceCompair = props => {
         tempteacherText = replaceAll(tempteacherText, '!', '');
         tempteacherText = replaceAll(tempteacherText, '|', '');
         tempteacherText = replaceAll(tempteacherText, '?', '');
-        const teacherTextArray = tempteacherText.split(' ');;
+        const teacherTextArray = tempteacherText.split(' ');
 
         let student_correct_words_result = [];
         let student_incorrect_words_result = [];
@@ -199,45 +191,50 @@ const VoiceCompair = props => {
         let result_per_words1 = 0;
         let occuracy_percentage = 0;
 
-        let word_result_array = compareArrays(teacherTextArray, studentTextArray);
+        let word_result_array = compareArrays(
+          teacherTextArray,
+          studentTextArray
+        );
 
         for (let i = 0; i < studentTextArray.length; i++) {
-            if (teacherTextArray.includes(studentTextArray[i])) {
-               correct_words++;
-               student_correct_words_result.push(
-                  studentTextArray[i]
-               );
-            } else {
-                wrong_words++;
-                student_incorrect_words_result.push(
-                   studentTextArray[i]
-                );
-            }
+          if (teacherTextArray.includes(studentTextArray[i])) {
+            correct_words++;
+            student_correct_words_result.push(studentTextArray[i]);
+          } else {
+            wrong_words++;
+            student_incorrect_words_result.push(studentTextArray[i]);
+          }
         }
         //calculation method
         if (originalwords >= studentswords) {
-           result_per_words = Math.round(
-                 Number((correct_words / originalwords) * 100)
-           );
+          result_per_words = Math.round(
+            Number((correct_words / originalwords) * 100)
+          );
         } else {
-            result_per_words = Math.round(
-              Number((correct_words / studentswords) * 100)
-            );
+          result_per_words = Math.round(
+            Number((correct_words / studentswords) * 100)
+          );
         }
 
-        let word_result = (result_per_words === 100) ? "correct" : "incorrect";
+        let word_result = result_per_words === 100 ? 'correct' : 'incorrect';
 
         if (process.env.REACT_APP_CAPTURE_AUDIO === 'true') {
-          let getContentId = parseInt(localStorage.getItem('content_random_id')) + 1;
-          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
+          let getContentId =
+            parseInt(localStorage.getItem('content_random_id')) + 1;
+          var audioFileName = `${process.env.REACT_APP_CHANNEL}/${
+            localStorage.getItem('contentSessionId') === null
+              ? localStorage.getItem('allAppContentSessionId')
+              : localStorage.getItem('contentSessionId')
+          }-${Date.now()}-${getContentId}.wav`;
 
           const command = new PutObjectCommand({
             Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
             Key: audioFileName,
-            Body: Uint8Array.from(window.atob(base64Data), (c) => c.charCodeAt(0)),
-            ContentType: 'audio/wav'
+            Body: Uint8Array.from(window.atob(base64Data), c =>
+              c.charCodeAt(0)
+            ),
+            ContentType: 'audio/wav',
           });
-
 
           try {
             const response = await S3Client.send(command);
@@ -247,23 +244,30 @@ const VoiceCompair = props => {
           }
         }
 
-        response({ // Required
-            "target": process.env.REACT_APP_CAPTURE_AUDIO === 'true' ? `${audioFileName}` : '', // Required. Target of the response
+        response(
+          {
+            // Required
+            target:
+              process.env.REACT_APP_CAPTURE_AUDIO === 'true'
+                ? `${audioFileName}`
+                : '', // Required. Target of the response
             //"qid": "", // Required. Unique assessment/question id
-            "type": "SPEAK", // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
-            "values": [
-                { "original_text": localStorage.getItem('contentText') },
-                { "response_text": texttemp},
-                { "response_correct_words_array": student_correct_words_result},
-                { "response_incorrect_words_array": student_incorrect_words_result},
-                { "response_word_array_result": word_result_array},
-                { "response_word_result": word_result},
-                { "accuracy_percentage": result_per_words},
-                { "duration":  responseDuration}
-             ]
-        },
+            type: 'SPEAK', // Required. Type of response. CHOOSE, DRAG, SELECT, MATCH, INPUT, SPEAK, WRITE
+            values: [
+              { original_text: localStorage.getItem('contentText') },
+              { response_text: texttemp },
+              { response_correct_words_array: student_correct_words_result },
+              {
+                response_incorrect_words_array: student_incorrect_words_result,
+              },
+              { response_word_array_result: word_result_array },
+              { response_word_result: word_result },
+              { accuracy_percentage: result_per_words },
+              { duration: responseDuration },
+            ],
+          },
           'ET'
-        )
+        );
 
         setAi4bharat(
           apiResponse['output'][0]['source'] != ''
@@ -271,17 +275,22 @@ const VoiceCompair = props => {
             : '-'
         );
         stopLoading();
-      }).catch(error => {
+      })
+      .catch(error => {
         clearTimeout(waitAlert);
         stopLoading();
         if (error.name !== 'AbortError') {
-          alert('Unable to process your request at the moment.Please try again later.');
+          alert(
+            'Unable to process your request at the moment.Please try again later.'
+          );
           console.log('error', error);
         }
       });
-      const waitAlert = setTimeout(() => {
+    const waitAlert = setTimeout(() => {
       abortController.abort();
-      alert('Server response is slow at this time. Please explore other lessons');
+      alert(
+        'Server response is slow at this time. Please explore other lessons'
+      );
     }, 10000);
   };
 
@@ -296,7 +305,7 @@ const VoiceCompair = props => {
       setLoadCnt(loadCnt => Number(loadCnt + 1));
     }
   }, [loadCnt]);
-  const getpermision = () => {  
+  const getpermision = () => {
     navigator.getUserMedia =
       navigator.getUserMedia ||
       navigator.webkitGetUserMedia ||
@@ -307,7 +316,6 @@ const VoiceCompair = props => {
       () => {
         console.log('Permission Granted');
         setAudioPermission(true);
-
       },
       () => {
         console.log('Permission Denied');
@@ -316,27 +324,26 @@ const VoiceCompair = props => {
       }
     );
 
-        
-    let audios = window.audioStream
+    let audios = window.audioStream;
     try {
       // ask for an audio input
-      navigator.mediaDevices.getUserMedia(
-      {
-          'audio': {
-              'mandatory': {
-                  'googEchoCancellation': 'false',
-                  'googAutoGainControl': 'false',
-                  'googNoiseSuppression': 'false',
-                  'googHighpassFilter': 'false'
-              },
-              'optional': []
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: {
+            mandatory: {
+              googEchoCancellation: 'false',
+              googAutoGainControl: 'false',
+              googNoiseSuppression: 'false',
+              googHighpassFilter: 'false',
+            },
+            optional: [],
           },
-      }).then(audios)
-      .catch();
+        })
+        .then(audios)
+        .catch();
     } catch (e) {
       alert('getUserMedia threw exception :' + e);
     }
-
   };
 
   return (
@@ -354,15 +361,14 @@ const VoiceCompair = props => {
                     {...(props?._audio ? props?._audio : {})}
                   />
                 ) : ( */}
-                  <AudioRecorderCompairUI
-                    setIsEmptyAudio = {setIsEmptyAudio}
-                    setIsAudioPlay={props.setIsAudioPlay}
-                    setRecordedAudio={setRecordedAudio}
-                    flag={props.flag}
-                    setTamilRecordedAudio={setTamilRecordedAudio}
-                    setTamilRecordedText={setTamilRecordedText}
-                    {...(props?._audio ? props?._audio : {})}
-                  />
+                <AudioRecorderCompairUI
+                  setIsAudioPlay={props.setIsAudioPlay}
+                  setRecordedAudio={setRecordedAudio}
+                  flag={props.flag}
+                  setTamilRecordedAudio={setTamilRecordedAudio}
+                  setTamilRecordedText={setTamilRecordedText}
+                  {...(props?._audio ? props?._audio : {})}
+                />
                 {/* )} */}
 
                 {/*recordedAudio !== "" ? (
