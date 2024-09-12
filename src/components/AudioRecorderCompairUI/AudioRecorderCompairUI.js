@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 import mic from '../../assests/Images/mic.png';
 import mic_play from '../../assests/Images/mic_play.svg';
+import RecordVoiceVisualizer from '../../utils/RecordVoiceVisualizer';
 
 const AudioRecorderCompair = props => {
   const [status, setStatus] = useState('');
@@ -60,12 +61,23 @@ const AudioRecorderCompair = props => {
     <div>
       <center>
         {status === 'recording' ? (
-          <img
-            src={mic_play}
-            style={{ height: '72px', width: '72px' }}
-            className="micimg mic_stop_record"
-            onClick={handleStopRecording}
-          />
+          <>
+            <div
+              style={{
+                marginTop: '50px',
+                marginBottom: '50px',
+                zIndex: '1000',
+              }}
+            >
+              <RecordVoiceVisualizer />
+            </div>
+            <img
+              src={mic_play}
+              style={{ height: '72px', width: '72px' }}
+              className="micimg mic_stop_record"
+              onClick={handleStopRecording}
+            />
+          </>
         ) : (
           <img
             src={mic}
