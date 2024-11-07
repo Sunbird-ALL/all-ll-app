@@ -27,7 +27,7 @@ function App() {
       localStorage.setItem('did', visitorId);
       initService();
     };
-    setFp();  
+    setFp();
 
     const initService = () => {
       if (localStorage.getItem('fpDetails_v2') !== null) {
@@ -75,7 +75,36 @@ function App() {
       }
     };
   }, []);
-  
+
+  useEffect(() => {
+
+    const handleMessage = (event) => {
+
+
+      // Destructure the message data
+      const { token, buddyToken, messageType, contentSessionId } = event.data;
+
+      // Check if the expected data exists
+      if (messageType === 'customData') {
+        if (token) {
+          localStorage.setItem('token', token);
+        }
+        if (buddyToken) {
+          localStorage.setItem('buddyToken', buddyToken);
+        }
+        if (contentSessionId) {
+          localStorage.setItem('contentSessionId', contentSessionId);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
+
   useEffect(() => {
     const cleanup = () => {
       if (localStorage.getItem('contentSessionId') === null) {
