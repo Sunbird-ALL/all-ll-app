@@ -27,7 +27,7 @@ function App() {
       localStorage.setItem('did', visitorId);
       initService();
     };
-    setFp();  
+    setFp();
 
     const initService = () => {
       if (localStorage.getItem('fpDetails_v2') !== null) {
@@ -75,7 +75,26 @@ function App() {
       }
     };
   }, []);
-  
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      // Destructure the message data
+      const { messageType, localStorageKeyValue } = event.data;
+      if (messageType === "customData") {
+        for (const item of localStorageKeyValue) {
+          const key = item.key;
+          const value = item.value;
+
+          localStorage.setItem(key, value);
+        }
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+
   useEffect(() => {
     const cleanup = () => {
       if (localStorage.getItem('contentSessionId') === null) {
