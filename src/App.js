@@ -13,6 +13,7 @@ import { startEvent } from './services/callTelemetryIntract';
 import Dots from './components/Spinner/Dots';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import loadable from 'react-loadable'
+import { getParameter } from './utils/helper';
 
 function App() {
   const location = useLocation();
@@ -145,6 +146,30 @@ function App() {
     loader: () => import(/* webpackChunkName: "ContentCreate" */'./pages/content/ContentCreate'),
     loading: LoadingComponent,
   })
+
+
+  useEffect(() => {
+    let virtualId;
+
+    if (getParameter("virtualId", window.location.search)) {
+      virtualId = getParameter("virtualId", window.location.search);
+    } else {
+      virtualId = localStorage.getItem("virtualId");
+    }
+    localStorage.setItem("virtualId", virtualId);
+
+    const contentSessionId = getParameter(
+      "contentSessionId",
+      window.location.search
+    );
+    if (contentSessionId) {
+      localStorage.setItem("contentSessionId", contentSessionId);
+    }
+    const token = getParameter("token", window.location.search);
+    if (token) {
+      localStorage.setItem("token", token);
+    }
+  }, []);
 
 
   return (
