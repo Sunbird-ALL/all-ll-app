@@ -151,8 +151,8 @@ function App() {
   useEffect(() => {
     let virtualId;
 
-    if (getParameter("virtualId", window.location.search)) {
-      virtualId = getParameter("virtualId", window.location.search);
+    if (getParameter("virtualId", window.location.hash)) {
+      virtualId = getParameter("virtualId", window.location.hash);
     } else {
       virtualId = localStorage.getItem("virtualId");
     }
@@ -160,12 +160,12 @@ function App() {
 
     const contentSessionId = getParameter(
       "contentSessionId",
-      window.location.search
+      window.location.hash
     );
     if (contentSessionId) {
       localStorage.setItem("contentSessionId", contentSessionId);
     }
-    const token = getParameter("token", window.location.search);
+    const token = getParameter("token", window.location.hash);
     if (token) {
       localStorage.setItem("token", token);
     }
