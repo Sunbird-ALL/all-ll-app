@@ -99,7 +99,7 @@ function Score() {
   useEffect(()=>{
     if(isProfanityWord()){
       alert('inappropriate word detected')
-    } 
+    }
   },[])
 
   const [recordedAudio, setRecordedAudio] = useState(
@@ -300,7 +300,9 @@ function Score() {
   };
 
   useEffect(() => {
-    send(handleScore());
+    if(handleScore() > 0){
+      send(handleScore());
+    }
   }, []);
 
   // function showScore() {
