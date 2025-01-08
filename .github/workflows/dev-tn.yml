@@ -34,6 +34,15 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Add missing Babel plugin
+        run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
+
+      - name: Install recordrtc
+        run: npm install recordrtc --save
+
+      - name: Update babel-preset-react-app
+        run: npm install babel-preset-react-app@latest --save-dev
+
       # Build Production with environment variables
       - name: Build Production
         env:
