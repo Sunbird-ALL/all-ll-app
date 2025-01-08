@@ -1,0 +1,81 @@
+name: ALL rig Deployment
+
+on:
+  push:
+    branches:
+      - all-rig-v1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: all-prod-rig
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install AWS CLI
+        run: |
+          sudo DEBIAN_FRONTEND=noninteractive apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+      - name: Configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+      - name: Build and Package Application
+        run: |
+          npm install
+      
+      - name: Build Production
+        run: |
+          REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }} \
+          REACT_APP_MODE=play \
+          REACT_APP_authToken="" \
+          REACT_APP_PID=learner-ai-story-demo \
+          REACT_APP_UID=anonymous \
+          REACT_APP_ID=all.rig.app \
+          REACT_APP_VER="0.1.4" \
+          REACT_APP_TIMEDIFF="0" \
+          REACT_APP_HOST=https://telemetry.theall.ai \
+          REACT_APP_ENDPOINT=telemetry \
+          REACT_APP_APISLUG="/v1/" \
+          REACT_APP_CHANNEL="learner-ai-demo" \
+          REACT_APP_ENV="all-player" \
+          REACT_APP_BATCHSIZE=1 \
+          REACT_APP_CONTENT_SIZE=5 \
+          REACT_APP_LANGUAGE=ta \
+          REACT_APP_TELEMETRY_MODE=DT \
+          REACT_APP_LEARNER_AI_APP_HOST="https://www.learnerai.theall.ai" \
+          REACT_APP_CAPTURE_AUDIO=true \
+          REACT_APP_AWS_S3_BUCKET_NAME=all-prod-storage \
+          REACT_APP_AWS_S3_BUCKET_URL=https://all-prod-storage.s3.ap-south-1.amazonaws.com \
+          REACT_APP_AWS_S3_REGION=ap-south-1 \
+          REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} \
+          REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} \
+          REACT_APP_AWS_S3_BUCKET_CONTENT_URL=https://all-prod-content-service.s3.ap-south-1.amazonaws.com \
+          REACT_APP_MIN_DECIBELS=-75 \
+          REACT_APP_IS_AUDIOPREPROCESSING=false \
+          npm run build
+      - name: Deploy to S3 Bucket
+        run: |
+          aws s3 sync ./build s3://sb-all-rig/assets/sb-ai/
+      - name: Debug Environment Variables
+        run: |
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "secrate": ${{secrets.REACT_APP_AWS_S3_BUCKET_NAME}}
+       ### Invalidate Cloudfront
+      - name: Cloudfront Invalidation
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION }}
+          PATHS: '/*'
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
