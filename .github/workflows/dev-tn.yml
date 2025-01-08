@@ -1,4 +1,4 @@
-name: ALL Tn dev Deployment
+name: ALL Tn Dev Deployment
 
 on:
   push:
@@ -11,28 +11,38 @@ jobs:
     environment: all-tn-dev
 
     steps:
+      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Configure AWS credentials
       - name: Configure AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ${{ secrets.AWS_REGION }}
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region $AWS_REGION
 
+      # Clean up old dependencies
       - name: Clean up node_modules and package-lock.json
         run: |
           rm -rf node_modules
           rm -f package-lock.json
 
+      # Install Dependencies with legacy peer dependencies handling
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
-      
+
+      # Build Production with environment variables
       - name: Build Production
         env:
           REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
@@ -63,15 +73,24 @@ jobs:
           REACT_APP_MIN_DECIBELS: ${{ vars.REACT_APP_MIN_DECIBELS }}
           REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
         run: npm run build
+
+      # Deploy to S3 Bucket
       - name: Deploy to S3 Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           aws s3 sync ./build s3://all-tn-app-dev/assets/sb-all/
+
+      # Debug Environment Variables (optional, for troubleshooting)
       - name: Debug Environment Variables
         run: |
           echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
           echo "AWS_REGION: $AWS_REGION"
-          echo "secrate": ${{secrets.REACT_APP_AWS_S3_BUCKET_NAME}}
-       ### Invalidate Cloudfront
+          echo "Secret AWS S3 Bucket Name: ${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }}"
+
+      # Invalidate Cloudfront (optional, if CloudFront is used)
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
         env:
