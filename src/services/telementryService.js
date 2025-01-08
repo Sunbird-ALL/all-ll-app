@@ -65,39 +65,39 @@ export const initialize = ({ context, config, metadata }) => {
 };
 
 export const start = (duration, stageId) => {
-    CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
-      options: getEventOptions(),
-      edata: {
-        type: 'content',
-        mode: 'play',
-        pageid: stageId,
-        duration: Number((duration / 1e3).toFixed(2)),
-      },
-    });
+  CsTelemetryModule.instance.telemetryService.raiseStartTelemetry({
+    options: getEventOptions(),
+    edata: {
+      type: 'content',
+      mode: 'play',
+      pageid: stageId,
+      duration: Number((duration / 1e3).toFixed(2)),
+    },
+  });
 };
 
 export const response = (context, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
-      CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
-        {
-          ...context,
-        },
-        getEventOptions()
-      );
+    CsTelemetryModule.instance.telemetryService.raiseResponseTelemetry(
+      {
+        ...context,
+      },
+      getEventOptions()
+    );
   }
 
 };
 
 export const end = (pageUrl) => {
-    CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
-      edata: {
-        type: 'content',
-        mode: 'play',
-        pageid: pageUrl,
-        summary: [],
-        duration: '000',
-      },
-    });
+  CsTelemetryModule.instance.telemetryService.raiseEndTelemetry({
+    edata: {
+      type: 'content',
+      mode: 'play',
+      pageid: pageUrl,
+      summary: [],
+      duration: '000',
+    },
+  });
 };
 
 
@@ -135,7 +135,7 @@ export const impression = (currentPage, telemetryMode) => {
   }
 };
 
-export const error = (error, data,telemetryMode) => {
+export const error = (error, data, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
     CsTelemetryModule.instance.telemetryService.raiseErrorTelemetry({
       options: getEventOptions(),
@@ -148,22 +148,22 @@ export const error = (error, data,telemetryMode) => {
   }
 };
 
-export const feedback = (data, contentId,telemetryMode) => {
+export const feedback = (data, contentId, telemetryMode) => {
   if (checkTelemetryMode(telemetryMode)) {
-      CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
-        options: getEventOptions(),
-        edata: {
-          contentId: contentId,
-          rating: data,
-          comments: '',
-        },
-      });
+    CsTelemetryModule.instance.telemetryService.raiseFeedBackTelemetry({
+      options: getEventOptions(),
+      edata: {
+        contentId: contentId,
+        rating: data,
+        comments: '',
+      },
+    });
   }
 };
 
-function checkTelemetryMode(currentMode ){
+function checkTelemetryMode(currentMode) {
 
-return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') ||(process.env.REACT_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) || (process.env.REACT_APP_TELEMETRY_MODE === 'DT' && (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'));
+  return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') || (process.env.REACT_APP_TELEMETRY_MODE === 'NT' && (currentMode === 'ET' || currentMode === 'NT')) || (process.env.REACT_APP_TELEMETRY_MODE === 'DT' && (currentMode === 'ET' || currentMode === 'NT' || currentMode === 'DT'));
 
 }
 
@@ -171,7 +171,7 @@ const location = new URLSearchParams(window.location);
 const myCurrectLanguage = getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
 
 export const getEventOptions = () => {
-  var emis_username = 'anonymous';
+  var emis_username = '';
   var buddyUserId = '';
 
   if (localStorage.getItem('token') !== null) {
@@ -188,7 +188,7 @@ export const getEventOptions = () => {
 
 
   const userType = isBuddyLogin ? 'Buddy User' : 'User';
-  const userId = isBuddyLogin  ? emis_username + '/' + buddyUserId : emis_username || 'anonymous'
+  const userId = isBuddyLogin ? emis_username + '/' + buddyUserId : emis_username || localStorage.getItem('virtualId') || "anonymous";
 
   return {
     object: {},
@@ -200,29 +200,27 @@ export const getEventOptions = () => {
         pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
       },
       env: process.env.REACT_APP_env,
-      uid: `${
-        isBuddyLogin
-          ? emis_username + '/' + buddyUserId
-          : emis_username || 'anonymous'
-      }`,
-      cdata:  userId == 'anonymous'
-      ? [
-        { id: contentSessionId, type: 'ContentSession' },
-        { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType },
-        { id: myCurrectLanguage, type: 'language' },
-      ]:[
-        { id: contentSessionId, type: 'ContentSession' },
-        { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType },
-        { id: myCurrectLanguage, type: 'language' },
-        { id: userDetails?.school_name, type: 'school_name' },
-        {
-          id: userDetails?.class_studying_id,
-          type: 'class_studying_id',
-        },
-        { id: userDetails?.udise_code, type: 'udise_code' },
-      ],
+      uid: isBuddyLogin
+        ? `${emis_username}/${buddyUserId}`
+        : emis_username || localStorage.getItem('virtualId') || 'anonymous',
+      cdata: userId == 'anonymous'
+        ? [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+        ] : [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+          { id: userDetails?.school_name, type: 'school_name' },
+          {
+            id: userDetails?.class_studying_id,
+            type: 'class_studying_id',
+          },
+          { id: userDetails?.udise_code, type: 'udise_code' },
+        ],
       rollup: {},
     },
   };
