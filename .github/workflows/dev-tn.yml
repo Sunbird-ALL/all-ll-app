@@ -1,4 +1,4 @@
-name: ALL Tn Dev Deployment
+name: ALL tn dev Deployment
 
 on:
   push:
@@ -11,34 +11,26 @@ jobs:
     environment: all-tn-dev
 
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
-      # Configure AWS credentials
       - name: Configure AWS credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set default.region $AWS_REGION
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      # Clean up old dependencies
       - name: Clean up node_modules and package-lock.json
         run: |
           rm -rf node_modules
           rm -f package-lock.json
 
-      # Install Dependencies with legacy peer dependencies handling
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
@@ -72,6 +64,7 @@ jobs:
           REACT_APP_AWS_S3_BUCKET_CONTENT_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_CONTENT_URL }}
           REACT_APP_MIN_DECIBELS: ${{ vars.REACT_APP_MIN_DECIBELS }}
           REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
+          CI: false # Disabling CI to not treat warnings as errors
         run: npm run build
 
       # Deploy to S3 Bucket
