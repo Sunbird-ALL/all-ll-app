@@ -17,82 +17,60 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '16'
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Clean up node_modules and package-lock.json
+      - name: Install AWS CLI
         run: |
-          rm -rf node_modules
-          rm -f package-lock.json
-
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
-
-      - name: Add missing Babel plugin
-        run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
-
-      - name: Install recordrtc
-        run: npm install recordrtc --save
-
-      - name: Update babel-preset-react-app
-        run: npm install babel-preset-react-app@latest --save-dev
-
-      # Build Production with environment variables
+          sudo DEBIAN_FRONTEND=noninteractive apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+      - name: Configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+      - name: Build and Package Application
+        run: |
+          npm install
+      
       - name: Build Production
-        env:
-          REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
-          REACT_APP_MODE: ${{ vars.REACT_APP_MODE }}
-          REACT_APP_authToken: ${{ vars.REACT_APP_AUTHTOKEN }}
-          REACT_APP_PID: ${{ vars.REACT_APP_PID }}
-          REACT_APP_UID: ${{ vars.REACT_APP_UID }}
-          REACT_APP_ID: ${{ vars.REACT_APP_ID }}
-          REACT_APP_VER: ${{ vars.REACT_APP_VER }}
-          REACT_APP_TIMEDIFF: ${{ vars.REACT_APP_TIMEDIFF }}
-          REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
-          REACT_APP_ENDPOINT: ${{ vars.REACT_APP_ENDPOINT }}
-          REACT_APP_APISLUG: ${{ vars.REACT_APP_APISLUG }}
-          REACT_APP_CHANNEL: ${{ vars.REACT_APP_CHANNEL }}
-          REACT_APP_ENV: ${{ vars.REACT_APP_ENV }}
-          REACT_APP_BATCHSIZE: ${{ vars.REACT_APP_BATCHSIZE }}
-          REACT_APP_CONTENT_SIZE: ${{ vars.REACT_APP_CONTENT_SIZE }}
-          REACT_APP_LANGUAGE: ${{ vars.REACT_APP_LANGUAGE }}
-          REACT_APP_TELEMETRY_MODE: ${{ vars.REACT_APP_TELEMETRY_MODE }}
-          REACT_APP_LEARNER_AI_APP_HOST: ${{ vars.REACT_APP_LEARNER_AI_APP_HOST }}
-          REACT_APP_CAPTURE_AUDIO: ${{ vars.REACT_APP_CAPTURE_AUDIO }}
-          REACT_APP_AWS_S3_BUCKET_NAME: ${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }}
-          REACT_APP_AWS_S3_BUCKET_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_URL }}
-          REACT_APP_AWS_S3_REGION: ${{ vars.REACT_APP_AWS_S3_REGION }}
-          REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
-          REACT_APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
-          REACT_APP_AWS_S3_BUCKET_CONTENT_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_CONTENT_URL }}
-          REACT_APP_MIN_DECIBELS: ${{ vars.REACT_APP_MIN_DECIBELS }}
-          REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
-          CI: false # Disabling CI to not treat warnings as errors
-        run: npm run build
-
-      # Deploy to S3 Bucket
+        run: |
+          REACT_APP_ASR_API_KEY=${{ secrets.REACT_APP_ASR_API_KEY }} \
+          REACT_APP_MODE=play \
+          REACT_APP_authToken="" \
+          REACT_APP_pid=languagelab-portal.All-LL-App \
+          REACT_APP_UID=anonymous \
+          REACT_APP_id=all.ll.app \
+          REACT_APP_ver="0.6.2" \
+          REACT_APP_TIMEDIFF="0" \
+          REACT_APP_host=https://telemetry-dev.theall.ai \
+          REACT_APP_endpoint=telemetry \
+          REACT_APP_apislug="/v1/" \
+          REACT_APP_CHANNEL="Mozhigal" \
+          REACT_APP_env="all-player" \
+          REACT_APP_batchsize=10 \
+          REACT_APP_CONTENT_SIZE=5 \
+          REACT_APP_LANGUAGE=ta \
+          REACT_APP_TELEMETRY_MODE=ET \
+          REACT_APP_LEARNER_AI_APP_HOST="https://www.learnerai-dev.theall.ai" \
+          REACT_APP_CAPTURE_AUDIO=true \
+          REACT_APP_AWS_S3_BUCKET_NAME=all-dev-storage \
+          REACT_APP_AWS_S3_BUCKET_URL=https://all-dev-storage.s3.ap-south-1.amazonaws.com \
+          REACT_APP_AWS_S3_REGION=ap-south-1 \
+          REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} \
+          REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} \
+          REACT_APP_AWS_S3_BUCKET_CONTENT_URL=https://all-dev-content-service.s3.ap-south-1.amazonaws.com \
+          REACT_APP_MIN_DECIBELS=-75 \
+          REACT_APP_IS_AUDIOPREPROCESSING=false \
+          npm run build
       - name: Deploy to S3 Bucket
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           aws s3 sync ./build s3://all-tn-app-dev/assets/sb-all/
-
-      # Debug Environment Variables (optional, for troubleshooting)
       - name: Debug Environment Variables
         run: |
           echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
           echo "AWS_REGION: $AWS_REGION"
-          echo "Secret AWS S3 Bucket Name: ${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }}"
-
-      # Invalidate Cloudfront (optional, if CloudFront is used)
+          echo "secrate": ${{secrets.REACT_APP_AWS_S3_BUCKET_NAME}}
+       ### Invalidate Cloudfront
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
         env:
