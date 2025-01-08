@@ -171,6 +171,29 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (window.telemetry?.syncEvents) {
+        // Attempt to run syncEvents
+        window.telemetry.syncEvents();
+      }
+
+      // Introduce a blocking operation for a very short delay (optional)
+      const start = Date.now();
+      while (Date.now() - start < 1000) {
+        // Busy-wait for 100ms (not ideal, but synchronous)
+      }
+    };
+
+    // Add the event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
 
   return (
     <>
