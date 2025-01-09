@@ -1,4 +1,4 @@
-name: ALL SAAS EXPLORE LEARN Deployment
+name: ALL tn dev all-ll-app Deployment
 
 on:
   push:
@@ -80,7 +80,7 @@ jobs:
           PUBLIC_URL: ${{ vars.PUBLIC_URL }}
           NODE_ENV: ${{ vars.NODE_ENV }}
           FAST_REFRESH: ${{ vars.FAST_REFRESH }}
-          REACT_APP_ASR_API_KEY: ${{ vars.REACT_APP_ASR_API_KEY }}
+          REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
           CI: false # Disabling CI to not treat warnings as errors
         run: npm run build
 
