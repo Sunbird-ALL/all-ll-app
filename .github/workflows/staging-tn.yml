@@ -1,4 +1,4 @@
-name: ALL Tn staging Deployment
+name: ALL Tn Staging Deployment
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     environment: all-tn-dev
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Setup Node.js
@@ -21,18 +21,19 @@ jobs:
 
       - name: Install AWS CLI
         run: |
-          sudo DEBIAN_FRONTEND=noninteractive apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          aws --version
 
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         run: |
           aws configure set aws_access_key_id ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
           aws configure set default.region ${{ secrets.AWS_REGION }}
 
-      - name: Build and Package Application
-        run: |
-          npm install
+      - name: Install Dependencies
+        run: npm install
 
       - name: Build Production
         run: |
@@ -73,7 +74,7 @@ jobs:
         run: |
           echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
           echo "AWS_REGION: $AWS_REGION"
-          echo "secrate": ${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }}
+          echo "secrate: ${{ secrets.REACT_APP_AWS_S3_BUCKET_NAME }}"
 
       - name: Cloudfront Invalidation
         uses: chetan/invalidate-cloudfront-action@master
