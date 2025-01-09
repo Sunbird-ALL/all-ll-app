@@ -205,23 +205,25 @@ export const getEventOptions = () => {
           ? emis_username + '/' + buddyUserId
           : emis_username || 'anonymous'
       }`,
-      cdata:  userId == 'anonymous'
-      ? [
-        { id: contentSessionId, type: 'ContentSession' },
-        { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType },
-        { id: myCurrectLanguage, type: 'language' },
-      ]:[
-        { id: contentSessionId, type: 'ContentSession' },
-        { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType },
-        { id: myCurrectLanguage, type: 'language' },
-        { id: userDetails?.school_name, type: 'school_name' },
-        {
-          id: userDetails?.class_studying_id,
-          type: 'class_studying_id',
-        },
-        { id: userDetails?.udise_code, type: 'udise_code' },
+      cdata: userId == 'anonymous'
+        ? [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+          { id: localStorage.getItem("virtualId") || null, type: "virtualId" },
+        ] : [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+          { id: userDetails?.school_name, type: 'school_name' },
+          {
+            id: userDetails?.class_studying_id,
+            type: 'class_studying_id',
+          },
+          { id: userDetails?.udise_code, type: 'udise_code' },
+          { id: localStorage.getItem("virtualId") || null, type: "virtualId" },
       ],
       rollup: {},
     },
