@@ -1,14 +1,14 @@
-name: ALL Tn dev Deployment
+name: ALL Tn Production Deployment
 
 on:
   push:
     branches:
-      - prod
+      - all-0.6-hotfix
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-tn-prod
+    environment: all-tn-production
 
     steps:
       - name: Checkout code
@@ -19,63 +19,63 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install AWS CLI
-        run: |
-          sudo DEBIAN_FRONTEND=noninteractive apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y awscli
-      - name: Configure AWS credentials
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set default.region ${{ secrets.AWS_REGION }}
-      - name: Build and Package Application
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Dependencies
         run: |
           npm install
-      
+
       - name: Build Production
+        env:
+          REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
+          REACT_APP_MODE: ${{ vars.REACT_APP_MODE }}
+          REACT_APP_AUTHTOKEN: ${{ vars.REACT_APP_AUTHTOKEN }}
+          REACT_APP_PID: ${{ vars.REACT_APP_PID }}
+          REACT_APP_UID: ${{ vars.REACT_APP_UID }}
+          REACT_APP_ID: ${{ vars.REACT_APP_ID }}
+          REACT_APP_VER: ${{ vars.REACT_APP_VER }}
+          REACT_APP_TIMEDIFF: ${{ vars.REACT_APP_TIMEDIFF }}
+          REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
+          REACT_APP_ENDPOINT: ${{ vars.REACT_APP_ENDPOINT }}
+          REACT_APP_APISLUG: ${{ vars.REACT_APP_APISLUG }}
+          REACT_APP_CHANNEL: ${{ vars.REACT_APP_CHANNEL }}
+          REACT_APP_ENV: ${{ vars.REACT_APP_ENV }}
+          REACT_APP_BATCHSIZE: ${{ vars.REACT_APP_BATCHSIZE }}
+          REACT_APP_CONTENT_SIZE: ${{ vars.REACT_APP_CONTENT_SIZE }}
+          REACT_APP_LANGUAGE: ${{ vars.REACT_APP_LANGUAGE }}
+          REACT_APP_TELEMETRY_MODE: ${{ vars.REACT_APP_TELEMETRY_MODE }}
+          REACT_APP_URL: ${{ vars.REACT_APP_URL }}
+          REACT_APP_CAPTURE_AUDIO: ${{ vars.REACT_APP_CAPTURE_AUDIO }}
+          REACT_APP_AWS_S3_BUCKET_NAME: ${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }}
+          REACT_APP_AWS_S3_BUCKET_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_URL }}
+          REACT_APP_AWS_S3_REGION: ${{ secrets.REACT_APP_AWS_S3_REGION }}
+          REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          REACT_APP_AWS_SECRET_ACCESS_KEY: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }}
+          REACT_APP_AWS_S3_BUCKET_CONTENT_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_CONTENT_URL }}
+          REACT_APP_MIN_DECIBELS: ${{ vars.REACT_APP_MIN_DECIBELS }}
+          REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
         run: |
-          REACT_APP_ASR_API_KEY=${{ secrets.REACT_APP_ASR_API_KEY }} \
-          REACT_APP_MODE=${{ vars.REACT_APP_MODE }} \
-          REACT_APP_authToken=${{ vars.REACT_APP_AUTHTOKEN }} \
-          REACT_APP_PID=${{ vars.REACT_APP_PID }} \
-          REACT_APP_UID=${{ vars.REACT_APP_UID }} \
-          REACT_APP_ID=${{ vars.REACT_APP_ID }} \
-          REACT_APP_VER=${{ vars.REACT_APP_VER }} \
-          REACT_APP_TIMEDIFF=${{ vars.REACT_APP_TIMEDIFF }} \
-          REACT_APP_HOST=${{ vars.REACT_APP_HOST }} \
-          REACT_APP_ENDPOINT=${{ vars.REACT_APP_ENDPOINT }} \
-          REACT_APP_APISLUG=${{ vars.REACT_APP_APISLUG }} \
-          REACT_APP_CHANNEL=${{ vars.REACT_APP_CHANNEL }} \
-          REACT_APP_ENV=${{ vars.REACT_APP_ENV }} \
-          REACT_APP_BATCHSIZE=${{ vars.REACT_APP_BATCHSIZE }} \
-          REACT_APP_CONTENT_SIZE=${{ vars.REACT_APP_CONTENT_SIZE }} \
-          REACT_APP_LANGUAGE=${{ vars.REACT_APP_LANGUAGE }} \
-          REACT_APP_TELEMETRY_MODE=${{ vars.REACT_APP_TELEMETRY_MODE }} \
-          REACT_APP_LEARNER_AI_APP_HOST=${{ vars.REACT_APP_LEARNER_AI_APP_HOST }} \
-          REACT_APP_CAPTURE_AUDIO=${{ vars.REACT_APP_CAPTURE_AUDIO }} \
-          REACT_APP_AWS_S3_BUCKET_NAME=${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }} \
-          REACT_APP_AWS_S3_BUCKET_URL=${{ vars.REACT_APP_AWS_S3_BUCKET_URL }} \
-          REACT_APP_AWS_S3_REGION=${{ vars.REACT_APP_AWS_S3_REGION }} \
-          REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} \
-          REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} \
-          REACT_APP_AWS_S3_BUCKET_CONTENT_URL=${{ vars.REACT_APP_AWS_S3_BUCKET_CONTENT_URL }} \
-          REACT_APP_MIN_DECIBELS=${{ vars.REACT_APP_MIN_DECIBELS }} \
-          REACT_APP_IS_AUDIOPREPROCESSING=${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }} \
           npm run build
+
       - name: Deploy to S3 Bucket
         run: |
-          aws s3 sync ./build s3://sballtnlanglab/tn-prod-build-all-ll-app/
-      # - name: Debug Environment Variables
-      #   run: |
-      #     echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
-      #     echo "AWS_REGION: $AWS_REGION"
-      #     echo "secrate": ${{secrets.REACT_APP_AWS_S3_BUCKET_NAME}}
-      #  ### Invalidate Cloudfront
-      # - name: Cloudfront Invalidation
-      #   uses: chetan/invalidate-cloudfront-action@master
-      #   env:
-      #     DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION }}
-      #     PATHS: '/*'
-      #     AWS_REGION: ${{ secrets.AWS_REGION }}
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws s3 sync ./build s3://sballtnlanglab/tn-prod-all-ll-app-build/
+
+      - name: Debug Environment Variables
+        run: |
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "AWS_REGION: $AWS_REGION"
+
+      - name: Invalidate CloudFront Cache
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION }}
+          PATHS: "/*"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
