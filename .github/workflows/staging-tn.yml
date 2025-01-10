@@ -1,4 +1,4 @@
-name: ALL tn dev all-ll-app Deployment
+name: https://d2ce35dy7hucsx.cloudfront.net ALL tn staging all-ll-app Deployment
 
 on:
   push:
