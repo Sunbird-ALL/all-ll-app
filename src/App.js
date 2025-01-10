@@ -6,7 +6,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { initialize, end } from './services/telementryService';
-import '@project-sunbird/telemetry-sdk/index.js';
+import '@tekdi/all-telemetry-sdk/index.js';
 import { startEvent } from './services/callTelemetryIntract';
 
 //components
