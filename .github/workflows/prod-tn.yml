@@ -30,6 +30,13 @@ jobs:
         run: |
           npm install --legacy-peer-deps
 
+      - name: Ensure .env.local Exists
+        run: |
+          if [ ! -f .env.local ]; then
+            echo "Creating .env.local"
+            touch .env.local
+          fi
+          
       - name: Build Production
         env:
           REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
