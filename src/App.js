@@ -45,22 +45,22 @@ function App() {
           did: did, // Unique id to identify the device or browser
           uid: 'anonymous',
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
-          env: process.env.REACT_APP_env,
+          env: process.env.REACT_APP_ENV,
 
           pdata: {
             // optional
-            id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-            ver: process.env.REACT_APP_ver, // Version of the App
-            pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
+            id: process.env.REACT_APP_ID, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+            ver: process.env.REACT_APP_VER, // Version of the App
+            pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
           },
           tags: [
             // Defines the tags data
             '',
           ],
           timeDiff: 0, // Defines the time difference// Defines the object roll up data
-          host: process.env.REACT_APP_host, // Defines the from which domain content should be load
-          endpoint: process.env.REACT_APP_endpoint,
-          apislug: process.env.REACT_APP_apislug,
+          host: process.env.REACT_APP_HOST, // Defines the from which domain content should be load
+          endpoint: process.env.REACT_APP_ENDPOINT,
+          apislug: process.env.REACT_APP_APISLUG,
         },
         config: {},
         // tslint:disable-next-line:max-line-length

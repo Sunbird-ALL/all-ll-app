@@ -237,7 +237,7 @@ function Mic({
           var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
 
           const command = new PutObjectCommand({
-            Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+            Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
             Key: audioFileName,
             Body: Uint8Array.from(window.atob(asrInput), (c) => c.charCodeAt(0)),
             ContentType: 'audio/wav'

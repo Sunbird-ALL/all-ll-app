@@ -36,7 +36,7 @@ jobs:
         run: |
           REACT_APP_API_KEY=${{ secrets.REACT_APP_API_KEY }} \
           REACT_APP_MODE=play \
-          REACT_APP_authToken="" \
+          REACT_APP_AUTHTOKEN="" \
           REACT_APP_PID=learner-ai-story-demo \
           REACT_APP_UID=anonymous \
           REACT_APP_ID=all.ll.app \

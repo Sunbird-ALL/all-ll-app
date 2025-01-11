@@ -44,7 +44,7 @@ jobs:
       - name: Build and Package Application
         env:
           REACT_APP_MODE: ${{ vars.REACT_APP_MODE }}
-          REACT_APP_authToken: ${{ vars.REACT_APP_authToken }}
+          REACT_APP_AUTHTOKEN: ${{ vars.REACT_APP_AUTHTOKEN }}
           REACT_APP_PID: ${{ vars.REACT_APP_PID }}
           REACT_APP_UID: ${{ vars.REACT_APP_UID }}
           REACT_APP_ID: ${{ vars.REACT_APP_ID }}
