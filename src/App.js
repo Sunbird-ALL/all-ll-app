@@ -24,25 +24,16 @@ function App() {
       const fp = await FingerprintJS.load();
 
       const { visitorId } = await fp.get();
-
-      localStorage.setItem('did', visitorId);
-      initService();
+      initService(visitorId);
     };
     setFp();
 
-    const initService = () => {
-      if (localStorage.getItem('fpDetails_v2') !== null) {
-        let fpDetails_v2 = localStorage.getItem('fpDetails_v2');
-        var did = fpDetails_v2.result;
-      } else {
-        var did = localStorage.getItem('did');
-      }
-
+    const initService = (visitorId) => {
       initialize({
         context: {
           mode: process.env.REACT_APP_MODE, // To identify preview used by the user to play/edit/preview
           authToken: '', // Auth key to make  api calls
-          did: did, // Unique id to identify the device or browser
+          did: localStorage.getItem("deviceId") || visitorId, // Unique id to identify the device or browser
           uid: 'anonymous',
           channel: process.env.REACT_APP_CHANNEL, // Unique id of the channel(Channel ID)
           env: process.env.REACT_APP_ENV,
