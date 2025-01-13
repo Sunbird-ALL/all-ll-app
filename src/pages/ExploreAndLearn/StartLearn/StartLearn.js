@@ -12,6 +12,7 @@ import { HStack, VStack } from '@chakra-ui/react';
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
 import { getParameter } from '../../../utils/helper';
 import AppFooter from '../../../components/AppFooter/AppFooter';
+import { filterBadWords } from '../../../utils/helper';
 
 function StartLearn() {
   const location = useLocation();
@@ -22,10 +23,9 @@ function StartLearn() {
   const [flag, setFlag] = useState(true);
   const playAudio = () => {
     interactCall("playAudio", "startlearn","DT", "play");
-    set_temp_audio(new Audio(content[sel_lang].audio));
+      set_temp_audio(new Audio(content[sel_lang].audio));
   };
-  // console.log(isAudioPlay);
-
+  
   const pauseAudio = () => {
     interactCall("pauseAudio", "startlearn","DT", "pause");
     if (temp_audio !== null) {
@@ -151,7 +151,6 @@ function StartLearn() {
         localStorage.setItem('trysame', 'no');
         localStorage.setItem('content_random_id', getitem);
         set_content(tempContent[getitem].content);
-
         set_content_id(getitem);
         localStorage.setItem(
           'contentText',
@@ -183,7 +182,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
@@ -275,6 +274,7 @@ function StartLearn() {
                         setVoiceText={setVoiceText}
                         setRecordedAudio={setRecordedAudio}
                         _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                        setIsAudioPlay={setIsAudioPlay}
                         flag={true}
                       />
                       {isAudioPlay === 'recording' ? (

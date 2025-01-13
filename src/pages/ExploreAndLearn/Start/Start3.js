@@ -7,7 +7,7 @@ import new3paragraph from '../../../assests/Images/Learn/new3paragraph.png';
 import learn_next from '../../../assests/Images/learn_next.png';
 
 import { scroll_to_top } from '../../../utils/Helper/JSHelper';
-import lang_constants from '../../../lang/lang_constants.json'
+import lang_constants from '../../../lang/lang_constants.json';
 /*chakra*/
 import { getParameter } from '../../../utils/helper';
 import AppFooter from '../../../components/AppFooter/AppFooter';
@@ -20,7 +20,8 @@ function Start3() {
   const [tabShowPara, setTabShowPara] = useState('');
 
   const location = useLocation();
-  const myCurrectLanguage = getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
+  const myCurrectLanguage =
+    getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
   const [sel_lang, set_sel_lang] = useState(myCurrectLanguage);
   const [sel_level, set_sel_level] = useState(
     // localStorage.getItem('apphomelevel')
@@ -79,7 +80,9 @@ function Start3() {
     } else {
       localStorage.removeItem('contents');
       axios
-        .get(window.location.origin + '/db/' + myCurrectLanguage + '/proto3.json')
+        .get(
+          window.location.origin + '/db/' + myCurrectLanguage + '/proto3.json'
+        )
         .then(res => {
           localStorage.setItem('contents', JSON.stringify(res.data));
 
@@ -105,7 +108,23 @@ function Start3() {
   };
 
   useEffect(() => {
-    getfromurl();
+    if (localStorage.getItem('contents') === null) getfromurl();
+    else {
+      let data = JSON.parse(localStorage.getItem('contents'));
+      let val =
+        data &&
+        Object.values(data).map(item => {
+          return item.type;
+        });
+      let tabShowWord = val && val.find(val => val === 'Word');
+      let tabShowS = val && val.find(val => val === 'Sentence');
+      let tabShowP = val && val.find(val => val === 'Paragraph');
+      setTabShow(tabShowWord);
+      setTabShowSentence(tabShowS);
+      setTabShowPara(tabShowP);
+
+      localStorage.setItem('apphomelevel', tabShowWord);
+    }
   }, [sel_level]);
 
   useEffect(() => {
@@ -114,7 +133,10 @@ function Start3() {
 
   const [load_cnt, set_load_cnt] = useState(0);
   useEffect(() => {
-    const showNavigationFooter = getParameter('hideNavigation', location.search);
+    const showNavigationFooter = getParameter(
+      'hideNavigation',
+      location.search
+    );
     set_hide_navFooter(showNavigationFooter);
 
     if (load_cnt == 0) {
@@ -125,10 +147,9 @@ function Start3() {
 
   // This is for language selection
 
-    function getLanguageConstants(languageCode) {
-      return lang_constants[languageCode] || lang_constants['en'];
-    }
-
+  function getLanguageConstants(languageCode) {
+    return lang_constants[languageCode] || lang_constants['en'];
+  }
 
   function showStart() {
     return (
@@ -157,7 +178,7 @@ function Start3() {
                             //window.location.reload();
                           }}
                         >
-                         {getLanguageConstants('en').HOME_TRY_IN}
+                          {getLanguageConstants('en').HOME_TRY_IN}
                         </div>
                       </div>
                       <div className="col s6">
@@ -195,13 +216,20 @@ function Start3() {
                       <div className="learn_level_div">
                         <div className="col s2">
                           <div className="learn_level_div_start">
-                            <img src={new1word} className="learn_level_img" alt="Word" />
+                            <img
+                              src={new1word}
+                              className="learn_level_img"
+                              alt="Word"
+                            />
                           </div>
                         </div>
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_WORD : getLanguageConstants(myCurrectLanguage).COMMON_WORD}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_WORD
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_WORD}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -210,7 +238,11 @@ function Start3() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning" />
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
@@ -238,7 +270,10 @@ function Start3() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_SENTENCE : getLanguageConstants(myCurrectLanguage).COMMON_SENTENCE}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_SENTENCE
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_SENTENCE}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -247,7 +282,11 @@ function Start3() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
@@ -275,7 +314,10 @@ function Start3() {
                         <div className="col s8">
                           <div className="learn_level_div_middle">
                             <font className="learn_title">
-                            {sel_lang === 'en' ? getLanguageConstants('en').COMMON_PARAGRAPH : getLanguageConstants(myCurrectLanguage).COMMON_PARAGRAPH}
+                              {sel_lang === 'en'
+                                ? getLanguageConstants('en').COMMON_PARAGRAPH
+                                : getLanguageConstants(myCurrectLanguage)
+                                    .COMMON_PARAGRAPH}
                             </font>
                             <br />
                             <font className="learn_sub_title">
@@ -284,7 +326,11 @@ function Start3() {
                           </div>
                         </div>
                         <div className="col s2">
-                          <img src={learn_next} className="learn_next_img" alt="Start Learning"/>
+                          <img
+                            src={learn_next}
+                            className="learn_next_img"
+                            alt="Start Learning"
+                          />
                         </div>
                       </div>
                     </Link>
@@ -298,7 +344,11 @@ function Start3() {
           </div>
         </div>
         {hide_navFooter === 'false' ? (
-          <AppFooter hideNavigation={getParameter('hideNavigation', location.search)} selectedLanguage={getParameter('language', location.search)} source={getParameter('source', location.search)}/>
+          <AppFooter
+            hideNavigation={getParameter('hideNavigation', location.search)}
+            selectedLanguage={getParameter('language', location.search)}
+            source={getParameter('source', location.search)}
+          />
         ) : (
           <></>
         )}

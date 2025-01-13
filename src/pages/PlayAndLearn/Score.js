@@ -14,8 +14,8 @@ import { findRegex } from '../../utils/helper';
 import { scroll_to_top } from '../../utils/Helper/JSHelper';
 import { interactCall } from '../../services/callTelemetryIntract';
 import play from '../../assests/Images/play-img.png';
-
 import pause from '../../assests/Images/pause-img.png';
+import { isProfanityWord } from '../../utils/helper';
 
 /*chakra*/
 import { feedback } from '../../services/telementryService';
@@ -61,7 +61,7 @@ function Score() {
     set_temp_audio(new Audio(recordedAudio));
   };
   const pauseAudio = () => {
-    interactCall("pauseAudio", "startlearn","DT", "pause");
+    interactCall("pauseAudio", "score","DT", "pause");
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -82,11 +82,11 @@ function Score() {
   };
 
   const newSentence = () => {
-    interactCall("newSentence", "startlearn","DT", "");
+    interactCall("newSentence", "score","DT", "");
     navigate(-1);
   };
   const trySameSentence = () => {
-    interactCall("trySameSentence", "startlearn","DT", "");
+    interactCall("trySameSentence", "score","DT", "");
     localStorage.setItem('trysame', 'yes');
     navigate(-1);
   };
@@ -101,6 +101,12 @@ function Score() {
       ? localStorage.getItem('apphomelang')
       : 'en'
   );
+
+  useEffect(()=>{
+    if(isProfanityWord()){
+      alert('inappropriate word detected')
+    }
+  },[])
 
   useEffect(() => {
     if (load_cnt == 0) {
@@ -132,6 +138,7 @@ function Score() {
       checkVoice(voiceText);
     }
   }, [voiceText]);
+
   function replaceAll(string, search, replace) {
     return string.split(search).join(replace);
   }
@@ -342,12 +349,14 @@ function Score() {
       window.parent.postMessage({
         score: currentScore,
         message: 'all-app-score',
-      });
+      }, "*");
     }
   };
 
   useEffect(() => {
-    send(handleScore());
+    if (handleScore() > 0) {
+      send(handleScore());
+    }
   }, []);
 
   function showScore() {

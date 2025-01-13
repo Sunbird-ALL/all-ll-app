@@ -46,6 +46,20 @@ function Mic({
     setUrl(value);
   }, [value]);
 
+  function handleMic(){
+    navigator.mediaDevices.getUserMedia({audio: true})
+    .then(stream => {
+      if(stream.getAudioTracks()[0].muted){
+        alert("please turn your mic on")
+      }
+      else{
+        startRecording();
+      }
+    })
+    .catch(err => console.log(err));
+  }
+
+
 
   const startRecording = () => {
     setRecord(true);
@@ -223,7 +237,7 @@ function Mic({
           var audioFileName = `${process.env.REACT_APP_CHANNEL}/${localStorage.getItem('contentSessionId')===null? localStorage.getItem('allAppContentSessionId'):localStorage.getItem('contentSessionId')}-${Date.now()}-${getContentId}.wav`;
 
           const command = new PutObjectCommand({
-            Bucket: process.env.REACT_APP_AWS_s3_BUCKET_NAME,
+            Bucket: process.env.REACT_APP_AWS_S3_BUCKET_NAME,
             Key: audioFileName,
             Body: Uint8Array.from(window.atob(asrInput), (c) => c.charCodeAt(0)),
             ContentType: 'audio/wav'
@@ -293,7 +307,7 @@ function Mic({
           <audio controls="controls" src={url} type="audio/webm" />
         </div>
       )*/}
-      <div onClick={record ? stopRecording : startRecording}>
+      <div onClick={record ? stopRecording : handleMic}>
         <IconMic />
       </div>
     </div>

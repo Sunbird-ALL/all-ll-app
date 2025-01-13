@@ -2,6 +2,7 @@ import React from 'react';
 import { generateUUID, uniqueId } from './utilService';
 import { CsTelemetryModule } from '@project-sunbird/client-services/telemetry';
 import jwt from 'jwt-decode';
+import { getParameter } from '../utils/helper';
 
 var contentSessionId;
 let playSessionId;
@@ -45,7 +46,7 @@ export const initialize = ({ context, config, metadata }) => {
         authtoken: context.authToken || '',
         uid: 'anonymous',
         sid: context.sid,
-        batchsize: process.env.REACT_APP_batchsize,
+        batchsize: process.env.REACT_APP_BATCHSIZE,
         mode: context.mode,
         host: context.host,
         apislug: context.apislug,
@@ -166,6 +167,9 @@ return (process.env.REACT_APP_TELEMETRY_MODE === 'ET' && currentMode === 'ET') |
 
 }
 
+const location = new URLSearchParams(window.location);
+const myCurrectLanguage = getParameter('language', location.search) || process.env.REACT_APP_LANGUAGE;
+
 export const getEventOptions = () => {
   var emis_username = 'anonymous';
   var buddyUserId = '';
@@ -191,20 +195,35 @@ export const getEventOptions = () => {
     context: {
       pdata: {
         // optional
-        id: process.env.REACT_APP_id, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
-        ver: process.env.REACT_APP_ver, // Version of the App
-        pid: process.env.REACT_APP_pid, // Optional. In case the component is distributed, then which instance of that component
+        id: process.env.REACT_APP_ID, // Producer ID. For ex: For sunbird it would be "portal" or "genie"
+        ver: process.env.REACT_APP_VER, // Version of the App
+        pid: process.env.REACT_APP_PID, // Optional. In case the component is distributed, then which instance of that component
       },
-      env: process.env.REACT_APP_env,
+      env: process.env.REACT_APP_ENV,
       uid: `${
         isBuddyLogin
           ? emis_username + '/' + buddyUserId
           : emis_username || 'anonymous'
       }`,
-      cdata: [
-        { id: contentSessionId, type: 'ContentSession' },
-        { id: playSessionId, type: 'PlaySession' },
-        { id: userId, type: userType }
+      cdata: userId == 'anonymous'
+        ? [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+          { id: localStorage.getItem("virtualId") || null, type: "virtualId" },
+        ] : [
+          { id: contentSessionId, type: 'ContentSession' },
+          { id: playSessionId, type: 'PlaySession' },
+          { id: userId, type: userType },
+          { id: myCurrectLanguage, type: 'language' },
+          { id: userDetails?.school_name, type: 'school_name' },
+          {
+            id: userDetails?.class_studying_id,
+            type: 'class_studying_id',
+          },
+          { id: userDetails?.udise_code, type: 'udise_code' },
+          { id: localStorage.getItem("virtualId") || null, type: "virtualId" },
       ],
       rollup: {},
     },

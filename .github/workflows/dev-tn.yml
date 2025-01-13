@@ -1,0 +1,104 @@
+name: https://d357v3o0fwx8le.cloudfront.net ALL tn dev all-ll-app Deployment
+
+on:
+  push:
+    branches:
+      - all-0.6-hotfix
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: all-tn-dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Clean up node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Ensure .env.local Exists
+        run: |
+          if [ ! -f .env.local ]; then
+            echo "Creating .env.local"
+            touch .env.local
+          fi
+
+      - name: Build and Package Application
+        env:
+          REACT_APP_MODE: ${{ vars.REACT_APP_MODE }}
+          REACT_APP_AUTHTOKEN: ${{ vars.REACT_APP_AUTHTOKEN }}
+          REACT_APP_PID: ${{ vars.REACT_APP_PID }}
+          REACT_APP_UID: ${{ vars.REACT_APP_UID }}
+          REACT_APP_ID: ${{ vars.REACT_APP_ID }}
+          REACT_APP_VER: ${{ vars.REACT_APP_VER }}
+          REACT_APP_TIMEDIFF: ${{ vars.REACT_APP_TIMEDIFF }}
+          REACT_APP_HOST: ${{ vars.REACT_APP_HOST }}
+          REACT_APP_ENDPOINT: ${{ vars.REACT_APP_ENDPOINT }}
+          REACT_APP_APISLUG: ${{ vars.REACT_APP_APISLUG }}
+          REACT_APP_CHANNEL: ${{ vars.REACT_APP_CHANNEL }}
+          REACT_APP_ENV: ${{ vars.REACT_APP_ENV }}
+          REACT_APP_BATCHSIZE: ${{ vars.REACT_APP_BATCHSIZE }}
+          REACT_APP_CONTENT_SIZE: ${{ vars.REACT_APP_CONTENT_SIZE }}
+          REACT_APP_LANGUAGE: ${{ vars.REACT_APP_LANGUAGE }}
+          REACT_APP_TELEMETRY_MODE: ${{ vars.REACT_APP_TELEMETRY_MODE }}
+          REACT_APP_VIRTUAL_ID_HOST: ${{ vars.REACT_APP_VIRTUAL_ID_HOST }}
+          REACT_APP_LEARNER_AI_ORCHESTRATION_HOST: ${{ vars.REACT_APP_LEARNER_AI_ORCHESTRATION_HOST }}
+          REACT_APP_LEARNER_AI_APP_HOST: ${{ vars.REACT_APP_LEARNER_AI_APP_HOST }}
+          REACT_APP_CONTENT_SERVICE_APP_HOST: ${{ vars.REACT_APP_CONTENT_SERVICE_APP_HOST }}
+          REACT_APP_CAPTURE_AUDIO: ${{ vars.REACT_APP_CAPTURE_AUDIO }}
+          REACT_APP_AWS_S3_BUCKET_NAME: ${{ vars.REACT_APP_AWS_S3_BUCKET_NAME }}
+          REACT_APP_AWS_S3_BUCKET_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_URL }}
+          REACT_APP_AWS_S3_REGION: ${{ vars.REACT_APP_AWS_S3_REGION }}
+          REACT_APP_AWS_S3_BUCKET_CONTENT_URL: ${{ vars.REACT_APP_AWS_S3_BUCKET_CONTENT_URL }}
+          REACT_APP_MIN_DECIBELS: ${{ vars.REACT_APP_MIN_DECIBELS }}
+          REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
+          REACT_APP_POST_LEARNER_PROGRESS: ${{ vars.REACT_APP_POST_LEARNER_PROGRESS }}
+          REACT_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
+          REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          REACT_APP_AWS_SECRET_ACCESS_KEY: ${{secrets.REACT_APP_AWS_SECRET_ACCESS_KEY}}
+          REACT_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
+          REACT_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
+          WDS_SOCKET_PORT: ${{ vars.WDS_SOCKET_PORT }}
+          WDS_SOCKET_PATH: ${{ vars.WDS_SOCKET_PATH }}
+          WDS_SOCKET_HOST: ${{ vars.WDS_SOCKET_HOST }}
+          PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+          NODE_ENV: ${{ vars.NODE_ENV }}
+          FAST_REFRESH: ${{ vars.FAST_REFRESH }}
+          REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
+          CI: false # Disabling CI to not treat warnings as errors
+        run: npm run build
+
+      - name: Deploy to S3 Bucket
+        run: aws s3 sync ./build s3://all-tn-app-dev/assets/sb-all/
+
+      - name: Debug Environment Variables
+        run: |
+          echo "REACT_APP_AWS_S3_BUCKET_NAME: $REACT_APP_AWS_S3_BUCKET_NAME"
+          echo "AWS_REGION: $AWS_REGION"
+
+      - name: Cloudfront Invalidation
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION }}
+          PATHS: "/*"
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

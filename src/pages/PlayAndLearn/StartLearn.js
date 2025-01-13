@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  useLocation,
-  useNavigate
-} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, HStack, VStack } from '@chakra-ui/react';
 import { getContentList } from '../../utils/Const/Const';
 import VoiceCompair from '../../components/VoiceCompair/VoiceCompair';
@@ -10,7 +7,7 @@ import play from '../../assests/Images/play-img.png';
 import pause from '../../assests/Images/pause-img.png';
 import refresh from '../../assests/Images/refresh.png';
 import AppFooter from '../../components/AppFooter/AppFooter';
-
+import { filterBadWords } from '../../utils/helper';
 import { interactCall } from '../../services/callTelemetryIntract';
 import axios from 'axios';
 
@@ -18,7 +15,7 @@ import { scroll_to_top } from '../../utils/Helper/JSHelper';
 
 /*chakra*/
 
-import {  getParameter } from '../../utils/helper';
+import { getParameter } from '../../utils/helper';
 
 function StartLearn() {
   const navigate = useNavigate();
@@ -28,12 +25,12 @@ function StartLearn() {
   const location = useLocation();
 
   const playAudio = () => {
-    interactCall("playAudio", "score","DT", "play");
+    interactCall('playAudio', 'startlearn', 'DT', 'play');
     set_temp_audio(new Audio(content[sel_lang].audio));
   };
 
   const pauseAudio = () => {
-    interactCall("pauseAudio", "score","DT", "pause");
+    interactCall('pauseAudio', 'startlearn', 'DT', 'pause');
     if (temp_audio !== null) {
       temp_audio.pause();
       setFlag(!false);
@@ -55,8 +52,8 @@ function StartLearn() {
   };
 
   const newSentence = () => {
-    interactCall("newSentence", "score","DT", "");
-    handleChangeWord()
+    interactCall('newSentence', 'startlearn', 'DT', '');
+    handleChangeWord();
   };
 
   useEffect(() => {
@@ -82,127 +79,188 @@ function StartLearn() {
     const filePath = getParameter('source', location.search);
 
     if (filePath && filePath != 'null') {
-    axios
-      .get(filePath)
-      .then(res => {
-        localStorage.setItem('contents', JSON.stringify(res.data));
+      axios
+        .get(filePath)
+        .then(res => {
+          localStorage.setItem('proto4', JSON.stringify(res.data));
 
-        if (load_cnt === 0) {
-          const content_list = getContentList();
+          if (load_cnt === 0) {
+            const content_list = getContentList();
 
-          let tempContent = [];
-          const content_keys = Object.keys(content_list);
+            let tempContent = [];
+            const content_keys = Object.keys(content_list);
 
-          content_keys.forEach(key => {
-            if (
-              content_list[key].type === sel_level &&
-              content_list[key]?.[sel_lang]
-            ) {
-              tempContent.push({
-                content: content_list[key],
-              });
-            }
-          });
-          if (tempContent.length > 0) {
-            let getitem = localStorage.getItem('content_random_id')
-              ? localStorage.getItem('content_random_id')
-              : 0;
-            if (trysame != 'yes') {
-              let old_getitem = getitem;
-              while (old_getitem == getitem) {
-                getitem = randomIntFromInterval(
-                  0,
-                  Number(tempContent.length - 1)
-                );
+            content_keys.forEach(key => {
+              if (
+                content_list[key].type === sel_level &&
+                content_list[key]?.[sel_lang]
+              ) {
+                tempContent.push({
+                  content: content_list[key],
+                });
               }
+            });
+            if (tempContent.length > 0) {
+              let getitem = localStorage.getItem('content_random_id')
+                ? localStorage.getItem('content_random_id')
+                : 0;
+              if (trysame != 'yes') {
+                let old_getitem = getitem;
+                while (old_getitem == getitem) {
+                  getitem = randomIntFromInterval(
+                    0,
+                    Number(tempContent.length - 1)
+                  );
+                }
+              }
+              localStorage.setItem('trysame', 'no');
+              localStorage.setItem('content_random_id', getitem);
+              set_content(tempContent[getitem].content);
+              set_content_id(getitem);
+              localStorage.setItem(
+                'contentText',
+                tempContent[getitem].content[
+                  localStorage.getItem('apphomelang')
+                ].text
+              );
             }
-            localStorage.setItem('trysame', 'no');
-            localStorage.setItem('content_random_id', getitem);
-            set_content(tempContent[getitem].content);
-            set_content_id(getitem);
-            localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
+            scroll_to_top('smooth');
+            setNewTempContent(tempContent);
+            set_load_cnt(load_cnt => Number(load_cnt + 1));
           }
-          scroll_to_top('smooth');
-            setNewTempContent(tempContent)
-          set_load_cnt(load_cnt => Number(load_cnt + 1));
-        }
-      })
-      .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     } else {
       axios
-      .get(window.location.origin + '/db/playAndLearn/proto4.json')
-      .then(res => {
-        localStorage.setItem('contents', JSON.stringify(res.data));
+        .get(window.location.origin + '/db/playAndLearn/proto4.json')
+        .then(res => {
+          localStorage.setItem('proto4', JSON.stringify(res.data));
 
-        if (load_cnt === 0) {
-          const content_list = getContentList();
+          if (load_cnt === 0) {
+            const content_list = getContentList();
 
-          let tempContent = [];
-          const content_keys = Object.keys(content_list);
+            let tempContent = [];
+            const content_keys = Object.keys(content_list);
 
-          content_keys.forEach(key => {
-            if (
-              content_list[key].type === sel_level &&
-              content_list[key]?.[sel_lang]
-            ) {
-              tempContent.push({
-                content: content_list[key],
-              });
-            }
-          });
-          if (tempContent.length > 0) {
-            let getitem = localStorage.getItem('content_random_id')
-              ? localStorage.getItem('content_random_id')
-              : 0;
-            if (trysame != 'yes') {
-              let old_getitem = getitem;
-              while (old_getitem == getitem) {
-                getitem = randomIntFromInterval(
-                  0,
-                  Number(tempContent.length - 1)
-                );
+            content_keys.forEach(key => {
+              if (
+                content_list[key].type === sel_level &&
+                content_list[key]?.[sel_lang]
+              ) {
+                tempContent.push({
+                  content: content_list[key],
+                });
               }
+            });
+            if (tempContent.length > 0) {
+              let getitem = localStorage.getItem('content_random_id')
+                ? localStorage.getItem('content_random_id')
+                : 0;
+              if (trysame != 'yes') {
+                let old_getitem = getitem;
+                while (old_getitem == getitem) {
+                  getitem = randomIntFromInterval(
+                    0,
+                    Number(tempContent.length - 1)
+                  );
+                }
+              }
+              localStorage.setItem('trysame', 'no');
+              localStorage.setItem('content_random_id', getitem);
+              set_content(tempContent[getitem].content);
+              set_content_id(getitem);
+              localStorage.setItem(
+                'contentText',
+                tempContent[getitem].content[
+                  localStorage.getItem('apphomelang')
+                ].text
+              );
             }
-            localStorage.setItem('trysame', 'no');
-            localStorage.setItem('content_random_id', getitem);
-            set_content(tempContent[getitem].content);
-            set_content_id(getitem);
-            localStorage.setItem('contentText', tempContent[getitem].content[localStorage.getItem('apphomelang')].text);
+            scroll_to_top('smooth');
+            setNewTempContent(tempContent);
+            set_load_cnt(load_cnt => Number(load_cnt + 1));
           }
-          scroll_to_top('smooth');
-          setNewTempContent(tempContent)
-          set_load_cnt(load_cnt => Number(load_cnt + 1));
-        }
-      })
-      .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
     }
-
   };
-  const [newTempContent, setNewTempContent] = useState([]); 
+  const [newTempContent, setNewTempContent] = useState([]);
 
   const handleChangeWord = () => {
     // Implement logic to select a new content
     let getitem = content_id;
-      let old_getitem = getitem;
-      while (old_getitem === getitem) {
-        getitem = randomIntFromInterval(0, Number(newTempContent.length - 1));
-      }
+    let old_getitem = getitem;
+    while (old_getitem === getitem) {
+      getitem = randomIntFromInterval(0, Number(newTempContent.length - 1));
+    }
     localStorage.setItem('trysame', 'no');
     localStorage.setItem('content_random_id', getitem);
     set_content(newTempContent[getitem].content);
     set_content_id(getitem);
     localStorage.setItem(
-        'contentText',
-        newTempContent[getitem].content[localStorage.getItem('apphomelang')].text
-      );
+      'contentText',
+      newTempContent[getitem].content[localStorage.getItem('apphomelang')].text
+    );
   };
 
-
   useEffect(() => {
-    const showNavigationFooter = getParameter('hideNavigation', location.search);
+    const showNavigationFooter = getParameter(
+      'hideNavigation',
+      location.search
+    );
     set_hide_navFooter(showNavigationFooter);
-    getfromurl();
-  }, [load_cnt]);
+
+    const proto4Data = localStorage.getItem('proto4');
+
+    if (proto4Data === null) {
+      // Fetch data and store in localStorage
+      getfromurl();
+    } else {
+      // Load content from localStorage
+      const parsedData = JSON.parse(proto4Data);
+      const content_list = getContentList();
+
+      let tempContent = [];
+      const content_keys = Object.keys(content_list);
+
+      content_keys.forEach(key => {
+        if (
+          content_list[key].type === sel_level &&
+          content_list[key]?.[sel_lang]
+        ) {
+          tempContent.push({
+            content: content_list[key],
+          });
+        }
+      });
+
+      if (tempContent.length > 0) {
+        let getitem = localStorage.getItem('content_random_id')
+          ? localStorage.getItem('content_random_id')
+          : 0;
+
+        if (trysame !== 'yes') {
+          let old_getitem = getitem;
+          while (old_getitem == getitem) {
+            getitem = randomIntFromInterval(0, Number(tempContent.length - 1));
+          }
+        }
+
+        localStorage.setItem('trysame', 'no');
+        localStorage.setItem('content_random_id', getitem);
+        set_content(tempContent[getitem].content);
+        set_content_id(getitem);
+        localStorage.setItem(
+          'contentText',
+          tempContent[getitem].content[localStorage.getItem('apphomelang')].text
+        );
+      }
+      scroll_to_top('smooth');
+      setNewTempContent(tempContent);
+      set_load_cnt(load_cnt => Number(load_cnt + 1));
+    }
+  }, []);
+
   function randomIntFromInterval(min, max) {
     // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -222,7 +280,7 @@ function StartLearn() {
   function go_to_result(voiceText) {
     localStorage.setItem('contentText', content[sel_lang].text);
     localStorage.setItem('recordedAudio', recordedAudio);
-    localStorage.setItem('voiceText', voiceText);
+    localStorage.setItem('voiceText', filterBadWords(voiceText));
     localStorage.setItem('contentid', content_id);
     localStorage.setItem('contenttype', content['title']);
     localStorage.setItem('isfromresult', 'learn');
@@ -231,41 +289,47 @@ function StartLearn() {
   function showStartLearn() {
     return (
       <>
-
         {content != null && content[sel_lang] ? (
-
-            <VStack gap={'10'} alignItems="center">
-               {sel_cource === 'See & Speak' ? (
-                  <>
-                    <div className="content_text_div">
-                      {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                    </div>
-                  </>
-                ) : (
-                  <h2 className="">
-                    {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
-                  </h2>
-                )}
-              <HStack display={'flex'} gap={'40'} justifyContent={'justify-between'}>
-
+          <VStack gap={'10'} alignItems="center">
+            {sel_cource === 'See & Speak' ? (
+              <>
+                <div className="content_text_div">
+                  {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
+                </div>
+              </>
+            ) : (
+              <h2 className="">
+                {content[sel_lang]?.text ? content[sel_lang]?.text : ''}
+              </h2>
+            )}
+            <HStack
+              display={'flex'}
+              gap={'40'}
+              justifyContent={'justify-between'}
+            >
               {isAudioPlay !== 'recording' && (
                 <VStack alignItems="center" gap="5">
                   {flag ? (
                     <img
-                    className="play_btn"
+                      className="play_btn"
                       src={play}
                       style={{ height: '72px', width: '72px' }}
                       onClick={() => playAudio()}
-                      />
+                    />
                   ) : (
                     <img
-                    className="play_btn"
+                      className="play_btn"
                       src={pause}
                       style={{ height: '72px', width: '72px' }}
                       onClick={() => pauseAudio()}
-                      />
-                      )}
-                  <h4 className="text-play m-0 " style={{position:'relative'}}>Listen</h4>
+                    />
+                  )}
+                  <h4
+                    className="text-play m-0 "
+                    style={{ position: 'relative' }}
+                  >
+                    Listen
+                  </h4>
                 </VStack>
               )}
               <VStack>
@@ -273,28 +337,29 @@ function StartLearn() {
                   setVoiceText={setVoiceText}
                   setRecordedAudio={setRecordedAudio}
                   _audio={{ isAudioPlay: e => setIsAudioPlay(e) }}
+                  setIsAudioPlay={setIsAudioPlay}
                   flag={true}
-
-                  />
-                  {isAudioPlay === 'recording'? <h4 className="text-speak m-0">Stop</h4>:<h4 className="text-speak m-0">Speak</h4>}
-
-                  </VStack>
-              </HStack>
-              {isAudioPlay !== 'recording' && (
-                <VStack>
-                  <img
-                    src={refresh}
-                    className="home_icon"
-                    style={{ height: '72px', width: '72px' }}
-                    onClick={newSentence}
-                    alt=''
-
-
-                  />
-                  <h4 className="text-speak m-0">Try new</h4>
-                </VStack>
-              )}
-            </VStack>
+                />
+                {isAudioPlay === 'recording' ? (
+                  <h4 className="text-speak m-0">Stop</h4>
+                ) : (
+                  <h4 className="text-speak m-0">Speak</h4>
+                )}
+              </VStack>
+            </HStack>
+            {isAudioPlay !== 'recording' && (
+              <VStack>
+                <img
+                  src={refresh}
+                  className="home_icon"
+                  style={{ height: '72px', width: '72px' }}
+                  onClick={newSentence}
+                  alt=""
+                />
+                <h4 className="text-speak m-0">Try new</h4>
+              </VStack>
+            )}
+          </VStack>
         ) : (
           <>
             <div className="">
@@ -309,7 +374,11 @@ function StartLearn() {
           </>
         )}
         {hide_navFooter === 'false' ? (
-          <AppFooter hideNavigation={getParameter('hideNavigation', location.search)} selectedLanguage={getParameter('language', location.search)} source={getParameter('source', location.search)}/>
+          <AppFooter
+            hideNavigation={getParameter('hideNavigation', location.search)}
+            selectedLanguage={getParameter('language', location.search)}
+            source={getParameter('source', location.search)}
+          />
         ) : (
           <></>
         )}
