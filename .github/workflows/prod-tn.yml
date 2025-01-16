@@ -1,4 +1,4 @@
-name: ALL tn prod all-ll-app Deployment
+name: Prod ALL tn dev all-ll-app Deployment
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: all-tn-dev
+    environment: all-tn-production
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -71,6 +72,8 @@ jobs:
           REACT_APP_IS_AUDIOPREPROCESSING: ${{ vars.REACT_APP_IS_AUDIOPREPROCESSING }}
           REACT_APP_POST_LEARNER_PROGRESS: ${{ vars.REACT_APP_POST_LEARNER_PROGRESS }}
           REACT_APP_IS_APP_IFRAME: ${{ vars.REACT_APP_IS_APP_IFRAME }}
+          REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
+          REACT_APP_AWS_SECRET_ACCESS_KEY: ${{secrets.REACT_APP_AWS_SECRET_ACCESS_KEY}}
           REACT_APP_IS_IN_APP_AUTHORISATION: ${{ vars.REACT_APP_IS_IN_APP_AUTHORISATION }}
           REACT_APP_LANGUAGES: ${{ vars.REACT_APP_LANGUAGES }}
           WDS_SOCKET_PORT: ${{ vars.WDS_SOCKET_PORT }}
@@ -80,8 +83,6 @@ jobs:
           NODE_ENV: ${{ vars.NODE_ENV }}
           FAST_REFRESH: ${{ vars.FAST_REFRESH }}
           REACT_APP_ASR_API_KEY: ${{ secrets.REACT_APP_ASR_API_KEY }}
-          REACT_APP_AWS_ACCESS_KEY_ID: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }}
-          REACT_APP_AWS_SECRET_ACCESS_KEY: ${{secrets.REACT_APP_AWS_SECRET_ACCESS_KEY}}
           CI: false # Disabling CI to not treat warnings as errors
         run: npm run build
 
