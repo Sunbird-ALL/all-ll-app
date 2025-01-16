@@ -3,7 +3,7 @@ name: ALL tn prod all-ll-app Deployment
 on:
   push:
     branches:
-      - all-0.6-hotfix
+      - main
 
 jobs:
   deploy:
