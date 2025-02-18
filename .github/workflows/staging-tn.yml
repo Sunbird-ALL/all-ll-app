@@ -3,7 +3,7 @@ name: https://d2ce35dy7hucsx.cloudfront.net ALL tn staging all-ll-app Deployment
 on:
   push:
     branches:
-      - all-0.6-hotfix
+      - all-0.7
 
 jobs:
   deploy:
