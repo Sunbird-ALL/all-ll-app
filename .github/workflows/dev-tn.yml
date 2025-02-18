@@ -3,7 +3,7 @@ name: https://d357v3o0fwx8le.cloudfront.net ALL tn dev all-ll-app Deployment
 on:
   push:
     branches:
-      - all-0.6-hotfix
+      - all-0.7
 
 jobs:
   deploy:
