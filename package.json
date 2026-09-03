@@ -10,7 +10,7 @@
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@fingerprintjs/fingerprintjs": "^3.4.0",
-    "@project-sunbird/client-services": "^5.1.2",
+    "@project-sunbird/client-services": "^8.1.4",
     "@tekdi/all-telemetry-sdk": "^0.0.32",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
